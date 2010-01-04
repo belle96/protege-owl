@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:protege="http://protege.stanford.edu/plugins/owl/protege#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns="http://www.owl-ontologies.com/Ontology1159814606.owl#"
+    xmlns:daml="http://www.daml.org/2001/03/daml+oil#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xml:base="http://www.owl-ontologies.com/Ontology1159814606.owl">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://protege.stanford.edu/plugins/owl/protege"/>
+    <protege:defaultLanguage rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >en</protege:defaultLanguage>
+  </owl:Ontology>
+  <owl:Class rdf:ID="XSB0003">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >C</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:ID="XSB0001">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >A</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="XSB0020"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="XSB0004"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </owl:Class>
+  <owl:Class>
+    <owl:oneOf rdf:parseType="Collection">
+      <XSB0004 rdf:ID="XSB0030">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >e1</rdfs:label>
+      </XSB0004>
+      <XSB0004 rdf:ID="XSB0031">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >e2</rdfs:label>
+      </XSB0004>
+      <XSB0004 rdf:ID="XSB0032">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >e3</rdfs:label>
+      </XSB0004>
+      <XSB0004 rdf:ID="XSB0033">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >e4</rdfs:label>
+      </XSB0004>
+      <XSB0004 rdf:ID="XSB0034">
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >e5</rdfs:label>
+      </XSB0004>
+    </owl:oneOf>
+  </owl:Class>
+  <owl:Class rdf:ID="XSB0002">
+    <rdfs:label xml:lang="en">B</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="#XSB0004">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <rdfs:label xml:lang="en">E</rdfs:label>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >D</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class>
+        <owl:oneOf rdf:parseType="Collection">
+          <XSB0004 rdf:about="#XSB0030"/>
+          <XSB0004 rdf:about="#XSB0031"/>
+          <XSB0004 rdf:about="#XSB0032"/>
+          <XSB0004 rdf:about="#XSB0033"/>
+          <XSB0004 rdf:about="#XSB0034"/>
+        </owl:oneOf>
+      </owl:Class>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="#XSB0020">
+    <rdfs:label xml:lang="en">f</rdfs:label>
+  </owl:ObjectProperty>
+</rdf:RDF>
+
+<!-- Created with Protege (with OWL Plugin 2.2, Build 339)  http://protege.stanford.edu -->

@@ -1,0 +1,199 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<project name = "owl" default = "init" basedir = ".">
+
+	<property file = "../global.properties"/>
+
+	<property name = "project.name" value = "owl"/>
+	<property name = "build.dir" value = "./build"/>
+	<property name = "build.dest" value = "${build.dir}/classes"/>
+	<property name = "build.src" value = "${build.dir}/src"/>
+	<property name = "docs.dir" value = "./docs"/>
+	<property name = "etc.dir" value = "./etc"/>
+	<property name = "build.javadoc" value = "${docs.dir}/apidocs"/>
+	<property name = "dist.dir" value = "./dist"/>
+	<property name = "lib.dir" value = "./lib"/>
+
+	<target name = "init">
+		<tstamp/>
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- PREPARE-SRC -->
+	<!-- =================================================================== -->
+	<target name = "prepare-src" depends = "init">
+		<mkdir dir = "${build.src}"/>
+		<mkdir dir = "${build.dest}"/>
+		<mkdir dir = "${dist.dir}"/>
+		<mkdir dir = "${build.javadoc}"/>
+
+		<!-- get source code from subversion repository -->
+		<exec executable = "cmd.exe" dir = "${batch.files}" os = "${os}">
+			<arg line = "/c checkout ${svn.core.url}/${project.name}/trunk/src ../${project.name}/build/src"/>
+		</exec>
+		<exec executable = "cmd.exe" dir = "${batch.files}" os = "${os}">
+			<arg line = "/c checkout ${svn.core.url}/${project.name}/trunk/lib ../${project.name}/lib"/>
+		</exec>
+		<exec executable = "cmd.exe" dir = "${batch.files}" os = "${os}">
+			<arg line = "/c checkout ${svn.core.url}/${project.name}/trunk/etc ../${project.name}/etc"/>
+		</exec>
+		<exec executable = "cmd.exe" dir = "${batch.files}" os = "${os}">
+			<arg line = "/c checkout ${svn.core.url}/${project.name}/trunk/examples ../${project.name}/examples"/>
+		</exec>
+		<exec executable = "cmd.exe" dir = "${batch.files}" os = "${os}">
+			<arg line = "/c checkout ${svn.core.url}/${project.name}/trunk ../${project.name} --non-recursive"/>
+		</exec>
+		
+		<!-- add license text to top of source files -->
+		<exec executable = "cmd.exe" dir = "${batch.files}" os = "${os}">
+			<arg line = "/c merge_license_with_source ../${project.name}/build/src"/>
+		</exec>
+	</target>
+	
+	<!-- =================================================================== -->
+	<!-- COMPILE -->
+	<!-- =================================================================== -->
+	<target name = "compile" depends = "prepare-src">
+		<javac srcdir = "${build.src}" 
+		          destdir = "${build.dest}" 
+		          debug = "true" 
+		          debuglevel = "lines" 
+		          optimize = "on" 
+		          includeAntRuntime = "no" 
+		          source = "1.5" 
+		          fork = "yes" 
+		          memoryInitialSize = "200m" 
+		          memoryMaximumSize = "200m">
+			<classpath>
+				<pathelement path = "${protege.jar}"/>
+				<fileset dir = "${lib.dir}">
+					<include name = "**/*.jar"/>
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- JAR -->
+	<!-- Create the class package. -->
+	<!-- =================================================================== -->
+	<target name = "jar" depends = "compile">
+		<copy todir = "${build.dest}/edu/stanford/smi/protegex/owl/ui/icons">
+			<fileset dir = "${build.src}/edu/stanford/smi/protegex/owl/ui/icons/">
+				<include name = "**/*.png"/>
+				<include name = "**/*.gif"/>
+			</fileset>
+		</copy>
+
+		<copy todir = "${build.dest}/edu/stanford/smi/protegex/owl/ui/metrics/lang/icons">
+			<fileset dir = "${build.src}/edu/stanford/smi/protegex/owl/ui/metrics/lang/icons/">
+				<include name = "**/*.png"/>
+			</fileset>
+		</copy>
+
+		<copy todir = "${build.dest}/edu/stanford/smi/protegex/owl/inference/ui/icons">
+			<fileset dir = "${build.src}/edu/stanford/smi/protegex/owl/inference/ui/icons/">
+				<include name = "**/*.png"/>
+				<include name = "**/*.gif"/>
+			</fileset>
+		</copy>
+
+		<copy todir = "${build.dest}/edu/stanford/smi/protegex/owl/swrl/ui/icons">
+			<fileset dir = "${build.src}/edu/stanford/smi/protegex/owl/swrl/ui/icons/">
+				<include name = "**/*.gif"/>
+			</fileset>
+		</copy>
+
+		<copy todir = "${build.dest}/edu/stanford/smi/protegex/owl/swrl/sqwrl/ui/icons">
+			<fileset dir = "${build.src}/edu/stanford/smi/protegex/owl/swrl/sqwrl/ui/icons">
+				<include name = "**/*.gif"/>
+			</fileset>
+		</copy>
+
+		<copy todir = "${build.dest}/edu/stanford/smi/protegex/owl/jena">
+			<fileset dir = "${build.src}/edu/stanford/smi/protegex/owl/jena">
+				<include name = "**/*.pprj"/>
+			</fileset>
+		</copy>
+
+		<copy file = "${build.src}/edu/stanford/smi/protegex/owl/database/OWL.pprj" todir = "${build.dest}/edu/stanford/smi/protegex/owl/database"/>
+		<copy file = "${build.src}/edu/stanford/smi/protegex/owl/resource/files/build.properties" todir = "${build.dest}/edu/stanford/smi/protegex/owl/resource/files"/>
+		<copy file = "${build.src}/edu/stanford/smi/protegex/owl/resource/files/about-owl.html" todir = "${build.dest}/edu/stanford/smi/protegex/owl/resource/files"/>
+		<copy file = "${build.src}/edu/stanford/smi/protegex/owl/resource/files/ProtegeLogo.gif" todir = "${build.dest}/edu/stanford/smi/protegex/owl/resource/files"/>
+		<copy file = "${build.src}/edu/stanford/smi/protegex/owl/model/classparser/manchester/ManchesterOWLParser.jj" todir = "${build.dest}/edu/stanford/smi/protegex/owl/model/classparser/manchester"/>
+		<copy file = "${build.src}/edu/stanford/smi/protegex/owl/model/classparser/dl/DLSyntaxParser.jj" todir = "${build.dest}/edu/stanford/smi/protegex/owl/model/classparser/dl"/>
+		<copy file = "${build.src}/edu/stanford/smi/protegex/owl/model/classparser/compact/CompactParser.jj" todir = "${build.dest}/edu/stanford/smi/protegex/owl/model/classparser/compact"/>
+
+		<jar jarfile = "${dist.dir}/protege-owl.jar" basedir = "${build.dest}" manifest = "${build.src}/meta-inf/manifest.mf"/>
+	</target>
+	
+	<!-- =================================================================== -->
+	<!-- JAVADOC -->
+	<!-- Create the API documentation. -->
+	<!-- =================================================================== -->
+	<target name = "javadoc" depends = "init" unless = "testbuild">
+
+		<property file = "${build.dir}/src/edu/stanford/smi/protegex/owl/resource/files/build.properties"/>
+		
+		<javadoc destdir = "${build.javadoc}" 
+		              doctitle = "${name} ${version} ${status}" 
+		              header = "${name} ${version} ${status}" 
+		              footer = "${name} ${version} ${status}" 
+		              windowtitle = "${name} ${version} ${status}" 
+		              author = "true" 
+		              source = "1.5"
+		              maxmemory = "256M">
+			<bottom><![CDATA[
+					<small>
+					<a href=mailto:protege-owl@lists.stanford.edu>Submit a bug report or feature request</a><br>
+					${copyright}
+					</small>]]>
+			</bottom>
+			<packageset dir = "${build.src}">                
+				<include name = "edu/**"/>                
+			</packageset>            
+			<classpath>
+				<pathelement path = "${protege.jar}"/>
+				<fileset dir = "${lib.dir}">
+					<include name = "**/*.jar"/>
+				</fileset>
+			</classpath>
+			<link href = "${jdk.javadoc}"/>
+		</javadoc>
+
+	</target>
+	
+	<!-- =================================================================== -->
+	<!-- DIST -->
+	<!-- Zips up all source code, resources, and api documentation. -->
+	<!-- =================================================================== -->
+	<target name = "dist" depends = "init">
+		<zip zipfile = "${dist.dir}/protege-owl-src-${version}.zip" update = "no">
+			<zipfileset dir = "${build.src}" prefix = "Protege-OWL ${version}/src"/>
+			<zipfileset dir = "${build.javadoc}" prefix = "Protege-OWL ${version}/docs/apidocs"/>
+			<zipfileset dir = "${etc.dir}" prefix = "Protege-OWL ${version}/etc"/>
+			<zipfileset dir = "${lib.dir}" includes = "*.jar" prefix = "Protege-OWL ${version}/lib"/>
+			<zipfileset dir = "." includes = "build.xml,local.properties.template,junit.properties.template,junit-logging.properties," prefix = "Protege-OWL ${version}"/>
+		</zip>
+		<zip zipfile = "${dist.dir}/protege-owl-bin-${version}.zip" update = "no">
+			<zipfileset dir = "${dist.dir}" includes = "protege-owl.jar"/>
+			<zipfileset dir = "${lib.dir}"/>
+			<zipfileset dir = "${etc.dir}" excludes = "doap.rdf"/>
+		</zip>
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- CLEAN -->
+	<!-- Cleans all generated files and directories. -->
+	<!-- =================================================================== -->
+	<target name = "clean" depends = "init">
+		<delete dir = "${build.dir}"/>
+		<delete dir = "${build.javadoc}"/>
+		<delete dir = "${dist.dir}"/>
+	</target>
+
+	<!-- =================================================================== -->
+	<!-- ALL -->
+	<!-- Create the jar file, javadoc api documentaion, and the zip file. -->
+	<!-- =================================================================== -->
+	<target name = "all" depends = "jar,javadoc,dist"/>
+</project>

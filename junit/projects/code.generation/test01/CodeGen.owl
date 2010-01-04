@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+    xmlns="http://www.tigraworld.com/protege/CodeGen.owl#"
+    xmlns:owl2="http://www.w3.org/2006/12/owl2#"
+    xmlns:swrl="http://www.w3.org/2003/11/swrl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:code1="http://www.tigraworld.com/protege/CodeGen1.owl#"
+    xmlns:xsp="http://www.owl-ontologies.com/2005/08/07/xsp.owl#"
+    xmlns:swrlb="http://www.w3.org/2003/11/swrlb#"
+    xmlns:code2="http://www.tigraworld.com/protege/CodeGen2.owl#"
+    xmlns:protege="http://protege.stanford.edu/plugins/owl/protege#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+  xml:base="http://www.tigraworld.com/protege/CodeGen.owl">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://www.tigraworld.com/protege/CodeGen2.owl"/>
+    <owl:imports rdf:resource="http://www.tigraworld.com/protege/CodeGen1.owl"/>
+  </owl:Ontology>
+  <owl:Class rdf:about="http://www.tigraworld.com/protege/CodeGen2.owl#Y">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="TopDouble"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.tigraworld.com/protege/CodeGen1.owl#C">
+    <rdfs:subClassOf rdf:resource="#TopDouble"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.tigraworld.com/protege/CodeGen2.owl#X">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Top"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.tigraworld.com/protege/CodeGen1.owl#B">
+    <rdfs:subClassOf rdf:resource="#Top"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://www.tigraworld.com/protege/CodeGen1.owl#D"/>
+  <owl:ObjectProperty rdf:about="http://www.tigraworld.com/protege/CodeGen1.owl#p">
+    <rdfs:domain rdf:resource="#Top"/>
+  </owl:ObjectProperty>
+  <Top rdf:ID="fTop">
+    <code1:p>
+      <code1:D rdf:ID="fD"/>
+    </code1:p>
+    <code1:p>
+      <code1:C rdf:ID="fC"/>
+    </code1:p>
+  </Top>
+  <code1:B rdf:ID="fX">
+    <rdf:type rdf:resource="http://www.tigraworld.com/protege/CodeGen2.owl#X"/>
+  </code1:B>
+</rdf:RDF>
+
+<!-- Created with Protege (with OWL Plugin 3.4, Build 501)  http://protege.stanford.edu -->

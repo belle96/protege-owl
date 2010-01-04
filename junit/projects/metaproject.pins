@@ -1,0 +1,90 @@
+; Wed Dec 09 22:01:17 PST 2009
+; 
+;+ (version "3.4.2")
+;+ (build "Build 557")
+
+([metaproject_Class0] of  Project
+
+	(allowedGroupOperation [metaproject_Instance_10008])
+	(location "examples/pizza.owl.pprj")
+	(name "Pizza")
+	(owner [metaproject_Instance_10005]))
+
+([metaproject_Instance_0] of  Group
+
+	(member
+		[metaproject_Instance_10002]
+		[metaproject_Instance_10003]
+		[metaproject_Instance_10004]
+		[metaproject_Instance_10005]
+		[metaproject_Instance_10006]
+		[metaproject_Instance_10007])
+	(name "World"))
+
+([metaproject_Instance_10000] of  Project
+
+	(allowedGroupOperation [metaproject_Instance_10008])
+	(location "junit/projects/Importing.pprj")
+	(name "Importing")
+	(owner [metaproject_Instance_10005]))
+
+([metaproject_Instance_10002] of  User
+
+	(group [metaproject_Instance_0])
+	(name "Guest")
+	(password "d03d8784f1da325584a812a0ce3981de")
+	(salt "e66ea2acb7c8fc90"))
+
+([metaproject_Instance_10003] of  User
+
+	(group [metaproject_Instance_0])
+	(name "Jennifer Vendetti")
+	(password "15d94090978b5c1455993bfb27d0d025")
+	(salt "e8eac99676e8b03c"))
+
+([metaproject_Instance_10004] of  User
+
+	(group [metaproject_Instance_0])
+	(name "Natasha Noy")
+	(password "c336968ce31d053af17661eb5776407c")
+	(salt "f2124ba59e4f421f"))
+
+([metaproject_Instance_10005] of  User
+
+	(group [metaproject_Instance_0])
+	(name "Ray Fergerson")
+	(password "15fe1fbe6f1bc0bba038eae5d7ce65fe")
+	(salt "67e111869f7679fb"))
+
+([metaproject_Instance_10006] of  User
+
+	(group [metaproject_Instance_0])
+	(lastAccess "1260424868469")
+	(lastLogin "1260424867029")
+	(name "Tania Tudorache")
+	(password "0f87c825a1c4fff0a2a3f2b9e9fe92c8")
+	(salt "9161c4502bbc97f1"))
+
+([metaproject_Instance_10007] of  User
+
+	(group [metaproject_Instance_0])
+	(lastAccess "1260424875360")
+	(lastLogin "1260424858668")
+	(name "Timothy Redmond")
+	(password "8b0152f6c9aceb775ac41a0a6ad8c008")
+	(salt "21759103730d6804"))
+
+([metaproject_Instance_10008] of  GroupOperation
+
+	(allowedGroup [metaproject_Instance_0])
+	(allowedOperation
+		[nci_metaproject_Instance_60009]
+		[nci_metaproject_Instance_60010]))
+
+([nci_metaproject_Instance_60009] of  Operation
+
+	(name "Read"))
+
+([nci_metaproject_Instance_60010] of  Operation
+
+	(name "Write"))
