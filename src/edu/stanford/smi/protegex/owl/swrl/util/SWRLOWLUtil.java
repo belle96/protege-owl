@@ -493,8 +493,13 @@ public class SWRLOWLUtil
 
     return result;
   } // getFullName
-  
+
   public static Set<String> getRDFSLabels(OWLModel owlModel, String resourceName)
+  {
+  	return getRDFSLabels(owlModel, resourceName, "");
+  } // getRDFSLabels
+  
+  public static Set<String> getRDFSLabels(OWLModel owlModel, String resourceName, String language)
   {
     RDFResource resource = owlModel.getRDFResource(resourceName);
     Set<String> result = new HashSet<String>();
@@ -503,9 +508,10 @@ public class SWRLOWLUtil
     	for (Object label : resource.getPropertyValues(owlModel.getRDFSLabelProperty())) {
     		if (label instanceof String) result.add((String)label);
         else if (label instanceof RDFSLiteral) {
-        	RDFSLiteral literal = (RDFSLiteral)label;	
-          	result.add	(literal.getString());
-        	} // if
+        	RDFSLiteral literal = (RDFSLiteral)label;
+        	if (language.equals("") || (language.equals(literal.getLanguage())))
+            result.add(literal.getString());
+        } // if
     	} // for
     } // if
     return result;

@@ -39,24 +39,27 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
    */
   public boolean hasLabel(List<BuiltInArgument> arguments) throws BuiltInException
   {
-    boolean isUnboundArgument = isUnboundArgument(1, arguments);   
+    boolean isUnboundArgument = isUnboundArgument(1, arguments);
+    boolean hasLanguage = (arguments.size() == 3);
+    String language;
     String resourceName;
     boolean result = false;
 
-    checkNumberOfArgumentsEqualTo(2, arguments.size());
+    checkNumberOfArgumentsAtLeast(2, arguments.size());
     checkThatArgumentIsAClassPropertyOrIndividual(0, arguments);
 
     resourceName = getArgumentAsAResourceName(0, arguments);
-
+    language = hasLanguage ? getArgumentAsAString(2, arguments) : "";
+    
     if (isUnboundArgument) {
     	MultiArgument multiArgument = argumentFactory.createMultiArgument(getVariableName(1, arguments));
-    	for (String label : SWRLOWLUtil.getRDFSLabels(getInvokingBridge().getOWLModel(), resourceName))
+    	for (String label : SWRLOWLUtil.getRDFSLabels(getInvokingBridge().getOWLModel(), resourceName, language))
     		multiArgument.addArgument(argumentFactory.createDataValueArgument(label));
     	arguments.set(1, multiArgument);
     	result = !multiArgument.hasNoArguments();
     } else { // Bound argument
     	String label = getArgumentAsAString(1, arguments);
-    	result = SWRLOWLUtil.getRDFSLabels(getInvokingBridge().getOWLModel(), resourceName).contains(label);
+    	result = SWRLOWLUtil.getRDFSLabels(getInvokingBridge().getOWLModel(), resourceName, language).contains(label);
     } // if
     
     return result;
