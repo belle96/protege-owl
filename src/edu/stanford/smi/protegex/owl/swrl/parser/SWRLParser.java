@@ -199,6 +199,7 @@ public class SWRLParser
       throw new SWRLParseException("Expecting '" + skipToken + "', got '" + token + "'. " + unexpectedTokenMessage);
   } // checkAndSkipToken
 
+  // Does not deal with escaped quotation characters.
   private String getNextStringToken(String noTokenMessage) throws SWRLParseException 
   {
     String token = "";
@@ -211,6 +212,8 @@ public class SWRLParser
     
     while (tokenizer.hasMoreTokens()) {
       token = tokenizer.nextToken("\"");
+      if (token.equals("\"")) token = ""; // Empty string 
+      else checkAndSkipToken("\"", "Expected \" to close string.");
       return token;
     } // while
     
@@ -505,7 +508,6 @@ public class SWRLParser
     if (parsedString.equals("\"")) { // The parsed entity is a string
       String stringValue = getNextStringToken("Expected a string.");
       if (!parseOnly) parsedEntity = owlModel.createRDFSLiteral(stringValue, owlModel.getXSDstring());
-      checkAndSkipToken("\"", "Expected \" to close string.");
     } // if
     // According to the XSD spec, xsd:boolean's have the lexical space: {true, false, 1, 0}. We don't allow {1, 0} since these are parsed
     // as XSDints.
