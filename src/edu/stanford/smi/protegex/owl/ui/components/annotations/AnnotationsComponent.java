@@ -1,15 +1,24 @@
 package edu.stanford.smi.protegex.owl.ui.components.annotations;
 
-import edu.stanford.smi.protege.model.Project;
-import edu.stanford.smi.protege.util.LabeledComponent;
-import edu.stanford.smi.protegex.owl.model.*;
-import edu.stanford.smi.protegex.owl.ui.components.triples.*;
-import edu.stanford.smi.protegex.owl.ui.icons.OWLIcons;
-
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
+
+import javax.swing.Action;
+
+import edu.stanford.smi.protege.model.Project;
+import edu.stanford.smi.protege.util.LabeledComponent;
+import edu.stanford.smi.protegex.owl.model.OWLModel;
+import edu.stanford.smi.protegex.owl.model.OWLOntology;
+import edu.stanford.smi.protegex.owl.model.RDFProperty;
+import edu.stanford.smi.protegex.owl.model.RDFResource;
+import edu.stanford.smi.protegex.owl.model.RDFSClass;
+import edu.stanford.smi.protegex.owl.ui.components.triples.AbstractTriplesComponent;
+import edu.stanford.smi.protegex.owl.ui.components.triples.AddResourceAction;
+import edu.stanford.smi.protegex.owl.ui.components.triples.CreateValueAction;
+import edu.stanford.smi.protegex.owl.ui.components.triples.DeleteTripleAction;
+import edu.stanford.smi.protegex.owl.ui.components.triples.TriplesTable;
+import edu.stanford.smi.protegex.owl.ui.components.triples.TriplesTableModel;
+import edu.stanford.smi.protegex.owl.ui.icons.OWLIcons;
 
 /**
  * A PropertyWidget to edit the values of annotation properties.
@@ -39,13 +48,19 @@ public class AnnotationsComponent extends AbstractTriplesComponent {
             public Collection getSelectableResources() {
                 TriplesTableModel tableModel = table.getTableModel();
                 OWLModel owlModel = tableModel.getOWLModel();
-                Collection properties = new ArrayList();
-                Collection annotationProperties = owlModel.getOWLAnnotationProperties();
+                Collection<RDFProperty> properties = new ArrayList();
+                Collection<RDFProperty> annotationProperties = owlModel.getOWLAnnotationProperties();
                 Collection ontologyProperties = owlModel.getOWLOntologyProperties();
                 RDFResource resource = tableModel.getSubject();
-                for (Iterator it = annotationProperties.iterator(); it.hasNext();) {
-                    RDFProperty property = (RDFProperty) it.next();
-                    if (ontologyProperties.contains(property)) {
+                for (RDFProperty property : annotationProperties) {
+                    /*
+                     * Warning... The property.isReadOnly() really is  here deliberately to support an unusual
+                     *            NCI definition of a read only property.
+                     */
+                    if (property.isReadOnly()) {
+                        continue;
+                    }
+                    else if (ontologyProperties.contains(property)) {
                         if (resource instanceof OWLOntology) {
                             properties.add(property);
                         }
@@ -73,7 +88,17 @@ public class AnnotationsComponent extends AbstractTriplesComponent {
 
         addResourceAction = new AddResourceAction(getTable()) {
             protected Collection getAllowedProperties(OWLModel owlModel) {
-                return owlModel.getOWLAnnotationProperties();
+                Collection<RDFProperty> allowedProperties = new ArrayList<RDFProperty>();
+                for (RDFProperty property : owlModel.getOWLAnnotationProperties()) {
+                    /*
+                     * Warning... The property.isReadOnly() really is here deliberately to support an unusual
+                     *            NCI definition of a read only property.
+                     */
+                    if (!property.isReadOnly()) {
+                        allowedProperties.add(property);
+                    }
+                }
+                return allowedProperties;
             }
         };
         
