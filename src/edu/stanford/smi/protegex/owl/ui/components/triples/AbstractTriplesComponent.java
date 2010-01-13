@@ -251,12 +251,20 @@ public abstract class AbstractTriplesComponent extends AbstractPropertyValuesCom
             JTextArea textArea = new JTextArea(value.toString());
             textArea.setLineWrap(true);
             textArea.setWrapStyleWord(true);
-            //textArea.setEnabled(tableModel.isCellEditable(row, TriplesTableModel.COL_VALUE));
+            /*
+             * Warning... The property.isReadOnly() really is  here deliberately to support an unusual
+             *            NCI definition of a read only property.
+             */
+            textArea.setEditable(!property.isReadOnly());
             Component comp = new JScrollPane(textArea);
             LabeledComponent lc = new LabeledComponent(name, comp);
             lc.setPreferredSize(new Dimension(400, 400));
             int r = ProtegeUI.getModalDialogFactory().showDialog(this, lc, "Edit annotation", ModalDialogFactory.MODE_OK_CANCEL);
-            if (r == ModalDialogFactory.OPTION_OK) {
+            /*
+             * Warning... The property.isReadOnly() really is  here deliberately to support an unusual
+             *            NCI definition of a read only property.
+             */
+            if (r == ModalDialogFactory.OPTION_OK && !property.isReadOnly()) {
                 String newValue = textArea.getText();
                 tableModel.setValue(newValue, row);
             }
