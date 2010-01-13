@@ -104,7 +104,11 @@ public class TriplesTable extends JTable implements TripleDisplay {
         final int row = getSelectedRow();
         RDFProperty property = tableModel.getPredicate(row);
         Object value = tableModel.getValue(row);
-        if (property.isAnnotationProperty()) {
+        /*
+         * Warning... The property.isReadOnly() really is  here deliberately to support an unusual
+         *            NCI definition of a read only property.
+         */
+        if (property.isAnnotationProperty() && !property.isReadOnly()) {
             if (resource instanceof RDFSNamedClass) {
                 RDFSNamedClass rootClass = (RDFSNamedClass) resource;
                 Collection targetResources = new ArrayList();
