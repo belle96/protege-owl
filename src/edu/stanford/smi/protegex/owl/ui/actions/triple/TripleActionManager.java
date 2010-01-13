@@ -22,36 +22,35 @@ import edu.stanford.smi.protegex.owl.model.triplestore.Triple;
  */
 public class TripleActionManager {
 
-    private static Map map = new HashMap();
+    private static Map<Class, TripleAction> map = new HashMap<Class, TripleAction> ();
 
 
     public static void addTripleActionsToMenu(Triple triple, Adder adder) {
-        List actions = getTripleActions();
-        List menubarActions = new ArrayList();
-        for (Iterator it = actions.iterator(); it.hasNext();) {
-            TripleAction action = (TripleAction) it.next();
+        List<TripleAction> actions = getTripleActions();
+        List<TripleAction> menubarActions = new ArrayList<TripleAction>();
+        for (Iterator<TripleAction> it = actions.iterator(); it.hasNext();) {
+            TripleAction action = it.next();
             if (action.isSuitable(triple)) {
                 menubarActions.add(action);
             }
         }
-        Collections.sort(menubarActions, new Comparator() {
-            public int compare(Object o, Object o1) {
-                TripleAction actionA = (TripleAction) o;
-                TripleAction actionB = (TripleAction) o1;
+        Collections.sort(menubarActions, new Comparator<TripleAction>() {
+            public int compare(TripleAction actionA, TripleAction actionB) {
                 String a = actionA.getName();
                 String b = actionB.getName();
                 return a.compareTo(b);
             }
         });
-        for (Iterator it = menubarActions.iterator(); it.hasNext();) {
-            TripleAction action = (TripleAction) it.next();
+        for (Iterator<TripleAction> it = menubarActions.iterator(); it.hasNext();) {
+            TripleAction action = it.next();
             adder.addTripleAction(action);
         }
     }
 
 
-    private static List getTripleActions() {
-        List actions = new ArrayList();
+    @SuppressWarnings("unchecked")
+    private static List<TripleAction> getTripleActions() {
+        List<TripleAction> actions = new ArrayList<TripleAction>();
         Class[] classes = getTripleActionClasses();
         for (int i = 0; i < classes.length; i++) {
             Class aClass = classes[i];
@@ -78,8 +77,9 @@ public class TripleActionManager {
     }
 
 
+    @SuppressWarnings("unchecked")
     public static Class[] getTripleActionClasses() {
-        Collection clses = new ArrayList(PluginUtilities.getClassesWithAttribute("TripleAction", "True"));
+        Collection<Class> clses = new ArrayList<Class>(PluginUtilities.getClassesWithAttribute("TripleAction", "True"));
         return (Class[]) clses.toArray(new Class[0]);
     }
 
