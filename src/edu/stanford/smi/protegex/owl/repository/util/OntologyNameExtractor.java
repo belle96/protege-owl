@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,7 +40,6 @@ public class OntologyNameExtractor {
     private InputStreamSource source;
 
     private URI uri;
-    private URL documentURL;
 
     private boolean valid = true;
 
@@ -54,9 +52,16 @@ public class OntologyNameExtractor {
      * @param source The input stream from which the ontology
      *           can be read.
      */
-    public OntologyNameExtractor(InputStreamSource source) {
-        this.source = source;
-        init();
+    public OntologyNameExtractor(InputStreamSource source) throws IOException {
+    	try {
+    		this.source = source;
+    		init();
+    	}
+    	catch (Throwable t) {
+    		IOException ioe = new IOException(t.getMessage());
+    		ioe.initCause(t);
+    		throw ioe;
+    	}
     }
     
     private void init() {
@@ -109,7 +114,7 @@ public class OntologyNameExtractor {
             ;
         }
         catch (Throwable t) {
-            log.log(Level.WARNING, "Exception caught trying to parse " + documentURL + " for an ontology declaration", t);
+            log.log(Level.WARNING, "Exception caught trying to parse " + source.getURL() + " for an ontology declaration", t);
             valid = false;
         }
         finally {
@@ -145,11 +150,13 @@ public class OntologyNameExtractor {
     }
     
     private void useDocumentLocation() {
+    	String failMsg = "Could not find name for ontology.  Even the document location didn't work";
         try {
-            uri = documentURL.toURI();
+        	uri = source.getURL().toURI();
         }
         catch (URISyntaxException urise) {
-            log.log(Level.WARNING, "Could not find name for ontology.  Even the document location didn't work", urise);
+        	log.log(Level.WARNING, failMsg, urise);
+        	return;
         }
     }
 
