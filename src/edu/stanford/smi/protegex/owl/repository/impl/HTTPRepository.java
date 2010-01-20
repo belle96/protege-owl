@@ -74,8 +74,10 @@ public class HTTPRepository extends AbstractStreamBasedRepositoryImpl {
                         throws IOException {
                 }
             }));
+            
             OntologyNameExtractor extractor = new OntologyNameExtractor(new URLInputSource(ontologyURL));
             ontologyName = extractor.getOntologyName();
+            
             System.setErr(oldErr);
         } catch (IOException e) {
         	Log.getLogger().warning("Could not get ontology from URL: " + ontologyURL);
