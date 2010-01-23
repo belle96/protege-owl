@@ -58,18 +58,16 @@ public class OWLModelAllTripleStoresWriter {
             String name = tripleStore.getName();
             URI ontologyName = new URI(name);
             Repository rep = model.getRepositoryManager().getRepository(ontologyName);
-            if (rep != null) {
-                if (rep.isWritable(ontologyName)) {
-                	Log.getLogger().info("Saving import " + ontologyName + " to " + rep.getOntologyLocationDescription(ontologyName));
-                    OutputStream os = rep.getOutputStream(ontologyName);
-	                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(os, FileUtilities.getWriteEncoding());
-                    bw = new BufferedWriter(outputStreamWriter);
-                    OWLModelWriter omw = getOwlModelWriter(tripleStore, bw);
-	                omw.getXmlWriter().setEncoding(FileUtilities.getWriteEncoding());
-                    omw.write();
-                    bw.flush();
-                    bw.close();
-                }
+            if (rep != null && rep.isWritable(ontologyName) && rep.hasOutputStream(ontologyName)) {
+                Log.getLogger().info("Saving import " + ontologyName + " to " + rep.getOntologyLocationDescription(ontologyName));
+                OutputStream os = rep.getOutputStream(ontologyName);
+                OutputStreamWriter outputStreamWriter = new OutputStreamWriter(os, FileUtilities.getWriteEncoding());
+                bw = new BufferedWriter(outputStreamWriter);
+                OWLModelWriter omw = getOwlModelWriter(tripleStore, bw);
+                omw.getXmlWriter().setEncoding(FileUtilities.getWriteEncoding());
+                omw.write();
+                bw.flush();
+                bw.close();
             }
         }
 
