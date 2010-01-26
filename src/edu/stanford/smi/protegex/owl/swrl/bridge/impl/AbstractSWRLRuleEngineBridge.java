@@ -22,17 +22,16 @@ import edu.stanford.smi.protegex.owl.model.RDFSClass;
 import edu.stanford.smi.protegex.owl.model.RDFSNamedClass;
 import edu.stanford.smi.protegex.owl.swrl.bridge.Atom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
-import edu.stanford.smi.protegex.owl.swrl.bridge.MultiArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLAxiom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLClass;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLClassAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLConversionFactory;
+import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataFactory;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValue;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDeclarationAxiom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDifferentIndividualsAxiom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLEntity;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataFactory;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLIndividual;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLObjectPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLProperty;
@@ -125,19 +124,14 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
   } // importSWRLRulesAndOWLKnowledge
 
   /**
-   ** Load rules from all the named rule groups and associated knowledge from OWL into bridge. All existing bridge rules and knowledge will
-   ** first be cleared and the associated rule engine will be reset.
+   * Load rules from all the named rule groups and associated knowledge from OWL into bridge. All existing bridge rules and knowledge will
+   * first be cleared and the associated rule engine will be reset.
    */
   public void importSWRLRulesAndOWLKnowledge(Set<String> ruleGroupNames) throws SWRLRuleEngineBridgeException
   {
     try {
-      importSWRLRules(); // Fills in referencedClassNames, referencedIndividualNames, referencedPropertyNames
-      importOWLClassesByName(referencedClassNames); // Import all (directly or indirectly) referenced classes.
-      importOWLPropertyAssertionAxioms(referencedPropertyNames); // Import property assertion axioms for (directly or indirectly) referenced properties
-      importOWLIndividuals(referencedIndividualNames); // Import all directly referenced individuals.
-      importAllOWLIndividualsOfClasses(referencedClassNames); // Import all individuals that are members of imported classes.
-      importAxioms(); // Import some other axioms (only owl:sameAs, owl:differentFrom, and owl:allDifferent for the moment).
-      
+      importSWRLRules(false); // Fills in referencedClassNames, referencedIndividualNames, referencedPropertyNames
+      importReferencedOWLKnowledge();
       exportSWRLRulesAndOWLKnowledge();
     } catch (OWLConversionFactoryException e) {
       throw new SWRLRuleEngineBridgeException("error importing SWRL rules and OWL knowledge: " + e.getMessage());
@@ -145,24 +139,52 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
 
   } // importSWRLRulesAndOWLKnowledge
 
-  private void importSWRLRules() throws SWRLRuleEngineBridgeException
+  private void importReferencedOWLKnowledge() throws SWRLRuleEngineBridgeException
   {
     try {
-      for (SWRLRule rule : activeOWLFactory.getSWRLRules()) {
-        importedSWRLRules.put(rule.getRuleName(), rule);
+      importOWLClassesByName(referencedClassNames); // Import all (directly or indirectly) referenced classes.
+      importOWLPropertyAssertionAxioms(referencedPropertyNames); // Import property assertion axioms for (directly or indirectly) referenced properties
+      importOWLIndividuals(referencedIndividualNames); // Import all directly referenced individuals.
+      importAllOWLIndividualsOfClasses(referencedClassNames); // Import all individuals that are members of imported classes.
+      importAxioms(); // Import some other axioms (only owl:sameAs, owl:differentFrom, and owl:allDifferent for the moment).
+    } catch (OWLConversionFactoryException e) {
+      throw new SWRLRuleEngineBridgeException("error importing SWRL rules and OWL knowledge: " + e.getMessage());
+    } // try
+
+  } // importReferencedOWLKnowledge
+
+  private void importSWRLRules(boolean allowSQWRLQueries) throws SWRLRuleEngineBridgeException
+  {
+    try {
+      for (SWRLRule rule : activeOWLFactory.getSWRLRules()) if (allowSQWRLQueries || !rule.isSQWRL()) importSWRLRule(rule);
+    } catch (OWLFactoryException e) {
+      throw new SWRLRuleEngineBridgeException("factory error importing rules: " + e.getMessage());
+    } // try
+  } // importSWRLRules
+
+  private void importSQWRLQuery(String queryName) throws SWRLRuleEngineBridgeException
+  {
+    try {
+      SWRLRule rule = activeOWLFactory.getSWRLRule(queryName);
+      if (rule.isSQWRL()) importSWRLRule(rule);
+    } catch (OWLFactoryException e) {
+       throw new SWRLRuleEngineBridgeException("factory error importing SQWRL query '" + queryName + "': " + e.getMessage());
+    } // try
+  } // importSWRLRules
+
+  private void importSWRLRule(SWRLRule rule) throws SWRLRuleEngineBridgeException
+  {
+  	try {
+      importedSWRLRules.put(rule.getRuleName(), rule);
         
-        for (Atom atom : rule.getBodyAtoms()) processSWRLAtom(atom, false);
-        for (Atom atom : rule.getHeadAtoms()) processSWRLAtom(atom, true);
-      } // for
+      for (Atom atom : rule.getBodyAtoms()) processSWRLAtom(atom, false);
+      for (Atom atom : rule.getHeadAtoms()) processSWRLAtom(atom, true);
     } catch (SQWRLException e) {
       throw new SWRLRuleEngineBridgeException("SQWRL error importing rules: " + e.getMessage());
     } catch (BuiltInException e) {
-        throw new SWRLRuleEngineBridgeException("built-in error importing rules: " + e.getMessage());
-    } catch (OWLFactoryException e) {
-       throw new SWRLRuleEngineBridgeException("factory error importing rules: " + e.getMessage());
+      throw new SWRLRuleEngineBridgeException("built-in error importing rules: " + e.getMessage());
     } // try
-
-  } // importSWRLRules
+  } // importSWRLRule
 
   private void processSWRLAtom(Atom atom, boolean isConsequent) throws SWRLRuleEngineBridgeException
   {
@@ -245,12 +267,37 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
     infer(ruleGroupNames);
   } // infer
 
+  public SQWRLResult runSQWRLQuery(String queryName) throws SQWRLException
+  {
+    SQWRLResult result = null;
+  	
+    try {
+      reset();
+      importSQWRLQuery(queryName);
+      importSWRLRules(false); // Will not import queries. Fills in referencedClassNames, referencedIndividualNames, referencedPropertyName.
+      importReferencedOWLKnowledge();
+      exportSWRLRulesAndOWLKnowledge();
+      run();
+      result = getSQWRLResult(queryName);
+    } catch (OWLConversionFactoryException e) {
+      throw new SQWRLException("conversion error running SQWRL query: " + e.getMessage());
+    } catch (SWRLRuleEngineBridgeException e) {
+      throw new SQWRLException("error running SQWRL queries: " + e.getMessage());
+    } // try
+    
+    return result;
+  } // runSQWRLQuery
+
   public void runSQWRLQueries() throws SQWRLException
   {
     try {
       reset();
-      importSWRLRulesAndOWLKnowledge();
-      run();
+      importSWRLRules(true); // Fills in referencedClassNames, referencedIndividualNames, referencedPropertyNames
+      importReferencedOWLKnowledge();
+      exportSWRLRulesAndOWLKnowledge();
+       run();
+    } catch (OWLConversionFactoryException e) {
+      throw new SQWRLException("conversion error running SQWRL queries: " + e.getMessage());
     } catch (SWRLRuleEngineBridgeException e) {
       throw new SQWRLException("error running SQWRL queries: " + e.getMessage());
     } // try
@@ -345,23 +392,14 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
   } // inferOWLIndividual
 
   /**
-   ** Invoke a SWRL built-in from a rule engine. <p>
-   **
-   ** See <a href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLRuleEngineBridgeFAQ#nid6QF">here</a> for documentaton.
+   * Invoke a SWRL built-in from a rule engine. <p>
+   *
+   * See <a href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLRuleEngineBridgeFAQ#nid6QF">here</a> for documentation.
    */
   public boolean invokeSWRLBuiltIn(String ruleName, String builtInName, int builtInIndex, boolean isInConsequent, List<BuiltInArgument> arguments)
     throws BuiltInException
   {
-    boolean hasUnboundArguments = hasUnboundArguments(arguments);
-    boolean result = BuiltInLibraryManager.invokeSWRLBuiltIn(this, ruleName, builtInName, builtInIndex, isInConsequent, arguments);
-    
-    if (result && hasUnboundArguments) {
-      if(hasUnboundArguments(arguments))
-        throw new BuiltInException("built-in " + builtInName + " in rule " + ruleName + " has unbound arguments");
-      generateBuiltInBindings(ruleName, builtInName, builtInIndex, arguments); // Generate all possible bindings.
-    } // if
-
-    return result;
+    return BuiltInLibraryManager.invokeSWRLBuiltIn(this, this, ruleName, builtInName, builtInIndex, isInConsequent, arguments);    
   } // invokeSWRLBuiltIn
 
   private void injectOWLDeclarationAxiom(OWLDeclarationAxiom axiom) throws SWRLBuiltInBridgeException
@@ -884,7 +922,7 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
 
   private void exportSWRLRules() throws SWRLRuleEngineBridgeException
   {
-    for (SWRLRule rule : importedSWRLRules.values()) defineSWRLRule(rule);
+    for (SWRLRule rule : importedSWRLRules.values()) defineOWLAxiom(rule);
   } // exportSWRLRules
 
   private void exportClasses() throws SWRLRuleEngineBridgeException
@@ -1003,21 +1041,15 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
 
   private void exportOWLClass(OWLClass owlClass) throws SWRLBuiltInBridgeException
   {
-    try {
-      defineOWLClass(owlClass);
-    } catch (SWRLRuleEngineBridgeException e) {
-      throw new SWRLBuiltInBridgeException("error exporting OWL class '" + owlClass.getPrefixedClassName() + "'");
-    } // try
+    OWLDeclarationAxiom axiom = activeOWLFactory.getOWLDeclarationAxiom(owlClass);
+    exportOWLAxiom(axiom);
   } // exportOWLClass
 
   private void exportOWLIndividual(OWLIndividual owlIndividual) throws SWRLBuiltInBridgeException
   {
-    try {
-      defineOWLIndividual(owlIndividual);
-    } catch (SWRLRuleEngineBridgeException e) {
-      throw new SWRLBuiltInBridgeException("error exporting OWL individual '" + owlIndividual.getPrefixedIndividualName() + "'");
-    } // try
-  } // exportOWLIndividual
+  	OWLDeclarationAxiom axiom = activeOWLFactory.getOWLDeclarationAxiom(owlIndividual);
+    exportOWLAxiom(axiom);
+   } // exportOWLIndividual
 
   private void exportOWLAxiom(OWLAxiom owlAxiom) throws SWRLBuiltInBridgeException
   {
@@ -1027,101 +1059,5 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
       throw new SWRLBuiltInBridgeException("error exporting OWL axiom " + owlAxiom + ": " + e.getMessage());
     } // try
   } // exportOWLAxiom
-
-  // This method is called with a list of arguments that contain the results of a built-in that bound at least one of its
-  // arguments. Some argument positions may contain multi-arguments, indicating that there is more than one pattern. If so, the 
-  // method generates the cross product of all possible results.
-  //
-  // Warning: this mechanism is incorrect and only works properly when a single argument is unbound. If two or more
-  // arguments are unbound and contain multi-arguments then the cross product is not correct. TODO: need to fix. 
-  private void generateBuiltInBindings(String ruleName, String builtInName, int builtInIndex, List<BuiltInArgument> arguments)
-    throws BuiltInException
-  {
-    List<Integer> multiArgumentIndexes = getMultiArgumentIndexes(arguments);
-    
-    if (multiArgumentIndexes.isEmpty()) // No multi-arguments - do a simple bind.
-      exportBuiltInBinding(ruleName, builtInName, builtInIndex, arguments); 
-    else { // Generate cross product of all possible bindings.
-      List<Integer> multiArgumentCounts = new ArrayList<Integer>();
-      List<Integer> multiArgumentSizes = new ArrayList<Integer>();
-      List<BuiltInArgument> argumentsPattern;
-
-      for (int i = 0; i < multiArgumentIndexes.size(); i++) multiArgumentCounts.add(Integer.valueOf(0));
-      for (int i = 0; i < multiArgumentIndexes.size(); i++) {
-        MultiArgument multiArgument = (MultiArgument)arguments.get(multiArgumentIndexes.get(i).intValue());
-        multiArgumentSizes.add(Integer.valueOf(multiArgument.getNumberOfArguments()));
-      } // for
-
-      do {
-        argumentsPattern = generateArgumentsPattern(arguments, multiArgumentCounts);
-        exportBuiltInBinding(ruleName, builtInName, builtInIndex, argumentsPattern); 
-      } while (!nextMultiArgumentCounts(multiArgumentCounts, multiArgumentSizes));
-    } // if
-  } // generateBuiltInBindings
-
-  // Find indices of multi-arguments (if any) in a list of arguments.
-  private List<Integer> getMultiArgumentIndexes(List<BuiltInArgument> arguments)
-  {
-    List<Integer> result = new ArrayList<Integer>();
-
-    for (int i = 0; i < arguments.size(); i++) 
-      if (arguments.get(i) instanceof MultiArgument) result.add(Integer.valueOf(i));
-
-    return result;
-  } // getMultiArgumentIndexes
-
-  // Export a particular binding pattern to a target rule engine.  
-  private void exportBuiltInBinding(String ruleName, String builtInName, int builtInIndex, List<BuiltInArgument> arguments) 
-    throws BuiltInException
-  {
-    try {
-      defineBuiltInBinding(ruleName, builtInName, builtInIndex, arguments);
-    } catch (SWRLRuleEngineBridgeException e) {
-      throw new BuiltInException("error exporting built-in binding: " + e.getMessage());
-    } // try
-  } // exportBuiltInBinding
-
-  private static boolean nextMultiArgumentCounts(List<Integer> multiArgumentCounts, List<Integer> multiArgumentSizes)
-    throws BuiltInException
-  {
-    if (multiArgumentSizes.isEmpty()) return true;
-    
-    if (nextMultiArgumentCounts(multiArgumentCounts.subList(1, multiArgumentCounts.size()), 
-                                multiArgumentSizes.subList(1, multiArgumentSizes.size()))) {
-      // No more permutations of rest of list so increment this count and if we are not at the end set rest of the list to begin at 0 again.
-      int count = multiArgumentCounts.get(0);
-      int size = multiArgumentSizes.get(0);
-      
-      if (++count == size) return true;
-
-      multiArgumentCounts.set(0, Integer.valueOf(count));
-
-      for (int i = 1; i < multiArgumentCounts.size(); i++) multiArgumentCounts.set(i, Integer.valueOf(0));
-    } // if
-    return false;
-  } // nextMultiArgumentCounts
-
-  private List<BuiltInArgument> generateArgumentsPattern(List<BuiltInArgument> arguments, List<Integer> multiArgumentCounts)
-  {
-    List<BuiltInArgument> result = new ArrayList<BuiltInArgument>();
-    int multiArgumentIndex = 0;
-
-    for (BuiltInArgument argument: arguments) {
-      if (argument instanceof MultiArgument) {
-        MultiArgument multiArgument = (MultiArgument)argument;
-        result.add(multiArgument.getArguments().get((multiArgumentCounts.get(multiArgumentIndex).intValue())));
-        multiArgumentIndex++;
-      } else result.add(argument);
-    } // for
-
-    return result;
-  } // generateArgumentsPattern  
-
-  public boolean hasUnboundArguments(List<BuiltInArgument> arguments)
-  {
-    for (BuiltInArgument argument : arguments) if (argument.isUnbound()) return true;
-
-    return false;
-  } // hasUnboundArguments
   
 } // AbstractSWRLRuleEngineBridge

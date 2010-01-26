@@ -1,24 +1,32 @@
 
 package edu.stanford.smi.protegex.owl.swrl.sqwrl.ui;
 
-import edu.stanford.smi.protegex.owl.swrl.exceptions.*;
-
-import edu.stanford.smi.protegex.owl.swrl.bridge.*;
-import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.*;
-
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.*;
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.*;
-
-import edu.stanford.smi.protegex.owl.model.OWLModel;
-import edu.stanford.smi.protegex.owl.swrl.model.*;
-
-import java.io.*;
-import javax.swing.*;
-import java.awt.*;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.JFileChooser;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileWriter;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JViewport;
+import javax.swing.table.AbstractTableModel;
+
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.ClassValue;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.ObjectValue;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.PropertyValue;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngine;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResult;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResultValue;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.InvalidQueryNameException;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 
 public class SQWRLQueryResultPanel extends JPanel 
 {
@@ -47,7 +55,7 @@ public class SQWRLQueryResultPanel extends JPanel
     JButton saveResultButton = createButton("Save as CSV...", "Save the result as a CSV file...", new SaveResultActionListener());
     buttonsPanel.add(saveResultButton);
 
-    JButton runQueriesButton = createButton("Rerun", "Rerun all the SQWRL queries", new RunQueriesActionListener());
+    JButton runQueriesButton = createButton("Rerun", "Rerun this SQWRL query", new RunQueriesActionListener());
     buttonsPanel.add(runQueriesButton);
     
     JButton closeTabButton = createButton("Close", "Close the tab for this query", new CloseTabActionListener());
@@ -70,9 +78,8 @@ public class SQWRLQueryResultPanel extends JPanel
       result = null;
 
       try {
-        queryEngine.runSQWRLQueries();
-        result = queryEngine.getSQWRLResult(queryName);
-
+        result = queryEngine.runSQWRLQuery(queryName);
+        
         if (result == null || result.getNumberOfRows() == 0) {
           controlPanel.appendText("No result returned for SQWRL query '" + queryName + "' - closing tab.\n");
           controlPanel.removeResultPanel(queryName);
@@ -80,14 +87,16 @@ public class SQWRLQueryResultPanel extends JPanel
       } catch (InvalidQueryNameException e) {
         controlPanel.appendText("Invalid query name '" + queryName + "'.\n");
       } catch (SQWRLException e) {
-        controlPanel.appendText("Exception running SQWRL queries: " + e.getMessage() + "\n");
+        controlPanel.appendText("Exception running SQWRL query '" + queryName + "': " + e.getMessage() + "\n");
       } // try
      
+      /*
       if (result == null) {
         controlPanel.removeAllPanels();
         controlPanel.appendText("Closing all result tabs.\n");
       } // if
-    }
+      */
+    } // try
   } // RunQueriesActionListener
   
   private class CloseTabActionListener implements ActionListener

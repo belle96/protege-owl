@@ -78,6 +78,25 @@ public class OWLFactoryImpl implements OWLDataFactory
     return result;
   } // getSWRLRules
 
+  public SWRLRule getSWRLRule(String ruleName) throws OWLFactoryException
+  {
+    SWRLRule result = null;
+    
+    if (hasOWLModel()) {
+      try {
+        result = conversionFactory.getSWRLRule(ruleName);
+      } catch (OWLConversionFactoryException e) {
+    	  throw new OWLFactoryException("conversion exception getting SWRL rule or SQWRL query: " + e.getMessage());
+      } catch (SQWRLException e) {
+    	  throw new OWLFactoryException("SQWRL exception getting query: " + e.getMessage());
+      } catch (BuiltInException e) {
+    	  throw new OWLFactoryException("built-in exception getting SWRL rule or SQWRL query: " + e.getMessage());      
+      } // try
+    } // if
+
+    return result;
+  } // getSWRLRule
+
   // Basic OWL entities
 
   public OWLClass getOWLClass() 

@@ -1,10 +1,10 @@
 
 package edu.stanford.smi.protegex.owl.swrl.bridge;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
-
-import java.util.Set;
 import java.util.List;
+import java.util.Set;
+
+import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 
 /**
  ** Interface representing a SWRL built-in atom

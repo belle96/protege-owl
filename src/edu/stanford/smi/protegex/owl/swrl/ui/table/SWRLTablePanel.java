@@ -1,18 +1,19 @@
 package edu.stanford.smi.protegex.owl.swrl.ui.table;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.BridgePluginManager;
-import edu.stanford.smi.protegex.owl.swrl.bridge.ui.ViewPluginAction;
-import edu.stanford.smi.protegex.owl.swrl.ui.tab.SWRLTab;
+import java.awt.BorderLayout;
+
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JViewport;
 
 import edu.stanford.smi.protege.util.Disposable;
 import edu.stanford.smi.protege.util.LabeledComponent;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.model.RDFResource;
+import edu.stanford.smi.protegex.owl.swrl.bridge.BridgePluginManager;
+import edu.stanford.smi.protegex.owl.swrl.bridge.ui.ViewPluginAction;
+import edu.stanford.smi.protegex.owl.swrl.ui.tab.SWRLTab;
 import edu.stanford.smi.protegex.owl.ui.OWLLabeledComponent;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.*;
 
 /**
  * A JPanel consisting of a SWRLTable and buttons to create and delete rules. It may have buttons to activate/deactivate any registered rule

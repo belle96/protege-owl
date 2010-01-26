@@ -1,18 +1,20 @@
 
 package edu.stanford.smi.protegex.owl.swrl.sqwrl.ui;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.*;
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.*;
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.*;
-import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.*;
-import edu.stanford.smi.protegex.owl.swrl.bridge.ui.*;
+import java.awt.Container;
+import java.awt.GridLayout;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 import edu.stanford.smi.protegex.owl.model.OWLModel;
-import edu.stanford.smi.protegex.owl.swrl.model.*;
+import edu.stanford.smi.protegex.owl.swrl.bridge.BridgeFactory;
+import edu.stanford.smi.protegex.owl.swrl.bridge.BridgePluginManager;
+import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRuleEngineBridge;
+import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLRuleEngineBridgeException;
+import edu.stanford.smi.protegex.owl.swrl.bridge.ui.SWRLPluginGUIAdapter;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.ui.icons.QueryIcons;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class SQWRLQueryTab extends JTabbedPane implements SWRLPluginGUIAdapter
 {
@@ -23,12 +25,10 @@ public class SQWRLQueryTab extends JTabbedPane implements SWRLPluginGUIAdapter
 
   private SWRLRuleEngineBridge bridge;
 
-  public Container getPluginGUI() { return this; }
+  public Container getPluginContainer() { return this; }
 
-  public Container createPluginGUI(OWLModel owlModel)
+  public Container createPluginContainer(OWLModel owlModel)
   {
-    // TODO: Eventually pop up window to select an engine from a list.
-
     try {
       bridge = BridgeFactory.createBridge(owlModel);
     } catch (SWRLRuleEngineBridgeException e) {
@@ -42,7 +42,7 @@ public class SQWRLQueryTab extends JTabbedPane implements SWRLPluginGUIAdapter
     addTab("SQWRLQueryTab", QueryIcons.getQueryIcon(), controlPanel, "Control Panel");
 
     return this;
-  } // createPluginGUI
+  } // createPluginContainer
 
   private Container makeErrorWindow(String text) 
   { 

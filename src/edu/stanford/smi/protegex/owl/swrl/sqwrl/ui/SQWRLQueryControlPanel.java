@@ -1,19 +1,26 @@
 
 package edu.stanford.smi.protegex.owl.swrl.sqwrl.ui;
 
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.*;
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.*;
-
-import edu.stanford.smi.protegex.owl.swrl.model.*;
-import edu.stanford.smi.protegex.owl.swrl.bridge.*;
-import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.*;
-import edu.stanford.smi.protegex.owl.swrl.ui.icons.SWRLIcons;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.*;
+import java.util.HashMap;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
+
+import edu.stanford.smi.protegex.owl.swrl.bridge.BridgePluginManager;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngine;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResult;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.InvalidQueryNameException;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
+import edu.stanford.smi.protegex.owl.swrl.ui.icons.SWRLIcons;
 
 public class SQWRLQueryControlPanel extends JPanel 
 {
@@ -84,15 +91,6 @@ public class SQWRLQueryControlPanel extends JPanel
     return button;
   } // createButton
 
-  private JLabel createLabel(String text)
-  {
-    JLabel label = new JLabel(text);
-
-    label.setPreferredSize(new Dimension(160, 30));
-
-    return label;
-  } // createLabel
-
   private JTextArea createTextArea()
   {
     JTextArea textArea = new JTextArea(10, 80);
@@ -129,14 +127,12 @@ public class SQWRLQueryControlPanel extends JPanel
         textArea.append("A maximum of " + MaximumOpenResultPanels + " result tabs may be open at once. ");
         textArea.append("Please close an existing tab to display results for the selected rule.\n");
       } else {
-	try {
-          queryEngine.runSQWRLQueries();
-        
+	      try {
           queryName = BridgePluginManager.getSelectedRuleName();
           
           if (queryName == null || queryName.equals("")) textArea.append("No SQWRL query selected.\n");
           else {
-            result = queryEngine.getSQWRLResult(queryName);
+            result = queryEngine.runSQWRLQuery(queryName);
             if (result == null || result.getNumberOfRows() == 0) {
               textArea.append("Query '" + queryName + "' did not generate any result.\n");
               if  (resultPanels.containsKey(queryName)) {

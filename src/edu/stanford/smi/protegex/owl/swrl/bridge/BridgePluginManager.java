@@ -104,7 +104,7 @@ public class BridgePluginManager
         
         if (registeredPlugins.containsKey(pluginName)) {
           PluginRegistration registration = registeredPlugins.get(pluginName);
-          Container pluginGUI = registration.getGUIAdapter().createPluginGUI(owlModel);
+          Container pluginGUI = registration.getGUIAdapter().createPluginContainer(owlModel);
 
           registration.setOWLModel(owlModel); // Set the owlModel so that we can deregister ourselves on deactivation.
           
@@ -130,7 +130,7 @@ public class BridgePluginManager
 
       if (registeredPlugins.containsKey(pluginName)) {
         PluginRegistration registration = registeredPlugins.get(pluginName);
-        Container pluginGUI = registration.getGUIAdapter().getPluginGUI();
+        Container pluginGUI = registration.getGUIAdapter().getPluginContainer();
         SWRLTab swrlTab = (SWRLTab)pluginGUI.getParent();
         if (swrlTab != null) {
           swrlTab.setVisible(false); 

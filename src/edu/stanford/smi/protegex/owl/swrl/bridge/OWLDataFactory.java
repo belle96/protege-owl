@@ -13,8 +13,9 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDType;
  */
 public interface OWLDataFactory
 {
-  Set<SWRLRule> getSWRLRules() throws OWLFactoryException;
-  BuiltInAtom getSWRLBuiltInAtom(String builtInURI, String builtInPrefixedName, List<BuiltInArgument> arguments);
+	 Set<SWRLRule> getSWRLRules() throws OWLFactoryException;
+	 SWRLRule getSWRLRule(String ruleName) throws OWLFactoryException;
+	 BuiltInAtom getSWRLBuiltInAtom(String builtInURI, String builtInPrefixedName, List<BuiltInArgument> arguments);
 
   OWLClass getOWLClass();
   OWLClass getOWLClass(String classURI);
