@@ -183,6 +183,7 @@ public class OWLFactoryImpl implements OWLDataFactory
   public OWLDataValue getOWLDataValue(String s) { return new OWLDataValueImpl(s); }
   public OWLDataValue getOWLDataValue(Number n) { return new OWLDataValueImpl(n); }
   public OWLDataValue getOWLDataValue(boolean b){ return new OWLDataValueImpl(b); }
+  public OWLDataValue getOWLDataValue(Boolean b){ return new OWLDataValueImpl(b); }
   public OWLDataValue getOWLDataValue(int i) { return new OWLDataValueImpl(i); }
   public OWLDataValue getOWLDataValue(long l) { return new OWLDataValueImpl(l); }
   public OWLDataValue getOWLDataValue(float f) { return new OWLDataValueImpl(f); }

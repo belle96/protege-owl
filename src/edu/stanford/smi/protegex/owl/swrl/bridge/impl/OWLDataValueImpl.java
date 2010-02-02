@@ -26,6 +26,7 @@ public class OWLDataValueImpl extends BuiltInArgumentImpl implements OWLDataValu
   public OWLDataValueImpl(String s) { value = s; } 
   public OWLDataValueImpl(Number n) { value = n; }
   public OWLDataValueImpl(boolean b) { value = Boolean.valueOf(b); }
+  public OWLDataValueImpl(Boolean b) { value = b; }
   public OWLDataValueImpl(int i) { value = Integer.valueOf(i); }
   public OWLDataValueImpl(long l) { value = Long.valueOf(l); }
   public OWLDataValueImpl(float f) { value = Float.valueOf(f); }

@@ -19,12 +19,22 @@ public interface SQWRLQueryEngine
   void runSQWRLQueries() throws SQWRLException;
 
   /**
-   ** Run a SQWRL query.
+   * Create and run a SQWRL query. Query will be created and added to ontology.
    */
   //SQWRLResult runSQWRLQuery(String queryName, String query) throws SQWRLException, SWRLParseException;
+  
+  /**
+   * Create a SQWRL query.
+   */
+  //void createSQWRLQuery(String queryName, String query) throws SQWRLException, SWRLParseException;
   
   /**
    * Get the results from a SQWRL query. Null is returned if there is no result.
    */
   SQWRLResult getSQWRLResult(String queryName) throws SQWRLException;
+  
+  /**
+   * Get the names of SQWRL queries.
+   */
+  //Set<String> getSQWRLQueryNames();
 } // SQWRLQueryEngine

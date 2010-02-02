@@ -537,6 +537,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
       } else  if (o instanceof RDFSLiteral) arguments.add(convertOWLDataValue((RDFSLiteral)o));
       else  if (o instanceof Number) arguments.add(owlFactory.getOWLDataValue((Number)o));
       else  if (o instanceof String) arguments.add(owlFactory.getOWLDataValue((String)o));
+      else  if (o instanceof Boolean) arguments.add(owlFactory.getOWLDataValue((Boolean)o));
       else throw new OWLConversionFactoryException("unknown type for argument '" + o + "' to built-in '" + builtInPrefixedName + "'");
     } // while
 
