@@ -276,7 +276,7 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
     try {
       reset();
       importSQWRLQuery(queryName);
-      importSWRLRules(false); // Will not import queries. Fills in referencedClassNames, referencedIndividualNames, referencedPropertyName.
+      importSWRLRules(false); // Fills in referencedClassNames, referencedIndividualNames, referencedPropertyName.
       importReferencedOWLKnowledge();
       exportSWRLRulesAndOWLKnowledge();
       run();
