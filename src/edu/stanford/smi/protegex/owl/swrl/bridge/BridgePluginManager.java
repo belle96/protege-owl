@@ -125,7 +125,7 @@ public class BridgePluginManager
   {
     if (isVisible(pluginName)) {
 
-      if (!force && (JOptionPane.showConfirmDialog(null, "Do you really want to disable the " + pluginName + " plugin?", "Disable " + pluginName,
+      if (!force && (JOptionPane.showConfirmDialog(null, "Do you really want to close the " + pluginName + " plugin?", "Disable " + pluginName,
                                                    JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION)) return false;
 
       if (registeredPlugins.containsKey(pluginName)) {

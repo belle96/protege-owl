@@ -156,7 +156,9 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
   private void importSWRLRules(boolean allowSQWRLQueries) throws SWRLRuleEngineBridgeException
   {
     try {
-      for (SWRLRule rule : activeOWLFactory.getSWRLRules()) if (allowSQWRLQueries || !rule.isSQWRL()) importSWRLRule(rule);
+      for (SWRLRule rule : activeOWLFactory.getSWRLRules()) importSWRLRule(rule); 
+      //if (allowSQWRLQueries || !rule.isSQWRL()) importSWRLRule(rule);
+    	  
     } catch (OWLFactoryException e) {
       throw new SWRLRuleEngineBridgeException("factory error importing rules: " + e.getMessage());
     } // try
