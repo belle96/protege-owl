@@ -44,10 +44,10 @@ public class DefaultSWRLAtomList extends DefaultRDFList implements SWRLAtomList
                 s += SWRLUtil.getSWRLBrowserText((RDFObject)instance, "BUILTIN ATOM");
         	} else {
         		String builtInName = builtIn.getName();
-        		if (SQWRLNames.getSetBuildBuiltInNames().contains(builtInName) && !setBuildEncountered) {
+        		if (SQWRLNames.getCollectionBuildBuiltInNames().contains(builtInName) && !setBuildEncountered) {
         			setBuildEncountered = true;
         			s += "  " + SWRLParser.RING_CHAR + "  " + SWRLUtil.getSWRLBrowserText((RDFObject)instance, "ATOM");
-        		} else if (SQWRLNames.getSetOperationBuiltInNames().contains(builtInName) && !setOperationEncountered && atomProcessed) {
+        		} else if (SQWRLNames.getCollectionOperationBuiltInNames().contains(builtInName) && !setOperationEncountered && atomProcessed) {
         			setOperationEncountered = true;
         			s += "  " + SWRLParser.RING_CHAR + "  " + SWRLUtil.getSWRLBrowserText((RDFObject)instance, "ATOM");
         		} else {

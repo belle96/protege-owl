@@ -24,7 +24,7 @@ public interface SWRLRule extends OWLAxiom
   void appendAtomsToBody(List<Atom> atom);
 
   boolean isSQWRL();
-  boolean usesSQWRLSets();
+  boolean usesSQWRLCollections();
   ResultImpl getSQWRLResult();
 
   List<Atom> getSQWRLPhase1BodyAtoms();

@@ -48,8 +48,8 @@ public abstract class BuiltInLibraryManager
    * rule engine. The built-in name should be the fully qualified name of the built-in (e.g.,
    * http://www.w3.org/2003/11/swrlb#lessThanOrEqual).
    */
-  public static boolean invokeSWRLBuiltIn(TargetSWRLRuleEngine targetRuleEngine, SWRLBuiltInBridge bridge, String ruleName, String builtInName, int builtInIndex, 
-                                          boolean isInConsequent, List<BuiltInArgument> arguments) 
+  public static boolean invokeSWRLBuiltIn(TargetSWRLRuleEngine targetRuleEngine, SWRLBuiltInBridge bridge, String ruleName, String builtInName, 
+		  								  int builtInIndex, boolean isInConsequent, List<BuiltInArgument> arguments) 
     throws BuiltInException
   {
     String prefix = getPrefix(bridge, builtInName);
@@ -57,21 +57,20 @@ public abstract class BuiltInLibraryManager
     String builtInMethodName = getBuiltInMethodName(builtInName);
     SWRLBuiltInLibrary library = loadBuiltInLibrary(bridge, ruleName, prefix, implementationClassName);
     Method method = resolveBuiltInMethod(ruleName, library, prefix, builtInMethodName); // TODO: cache the method
-    boolean hasUnboundArguments = hasUnboundArguments(arguments);
     
     checkBuiltInMethodSignature(ruleName, prefix, builtInMethodName, method); // Check signature of method.
 
     boolean result = library.invokeBuiltInMethod(method, bridge, ruleName, prefix, builtInMethodName, builtInIndex, isInConsequent, arguments);
 
-    if (result && hasUnboundArguments) {
+    if (result) {
     	if(hasUnboundArguments(arguments)) // Make sure the built-in has bound all its arguments.
          throw new BuiltInException("built-in " + builtInName + " in rule " + ruleName + " returned with unbound arguments");
       
     	for (List<BuiltInArgument> binding : generateBuiltInArgumentBindings(ruleName, builtInName, builtInIndex, arguments)) {
-    		try {
-    	   targetRuleEngine.defineBuiltInArgumentBinding(ruleName, builtInName, builtInIndex, binding);
+    	  try {
+    	    targetRuleEngine.defineBuiltInArgumentBinding(ruleName, builtInName, builtInIndex, binding);
     	  } catch (TargetSWRLRuleEngineException e) {
-    	     throw new BuiltInException("error defining argument binding for built-in " + builtInName + " in rule " + ruleName + ": " + e.getMessage());
+    	    throw new BuiltInException("error defining argument binding for built-in " + builtInName + " in rule " + ruleName + ": " + e.getMessage());
     	  } // try
     	} // for
     } // if
@@ -137,9 +136,8 @@ public abstract class BuiltInLibraryManager
   } // invokeAllBuiltInLibrariesResetMethod
 
   /**
-   * This method is called with a list of arguments that contain the results of a built-in that bound at least one of its
-   * arguments. Some argument positions may contain multi-arguments, indicating that there is more than one pattern. If the
-   * result has more than one multi-argument, each multi-argument must have the same number of elements.
+   * This method is called with a list of built-in arguments. Some argument positions may contain multi-arguments, indicating that there is more
+   * than one pattern. If the result has more than one multi-argument, each multi-argument must have the same number of elements.
    */
   public static Set<List<BuiltInArgument>> generateBuiltInArgumentBindings(String ruleName, String builtInName, int builtInIndex, List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -150,9 +148,9 @@ public abstract class BuiltInLibraryManager
     if (multiArgumentIndexes.isEmpty()) // No multi-arguments - do a simple bind.
       bindings.add(arguments);
     else { // Generate all possible bindings.
-    	int firstMultiArgumentIndex = multiArgumentIndexes.get(0); // Pick the first multi-argument.
+      int firstMultiArgumentIndex = multiArgumentIndexes.get(0); // Pick the first multi-argument.
       multiArgument = (MultiArgument)arguments.get(firstMultiArgumentIndex);
-    	int numberOfArgumentsInMultiArgument = multiArgument.getNumberOfArguments(); 
+      int numberOfArgumentsInMultiArgument = multiArgument.getNumberOfArguments(); 
 
       if (numberOfArgumentsInMultiArgument < 1) throw new BuiltInException("empty multi-argument for built-in " + builtInName + " in rule " + ruleName);
       

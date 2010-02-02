@@ -22,6 +22,7 @@
   <swrl:Builtin rdf:ID="median"/>
   <swrl:Builtin rdf:ID="element"/>
   <swrl:Builtin rdf:ID="makeSet"/>
+  <swrl:Builtin rdf:ID="makeBag"/>
   <swrl:Builtin rdf:ID="groupBy"/>
   <swrl:Builtin rdf:ID="size"/>
   <swrl:Builtin rdf:ID="isEmpty"/>

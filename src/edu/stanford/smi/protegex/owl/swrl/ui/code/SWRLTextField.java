@@ -55,9 +55,13 @@ public class SWRLTextField extends SymbolTextField {
                 for (int i = 0; i < charMap.length; i++) {
                     char[] chars = charMap[i];
                     if (chars[0] == ch) {
-                        JTextComponent c = (JTextComponent) evt.getSource();
+                        JTextComponent c = (JTextComponent)evt.getSource();
                         try {
-                            c.getDocument().insertString(c.getCaretPosition(), "" + chars[1], null);
+                        	String leftString = c.getDocument().getText(0, c.getCaretPosition()).trim();
+                        	if (leftString.length() == 0 || leftString.endsWith(")"))
+                        		c.getDocument().insertString(c.getCaretPosition(), "" + chars[1], null);
+                        	else
+                        		c.getDocument().insertString(c.getCaretPosition(), "" + ch, null);
                             evt.consume();
                             return;
                         }

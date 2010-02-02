@@ -7,7 +7,7 @@ import java.util.Set;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 
 /**
- ** Interface representing a SWRL built-in atom
+ * Interface representing a SWRL built-in atom
  */
 public interface BuiltInAtom  extends Atom
 {
@@ -26,11 +26,15 @@ public interface BuiltInAtom  extends Atom
   String getArgumentVariableName(int argumentNumber) throws BuiltInException;
   Set<String> getArgumentsVariableNames() throws BuiltInException;
   Set<String> getArgumentsVariableNamesExceptFirst() throws BuiltInException;
+  Set<String> getDependsOnVariableNames(); // Indicates variables that this built-in depends on (directly  or indirectly)
   void addArguments(List<BuiltInArgument> additionalArguments);
 
-  boolean usesSQWRLSetResults();
-  void setUsesSQWRLSetResults();
-  boolean isSQWRLMakeSet();
+  boolean usesSQWRLCollectionResults();
+  boolean isSQWRLCreateCollection();
+  boolean isSQWRLCollectionOperation();
   boolean isSQWRLGroupBy();
+  
+  void setUsesSQWRLCollectionResults();
+  void setDependsOnVariableNames(Set<String> variableNames);
 } // BuiltInAtom
 

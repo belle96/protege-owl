@@ -20,7 +20,8 @@ public class BuiltInAtomImpl extends AtomImpl implements BuiltInAtom
   private String builtInName, builtInPrefixedName;
   private List<BuiltInArgument> arguments; 
   private int builtInIndex = -1; // Index of this built-in atom in rule body; left-to-right, first built-in index is 0, second in 1, and so on
-  private boolean sqwrlSetResultsUsed = false;
+  private boolean sqwrlCollectionResultsUsed = false;
+  private Set<String> dependsOnVariableNames = new HashSet<String>();
   
   public BuiltInAtomImpl(String builtInName, String builtInPrefixedName, List<BuiltInArgument> arguments)
   {
@@ -45,12 +46,15 @@ public class BuiltInAtomImpl extends AtomImpl implements BuiltInAtom
   public int getNumberOfArguments() { return arguments.size(); }
   public int getBuiltInIndex() { return builtInIndex; }
   public void setBuiltInIndex(int builtInIndex) { this.builtInIndex = builtInIndex; }
+  public Set<String> getDependsOnVariableNames() { return dependsOnVariableNames; }
 
-  public boolean usesSQWRLSetResults() { return sqwrlSetResultsUsed; } 
-  public void setUsesSQWRLSetResults() { sqwrlSetResultsUsed = true; }
-  public boolean isSQWRLMakeSet() { return builtInName.equals(SQWRLNames.MakeSet); }
+  public boolean usesSQWRLCollectionResults() { return sqwrlCollectionResultsUsed; } 
+  public boolean isSQWRLCreateCollection() { return builtInName.equals(SQWRLNames.MakeSet) || builtInName.equals(SQWRLNames.MakeBag); }
   public boolean isSQWRLGroupBy() { return builtInName.equals(SQWRLNames.GroupBy); }
+  public boolean isSQWRLCollectionOperation() { return SQWRLNames.isSQWRLCollectionOperationBuiltIn(builtInName); } 
 
+  public void setUsesSQWRLCollectionResults() { sqwrlCollectionResultsUsed = true; }
+  
   public boolean usesAtLeastOneVariableOf(Set<String> variableNames) throws BuiltInException
   { 
     Set<String> s = new HashSet<String>(variableNames);
@@ -123,6 +127,11 @@ public class BuiltInAtomImpl extends AtomImpl implements BuiltInAtom
     arguments.addAll(additionalArguments); 
   } // addArguments
 
+  public void setDependsOnVariableNames(Set<String> variableNames)
+  {
+	dependsOnVariableNames = variableNames;
+  } // setDependsOnVariableNames
+  
   private void checkArgumentNumber(int argumentNumber) throws BuiltInException
   {
     if (argumentNumber < 0 || argumentNumber > arguments.size()) throw new BuiltInException("invalid (0-offset) argument #" + argumentNumber);

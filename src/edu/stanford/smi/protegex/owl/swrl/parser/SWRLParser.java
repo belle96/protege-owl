@@ -102,7 +102,7 @@ public class SWRLParser
     String token, message;
     SWRLAtomList head = null, body = null;
     SWRLAtom atom = null;
-    boolean atLeastOneAtom = false, justProcessedAtom = false;
+    boolean atLeastOneAtom = false, justProcessedAtom = true;
     
     inHead = false;
     
@@ -519,23 +519,17 @@ public class SWRLParser
       } // if
     } else { // Is it an integer, float, long or double then?
       try {
-        if (!parseOnly) parsedEntity = owlModel.createRDFSLiteral(parsedString, owlModel.getXSDint());
-      } catch (NumberFormatException e1) {
-        try {
-          if (!parseOnly) parsedEntity = owlModel.createRDFSLiteral(parsedString, owlModel.getXSDfloat());
-        } catch (NumberFormatException e3) {
-          try {
-            if (!parseOnly) parsedEntity = owlModel.createRDFSLiteral(parsedString, owlModel.getXSDdouble());
-          } catch (NumberFormatException e4) {
-            try { 
-              if (!parseOnly) parsedEntity = owlModel.createRDFSLiteral(parsedString, owlModel.getXSDlong());
-            } catch (Exception e5) { 
-              String errorMessage = "Invalid literal '" + parsedString + "'.";
-              if (parseOnly) throw new SWRLIncompleteRuleException(errorMessage);
-              else throw new SWRLParseException(errorMessage);
-            } // try
-          } // try
-        } // try
+    	if (parsedString.contains(".")) {
+    	  Double.parseDouble(parsedString); // Check it
+          if (!parseOnly) parsedEntity = owlModel.createRDFSLiteral(parsedString, owlModel.getXSDdouble());
+    	} else {
+          Long.parseLong(parsedString); // Check it
+          if (!parseOnly) parsedEntity = owlModel.createRDFSLiteral(parsedString, owlModel.getXSDlong());
+        } // if
+      } catch (NumberFormatException e) {
+        String errorMessage = "Invalid literal '" + parsedString + "'.";
+        if (parseOnly) throw new SWRLIncompleteRuleException(errorMessage);
+        else throw new SWRLParseException(errorMessage);
       } // try
     } // if
     
