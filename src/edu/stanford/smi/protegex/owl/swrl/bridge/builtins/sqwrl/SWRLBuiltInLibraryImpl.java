@@ -185,7 +185,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   public boolean size(List<BuiltInArgument> arguments) throws BuiltInException
   {
     String collectionID = getSetIDInSingleSetOperation(arguments, 1, 2); // Does argument checking
-    long size = getCollection(collectionID).size(); // Checks collection ID validity
+    int size = getCollection(collectionID).size(); // Checks collection ID validity
     
     checkIfInAntecedent();
 
