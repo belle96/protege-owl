@@ -61,7 +61,7 @@ public class OWLBackwardsCompatibilityProjectFixups implements ProjectFixupPlugi
     public static final String OWL_BUILD_PROPERTY = "owl_build";  // this implementation was muffed and I am not going to fix it.
     public static final String OWL_MAJOR_BUILD_PROPERTY = "owl_major_build";
     public static final String OWL_DATABASE_INCLUSION = "parser_namespace_database_inclusion_version";
-    
+
     public static void insertVersionData(PropertyList sources) {
         sources.setString(OWL_BUILD_PROPERTY, OWLText.getBuildNumber());
         sources.setString(OWL_MAJOR_BUILD_PROPERTY, OWLText.getVersion());
@@ -71,25 +71,25 @@ public class OWLBackwardsCompatibilityProjectFixups implements ProjectFixupPlugi
     public static void fix(OWLModel owlModel) {
         Project project = owlModel.getProject();
         KnowledgeBase internalKb = project.getInternalProjectKnowledgeBase();
-        
+
         fixInternalProject(internalKb);
     }
 
 
     private static void fixInternalProject(KnowledgeBase internalKb) {
-        PropertyList sources = getProjectSources(internalKb);       
-        
+        PropertyList sources = getProjectSources(internalKb);
+
         if (isReallyAncientVersion(sources)) {
-        	Log.getLogger().info("Backwards compatibility fixup for OWL project file (really ancient one)");        	
+        	Log.getLogger().info("Backwards compatibility fixup for OWL project file (really ancient one)");
             fixReallyAncient(internalKb);
         }
         if (isBeforeDatabaseInclusion(sources)) {
-        	Log.getLogger().info("Backwards compatibility fixup for OWL project file (before DB inclusion)");        	
+        	Log.getLogger().info("Backwards compatibility fixup for OWL project file (before DB inclusion)");
             fixForDatabaseInclusion(internalKb);
-        } 
+        }
     }
-    
-    
+
+
     /*
      * =================================================================================================
      *    Database inclusion fixups...
@@ -97,34 +97,33 @@ public class OWLBackwardsCompatibilityProjectFixups implements ProjectFixupPlugi
     public static boolean isBeforeDatabaseInclusion(PropertyList sources) {
         return sources.getBoolean(OWL_DATABASE_INCLUSION) == null;
     }
-    
+
     @SuppressWarnings("unchecked")
     private static void fixForDatabaseInclusion(KnowledgeBase internalKb) {
-        adjustNamespacePrefix(internalKb);        
+        adjustNamespacePrefix(internalKb);
         fixFramesVisibility(internalKb);
     }
-    
+
     private static void fixFramesVisibility(KnowledgeBase internalKb) {
     	//fix owl:Thing to be visible
     	Instance projectInstance = getProjectInstance(internalKb);
     	ModelUtilities.removeOwnSlotValue(projectInstance, SLOT_HIDDEN_FRAMES, OWLNames.Cls.THING);
-    	
+
     	fixSWRLVisibility(internalKb);
     }
-    
+
     private static void fixSWRLVisibility(KnowledgeBase internalKb) {
     	SWRLSystemFrames swrlSystemFrames = new SWRLSystemFrames(null);
 
     	Collection<Frame> invisibles = swrlSystemFrames.getFrames();
-    	
+
         Instance projectInstance = getProjectInstance(internalKb);
- 	   
-        for (Iterator<Frame> iterator = invisibles.iterator(); iterator.hasNext();) {
-			Frame frame = iterator.next();
+
+        for (Frame frame : invisibles) {
 			ModelUtilities.addOwnSlotValue(projectInstance, SLOT_HIDDEN_FRAMES, frame.getName());
-		}       
+		}
     }
-    
+
     @SuppressWarnings("unchecked")
     private static void adjustNamespacePrefix(KnowledgeBase internalKb) {
         for (Instance instance : internalKb.getInstances()) {
@@ -134,7 +133,7 @@ public class OWLBackwardsCompatibilityProjectFixups implements ProjectFixupPlugi
             }
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     private static void adjustNamespacePrefix(Instance instance, Slot slot, Collection values) {
         Collection<Object> fixedValues = new ArrayList<Object>();
@@ -152,7 +151,7 @@ public class OWLBackwardsCompatibilityProjectFixups implements ProjectFixupPlugi
             instance.setDirectOwnSlotValues(slot, fixedValues);
         }
     }
-    
+
     private static String adjustNamespacePrefix(String value) {
         String prefix;
         prefix = RDFNames.RDF_PREFIX + ":";
@@ -177,28 +176,28 @@ public class OWLBackwardsCompatibilityProjectFixups implements ProjectFixupPlugi
         }
         return value;
     }
-    
+
     private static String replacePrefix(String value, String prefix, String namespace) {
         return namespace + value.substring(prefix.length());
     }
-    
+
     /*
      * =================================================================================================
      *    Really ancient fixups
      */
-    
+
     public static boolean isReallyAncientVersion(PropertyList sources) {
-        return sources.getInteger(OWLBackwardsCompatibilityProjectFixups.OWL_BUILD_PROPERTY) == null;
+        return sources.getString(OWLBackwardsCompatibilityProjectFixups.OWL_BUILD_PROPERTY) == null;
     }
-    
-    
-    private static void fixReallyAncient(KnowledgeBase internalKb) {        
+
+
+    private static void fixReallyAncient(KnowledgeBase internalKb) {
         updateStandardForms(internalKb);
         renameWidgets(internalKb);
         fixFramesVisibility(internalKb);
     }
-    
-    
+
+
     private static void renameWidgets(KnowledgeBase internalKb) {
         renameWidget(internalKb, "edu.stanford.smi.protegex.owl.ui.cls.OWLClsesTab", OWLClassesTab.class.getName());
         renameWidget(internalKb, "edu.stanford.smi.protegex.owl.ui.OWLIndividualsTab", OWLIndividualsTab.class.getName());
@@ -219,9 +218,9 @@ public class OWLBackwardsCompatibilityProjectFixups implements ProjectFixupPlugi
         renameWidget(internalKb, StringListWidget.class.getName(), MultiLiteralWidget.class.getName());
         renameWidget(internalKb, SymbolListWidget.class.getName(), MultiLiteralWidget.class.getName());
     }
-    
+
     private static final String SLOT_HIDDEN_FRAMES = "hidden_classes";
-   
+
 
     private static void changeInstanceValue(KnowledgeBase kb,
                                             String className,
@@ -339,34 +338,34 @@ public class OWLBackwardsCompatibilityProjectFixups implements ProjectFixupPlugi
             // Log.trace(widgetClsName + " form changed= " + changed, BackwardsCompatibilityProjectFixups.class, "updateStandardForms");
         }
     }
-    
-    
+
+
     // ******************* interface methods ******************* //
 
 	public void fixProject(KnowledgeBase internalKb) {
 		fixInternalProject(internalKb);
-		
+
 	}
 
-	public String getName() {		
-		return "OWL Backward Project Compatibility Fixups"; 
+	public String getName() {
+		return "OWL Backward Project Compatibility Fixups";
 	}
 
 	public void dispose() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	public static boolean isSuitable(KnowledgeBase internalKb, Collection errors) {
 		String factory = getProjectSources(internalKb).getString(KnowledgeBaseFactory.FACTORY_CLASS_NAME);
-		
-		return factory != null && factory.contains(".owl.");		
+
+		return factory != null && factory.contains(".owl.");
 	}
-	
+
 	 private static final String CLASS_PROJECT = "Project";
-	 
+
 	// ********** utility methods *************
-	 
+
     protected static Instance getProjectInstance(KnowledgeBase kb) {
         Instance result = null;
         Cls cls = kb.getCls(CLASS_PROJECT);
@@ -375,7 +374,7 @@ public class OWLBackwardsCompatibilityProjectFixups implements ProjectFixupPlugi
         } else {
             Collection<Instance> instances = cls.getDirectInstances();
             // Assert.areEqual(instances.size(), 1);
-            result = (Instance) CollectionUtilities.getFirstItem(instances);
+            result = CollectionUtilities.getFirstItem(instances);
         }
         if (result == null) {
             Log.getLogger().severe("no project instance");
