@@ -485,7 +485,8 @@ public class RDFResourceRenderer extends OWLModelVisitorAdapter {
                 else {
                     RDFSLiteral curLiteral = model.asRDFSLiteral(curVal);
                     writer.writeAttribute(RDFNames.Slot.DATATYPE, curLiteral.getDatatype().getURI());
-                    writer.writeTextContent(curLiteral.getPlainValue().toString());
+                    // TODO I don't know why we don't just use curLiteral.getString()  but I didn't want to break anything
+                    writer.writeTextContent(curLiteral.getPlainValue() != null ? curLiteral.getPlainValue().toString() : curLiteral.getString());
                 }
                 writer.writeEndElement(); // End of rdf:first
                 writer.writeStartElement(Util.getPrefixedName(RDFNames.Slot.REST, tripleStore));
