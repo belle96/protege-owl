@@ -18,6 +18,7 @@ public abstract class DatetimeStringProcessor
   protected String delimiters;
   protected int[] gTokenIndex; // The number of tokens (including delimeters) necessary to strip a datetime to a specified granularity
   protected String datetimeRoundDownPadding[], datetimeRoundUpPadding[]; // Strings to pad a partially specified datetime
+  protected static final long daylightSavingsTimeOffsetInMillis = 60 * 60 * 1000;
 
   public DatetimeStringProcessor(SimpleDateFormat dateFormat, String delimiters, int gTokenIndex[], 
                                  String datetimeRoundDownPadding[], String datetimeRoundUpPadding[])

@@ -39,7 +39,8 @@ public class JDBCDatetimeStringProcessor extends DatetimeStringProcessor
 	  Timestamp ts= new Timestamp(millisecondsFrom1970);
 	  TimeZone tz = gc.getTimeZone();
 	    
-	  if (tz.inDaylightTime(ts)) ts = new Timestamp(millisecondsFrom1970 - Calendar.DST_OFFSET);
+	  if (tz.inDaylightTime(ts)) 
+		  ts = new Timestamp(millisecondsFrom1970 - daylightSavingsTimeOffsetInMillis);
 	       
 	  return ts.toString(); // Returns in JDBC format.
   } // constructDatetimeString

@@ -39,7 +39,8 @@ public class XSDDatetimeStringProcessor extends DatetimeStringProcessor
     Timestamp ts= new Timestamp(millisecondsFrom1970);
     TimeZone tz = gc.getTimeZone();
     
-    if (tz.inDaylightTime(ts)) ts = new Timestamp(millisecondsFrom1970 - Calendar.DST_OFFSET);
+    if (tz.inDaylightTime(ts)) 
+    	ts = new Timestamp(millisecondsFrom1970 - daylightSavingsTimeOffsetInMillis);
         
     return ts.toString().replace(' ', 'T'); // Timestamp.toString returns in JDBC format so replace space with 'T'.
   } // constructDatetimeStringFromMillisecondsFrom1970Count
