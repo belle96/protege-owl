@@ -4,6 +4,7 @@ package edu.stanford.smi.protegex.owl.swrl.bridge.builtins;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -896,7 +897,7 @@ public List<BuiltInArgument> copyArguments(List<BuiltInArgument> arguments) thro
   return new ArrayList<BuiltInArgument>(arguments);
 } // copyArguments
 
-public boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, Set<BuiltInArgument> resultArguments) 
+public boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, Collection<BuiltInArgument> resultArguments) 
   throws BuiltInException
 {
   boolean result = false;

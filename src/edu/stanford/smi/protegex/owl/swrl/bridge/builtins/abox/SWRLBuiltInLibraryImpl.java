@@ -31,7 +31,6 @@ import edu.stanford.smi.protegex.owl.swrl.util.SWRLOWLUtil;
 public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 {
   private static String SWRLABoxLibraryName = "SWRLABoxBuiltIns";
-  private static String SWRLABoxPrefix = "abox:";
 
   private ArgumentFactory argumentFactory;
 
@@ -102,15 +101,15 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
           axiom = getInvokingBridge().getOWLDataFactory().getOWLDataPropertyAssertionAxiom(subject, property, value);
         } // if
         getInvokingBridge().injectOWLAxiom(axiom);
-      } else {
+      } else { // In antecedent
         if (propertyValueSupplied) {
           propertyValue = getArgumentAsAPropertyValue(2, arguments);
           if (isObjectProperty) {
             RDFResource resource = SWRLOWLUtil.getObjectPropertyValue(getInvokingBridge().getOWLModel(), individualName, propertyName);
             result = propertyValue.equals(resource.getName());
           } else 
-            result = (propertyValue == SWRLOWLUtil.getDatavaluedPropertyValues(getInvokingBridge().getOWLModel(), individualName, propertyName));
-        } else { // Unbound
+            result = SWRLOWLUtil.getDatavaluedPropertyValues(getInvokingBridge().getOWLModel(), individualName, propertyName).contains(propertyValue);
+        } else { // Property value unbound
           MultiArgument multiArgument = argumentFactory.createMultiArgument(getVariableName(2, arguments));
           if (isObjectProperty) {
             for (RDFResource value : SWRLOWLUtil.getObjectPropertyValues(getInvokingBridge().getOWLModel(), individualName, propertyName)) {

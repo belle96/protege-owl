@@ -2,8 +2,8 @@
 package edu.stanford.smi.protegex.owl.swrl.bridge.builtins;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLClass;
@@ -159,7 +159,7 @@ public interface SWRLBuiltInLibrary
 	List<BuiltInArgument> copyArguments(List<BuiltInArgument> arguments) throws BuiltInException; 
 
 	boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber,
-                                  Set<BuiltInArgument> resultArguments) throws BuiltInException; 
+                                  Collection<BuiltInArgument> resultArguments) throws BuiltInException; 
 	boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber,
                                   BuiltInArgument resultArgument) throws BuiltInException; 
 	boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber,

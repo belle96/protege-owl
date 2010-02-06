@@ -127,10 +127,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (collections.containsKey(collectionID)) set = collections.get(collectionID);
     else {  
       set = new HashSet<BuiltInArgument>(); collections.put(collectionID, set); 
+      System.err.println("creating set with id: " + collectionID);
     } // if
 
     set.add(element);
-    // System.err.println("adding element " + element + " to set " + collectionID);
+    //System.err.println("adding element " + element + " to set " + collectionID);
 
     if (isUnboundArgument(0, arguments)) arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument(collectionID));
 
@@ -167,7 +168,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean isEmpty(List<BuiltInArgument> arguments) throws BuiltInException
   {
-    String collectionID = getSetIDInSingleSetOperation(arguments, 0, 1); // Does argument checking
+    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 0, 1); // Does argument checking
     
     checkIfInAntecedent();
     
@@ -184,7 +185,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean size(List<BuiltInArgument> arguments) throws BuiltInException
   {
-    String collectionID = getSetIDInSingleSetOperation(arguments, 1, 2); // Does argument checking
+    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
     int size = getCollection(collectionID).size(); // Checks collection ID validity
     
     checkIfInAntecedent();
@@ -210,7 +211,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       
       result = true;
     } else { // SQWRL collection operator
-      String collectionID = getSetIDInSingleSetOperation(arguments, 1, 2); // Does argument checking
+      String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
       Collection<BuiltInArgument> collection = getCollection(collectionID); // Check collectionID validity
       
       if (collection.isEmpty()) result = false;
@@ -252,7 +253,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
       result = true;
     } else { // SQWRL collection operator
-      String collectionID = getSetIDInSingleSetOperation(arguments, 1, 2); // Does argument checking
+      String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
       Collection<BuiltInArgument> collection = getCollection(collectionID); // Checks collectionID validity
       
       if (collection.isEmpty()) result = false;
@@ -290,7 +291,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       
       result = true;
     } else { // SQWRL collection operator
-      String collectionID = getSetIDInSingleSetOperation(arguments, 1, 2); // Does argument checking
+      String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
       Collection<BuiltInArgument> collection = getCollection(collectionID); // Checks collectionID validity
       
       if (collection.isEmpty()) result = false;
@@ -325,7 +326,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       if (argument instanceof OWLDataValue && ((OWLDataValue)argument).isNumeric()) resultImpl.addRowData((DataValue)argument);
       else throw new InvalidBuiltInArgumentException(0, "expecting numeric literal, got '" + argument + "'");
     } else { // SQWRL collection operator
-      String collectionID = getSetIDInSingleSetOperation(arguments, 1, 2); // Does argument checking
+      String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
       Collection<BuiltInArgument> collection = getCollection(collectionID); // Checks collectionID validity
       
       if (collection.isEmpty()) result = false;
@@ -352,7 +353,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (getIsInConsequent()) { // Simple SQWRL aggregation operator
       throw new BuiltInException("not implemented");
     } else { // SQWRL collection operator
-      String collectionID = getSetIDInSingleSetOperation(arguments, 1, 2); // Does argument checking
+      String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
       Collection<BuiltInArgument> collection = getCollection(collectionID); // Checks collectionID validity
       
       if (collection.isEmpty()) result = false;
@@ -385,8 +386,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     String setName2 = getCollectionName(arguments, 1);
     int set1NumberOfGroupElements = getCollectionNumberOfGroupElements(setName1);
     int set2NumberOfGroupElements = getCollectionNumberOfGroupElements(setName2);
-    String collectionID1 = getSetIDInMultiSetOperation(arguments, 0, 2, 0, set1NumberOfGroupElements); // Does argument checking
-    String collectionID2 = getSetIDInMultiSetOperation(arguments, 1, 2, set1NumberOfGroupElements, set2NumberOfGroupElements); // Does argument checking
+    String collectionID1 = getCollectionIDInMultiCollectionOperation(arguments, 0, 2, 0, set1NumberOfGroupElements); // Does argument checking
+    String collectionID2 = getCollectionIDInMultiCollectionOperation(arguments, 1, 2, set1NumberOfGroupElements, set2NumberOfGroupElements); // Does argument checking
     Collection<BuiltInArgument> collection1 = getCollection(collectionID1);
     Collection<BuiltInArgument> collection2 = getCollection(collectionID2);
     
@@ -409,9 +410,9 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 	    int set1NumberOfGroupElements = getCollectionNumberOfGroupElements(setName1);
 	    int set2NumberOfGroupElements = getCollectionNumberOfGroupElements(setName2);
 	    int setResultNumberOfGroupElements = set1NumberOfGroupElements + set2NumberOfGroupElements;
-	    String collectionIDResult = getSetIDInMultiSetOperation(arguments, 0, 3, 0, setResultNumberOfGroupElements); // Does argument checking
-	    String collectionID1 = getSetIDInMultiSetOperation(arguments, 1, 3, 0, set1NumberOfGroupElements); // Does argument checking
-	    String collectionID2 = getSetIDInMultiSetOperation(arguments, 2, 3, 0 + set1NumberOfGroupElements, set2NumberOfGroupElements); // Does argument checking
+	    String collectionIDResult = getCollectionIDInMultiCollectionOperation(arguments, 0, 3, 0, setResultNumberOfGroupElements); // Does argument checking
+	    String collectionID1 = getCollectionIDInMultiCollectionOperation(arguments, 1, 3, 0, set1NumberOfGroupElements); // Does argument checking
+	    String collectionID2 = getCollectionIDInMultiCollectionOperation(arguments, 2, 3, 0 + set1NumberOfGroupElements, set2NumberOfGroupElements); // Does argument checking
 	    Collection<BuiltInArgument> collection1 = getCollection(collectionID1);
 	    Collection<BuiltInArgument> collection2 = getCollection(collectionID2);
 	    Collection<BuiltInArgument> intersection = new HashSet<BuiltInArgument>(collection1);
@@ -434,9 +435,9 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 	int set1NumberOfGroupElements = getCollectionNumberOfGroupElements(setName1);
 	int set2NumberOfGroupElements = getCollectionNumberOfGroupElements(setName2);
 	int setResultNumberOfGroupElements = set1NumberOfGroupElements + set2NumberOfGroupElements;
-	String collectionIDResult = getSetIDInMultiSetOperation(arguments, 0, 3, 0, setResultNumberOfGroupElements); // Does argument checking
-	String collectionID1 = getSetIDInMultiSetOperation(arguments, 1, 3, 0, set1NumberOfGroupElements); // Does argument checking
-	String collectionID2 = getSetIDInMultiSetOperation(arguments, 2, 3, 0 + set1NumberOfGroupElements, set2NumberOfGroupElements); // Does argument checking
+	String collectionIDResult = getCollectionIDInMultiCollectionOperation(arguments, 0, 3, 0, setResultNumberOfGroupElements); // Does argument checking
+	String collectionID1 = getCollectionIDInMultiCollectionOperation(arguments, 1, 3, 0, set1NumberOfGroupElements); // Does argument checking
+	String collectionID2 = getCollectionIDInMultiCollectionOperation(arguments, 2, 3, 0 + set1NumberOfGroupElements, set2NumberOfGroupElements); // Does argument checking
 	Collection<BuiltInArgument> collection1 = getCollection(collectionID1);
 	Collection<BuiltInArgument> collection2 = getCollection(collectionID2);
 	Set<BuiltInArgument> union = new HashSet<BuiltInArgument>(collection1);
@@ -459,9 +460,9 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 	int set1NumberOfGroupElements = getCollectionNumberOfGroupElements(setName1);
 	int set2NumberOfGroupElements = getCollectionNumberOfGroupElements(setName2);
 	int setResultNumberOfGroupElements = set1NumberOfGroupElements + set2NumberOfGroupElements;
-	String collectionIDResult = getSetIDInMultiSetOperation(arguments, 0, 3, 0, setResultNumberOfGroupElements); // Does argument checking
-	String collectionID1 = getSetIDInMultiSetOperation(arguments, 1, 3, 0, set1NumberOfGroupElements); // Does argument checking
-	String collectionID2 = getSetIDInMultiSetOperation(arguments, 2, 3, 0 + set1NumberOfGroupElements, set2NumberOfGroupElements); // Does argument checking
+	String collectionIDResult = getCollectionIDInMultiCollectionOperation(arguments, 0, 3, 0, setResultNumberOfGroupElements); // Does argument checking
+	String collectionID1 = getCollectionIDInMultiCollectionOperation(arguments, 1, 3, 0, set1NumberOfGroupElements); // Does argument checking
+	String collectionID2 = getCollectionIDInMultiCollectionOperation(arguments, 2, 3, 0 + set1NumberOfGroupElements, set2NumberOfGroupElements); // Does argument checking
 	Collection<BuiltInArgument> collection1 = getCollection(collectionID1);
 	Collection<BuiltInArgument> collection2 = getCollection(collectionID2);
 	Collection<BuiltInArgument> difference = new HashSet<BuiltInArgument>(collection1);
@@ -479,14 +480,16 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean contains(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-    String collectionID = getSetIDInSingleSetOperation(arguments, 0, 2); // Does argument checking
-    BuiltInArgument element = arguments.get(1);
-    
-    // System.err.println("sqwrl.contains: arguments: " + arguments);
+    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 0, 2); // Does argument checking
+    //BuiltInArgument element = arguments.get(1);
     
     checkIfInAntecedent();
     
-    return getCollection(collectionID).contains(element);
+    return processResultArgument(arguments, 1, getCollection(collectionID));
+    
+    // System.err.println("sqwrl.contains: arguments: " + arguments);
+       
+    //return getCollection(collectionID).contains(element);
   } // contains
 
   public boolean notContains(List<BuiltInArgument> arguments) throws BuiltInException 
@@ -498,7 +501,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean greatest(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-    String collectionID = getSetIDInSingleSetOperation(arguments, 1, 2); // Does argument checking
+    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
     Collection<BuiltInArgument> collection = getCollection(collectionID);
     boolean result = false;
 
@@ -515,7 +518,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean greatestN(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-    String collectionID = getSetIDInSingleSetOperation(arguments, 1, 3); // Does argument checking
+    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
     int n = getArgumentAsAPositiveInteger(2, arguments);
     Collection<BuiltInArgument> collection = getCollection(collectionID);
     boolean result = false;
@@ -537,7 +540,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
  
   public boolean notGreatestN(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-    String collectionID = getSetIDInSingleSetOperation(arguments, 1, 3); // Does argument checking
+    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
     int n = getArgumentAsAPositiveInteger(2, arguments);
     Collection<BuiltInArgument> collection = getCollection(collectionID);
     boolean result = false;
@@ -559,7 +562,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean leastN(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-    String collectionID = getSetIDInSingleSetOperation(arguments, 1, 3); // Does argument checking
+    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
     int n = getArgumentAsAPositiveInteger(2, arguments);
     Collection<BuiltInArgument> collection = getCollection(collectionID);
     boolean result = false;
@@ -581,7 +584,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean notLeastN(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-    String collectionID = getSetIDInSingleSetOperation(arguments, 1, 3); // Does argument checking
+    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
     int n = getArgumentAsAPositiveInteger(2, arguments);
     Collection<BuiltInArgument> collection = getCollection(collectionID);
     boolean result = false;
@@ -603,7 +606,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean least(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-    String collectionID = getSetIDInSingleSetOperation(arguments, 1, 2); // Does argument checking
+    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
     Collection<BuiltInArgument> collection = getCollection(collectionID);
     boolean result = false;
 
@@ -668,7 +671,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     return collectionName + ":" + groupPattern;
   } // getCollectionIDInMake
 
-  private String getSetIDInSingleSetOperation(List<BuiltInArgument> arguments, int setArgumentIndex, int numberOfCoreArguments) 
+  private String getCollectionIDInSingleCollectionOperation(List<BuiltInArgument> arguments, int setArgumentIndex, int numberOfCoreArguments) 
     throws BuiltInException
   {
     String ruleName = getInvokingRuleName();
@@ -678,14 +681,14 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
     if (hasGroupPattern) {
     	groupPattern = createInvocationPattern(getInvokingBridge(), ruleName, 0, false, 
-    			                                               arguments.subList(numberOfCoreArguments, arguments.size()));
+    			                               arguments.subList(numberOfCoreArguments, arguments.size()));
     } // if
 
     return setName + ":" + groupPattern;
-  } // getSetIDInSingleSetOperation
+  } // getCollectionIDInSingleCollectionOperation
 
-  private String getSetIDInMultiSetOperation(List<BuiltInArgument> arguments, int setArgumentNumber, 
-                                             int coreArgumentNumber, int groupArgumentOffset, int numberOfRelevantGroupArguments) 
+  private String getCollectionIDInMultiCollectionOperation(List<BuiltInArgument> arguments, int setArgumentNumber, 
+                                             	           int coreArgumentNumber, int groupArgumentOffset, int numberOfRelevantGroupArguments) 
    throws BuiltInException
   {
     String ruleName = getInvokingRuleName();
@@ -698,8 +701,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
                                              coreArgumentNumber + groupArgumentOffset + numberOfRelevantGroupArguments)); 
 
     return setName + ":" + groupPattern;
-  } // getCollectionIDInOperation
-
+  } // getCollectionIDInMultiCollectionOperation
   
   private ResultImpl getResult(String queryName) throws BuiltInException
   {
