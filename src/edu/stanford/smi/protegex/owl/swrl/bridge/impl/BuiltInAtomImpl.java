@@ -49,8 +49,8 @@ public class BuiltInAtomImpl extends AtomImpl implements BuiltInAtom
   public Set<String> getDependsOnVariableNames() { return dependsOnVariableNames; }
 
   public boolean usesSQWRLCollectionResults() { return sqwrlCollectionResultsUsed; } 
-  public boolean isSQWRLCreateCollection() { return builtInName.equals(SQWRLNames.MakeSet) || builtInName.equals(SQWRLNames.MakeBag); }
-  public boolean isSQWRLGroupBy() { return builtInName.equals(SQWRLNames.GroupBy); }
+  public boolean isSQWRLMakeCollection() { return SQWRLNames.isSQWRLCollectionMakeBuiltIn(builtInName); }
+  public boolean isSQWRLGroupCollection() { return SQWRLNames.isSQWRLCollectionGroupBuiltIn(builtInName); }
   public boolean isSQWRLCollectionOperation() { return SQWRLNames.isSQWRLCollectionOperationBuiltIn(builtInName); } 
 
   public void setUsesSQWRLCollectionResults() { sqwrlCollectionResultsUsed = true; }

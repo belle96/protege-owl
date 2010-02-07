@@ -67,7 +67,7 @@ public class SWRLRuleImpl implements SWRLRule
     for (Atom atom : bodyAtoms) {
       if (atom instanceof BuiltInAtom) {
     	BuiltInAtom builtInAtom = (BuiltInAtom)atom;	
-    	if (builtInAtom.usesSQWRLCollectionResults() || builtInAtom.isSQWRLGroupBy()) continue;
+    	if (builtInAtom.usesSQWRLCollectionResults() || builtInAtom.isSQWRLGroupCollection()) continue;
       } // if
       result.add(atom);
     } // for
@@ -82,7 +82,7 @@ public class SWRLRuleImpl implements SWRLRule
     for (Atom atom : bodyAtoms) {
     	if (atom instanceof BuiltInAtom) {
     	  BuiltInAtom builtInAtom = (BuiltInAtom)atom;
-    	  if (builtInAtom.isSQWRLCreateCollection() || builtInAtom.isSQWRLGroupBy()) continue;
+    	  if (builtInAtom.isSQWRLMakeCollection() || builtInAtom.isSQWRLGroupCollection()) continue;
       } // if
       result.add(atom);
     } // for
@@ -199,7 +199,7 @@ public class SWRLRuleImpl implements SWRLRule
     sqwrlResult = new ResultImpl();
     
     preprocessSQWRLHeadBuiltIns();
-    preprocessSQWRLCollectionBuildBuiltIns(setNames, setGroupArgumentsMap);
+    preprocessSQWRLCollectionMakeBuiltIns(setNames, setGroupArgumentsMap);
     preprocessSQWRLCollectionOperationBuiltIns(setNames, setGroupArgumentsMap);
     
     sqwrlResult.configured();
@@ -288,18 +288,18 @@ public class SWRLRuleImpl implements SWRLRule
 
   // We store the group arguments for each collection specified in the make operation; these arguments are later appended to the collection
   // operation built-ins
-  private void preprocessSQWRLCollectionBuildBuiltIns(Set<String> collectionNames, Map<String, List<BuiltInArgument>> collectionGroupArgumentsMap) 
+  private void preprocessSQWRLCollectionMakeBuiltIns(Set<String> collectionNames, Map<String, List<BuiltInArgument>> collectionGroupArgumentsMap) 
     throws SQWRLException, BuiltInException
   {
-    for (BuiltInAtom builtInAtom : getBuiltInAtomsFromBody(SQWRLNames.getCollectionBuildBuiltInNames())) {
+    for (BuiltInAtom builtInAtom : getBuiltInAtomsFromBody(SQWRLNames.getCollectionMakeAndGroupBuiltInNames())) {
       String collectionName = builtInAtom.getArgumentVariableName(0); // First argument is the collection name
 
       hasSQWRLCollectionBuiltIns = true;
 
-      if (builtInAtom.isSQWRLCreateCollection()) {
+      if (builtInAtom.isSQWRLMakeCollection()) {
     	if (builtInAtom.getNumberOfArguments() != 2) throw new SQWRLException("makeSet or makeBag must have two arguments");
         if (!collectionNames.contains(collectionName)) collectionNames.add(collectionName);
-      } else if (builtInAtom.getBuiltInName().equals(SQWRLNames.GroupBy)) {
+      } else if (builtInAtom.isSQWRLGroupCollection()) {
         List<BuiltInArgument> builtInArguments = builtInAtom.getArguments();
         List<BuiltInArgument> groupArguments = builtInArguments.subList(1, builtInArguments.size());
 
@@ -314,7 +314,7 @@ public class SWRLRuleImpl implements SWRLRule
     } // for
   } // preprocessSQWRLCollectionBuildBuiltIns
 
-  // Append the group arguments to all collection operation built-ins for each of it the colection arguments; also append group arguments
+  // Append the group arguments to all collection built-ins for each of it the collection arguments; also append group arguments
   // to collections created by operation built-ins.
   private void preprocessSQWRLCollectionOperationBuiltIns(Set<String> collectionNames, Map<String, List<BuiltInArgument>> collectionGroupArgumentsMap) 
     throws SQWRLException, BuiltInException
@@ -323,18 +323,18 @@ public class SWRLRuleImpl implements SWRLRule
 
     for (BuiltInAtom builtInAtom : getBuiltInAtomsFromBody()) {
       String builtInName = builtInAtom.getBuiltInName();
-      String builtInPrefixedName = builtInAtom.getBuiltInPrefixedName();
-      if (builtInAtom.isSQWRLCreateCollection() || builtInAtom.isSQWRLCollectionOperation()) {
+      //String builtInPrefixedName = builtInAtom.getBuiltInPrefixedName();
+      if (builtInAtom.isSQWRLMakeCollection() || builtInAtom.isSQWRLCollectionOperation()) {
         Set<String> argumentsVariableNames = builtInAtom.getArgumentsVariableNames();
 
         if (SQWRLNames.isSQWRLCollectionOperationBuiltIn(builtInName)) builtInAtom.setUsesSQWRLCollectionResults();
         
         for (String variableName : argumentsVariableNames) {
-          if (collectionNames.contains(variableName) && collectionGroupArgumentsMap.containsKey(variableName)) { // Variable refers to a grouped set
-            List<BuiltInArgument> setGroupArguments = collectionGroupArgumentsMap.get(variableName);
-            builtInAtom.addArguments(setGroupArguments); // Append each set's group arguments to built-in
+          if (collectionNames.contains(variableName) && collectionGroupArgumentsMap.containsKey(variableName)) { // Variable refers to a grouped collection
+            List<BuiltInArgument> collectionGroupArguments = collectionGroupArgumentsMap.get(variableName); // Get the grouping arguments
+            builtInAtom.addArguments(collectionGroupArguments); // Append each collections's group arguments to built-in
             
-            // System.err.println("appending group arguments " + collectionGroupArgumentsMap.get(variableName) + " in built-in " + builtInPrefixedName + " for collection ?" + variableName);
+            // System.err.println("appending group arguments " + collectionGroupArguments + " in built-in " + builtInPrefixedName + " for collection ?" + variableName);
           } // if
         } // for
         

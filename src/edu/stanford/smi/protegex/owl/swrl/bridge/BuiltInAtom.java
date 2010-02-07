@@ -30,9 +30,9 @@ public interface BuiltInAtom  extends Atom
   void addArguments(List<BuiltInArgument> additionalArguments);
 
   boolean usesSQWRLCollectionResults();
-  boolean isSQWRLCreateCollection();
+  boolean isSQWRLMakeCollection();
+  boolean isSQWRLGroupCollection();
   boolean isSQWRLCollectionOperation();
-  boolean isSQWRLGroupBy();
   
   void setUsesSQWRLCollectionResults();
   void setDependsOnVariableNames(Set<String> variableNames);

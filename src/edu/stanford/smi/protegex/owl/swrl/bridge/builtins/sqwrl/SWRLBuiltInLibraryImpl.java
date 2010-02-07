@@ -127,7 +127,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (collections.containsKey(collectionID)) set = collections.get(collectionID);
     else {  
       set = new HashSet<BuiltInArgument>(); collections.put(collectionID, set); 
-      System.err.println("creating set with id: " + collectionID);
+      //System.err.println("creating set with id: " + collectionID);
     } // if
 
     set.add(element);
