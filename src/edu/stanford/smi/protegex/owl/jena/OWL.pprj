@@ -7195,10 +7195,10 @@
 ([KB_941921_Instance_7] of  Property_List
 )
 
-([OWL_ProjectKB_Instance_3] of  Integer
+([OWL_ProjectKB_Instance_3] of  String
 
-	(integer_value 125)
-	(name "owl_build"))
+	(name "owl_build")
+	(string_value "572"))
 
 ([PAL_FORM_WIDGET] of  Widget
 
