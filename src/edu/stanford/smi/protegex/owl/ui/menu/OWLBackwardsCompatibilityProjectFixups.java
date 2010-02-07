@@ -107,9 +107,8 @@ public class OWLBackwardsCompatibilityProjectFixups implements ProjectFixupPlugi
     private static void fixFramesVisibility(KnowledgeBase internalKb) {
     	//fix owl:Thing to be visible
     	Instance projectInstance = getProjectInstance(internalKb);
-    	ModelUtilities.removeOwnSlotValue(projectInstance, SLOT_HIDDEN_FRAMES, OWLNames.Cls.THING);
-
     	fixSWRLVisibility(internalKb);
+        ModelUtilities.removeOwnSlotValue(projectInstance, SLOT_HIDDEN_FRAMES, OWLNames.Cls.THING);
     }
 
     private static void fixSWRLVisibility(KnowledgeBase internalKb) {
@@ -118,7 +117,7 @@ public class OWLBackwardsCompatibilityProjectFixups implements ProjectFixupPlugi
     	Collection<Frame> invisibles = swrlSystemFrames.getFrames();
 
         Instance projectInstance = getProjectInstance(internalKb);
-
+        
         for (Frame frame : invisibles) {
 			ModelUtilities.addOwnSlotValue(projectInstance, SLOT_HIDDEN_FRAMES, frame.getName());
 		}
