@@ -45,7 +45,6 @@
   <swrl:Builtin rdf:ID="isOWLEnumeratedDatatypeAxiom"/>
   <swrl:Builtin rdf:ID="isOWLEquivalentClassAxiom"/>
   <swrl:Builtin rdf:ID="isOWLSymmetricPropertyAxiom"/>
-  <swrl:Builtin rdf:ID="isOWLEquivalentClassAxiom"/>
   <swrl:Builtin rdf:ID="isOWLDifferentIndividualsAxiom"/>
   <swrl:Builtin rdf:ID="isOWLEquivalentPropertyAxiom"/>
   <swrl:Builtin rdf:ID="isOWLInDomainOfAxiom"/>
