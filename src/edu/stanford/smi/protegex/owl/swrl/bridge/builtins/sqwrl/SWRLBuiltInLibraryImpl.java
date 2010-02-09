@@ -154,7 +154,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     bag.add(element);
     // System.err.println("adding element " + element + " to bag " + collectionID);
 
-    if (isUnboundArgument(0, arguments)) arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument(collectionID));
+    if (isUnboundArgument(0, arguments)) 
+    	arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument(collectionID));
 
     return true;
   } // makeBag
@@ -716,10 +717,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   private Collection<BuiltInArgument> getCollection(String collectionID) throws BuiltInException
   {
-    if (!isCollection(collectionID)) throw new BuiltInException("internal error: no collection found for ID " + collectionID);
+    if (!isCollection(collectionID)) throw new BuiltInException("argument " + collectionID + " does not refer to a collection");
     return collections.get(collectionID);
-  } // getCollection
-
-  private boolean isSet(Collection<BuiltInArgument> collection) { return collection instanceof Set<?>; } 
+  } // getCollection 
   
 } // SWRLBuiltInLibraryImpl
