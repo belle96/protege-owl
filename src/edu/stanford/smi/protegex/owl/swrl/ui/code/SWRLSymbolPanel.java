@@ -21,6 +21,7 @@ import javax.swing.JToolBar;
 import edu.stanford.smi.protege.ui.FrameComparator;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.model.RDFResource;
+import edu.stanford.smi.protegex.owl.model.RDFSDatatype;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLBuiltin;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLNames;
@@ -254,15 +255,14 @@ public class SWRLSymbolPanel extends SymbolPanel
     }
     
     private String getNextVariableName() {
-      Collection usedNames = getUsedVariableNames();
-      Collection existingVariableNames = new ArrayList();
+      Collection<String> usedNames = getUsedVariableNames();
+      Collection<String> existingVariableNames = new ArrayList<String>();
       OWLModel owlModel = getOWLModel();
       SWRLFactory factory = new SWRLFactory(owlModel);
-      final Collection variables = factory.getVariables();
-      for (Iterator it = variables.iterator(); it.hasNext();) {
-        SWRLVariable variable = (SWRLVariable) it.next();
-        existingVariableNames.add(variable.getName());
-      }
+      final Collection<SWRLVariable> variables = factory.getVariables();
+      for (SWRLVariable variable : variables)
+       existingVariableNames.add(variable.getName());
+      
       String chars = "xyzabcdefghijklmnopqrstuvwXYZABCDEFGHIJKLMNOPQRSTUVW";
       for (int i = 0; i < chars.length(); i++) {
         char c = chars.charAt(i);
@@ -291,7 +291,7 @@ public class SWRLSymbolPanel extends SymbolPanel
     public void actionPerformed(ActionEvent e) 
     {
       OWLModel owlModel = getOWLModel();
-      Collection datatypes = owlModel.getRDFSDatatypes();
+      Collection<RDFSDatatype> datatypes = owlModel.getRDFSDatatypes();
       RDFResource datatype = ProtegeUI.getSelectionDialogFactory().selectResourceFromCollection(SWRLSymbolPanel.this, owlModel,
                                                                                                 datatypes, 
                                                                                                 "Select the XML Schema datatype to insert");
