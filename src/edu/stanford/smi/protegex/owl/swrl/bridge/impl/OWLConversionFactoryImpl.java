@@ -734,7 +734,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
             OWLIndividual subjectOWLIndividual = owlFactory.getOWLIndividual(subjectIndividual.getName());
             OWLProperty objectPropertyPropertyValue;
             if (objectPropertyValue.isObjectProperty()) objectPropertyPropertyValue = owlFactory.getOWLObjectProperty(objectPropertyValue.getName());
-            else objectPropertyPropertyValue = owlFactory.getOWLObjectProperty(objectPropertyValue.getName());
+            else objectPropertyPropertyValue = owlFactory.getOWLDataProperty(objectPropertyValue.getName());
             axiom = owlFactory.getOWLPropertyPropertyAssertionAxiom(subjectOWLIndividual, objectProperty, objectPropertyPropertyValue);
             propertyAssertions.add(axiom);                
           } // if
