@@ -14,7 +14,7 @@ public class OWLIndividualImpl extends PropertyValueImpl implements OWLIndividua
 {
   // NOTE: equals() method defined in this class
 
-  private String individualName, prefixedIndividualName;  
+  private String individualURI, prefixedIndividualName;  
   private Set<OWLClass> definingClasses, definingSuperclasses, definingEquivalentClasses, definingEquivalentClassSuperclasses, classes;
   private Set<OWLIndividual> sameAsIndividuals;
 
@@ -46,8 +46,7 @@ public class OWLIndividualImpl extends PropertyValueImpl implements OWLIndividua
 
   public void addSameAsIndividual(OWLIndividual sameAsIndividual) { sameAsIndividuals.add(sameAsIndividual); }
 
-  public String getURI() { return individualName; }
-  public String getIndividualName() { return individualName; }
+  public String getURI() { return individualURI; }
   public String getPrefixedIndividualName() { return prefixedIndividualName; }
   public Set<OWLClass> getDefiningClasses() { return definingClasses; }
   public Set<OWLClass> getDefiningSuperclasses() { return definingSuperclasses; }
@@ -55,9 +54,9 @@ public class OWLIndividualImpl extends PropertyValueImpl implements OWLIndividua
   public Set<OWLClass> getDefiningEquivalentClassSuperclasses() { return definingEquivalentClassSuperclasses; }
   public Set<OWLIndividual> getSameAsIndividuals() { return sameAsIndividuals; }
 
-  public boolean hasClass(String className) 
+  public boolean hasClass(String classURI) 
   {
-    for (OWLClass owlClass : classes) if (owlClass.getClassName().equals(className)) return true;
+    for (OWLClass owlClass : classes) if (owlClass.getURI().equals(classURI)) return true;
 
     return false;
   } // hasClass
@@ -72,7 +71,7 @@ public class OWLIndividualImpl extends PropertyValueImpl implements OWLIndividua
     if(this == obj) return true;
     if((obj == null) || (obj.getClass() != this.getClass())) return false;
     OWLIndividualImpl impl = (OWLIndividualImpl)obj;
-    return (getIndividualName() == impl.getIndividualName() || (getIndividualName() != null && getIndividualName().equals(impl.getIndividualName()))) &&
+    return (getURI() == impl.getURI() || (getURI() != null && getURI().equals(impl.getURI()))) &&
            (getPrefixedIndividualName() == impl.getPrefixedIndividualName() || (getPrefixedIndividualName() != null && getPrefixedIndividualName().equals(impl.getPrefixedIndividualName()))) &&
            (definingClasses != null && impl.definingClasses != null && definingClasses.equals(impl.definingClasses)) &&
            (definingSuperclasses != null && impl.definingSuperclasses != null && definingSuperclasses.equals(impl.definingSuperclasses)) &&
@@ -84,7 +83,7 @@ public class OWLIndividualImpl extends PropertyValueImpl implements OWLIndividua
   {
     int hash = 8;
 
-    hash = hash + (null == getIndividualName() ? 0 : getIndividualName().hashCode());
+    hash = hash + (null == getURI() ? 0 : getURI().hashCode());
     hash = hash + (null == getPrefixedIndividualName() ? 0 : getPrefixedIndividualName().hashCode());
     hash = hash + (null == getDefiningClasses() ? 0 : getDefiningClasses().hashCode());
     hash = hash + (null == getDefiningSuperclasses() ? 0 : getDefiningSuperclasses().hashCode());
@@ -96,12 +95,12 @@ public class OWLIndividualImpl extends PropertyValueImpl implements OWLIndividua
 
   public int compareTo(Object o)
   {
-    return individualName.compareTo(((OWLIndividualImpl)o).getIndividualName());
+    return individualURI.compareTo(((OWLIndividualImpl)o).getURI());
   } // compareTo
 
   private void initialize(String individualName, String prefixedIndividualName)
   {
-    this.individualName = individualName;
+    this.individualURI = individualName;
     this.prefixedIndividualName = prefixedIndividualName;
 
     definingClasses = new HashSet<OWLClass>();

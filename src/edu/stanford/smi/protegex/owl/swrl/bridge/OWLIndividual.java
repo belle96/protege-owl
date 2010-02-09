@@ -7,7 +7,6 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.ObjectValue;
 
 public interface OWLIndividual extends OWLEntity, OWLPropertyValue, IndividualArgument, ObjectValue
 {
-  String getIndividualName();
   String getPrefixedIndividualName();
 
   Set<OWLClass> getDefiningClasses();

@@ -39,7 +39,6 @@ public abstract class OWLPropertyImpl extends BuiltInArgumentImpl implements OWL
   public void setEquivalentPropertySuperPropertyNames(Set<String> equivalentPropertySuperPropertyNames) { this.equivalentPropertySuperPropertyNames = equivalentPropertySuperPropertyNames; }
 
   public String getURI() { return propertyURI; }
-  public String getPropertyName() { return propertyURI; }
   public String getPrefixedPropertyName() { return prefixedPropertyName; }
   public Set<String> getDomainClassNames() { return domainClassNames; }
   public Set<String> getRangeClassNames() { return rangeClassNames; }
@@ -57,7 +56,7 @@ public abstract class OWLPropertyImpl extends BuiltInArgumentImpl implements OWL
     if(this == obj) return true;
     if((obj == null) || (obj.getClass() != this.getClass())) return false;
     OWLPropertyImpl impl = (OWLPropertyImpl)obj;
-    return (getPropertyName() == impl.getPropertyName() || (getPropertyName() != null && getPropertyName().equals(impl.getPropertyName()))) && 
+    return (getURI() == impl.getURI() || (getURI() != null && getURI().equals(impl.getURI()))) && 
       (getPrefixedPropertyName() == impl.getPrefixedPropertyName() || (getPrefixedPropertyName() != null && getPrefixedPropertyName().equals(impl.getPrefixedPropertyName()))) && 
       (domainClassNames == impl.domainClassNames || (domainClassNames != null && domainClassNames.equals(impl.domainClassNames))) &&
       (rangeClassNames == impl.rangeClassNames || (rangeClassNames != null && rangeClassNames.equals(impl.rangeClassNames))) &&
@@ -70,7 +69,7 @@ public abstract class OWLPropertyImpl extends BuiltInArgumentImpl implements OWL
   public int hashCode()
   {
     int hash = 767;
-    hash = hash + (null == getPropertyName() ? 0 : getPropertyName().hashCode());
+    hash = hash + (null == getURI() ? 0 : getURI().hashCode());
     hash = hash + (null == getPrefixedPropertyName() ? 0 : getPrefixedPropertyName().hashCode());
     hash = hash + (null == domainClassNames ? 0 : domainClassNames.hashCode());
     hash = hash + (null == rangeClassNames ? 0 : rangeClassNames.hashCode());
@@ -83,7 +82,7 @@ public abstract class OWLPropertyImpl extends BuiltInArgumentImpl implements OWL
 
   public int compareTo(Object o)
   {
-    return propertyURI.compareTo(((OWLPropertyImpl)o).getPropertyName());
+    return propertyURI.compareTo(((OWLPropertyImpl)o).getURI());
   } // compareTo
 
   private void initialize()

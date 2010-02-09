@@ -10,7 +10,7 @@ import java.util.Set;
  */
 public interface OWLProperty extends OWLEntity, PropertyValue, AtomArgument // AtomArgument is for SWRL Full
 {
-  String getPropertyName();
+  String getURI();
   String getPrefixedPropertyName();
 
   Set<String> getDomainClassNames();

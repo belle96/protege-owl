@@ -62,15 +62,15 @@ public class RelationalMapper implements Mapper, MapperGenerator
     } // try
   } // close
 
-  public boolean isMapped(OWLClass owlClass) { return classMaps.containsKey(owlClass.getClassName()); }
+  public boolean isMapped(OWLClass owlClass) { return classMaps.containsKey(owlClass.getURI()); }
   public boolean isMapped(OWLProperty owlProperty) 
   { 
-    return objectPropertyMaps.containsKey(owlProperty.getPropertyName()) || datatypePropertyMaps.containsKey(owlProperty.getPropertyName());
+    return objectPropertyMaps.containsKey(owlProperty.getURI()) || datatypePropertyMaps.containsKey(owlProperty.getURI());
   } //isMapped
 
   public void addMap(OWLClassMap classMap)
   {
-    String className = classMap.getOWLClass().getClassName();
+    String className = classMap.getOWLClass().getURI();
 
     if (classMaps.containsKey(className)) classMaps.remove(className); // Remove old map, if any
 
@@ -79,7 +79,7 @@ public class RelationalMapper implements Mapper, MapperGenerator
 
   public void addMap(OWLObjectPropertyMap objectPropertyMap)
   {
-    String propertyName = objectPropertyMap.getProperty().getPropertyName();
+    String propertyName = objectPropertyMap.getProperty().getURI();
 
     if (objectPropertyMaps.containsKey(propertyName)) objectPropertyMaps.remove(propertyName); // Remove old map, if any
 
@@ -88,7 +88,7 @@ public class RelationalMapper implements Mapper, MapperGenerator
 
   public void addMap(OWLDatatypePropertyMap datatypePropertyMap)
   {
-    String propertyName = datatypePropertyMap.getProperty().getPropertyName();
+    String propertyName = datatypePropertyMap.getProperty().getURI();
 
     if (datatypePropertyMaps.containsKey(propertyName)) datatypePropertyMaps.remove(propertyName); // Remove old map, if any
 
@@ -97,7 +97,7 @@ public class RelationalMapper implements Mapper, MapperGenerator
 
   public Set<OWLIndividual> mapOWLClass(OWLClass owlClass) throws MapperException
   {
-    String className = owlClass.getClassName();
+    String className = owlClass.getURI();
     OWLClassMap classMap = getOWLClassMap(className);
     PrimaryKey primaryKey = classMap.getPrimaryKey();
     String primaryKeyColumnName = primaryKey.getPrimaryKeyColumns().iterator().next().getColumnName(); // Will have checked for non composite key
@@ -133,7 +133,7 @@ public class RelationalMapper implements Mapper, MapperGenerator
 
   public Set<OWLObjectPropertyAssertionAxiom> mapOWLObjectProperty(OWLProperty owlProperty) throws MapperException
   {
-    String propertyName = owlProperty.getPropertyName();
+    String propertyName = owlProperty.getURI();
     OWLObjectPropertyMap propertyMap = getOWLObjectPropertyMap(propertyName);
     ForeignKey foreignKey = propertyMap.getForeignKey();
     String subjectTableName = foreignKey.getBaseTable().getTableName();
@@ -186,7 +186,7 @@ public class RelationalMapper implements Mapper, MapperGenerator
                                                                        OWLDataValue objectOWLDatatypeValue) 
     throws MapperException
   {
-    String propertyName = owlProperty.getPropertyName();
+    String propertyName = owlProperty.getURI();
     OWLDatatypePropertyMap propertyMap = getOWLDatatypePropertyMap(propertyName);
     PrimaryKey primaryKey = propertyMap.getPrimaryKey();
     String valueColumnName = propertyMap.getValueColumn().getColumnName();
@@ -205,7 +205,7 @@ public class RelationalMapper implements Mapper, MapperGenerator
     query = "SELECT " + subjectPrimaryKeyColumnName + ", " + valueColumnName + " FROM " + subjectTableName;
     if (hasSubject || hasObject) {
       query += " WHERE ";
-      if (hasSubject) query +=  subjectPrimaryKeyColumnName + " = " + subjectOWLIndividual.getIndividualName();
+      if (hasSubject) query +=  subjectPrimaryKeyColumnName + " = " + subjectOWLIndividual.getURI();
       if (hasObject) {
         if (hasSubject) query += " AND ";
         query += valueColumnName + " = ";
@@ -318,7 +318,7 @@ public class RelationalMapper implements Mapper, MapperGenerator
     SQWRLResult result = queryEngine.getSQWRLResult("ddm:OWLDatatypePropertyMap-Query");
     if (result != null) {
       while (result.hasNext()) {
-        String propertyName = result.getPropertyValue("?ddm:owlDatatypeProperty").getPropertyName();
+        String propertyName = result.getPropertyValue("?ddm:owlDatatypeProperty").getURI();
         String schemaName  = result.getDataValue("?ddm:schemaName").getString();
         String tableName  = result.getDataValue("?ddm:tableName").getString();
         String keyColumnName  = result.getDataValue("?ddm:keyColumnName").getString();

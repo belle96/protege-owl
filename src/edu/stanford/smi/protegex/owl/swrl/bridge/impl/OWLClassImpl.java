@@ -35,7 +35,6 @@ public class OWLClassImpl extends BuiltInArgumentImpl implements OWLClass
   public void setEquivalentClassSuperclassNames(Set<String> equivalentClassSuperclassNames) { this.equivalentClassSuperclassNames = equivalentClassSuperclassNames; }
 
   public String getURI() { return classURI; }
-  public String getClassName() { return classURI; }
   public String getPrefixedClassName() { return prefixedClassName; }
   public Set<String> getSuperclassNames() { return superclassNames; }
   public Set<String> getDirectSuperClassNames() { return directSuperClassNames; }
@@ -54,7 +53,7 @@ public class OWLClassImpl extends BuiltInArgumentImpl implements OWLClass
     if(this == obj) return true;
     if((obj == null) || (obj.getClass() != this.getClass())) return false;
     OWLClassImpl impl = (OWLClassImpl)obj;
-    return (getClassName() == impl.getClassName() || (getClassName() != null && getClassName().equals(impl.getClassName()))) &&
+    return (getURI() == impl.getURI() || (getURI() != null && getURI().equals(impl.getURI()))) &&
            (getPrefixedClassName() == impl.getPrefixedClassName() || (getPrefixedClassName() != null && getPrefixedClassName().equals(impl.getPrefixedClassName()))) &&
            (superclassNames != null && impl.superclassNames != null && superclassNames.equals(impl.superclassNames)) &&
            (directSuperClassNames != null && impl.directSuperClassNames != null && directSuperClassNames.equals(impl.directSuperClassNames)) &&
@@ -67,7 +66,7 @@ public class OWLClassImpl extends BuiltInArgumentImpl implements OWLClass
   {
     int hash = 12;
 
-    hash = hash + (null == getClassName() ? 0 : getClassName().hashCode());
+    hash = hash + (null == getURI() ? 0 : getURI().hashCode());
     hash = hash + (null == getPrefixedClassName() ? 0 : getPrefixedClassName().hashCode());
     hash = hash + (null == getSuperclassNames() ? 0 : getSuperclassNames().hashCode());
     hash = hash + (null == getDirectSuperClassNames() ? 0 : getDirectSuperClassNames().hashCode());
@@ -80,7 +79,7 @@ public class OWLClassImpl extends BuiltInArgumentImpl implements OWLClass
 
   public int compareTo(Object o)
   {
-    return classURI.compareTo(((OWLClassImpl)o).getClassName());
+    return classURI.compareTo(((OWLClassImpl)o).getURI());
   } // compareTo
 
   private void initialize(String classURI, String prefixedClassName)

@@ -209,7 +209,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
 
   public void putOWLClass(OWLClass owlClass) throws OWLConversionFactoryException
   {
-    String classURI = owlClass.getClassName();
+    String classURI = owlClass.getURI();
     edu.stanford.smi.protegex.owl.model.OWLClass cls, superclass;
 
     if (SWRLOWLUtil.isClass(owlModel, classURI)) cls = SWRLOWLUtil.getOWLNamedClass(owlModel, classURI);
@@ -225,14 +225,14 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
 
   public void putOWLIndividual(OWLIndividual owlIndividual) throws OWLConversionFactoryException
   {
-    String individualURI = owlIndividual.getIndividualName();
+    String individualURI = owlIndividual.getURI();
     edu.stanford.smi.protegex.owl.model.OWLIndividual individual;
     
     if (SWRLOWLUtil.isIndividual(owlModel, individualURI)) individual = SWRLOWLUtil.getIndividual(owlModel, individualURI);
     else individual = SWRLOWLUtil.createIndividual(owlModel, individualURI);
     
     for (OWLClass owlClass : owlIndividual.getDefiningClasses()) {
-      edu.stanford.smi.protegex.owl.model.RDFSClass cls = SWRLOWLUtil.getOWLNamedClass(owlModel, owlClass.getClassName());
+      edu.stanford.smi.protegex.owl.model.RDFSClass cls = SWRLOWLUtil.getOWLNamedClass(owlModel, owlClass.getURI());
 
       if (!individual.hasRDFType(cls)) { 
         if (individual.hasRDFType(SWRLOWLUtil.getOWLThingClass(owlModel))) individual.setRDFType(cls);
@@ -319,7 +319,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
       String individualName = ((edu.stanford.smi.protegex.owl.model.OWLIndividual)atom.getArgument1()).getName();
       OWLIndividual argument1 = owlFactory.getOWLIndividual(individualName);
       classAtom.setArgument1(argument1);
-      classAtom.addReferencedIndividualName(argument1.getIndividualName());
+      classAtom.addReferencedIndividualName(argument1.getURI());
     } else if (atom.getArgument1() instanceof edu.stanford.smi.protegex.owl.model.OWLNamedClass) {
       String className = ((edu.stanford.smi.protegex.owl.model.OWLNamedClass)atom.getArgument1()).getName();
       OWLClass argument1 = owlFactory.getOWLClass(className);
@@ -362,7 +362,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
       edu.stanford.smi.protegex.owl.model.OWLIndividual individual = (edu.stanford.smi.protegex.owl.model.OWLIndividual)atom.getArgument1();
       OWLIndividual argument1 = owlFactory.getOWLIndividual(individual.getName());
       individualPropertyAtom.setArgument1(argument1);
-      individualPropertyAtom.addReferencedIndividualName(argument1.getIndividualName());
+      individualPropertyAtom.addReferencedIndividualName(argument1.getURI());
     } else throw new OWLConversionFactoryException("unexpected first argument to individual property atom '" + atom.getBrowserText() + 
                                          "' - expecting variable or individual, got instance of " + atom.getArgument1().getClass());
 
@@ -375,12 +375,12 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
       edu.stanford.smi.protegex.owl.model.OWLIndividual individual = (edu.stanford.smi.protegex.owl.model.OWLIndividual)atom.getArgument2();
       OWLIndividual argument2 = owlFactory.getOWLIndividual(individual.getName());
       individualPropertyAtom.setArgument2(argument2);
-      individualPropertyAtom.addReferencedIndividualName(argument2.getIndividualName());
+      individualPropertyAtom.addReferencedIndividualName(argument2.getURI());
     } else if (atom.getArgument2() instanceof edu.stanford.smi.protegex.owl.model.OWLNamedClass) {
       edu.stanford.smi.protegex.owl.model.OWLNamedClass cls = (edu.stanford.smi.protegex.owl.model.OWLNamedClass)atom.getArgument2();
       OWLClass argument2 = owlFactory.getOWLClass(cls.getName());
       individualPropertyAtom.setArgument2(argument2);
-      individualPropertyAtom.addReferencedClassName(argument2.getClassName());
+      individualPropertyAtom.addReferencedClassName(argument2.getURI());
     } else if (atom.getArgument2() instanceof edu.stanford.smi.protegex.owl.model.OWLProperty) {
       edu.stanford.smi.protegex.owl.model.OWLProperty property = (edu.stanford.smi.protegex.owl.model.OWLProperty)atom.getArgument2();
       OWLProperty argument2;
@@ -416,7 +416,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
       edu.stanford.smi.protegex.owl.model.OWLIndividual individual = (edu.stanford.smi.protegex.owl.model.OWLIndividual)atom.getArgument1();
       OWLIndividual argument1 = owlFactory.getOWLIndividual(individual.getName());
       datavaluedPropertyAtom.setArgument1(argument1);
-      datavaluedPropertyAtom.addReferencedIndividualName(argument1.getIndividualName());
+      datavaluedPropertyAtom.addReferencedIndividualName(argument1.getURI());
     } else throw new OWLConversionFactoryException("unexpected argument first to datavalued property atom '" + atom.getBrowserText() + 
                                          "' - expecting variable or individual, got instance of " + atom.getArgument1().getClass());
 
@@ -548,16 +548,16 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
 
   private void write2OWLModel(OWLClassAssertionAxiom axiom) throws OWLConversionFactoryException
   {
-    String classURI = axiom.getDescription().getClassName();
-    String individualURI = axiom.getIndividual().getIndividualName();
+    String classURI = axiom.getDescription().getURI();
+    String individualURI = axiom.getIndividual().getURI();
     SWRLOWLUtil.addClass(owlModel, individualURI, classURI);
   } // write2OWLModel
 
   private void write2OWLModel(OWLClassPropertyAssertionAxiom axiom) throws OWLConversionFactoryException
   {
-    String propertyURI = axiom.getProperty().getPropertyName();
-    String subjectIndividualName = axiom.getSubject().getIndividualName();
-    String objectClassName = axiom.getObject().getClassName();
+    String propertyURI = axiom.getProperty().getURI();
+    String subjectIndividualName = axiom.getSubject().getURI();
+    String objectClassName = axiom.getObject().getURI();
     edu.stanford.smi.protegex.owl.model.RDFProperty property = SWRLOWLUtil.getOWLProperty(owlModel, propertyURI);
     edu.stanford.smi.protegex.owl.model.OWLIndividual subjectIndividual;
     edu.stanford.smi.protegex.owl.model.OWLNamedClass objectClass = null;
@@ -575,8 +575,8 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
   private void write2OWLModel(OWLDataPropertyAssertionAxiom axiom) throws OWLConversionFactoryException
   {
     edu.stanford.smi.protegex.owl.model.OWLIndividual subjectIndividual;
-    String propertyURI = axiom.getProperty().getPropertyName();
-    String subjectIndividualName = axiom.getSubject().getIndividualName();
+    String propertyURI = axiom.getProperty().getURI();
+    String subjectIndividualName = axiom.getSubject().getURI();
     edu.stanford.smi.protegex.owl.model.RDFProperty property = SWRLOWLUtil.getOWLProperty(owlModel, propertyURI);
     edu.stanford.smi.protegex.owl.model.RDFSDatatype rangeDatatype = property.getRangeDatatype();
     Object objectValue;
@@ -603,9 +603,9 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
   private void write2OWLModel(OWLObjectPropertyAssertionAxiom axiom) throws OWLConversionFactoryException
   {
     edu.stanford.smi.protegex.owl.model.OWLIndividual subjectIndividual, objectIndividual;
-    String propertyURI = axiom.getProperty().getPropertyName();
-    String subjectIndividualName = axiom.getSubject().getIndividualName();
-    String objectIndividualName = axiom.getObject().getIndividualName();
+    String propertyURI = axiom.getProperty().getURI();
+    String subjectIndividualName = axiom.getSubject().getURI();
+    String objectIndividualName = axiom.getObject().getURI();
     edu.stanford.smi.protegex.owl.model.RDFProperty property = SWRLOWLUtil.getOWLProperty(owlModel, propertyURI);
     
     if (property == null) throw new OWLConversionFactoryException("invalid property name '" + propertyURI + "'");
@@ -621,9 +621,9 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
 
   private void write2OWLModel(OWLPropertyPropertyAssertionAxiom axiom) throws OWLConversionFactoryException
   {
-    String propertyURI = axiom.getProperty().getPropertyName();
-    String subjectIndividualName = axiom.getSubject().getIndividualName();
-    String objectPropertyName = axiom.getObject().getPropertyName();
+    String propertyURI = axiom.getProperty().getURI();
+    String subjectIndividualName = axiom.getSubject().getURI();
+    String objectPropertyName = axiom.getObject().getURI();
     edu.stanford.smi.protegex.owl.model.RDFProperty property = SWRLOWLUtil.getOWLProperty(owlModel, propertyURI);
     edu.stanford.smi.protegex.owl.model.OWLIndividual subjectIndividual;
     edu.stanford.smi.protegex.owl.model.OWLProperty objectProperty;
@@ -641,9 +641,9 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
 
   private void write2OWLModel(OWLSomeValuesFrom axiom) throws OWLConversionFactoryException
   {
-    edu.stanford.smi.protegex.owl.model.OWLSomeValuesFrom someValuesFrom = SWRLOWLUtil.getOWLSomeValuesFrom(owlModel, axiom.asOWLClass().getClassName());
-    edu.stanford.smi.protegex.owl.model.OWLProperty property = SWRLOWLUtil.getOWLProperty(owlModel, axiom.getProperty().getPropertyName());
-    edu.stanford.smi.protegex.owl.model.RDFResource filler = SWRLOWLUtil.getClass(owlModel, axiom.getSomeValuesFrom().getClassName());
+    edu.stanford.smi.protegex.owl.model.OWLSomeValuesFrom someValuesFrom = SWRLOWLUtil.getOWLSomeValuesFrom(owlModel, axiom.asOWLClass().getURI());
+    edu.stanford.smi.protegex.owl.model.OWLProperty property = SWRLOWLUtil.getOWLProperty(owlModel, axiom.getProperty().getURI());
+    edu.stanford.smi.protegex.owl.model.RDFResource filler = SWRLOWLUtil.getClass(owlModel, axiom.getSomeValuesFrom().getURI());
     
     someValuesFrom.setOnProperty(property);
     someValuesFrom.setFiller(filler); 
@@ -651,8 +651,8 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
 
   private void write2OWLModel(OWLSubClassAxiom axiom) throws OWLConversionFactoryException
   {
-    String subClassName = axiom.getSubClass().getClassName();
-    String superClassName = axiom.getSuperClass().getClassName();
+    String subClassName = axiom.getSubClass().getURI();
+    String superClassName = axiom.getSuperClass().getURI();
     SWRLOWLUtil.addSuperClass(owlModel, subClassName, superClassName);
   } // write2OWLModel
   

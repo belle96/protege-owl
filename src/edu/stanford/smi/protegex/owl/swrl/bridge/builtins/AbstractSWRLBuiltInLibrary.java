@@ -413,7 +413,7 @@ public String getArgumentAsAnIndividualName(int argumentNumber, List<BuiltInArgu
 {
   checkThatArgumentIsAnIndividual(argumentNumber, arguments);
 
-  return ((IndividualArgument)arguments.get(argumentNumber)).getIndividualName();
+  return ((IndividualArgument)arguments.get(argumentNumber)).getURI();
 } // getArgumentAsAnIndividualName
 
 public OWLIndividual getArgumentAsAnOWLIndividual(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException
@@ -427,7 +427,7 @@ public String getArgumentAsAClassName(int argumentNumber, List<BuiltInArgument> 
 {
   checkThatArgumentIsAClass(argumentNumber, arguments);
 
-  return ((ClassArgument)arguments.get(argumentNumber)).getClassName();
+  return ((ClassArgument)arguments.get(argumentNumber)).getURI();
 } // getArgumentAsAClassName
 
 public OWLClass getArgumentAsAnOWLClass(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException
@@ -457,9 +457,9 @@ public String getArgumentAsAResourceName(int argumentNumber, List<BuiltInArgumen
 
   checkThatArgumentIsAClassPropertyOrIndividual(argumentNumber, arguments);
 
-  if (isArgumentAClass(argumentNumber, arguments)) resourceName = ((ClassArgument)arguments.get(argumentNumber)).getClassName();
-  else if (isArgumentAProperty(argumentNumber, arguments)) resourceName = ((PropertyArgument)arguments.get(argumentNumber)).getPropertyName();
-  else if (isArgumentAnIndividual(argumentNumber, arguments)) resourceName = ((IndividualArgument)arguments.get(argumentNumber)).getIndividualName();
+  if (isArgumentAClass(argumentNumber, arguments)) resourceName = ((ClassArgument)arguments.get(argumentNumber)).getURI();
+  else if (isArgumentAProperty(argumentNumber, arguments)) resourceName = ((PropertyArgument)arguments.get(argumentNumber)).getURI();
+  else if (isArgumentAnIndividual(argumentNumber, arguments)) resourceName = ((IndividualArgument)arguments.get(argumentNumber)).getURI();
 
   return resourceName;
 } // getArgumentAsAResourceName
@@ -468,7 +468,7 @@ public String getArgumentAsAPropertyName(int argumentNumber, List<BuiltInArgumen
 {
   checkThatArgumentIsAProperty(argumentNumber, arguments);
 
-  return ((PropertyArgument)arguments.get(argumentNumber)).getPropertyName();
+  return ((PropertyArgument)arguments.get(argumentNumber)).getURI();
 } // getArgumentAsAPropertyName
 
 public void checkArgumentNumber(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException
@@ -816,13 +816,13 @@ private String makeInvalidArgumentTypeMessage(BuiltInArgument argument, String e
   else {
     if (argument instanceof ClassArgument) {
       ClassArgument classArgument = (ClassArgument)argument;
-      message += "class with name '" + classArgument.getClassName() + "'";
+      message += "class with name '" + classArgument.getURI() + "'";
     } else if (argument instanceof PropertyArgument) {
       PropertyArgument propertyArgument = (PropertyArgument)argument;
-      message += "property with name '" + propertyArgument.getPropertyName() + "'";
+      message += "property with name '" + propertyArgument.getURI() + "'";
     } else if (argument instanceof IndividualArgument) {
       IndividualArgument individualArgument = (IndividualArgument)argument;
-      message += "individual with name '" + individualArgument.getIndividualName() + "'";
+      message += "individual with name '" + individualArgument.getURI() + "'";
     } else if (argument instanceof DataValueArgument) {
       DataValueArgument literal = (DataValueArgument)argument;
       message += "literal with value '" + literal.toString() + "'";
@@ -848,13 +848,13 @@ public Object getArgumentAsAPropertyValue(int argumentNumber, List<BuiltInArgume
 
   if (argument instanceof ClassArgument) {
     ClassArgument classArgument = (ClassArgument)argument;
-    result = classArgument.getClassName();
+    result = classArgument.getURI();
   } else if (argument instanceof PropertyArgument) {
     PropertyArgument propertyArgument = (PropertyArgument)argument;
-    result = propertyArgument.getPropertyName();
+    result = propertyArgument.getURI();
   } else if (argument instanceof IndividualArgument) {
     IndividualArgument individualArgument = (IndividualArgument)argument;
-    result = individualArgument.getIndividualName();
+    result = individualArgument.getURI();
   } else if (argument instanceof OWLDataValue) {
     OWLDataValue literal = (OWLDataValue)argument;
     if (literal.isNumeric()) result = literal.getNumber();

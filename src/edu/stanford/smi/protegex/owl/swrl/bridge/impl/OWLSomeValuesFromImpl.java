@@ -19,7 +19,7 @@ public class OWLSomeValuesFromImpl extends OWLRestrictionImpl implements OWLSome
 
   public String toString()
   {
-    return "someValuesFrom(" + asOWLClass().getClassName() + ", " + getProperty().getPropertyName() + ", " + getSomeValuesFrom().getClassName() + ")";
+    return "someValuesFrom(" + asOWLClass().getURI() + ", " + getProperty().getURI() + ", " + getSomeValuesFrom().getURI() + ")";
   } // toString
 
   public boolean equals(Object obj)
@@ -27,18 +27,18 @@ public class OWLSomeValuesFromImpl extends OWLRestrictionImpl implements OWLSome
     if(this == obj) return true;
     if((obj == null) || (obj.getClass() != this.getClass())) return false;
     OWLSomeValuesFromImpl impl = (OWLSomeValuesFromImpl)obj;
-    return (asOWLClass().getClassName() == impl.asOWLClass().getClassName() || (asOWLClass().getClassName() != null && asOWLClass().getClassName().equals(impl.asOWLClass().getClassName()))) &&
-           (getProperty().getPropertyName() == impl.getProperty().getPropertyName() || (getProperty().getPropertyName() != null && getProperty().getPropertyName().equals(impl.getProperty().getPropertyName()))) &&
-           (getSomeValuesFrom().getClassName() == impl.getSomeValuesFrom().getClassName() || (getSomeValuesFrom().getClassName() != null && getSomeValuesFrom().getClassName().equals(impl.getSomeValuesFrom().getClassName())));
+    return (asOWLClass().getURI() == impl.asOWLClass().getURI() || (asOWLClass().getURI() != null && asOWLClass().getURI().equals(impl.asOWLClass().getURI()))) &&
+           (getProperty().getURI() == impl.getProperty().getURI() || (getProperty().getURI() != null && getProperty().getURI().equals(impl.getProperty().getURI()))) &&
+           (getSomeValuesFrom().getURI() == impl.getSomeValuesFrom().getURI() || (getSomeValuesFrom().getURI() != null && getSomeValuesFrom().getURI().equals(impl.getSomeValuesFrom().getURI())));
   } // equals
 
   public int hashCode()
   {
     int hash = 232;
 
-    hash = hash + (null == asOWLClass().getClassName() ? 0 : asOWLClass().getClassName().hashCode());
-    hash = hash + (null == getProperty().getPropertyName() ? 0 : getProperty().getPropertyName().hashCode());
-    hash = hash + (null == getSomeValuesFrom().getClassName() ? 0 : getSomeValuesFrom().getClassName().hashCode());
+    hash = hash + (null == asOWLClass().getURI() ? 0 : asOWLClass().getURI().hashCode());
+    hash = hash + (null == getProperty().getURI() ? 0 : getProperty().getURI().hashCode());
+    hash = hash + (null == getSomeValuesFrom().getURI() ? 0 : getSomeValuesFrom().getURI().hashCode());
 
     return hash;
   } // hashCode
