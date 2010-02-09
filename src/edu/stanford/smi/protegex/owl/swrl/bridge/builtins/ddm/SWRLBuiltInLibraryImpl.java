@@ -69,7 +69,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     OWLClass owlClass = null;
     Set<OWLIndividual> individuals = new HashSet<OWLIndividual>();
     String className;
-    Mapper mapper;
+    Mapper mapper = null;
 
     checkNumberOfArgumentsAtLeast(2, arguments.size());
 
@@ -79,9 +79,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
     if (!isUnboundIndividualArgument) throw new BuiltInException("bound arguments not yet implemented, class = '" + className + "'");
 
-    owlClass = getInvokingBridge().getOWLDataFactory().getOWLClass(className);
-    
-    mapper = null;
+    owlClass = getInvokingBridge().getOWLDataFactory().getOWLClass(className);  
    
     individuals = mapper.mapOWLClass(owlClass);
     
@@ -146,7 +144,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     OWLDataValue value = null;
     Set<OWLDataPropertyAssertionAxiom> axioms = new HashSet<OWLDataPropertyAssertionAxiom>();
     String propertyName;
-    Mapper mapper;
+    Mapper mapper = null;
 
     checkNumberOfArgumentsAtLeast(1, arguments.size());
     checkForUnboundArguments(arguments);
@@ -160,16 +158,14 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     
     if (hasSubject) {
       String subjectIndividualName = getArgumentAsAnIndividualName(1, arguments);
-      subjectOWLIndividual = getInvokingBridge().getOWLDataFactory().getOWLIndividual(getArgumentAsAnIndividualName(1, arguments));
+      subjectOWLIndividual = getInvokingBridge().getOWLDataFactory().getOWLIndividual(subjectIndividualName);
     } // if
     if (hasValue) {
       if (hasSubject) value = getArgumentAsAnOWLDatatypeValue(2, arguments);
       else value = getArgumentAsAnOWLDatatypeValue(1, arguments);
     } // if
-    
-    mapper = null;
-    
-    if (!mapper.isMapped(owlProperty)) return false;
+        
+    //if (!mapper.isMapped(owlProperty)) return false;
     
     if (!hasSubject && !hasValue) axioms = mapper.mapOWLDatatypeProperty(owlProperty);
     else if (hasSubject && !hasValue) axioms = mapper.mapOWLDatatypeProperty(owlProperty, subjectOWLIndividual);

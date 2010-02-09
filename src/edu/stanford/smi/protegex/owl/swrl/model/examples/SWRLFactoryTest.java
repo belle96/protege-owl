@@ -66,7 +66,7 @@ public class SWRLFactoryTest {
         RDFObject literalValue;
         OWLNamedClass pizzaClass, pizzaBase;
         SWRLVariable x, y, z;
-        Collection arguments;
+        Collection<RDFObject> arguments;
 
         // OWL classes
         pizzaClass = owlModel.createOWLNamedClass("Pizza");
@@ -103,7 +103,7 @@ public class SWRLFactoryTest {
         head.append(sameIndividualAtom);
 
         // lessThan(?x, ?y)
-        arguments = new ArrayList();
+        arguments = new ArrayList<RDFObject>();
         arguments.add(x);
         arguments.add(y);
         builtinAtom = swrlFactory.createBuiltinAtom(lessThanBuiltin, arguments.iterator());

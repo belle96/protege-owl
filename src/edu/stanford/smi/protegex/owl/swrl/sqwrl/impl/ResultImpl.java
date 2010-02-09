@@ -818,7 +818,7 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
     public int compare(List<SQWRLResultValue> row1, List<SQWRLResultValue> row2) 
     {
       for (Integer columnIndex : orderByColumnIndexes) {
-        int result = ((Comparable)row1.get(columnIndex)).compareTo(((Comparable)row2.get(columnIndex)));
+        int result = row1.get(columnIndex).compareTo(row2.get(columnIndex));
         if (result != 0) if (ascending) return result; else return -result;
       } // for
 
