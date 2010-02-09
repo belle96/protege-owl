@@ -1,13 +1,25 @@
 
 package edu.stanford.smi.protegex.owl.swrl.ddm.impl;
 
-import edu.stanford.smi.protegex.owl.swrl.ddm.*;
-import edu.stanford.smi.protegex.owl.swrl.ddm.exceptions.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
-import java.util.*;
-import java.sql.*;
+import edu.stanford.smi.protegex.owl.swrl.ddm.Column;
+import edu.stanford.smi.protegex.owl.swrl.ddm.DDMFactory;
+import edu.stanford.smi.protegex.owl.swrl.ddm.Database;
+import edu.stanford.smi.protegex.owl.swrl.ddm.DatabaseConnection;
+import edu.stanford.smi.protegex.owl.swrl.ddm.ForeignKey;
+import edu.stanford.smi.protegex.owl.swrl.ddm.ForeignKeyColumn;
+import edu.stanford.smi.protegex.owl.swrl.ddm.PrimaryKey;
+import edu.stanford.smi.protegex.owl.swrl.ddm.PrimaryKeyColumn;
+import edu.stanford.smi.protegex.owl.swrl.ddm.Table;
+import edu.stanford.smi.protegex.owl.swrl.ddm.exceptions.JDBCException;
 
 public class DatabaseConnectionImpl implements DatabaseConnection
 {
@@ -65,7 +77,6 @@ public class DatabaseConnectionImpl implements DatabaseConnection
   public Set<Table> getTables(String schemaName) throws SQLException
   {
     Set<Table> result = new HashSet<Table>();
-    Set<ForeignKey> foreignKeys = new HashSet<ForeignKey>();
     Table table;
 
     if (isOpen()) {

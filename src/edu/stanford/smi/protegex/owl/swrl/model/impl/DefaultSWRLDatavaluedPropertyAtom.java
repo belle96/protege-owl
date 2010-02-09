@@ -23,8 +23,8 @@ public class DefaultSWRLDatavaluedPropertyAtom extends DefaultSWRLAtom implement
     }
 
 
-    public void getReferencedInstances(Set set) {
-        Object argument1 = getArgument1();
+    public void getReferencedInstances(Set<RDFResource> set) {
+        RDFResource argument1 = getArgument1();
         if (argument1 != null) {
             set.add(argument1);
         }

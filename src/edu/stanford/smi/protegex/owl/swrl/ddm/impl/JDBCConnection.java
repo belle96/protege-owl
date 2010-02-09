@@ -1,14 +1,21 @@
 
 package edu.stanford.smi.protegex.owl.swrl.ddm.impl;
 
-import edu.stanford.smi.protegex.owl.swrl.ddm.*;
-import edu.stanford.smi.protegex.owl.swrl.ddm.exceptions.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-// Use the Protege class loader to find JDBC drivers
 import edu.stanford.smi.protege.plugin.PluginUtilities;
-
-import java.sql.*;
-import java.util.*;
+import edu.stanford.smi.protegex.owl.swrl.ddm.Column;
+import edu.stanford.smi.protegex.owl.swrl.ddm.exceptions.JDBCException;
 
 public class JDBCConnection
 {
@@ -300,10 +307,9 @@ public class JDBCConnection
     ResultSetMetaData rsmd;
     Set<String> columnTypeNames = new HashSet<String>();
     ResultSet rs = dbmd.getColumns(null, schemaName, tableName, null);
-    int numberOfColumns, i = 0;
+    int i = 0;
 
     rsmd = rs.getMetaData();
-    numberOfColumns = rsmd.getColumnCount();
 
     while (rs.next()) columnTypeNames.add(rsmd.getColumnTypeName(i++));
 
@@ -327,14 +333,9 @@ public class JDBCConnection
   public synchronized Set<String> getColumnNames(String schemaName, String tableName) throws SQLException
   {
     ResultSet rs;    
-    ResultSetMetaData rsmd;
     Set<String> columnNames = new HashSet<String>();
-    String column_name;
-    int numberOfColumns;
 
     rs = dbmd.getColumns(null, schemaName, tableName, null);
-    rsmd = rs.getMetaData();
-    numberOfColumns = rsmd.getColumnCount();
 
     while (rs.next()) columnNames.add(rs.getString("COLUMN_NAME"));
 

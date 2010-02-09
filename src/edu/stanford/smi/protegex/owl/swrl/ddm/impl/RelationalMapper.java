@@ -1,20 +1,41 @@
 
 package edu.stanford.smi.protegex.owl.swrl.ddm.impl;
 
-import edu.stanford.smi.protegex.owl.swrl.ddm.*;
-import edu.stanford.smi.protegex.owl.swrl.ddm.exceptions.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.*;
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.*;
-
-import edu.stanford.smi.protegex.owl.swrl.bridge.*;
+import edu.stanford.smi.protegex.owl.swrl.bridge.Mapper;
+import edu.stanford.smi.protegex.owl.swrl.bridge.OWLClass;
+import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataFactory;
+import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataProperty;
+import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataPropertyAssertionAxiom;
+import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValue;
+import edu.stanford.smi.protegex.owl.swrl.bridge.OWLIndividual;
+import edu.stanford.smi.protegex.owl.swrl.bridge.OWLObjectPropertyAssertionAxiom;
+import edu.stanford.smi.protegex.owl.swrl.bridge.OWLProperty;
+import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.MapperException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.impl.OWLFactoryImpl;
-import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.*;
-
-import edu.stanford.smi.protegex.owl.model.OWLModel;
-
-import java.util.*;
-import java.sql.*;
+import edu.stanford.smi.protegex.owl.swrl.ddm.Column;
+import edu.stanford.smi.protegex.owl.swrl.ddm.DDMFactory;
+import edu.stanford.smi.protegex.owl.swrl.ddm.Database;
+import edu.stanford.smi.protegex.owl.swrl.ddm.DatabaseConnection;
+import edu.stanford.smi.protegex.owl.swrl.ddm.ForeignKey;
+import edu.stanford.smi.protegex.owl.swrl.ddm.MapperGenerator;
+import edu.stanford.smi.protegex.owl.swrl.ddm.OWLClassMap;
+import edu.stanford.smi.protegex.owl.swrl.ddm.OWLDatatypePropertyMap;
+import edu.stanford.smi.protegex.owl.swrl.ddm.OWLObjectPropertyMap;
+import edu.stanford.smi.protegex.owl.swrl.ddm.PrimaryKey;
+import edu.stanford.smi.protegex.owl.swrl.ddm.PrimaryKeyColumn;
+import edu.stanford.smi.protegex.owl.swrl.ddm.Table;
+import edu.stanford.smi.protegex.owl.swrl.ddm.exceptions.JDBCException;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngine;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResult;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.InvalidQueryNameException;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 
 public class RelationalMapper implements Mapper, MapperGenerator
 {
@@ -103,7 +124,7 @@ public class RelationalMapper implements Mapper, MapperGenerator
     String primaryKeyColumnName = primaryKey.getPrimaryKeyColumns().iterator().next().getColumnName(); // Will have checked for non composite key
     Database database = primaryKey.getBaseTable().getDatabase();
     String tableName = primaryKey.getBaseTable().getTableName();
-    String columnName = primaryKey.getPrimaryKeyColumns().iterator().next().getColumnName();
+    //String columnName = primaryKey.getPrimaryKeyColumns().iterator().next().getColumnName();
     Set<OWLIndividual> result = new HashSet<OWLIndividual>();
     DatabaseConnection databaseConnection;
     ResultSet rs;

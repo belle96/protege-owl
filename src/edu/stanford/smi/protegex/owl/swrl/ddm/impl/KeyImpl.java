@@ -1,9 +1,8 @@
 
 package edu.stanford.smi.protegex.owl.swrl.ddm.impl;
 
-import edu.stanford.smi.protegex.owl.swrl.ddm.*;
-
-import java.util.*;
+import edu.stanford.smi.protegex.owl.swrl.ddm.Key;
+import edu.stanford.smi.protegex.owl.swrl.ddm.Table;
 
 public abstract class KeyImpl implements Key
 {

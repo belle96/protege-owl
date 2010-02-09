@@ -4,7 +4,6 @@ import java.util.Set;
 
 import edu.stanford.smi.protege.model.FrameID;
 import edu.stanford.smi.protege.model.KnowledgeBase;
-import edu.stanford.smi.protege.model.Slot;
 import edu.stanford.smi.protegex.owl.model.OWLObjectProperty;
 import edu.stanford.smi.protegex.owl.model.RDFResource;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLIndividualPropertyAtom;
@@ -21,16 +20,16 @@ public class DefaultSWRLIndividualPropertyAtom extends DefaultSWRLAtom implement
     }
 
 
-    public void getReferencedInstances(Set set) {
-        Object argument1 = getArgument1();
+    public void getReferencedInstances(Set<RDFResource> set) {
+        RDFResource argument1 = getArgument1();
         if (argument1 != null) {
             set.add(argument1);
         }
-        Object argument2 = getArgument2();
+        RDFResource argument2 = getArgument2();
         if (argument2 != null) {
             set.add(argument2);
         }
-        Slot slot = getPropertyPredicate();
+        RDFResource slot = getPropertyPredicate();
         if (slot != null) {
             set.add(slot);
         }

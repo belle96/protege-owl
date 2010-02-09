@@ -115,7 +115,7 @@ public class SQWRLQueryResultPanel extends JPanel
     public SaveResultActionListener()
     {
       chooser = new JFileChooser();
-      chooser.setCurrentDirectory(null);
+      chooser.setCurrentDirectory(currentDirectory);
     } // SaveResultActionListener
 
     public void actionPerformed(ActionEvent event) 

@@ -3,6 +3,7 @@ package edu.stanford.smi.protegex.owl.swrl.model;
 import java.util.Set;
 
 import edu.stanford.smi.protegex.owl.model.OWLIndividual;
+import edu.stanford.smi.protegex.owl.model.RDFResource;
 
 /**
  * The common base interface of all SWRL related classes.
@@ -17,5 +18,5 @@ public interface SWRLIndividual extends OWLIndividual {
      *
      * @param set
      */
-    void getReferencedInstances(Set set);
+    void getReferencedInstances(Set<RDFResource> set);
 }

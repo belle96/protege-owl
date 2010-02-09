@@ -9,6 +9,7 @@ import edu.stanford.smi.protege.model.KnowledgeBase;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.model.RDFList;
 import edu.stanford.smi.protegex.owl.model.RDFObject;
+import edu.stanford.smi.protegex.owl.model.RDFResource;
 import edu.stanford.smi.protegex.owl.model.impl.DefaultRDFList;
 import edu.stanford.smi.protegex.owl.model.visitor.OWLModelVisitor;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLAtomList;
@@ -66,7 +67,7 @@ public class DefaultSWRLAtomList extends DefaultRDFList implements SWRLAtomList
     return s;
   } // getBrowserText
 
-  public void getReferencedInstances(Set set) {
+  public void getReferencedInstances(Set<RDFResource> set) {
     final OWLModel owlModel = getOWLModel();
     RDFList li = this;
     while (li != null && !li.equals(owlModel.getRDFNil())) {

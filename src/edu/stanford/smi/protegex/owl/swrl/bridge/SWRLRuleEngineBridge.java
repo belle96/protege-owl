@@ -3,7 +3,6 @@ package edu.stanford.smi.protegex.owl.swrl.bridge;
 
 import java.util.List;
 
-import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.SWRLRuleEngine;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLRuleEngineBridgeException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngine;

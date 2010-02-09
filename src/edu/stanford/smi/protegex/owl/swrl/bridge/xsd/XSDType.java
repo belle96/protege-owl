@@ -5,7 +5,7 @@ import java.net.URISyntaxException;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.DataValueConversionException;
 
-public abstract class XSDType implements Comparable
+public abstract class XSDType implements Comparable<XSDType>
 {
   private String content;
   private java.net.URI uri = null;
@@ -22,9 +22,9 @@ public abstract class XSDType implements Comparable
 
   public java.net.URI getURI() { return uri; }
 
-  public int compareTo(Object o)
+  public int compareTo(XSDType xsdType)
   {
-    return content.compareTo(((XSDType)o).getContent()); // Will throw a ClassCastException if o's class does not implement Comparable
+    return content.compareTo(xsdType.getContent()); 
   } // compareTo
 
   protected abstract void validate() throws DataValueConversionException;

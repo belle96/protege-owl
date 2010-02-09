@@ -1,5 +1,7 @@
 package edu.stanford.smi.protegex.owl.swrl.model.impl;
 
+import java.util.Set;
+
 import edu.stanford.smi.protege.model.FrameID;
 import edu.stanford.smi.protege.model.Instance;
 import edu.stanford.smi.protege.model.KnowledgeBase;
@@ -8,8 +10,6 @@ import edu.stanford.smi.protegex.owl.model.RDFResource;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLDataRangeAtom;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLNames;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable;
-
-import java.util.Set;
 
 public class DefaultSWRLDataRangeAtom extends DefaultSWRLAtom implements SWRLDataRangeAtom {
 
@@ -22,14 +22,14 @@ public class DefaultSWRLDataRangeAtom extends DefaultSWRLAtom implements SWRLDat
     }
 
 
-    public void getReferencedInstances(Set set) {
-        Object argument1 = getArgument1();
+    public void getReferencedInstances(Set<RDFResource> set) {
+        RDFObject argument1 = getArgument1();
         if (argument1 != null && argument1 instanceof SWRLVariable) {
-            set.add(argument1);
+            set.add((SWRLVariable)argument1);
         }
         Instance dataRange = getDataRange();
-        if (dataRange != null) {
-            set.add(dataRange);
+        if (dataRange != null && dataRange instanceof RDFResource) {
+            set.add((RDFResource)dataRange);
         }
     }
 

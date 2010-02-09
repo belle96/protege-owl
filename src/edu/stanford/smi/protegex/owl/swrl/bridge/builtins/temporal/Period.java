@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/*
-** Class representing an interval of time.
-*/
+/**
+ * Class representing an interval of time.
+ */
 public class Period
 {
   // Both instants will have the same granularity so we do not store the granularity separately.
@@ -380,7 +380,7 @@ public class Period
   // This routine modifies the periods list that it has been passed so this list should not be used again.
   public List<Period> coalesce(List<Period> periods, int granularity) throws TemporalException
   {
-    Iterator iterator;
+    Iterator<Period> iterator;
     Period p1, p2;
     boolean periodMerged;
     List<Period> resultList = new ArrayList<Period>();

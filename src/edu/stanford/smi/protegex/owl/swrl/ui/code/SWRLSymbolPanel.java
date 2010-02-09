@@ -1,8 +1,27 @@
 package edu.stanford.smi.protegex.owl.swrl.ui.code;
 
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JButton;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JToolBar;
+
 import edu.stanford.smi.protege.ui.FrameComparator;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.model.RDFResource;
+import edu.stanford.smi.protegex.owl.swrl.model.SWRLBuiltin;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLNames;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable;
@@ -13,12 +32,6 @@ import edu.stanford.smi.protegex.owl.ui.ProtegeUI;
 import edu.stanford.smi.protegex.owl.ui.code.SymbolPanel;
 import edu.stanford.smi.protegex.owl.ui.icons.OWLIcons;
 import edu.stanford.smi.protegex.owl.ui.resourceselection.ResourceSelectionAction;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.*;
 
 /**
  * @author Holger Knublauch  <holger@knublauch.com>
@@ -58,9 +71,9 @@ public class SWRLSymbolPanel extends SymbolPanel
     return new Dimension(500, pref.height);
   }
 
-  private Collection getUsedVariableNames() {
+  private Collection<String> getUsedVariableNames() {
     String text = getSymbolEditor().getText();
-    Collection result = new HashSet();
+    Collection<String> result = new HashSet<String>();
     for (int i = 0; i < text.length(); i++) {
       if (text.charAt(i) == '?') {
         String varName = getVariableName(text, i);
@@ -175,7 +188,7 @@ public class SWRLSymbolPanel extends SymbolPanel
   }
 
   private void insertVariable(ActionEvent e) {
-    Set vars = new HashSet(getUsedVariableNames());
+    Set<String> vars = new HashSet<String>(getUsedVariableNames());
     final Collection instances = getOWLModel().getRDFSNamedClass(SWRLNames.Cls.VARIABLE).getInstances(true);
     for (Iterator it = instances.iterator(); it.hasNext();) {
       RDFResource resource = (RDFResource) it.next();
@@ -213,7 +226,7 @@ public class SWRLSymbolPanel extends SymbolPanel
 
     public Collection getSelectableResources() 
     {
-      java.util.List result = new ArrayList(new SWRLFactory(getOWLModel()).getBuiltins());
+      java.util.List<SWRLBuiltin> result = new ArrayList<SWRLBuiltin>(new SWRLFactory(getOWLModel()).getBuiltins());
       Collections.sort(result, new FrameComparator());
       return result;
     }

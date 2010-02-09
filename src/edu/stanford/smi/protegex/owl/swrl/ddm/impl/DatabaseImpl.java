@@ -1,10 +1,7 @@
 
 package edu.stanford.smi.protegex.owl.swrl.ddm.impl;
 
-import edu.stanford.smi.protegex.owl.swrl.ddm.*;
-import edu.stanford.smi.protegex.owl.swrl.ddm.exceptions.*;
-
-import java.util.*;
+import edu.stanford.smi.protegex.owl.swrl.ddm.Database;
 
 public class DatabaseImpl implements Database
 {

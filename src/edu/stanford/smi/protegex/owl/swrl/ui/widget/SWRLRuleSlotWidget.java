@@ -18,11 +18,10 @@ import edu.stanford.smi.protege.util.LabeledComponent;
 import edu.stanford.smi.protege.widget.AbstractSlotWidget;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLImp;
-import edu.stanford.smi.protegex.owl.swrl.model.impl.DefaultSWRLImp;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLNames;
-import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParser;
+import edu.stanford.smi.protegex.owl.swrl.model.impl.DefaultSWRLImp;
 import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParseException;
-import edu.stanford.smi.protegex.owl.swrl.ui.SWRLProjectPlugin;
+import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParser;
 import edu.stanford.smi.protegex.owl.swrl.ui.code.SWRLSymbolPanel;
 import edu.stanford.smi.protegex.owl.swrl.ui.code.SWRLTextArea;
 

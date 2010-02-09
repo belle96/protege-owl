@@ -248,47 +248,47 @@ public class XMLBridgeMapper
 
   private boolean isSchema(Element element) { return hasName(element, "schema"); }
   private boolean isElement(Element element) { return hasName(element, "element"); }
-  private boolean isAll(Element element) { return hasName(element, "all"); }
-  private boolean isComplexType(Element element) { return hasName(element, "complexType"); }
-  private boolean isSequence(Element element) { return hasName(element, "sequence"); }
-  private boolean isGroup(Element element) { return hasName(element, "group"); }
-  private boolean isAttributeGroup(Element element) { return hasName(element, "attributeGroup"); }
-  private boolean isChoice(Element element) { return hasName(element, "choice"); }
-  private boolean isAny(Element element) { return hasName(element, "any"); }
-  private boolean isAnyAttribute(Element element) { return hasName(element, "anyAttribute"); }
-  private boolean isAttribute(Element element) { return hasName(element, "attribute"); }
-  private boolean isComplexContent(Element element) { return hasName(element, "complexContent"); }
-  private boolean isSimpleContent(Element element) { return hasName(element, "simpleContent"); }
-  private boolean isSimpleContext(Element element) { return hasName(element, "simpleContext"); }
-  private boolean isSimpleType(Element element) { return hasName(element, "simpleType"); }
-  private boolean isRefElement(Element element) { return isElement(element) && hasRefAttribute(element); }
+  public boolean isAll(Element element) { return hasName(element, "all"); }
+  public boolean isComplexType(Element element) { return hasName(element, "complexType"); }
+  public boolean isSequence(Element element) { return hasName(element, "sequence"); }
+  public boolean isGroup(Element element) { return hasName(element, "group"); }
+  public boolean isAttributeGroup(Element element) { return hasName(element, "attributeGroup"); }
+  public boolean isChoice(Element element) { return hasName(element, "choice"); }
+  public boolean isAny(Element element) { return hasName(element, "any"); }
+  public boolean isAnyAttribute(Element element) { return hasName(element, "anyAttribute"); }
+  public boolean isAttribute(Element element) { return hasName(element, "attribute"); }
+  public boolean isComplexContent(Element element) { return hasName(element, "complexContent"); }
+  public boolean isSimpleContent(Element element) { return hasName(element, "simpleContent"); }
+  public boolean isSimpleContext(Element element) { return hasName(element, "simpleContext"); }
+  public boolean isSimpleType(Element element) { return hasName(element, "simpleType"); }
+  public boolean isRefElement(Element element) { return isElement(element) && hasRefAttribute(element); }
 
-  private String getNameAttribute(Element element) throws XMLBridgeMapperException { return getNameAttributeValue(element); }
-  private String getReafAttribute(Element element) throws XMLBridgeMapperException { return getRefAttributeValue(element); }
-  private String getTypeAttribute(Element element) throws XMLBridgeMapperException { return getTypeAttributeValue(element); }
-  private String getUseAttribute(Element element) throws XMLBridgeMapperException { return getUseAttributeValue(element); }
-  private String getMinOccursAttribute(Element element) throws XMLBridgeMapperException { return getMinOccursAttributeValue(element); }
-  private String getMaxOccursAttribute(Element element) throws XMLBridgeMapperException { return getMaxOccursAttributeValue(element); }
+  public String getNameAttribute(Element element) throws XMLBridgeMapperException { return getNameAttributeValue(element); }
+  public String getReafAttribute(Element element) throws XMLBridgeMapperException { return getRefAttributeValue(element); }
+  public String getTypeAttribute(Element element) throws XMLBridgeMapperException { return getTypeAttributeValue(element); }
+  public String getUseAttribute(Element element) throws XMLBridgeMapperException { return getUseAttributeValue(element); }
+  public String getMinOccursAttribute(Element element) throws XMLBridgeMapperException { return getMinOccursAttributeValue(element); }
+  public String getMaxOccursAttribute(Element element) throws XMLBridgeMapperException { return getMaxOccursAttributeValue(element); }
 
-  private boolean hasNameAttribute(Element element) { return hasAttribute(element, "name"); }
-  private boolean hasValueAttribute(Element element) { return hasAttribute(element, "value"); }
-  private boolean hasBaseAttribute(Element element) { return hasAttribute(element, "base"); }
-  private boolean hasMixedAttribute(Element element) { return hasAttribute(element, "mixed"); }
-  private boolean hasTypeAttribute(Element element) { return hasAttribute(element, "type"); }
-  private boolean hasDefaultAttribute(Element element) { return hasAttribute(element, "default"); }
-  private boolean hasFixedAttribute(Element element) { return hasAttribute(element, "fixed"); }
-  private boolean hasRefAttribute(Element element) { return hasAttribute(element, "ref"); }
-  private boolean hasUseAttribute(Element element) { return hasAttribute(element, "use"); }
-  private boolean hasMaxOccursAttribute(Element element) { return hasAttribute(element, "maxOccurs"); }
-  private boolean hasMinOccursAttribute(Element element) { return hasAttribute(element, "minOccurs"); }
+  public boolean hasNameAttribute(Element element) { return hasAttribute(element, "name"); }
+  public boolean hasValueAttribute(Element element) { return hasAttribute(element, "value"); }
+  public boolean hasBaseAttribute(Element element) { return hasAttribute(element, "base"); }
+  public boolean hasMixedAttribute(Element element) { return hasAttribute(element, "mixed"); }
+  public boolean hasTypeAttribute(Element element) { return hasAttribute(element, "type"); }
+  public boolean hasDefaultAttribute(Element element) { return hasAttribute(element, "default"); }
+  public boolean hasFixedAttribute(Element element) { return hasAttribute(element, "fixed"); }
+  public boolean hasRefAttribute(Element element) { return hasAttribute(element, "ref"); }
+  public boolean hasUseAttribute(Element element) { return hasAttribute(element, "use"); }
+  public boolean hasMaxOccursAttribute(Element element) { return hasAttribute(element, "maxOccurs"); }
+  public boolean hasMinOccursAttribute(Element element) { return hasAttribute(element, "minOccurs"); }
 
-  private String getNameAttributeValue(Element element) throws XMLBridgeMapperException { return getAttributeValue(element, "name"); }
-  private String getValueAttributeValue(Element element) throws XMLBridgeMapperException  { return getAttributeValue(element, "value"); }
-  private String getMixedAttributeValue(Element element) throws XMLBridgeMapperException  { return getAttributeValue(element, "mixed"); }
-  private String getBaseAttributeValue(Element element) throws XMLBridgeMapperException  { return getAttributeValue(element, "base"); }
-  private String getTypeAttributeValue(Element element) throws XMLBridgeMapperException  { return getAttributeValue(element, "type"); }
-  private String getDefaultAttributeValue(Element element) throws XMLBridgeMapperException  { return getAttributeValue(element, "default"); }
-  private String getFixedAttributeValue(Element element) throws XMLBridgeMapperException  { return getAttributeValue(element, "fixed"); }
+  public String getNameAttributeValue(Element element) throws XMLBridgeMapperException { return getAttributeValue(element, "name"); }
+  public String getValueAttributeValue(Element element) throws XMLBridgeMapperException  { return getAttributeValue(element, "value"); }
+  public String getMixedAttributeValue(Element element) throws XMLBridgeMapperException  { return getAttributeValue(element, "mixed"); }
+  public String getBaseAttributeValue(Element element) throws XMLBridgeMapperException  { return getAttributeValue(element, "base"); }
+  public String getTypeAttributeValue(Element element) throws XMLBridgeMapperException  { return getAttributeValue(element, "type"); }
+  public String getDefaultAttributeValue(Element element) throws XMLBridgeMapperException  { return getAttributeValue(element, "default"); }
+  public String getFixedAttributeValue(Element element) throws XMLBridgeMapperException  { return getAttributeValue(element, "fixed"); }
   private String getRefAttributeValue(Element element) throws XMLBridgeMapperException { return getAttributeValue(element, "ref"); }
   private String getUseAttributeValue(Element element) throws XMLBridgeMapperException { return getAttributeValue(element, "use"); }
   private String getMaxOccursAttributeValue(Element element) throws XMLBridgeMapperException { return getAttributeValue(element, "maxOccurs"); }

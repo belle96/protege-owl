@@ -1,8 +1,6 @@
 
 package edu.stanford.smi.protegex.owl.swrl.ddm;
 
-import java.util.*;
-
 public interface Database
 {
   String getJDBCDriverName();

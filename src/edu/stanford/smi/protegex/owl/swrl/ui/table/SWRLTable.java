@@ -4,7 +4,6 @@ package edu.stanford.smi.protegex.owl.swrl.ui.table;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Set;
 
 import javax.swing.AbstractAction;
@@ -13,9 +12,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.TableColumn;
 
-import edu.stanford.smi.protege.event.KnowledgeBaseAdapter;
-import edu.stanford.smi.protege.event.KnowledgeBaseEvent;
-import edu.stanford.smi.protege.model.KnowledgeBase;
 import edu.stanford.smi.protege.util.Disposable;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.model.RDFProperty;
@@ -63,16 +59,13 @@ public class SWRLTable extends SymbolTable implements Disposable {
     }
 
 
-    protected Collection getNavigationMenuItems(RDFResource RDFResource) {
-        SWRLImp imp = (SWRLImp) RDFResource;
-        Set set = imp.getReferencedInstances();
-        Collection result = new ArrayList();
-        for (Iterator it = set.iterator(); it.hasNext();) {
-          RDFResource resource = (RDFResource)it.next();
-          if (!(resource instanceof SWRLIndividual)) {
-            result.add(resource);
-          }
-        }
+    protected Collection<RDFResource> getNavigationMenuItems(RDFResource rdfResource) {
+        SWRLImp imp = (SWRLImp)rdfResource;
+        Set<RDFResource> set = imp.getReferencedInstances();
+        Collection<RDFResource> result = new ArrayList<RDFResource>();
+        for (RDFResource resource : set) 
+          if (!(resource instanceof SWRLIndividual)) result.add(resource);
+        
         return result;
     }
 
@@ -105,7 +98,6 @@ public class SWRLTable extends SymbolTable implements Disposable {
     public void valueChanged(ListSelectionEvent e)
     {
       int selectedRow = getSelectedRow();
-      int selectedColumn = getSelectedColumn();
       SWRLTableModel tableModel = (SWRLTableModel)getSymbolTableModel();
 
       super.valueChanged(e);

@@ -95,7 +95,7 @@ public class SWRLFactory
     return list;
   }
 
-  public SWRLBuiltinAtom createBuiltinAtom(SWRLBuiltin swrlBuiltin, Iterator arguments) 
+  public SWRLBuiltinAtom createBuiltinAtom(SWRLBuiltin swrlBuiltin, Iterator<RDFObject> arguments) 
   {
     RDFList li = owlModel.createRDFList(arguments);
     return createBuiltinAtom(swrlBuiltin, li);    
@@ -207,21 +207,31 @@ public class SWRLFactory
     }
   } // getBuiltin
 
-  public Collection getBuiltins() 
+  public Collection<SWRLBuiltin> getBuiltins() 
   {
     RDFSNamedClass builtinCls = owlModel.getRDFSNamedClass(SWRLNames.Cls.BUILTIN);
-    return builtinCls.getInstances(true);
+    Set<SWRLBuiltin> result = new HashSet<SWRLBuiltin>();
+    
+    for (Object o : builtinCls.getInstances(true))
+      if (o instanceof SWRLBuiltin) result.add((SWRLBuiltin)o);
+    
+    return result;
   }
 
-  public Collection getImps() 
+  public Collection<SWRLImp> getImps() 
   {
-    return systemFrames.getImpCls().getInstances(true);
+    Collection<SWRLImp> imps = new HashSet<SWRLImp>();
+    
+    for (Object o : systemFrames.getImpCls().getInstances(true))
+    	if (o instanceof SWRLImp) imps.add((SWRLImp)o);
+    
+    return imps;
   } // getImps
 
-  public Collection getEnabledImps() { return getImps(new HashSet<String>(), true); }
-  public Collection getEnabledImps(Set<String> ruleGroupNames) { return getImps(ruleGroupNames, true); }
+  public Collection<SWRLImp> getEnabledImps() { return getImps(new HashSet<String>(), true); }
+  public Collection<SWRLImp> getEnabledImps(Set<String> ruleGroupNames) { return getImps(ruleGroupNames, true); }
 
-  public Collection getEnabledImps(String ruleGroupName) 
+  public Collection<SWRLImp> getEnabledImps(String ruleGroupName) 
   { 
     Set<String> ruleGroupNames = new HashSet<String>();
     ruleGroupNames.add(ruleGroupName);
@@ -229,15 +239,13 @@ public class SWRLFactory
   } // getEnabledImps
 
   // If the ruleGroupNames is empty, return all imps.
-  private Collection getImps(Set<String> ruleGroupNames, boolean isEnabled) 
+  private Collection<SWRLImp> getImps(Set<String> ruleGroupNames, boolean isEnabled) 
   {
-    Collection result = new ArrayList();
-    Collection imps = getImps();
+    Collection<SWRLImp> result = new ArrayList<SWRLImp>();
+    Collection<SWRLImp> imps = getImps();
 
     if (imps != null) {
-      Iterator iterator = imps.iterator();
-      while (iterator.hasNext()) {
-        SWRLImp imp = (SWRLImp)iterator.next();
+      for (SWRLImp imp : imps) {
         if (ruleGroupNames.isEmpty() || imp.isInRuleGroups(ruleGroupNames)) {
           if (imp.isEnabled() == isEnabled) result.add(imp);
         } // if
@@ -248,8 +256,7 @@ public class SWRLFactory
 
   public void deleteImps()
   {
-    for (Object o : getImps()) {
-      SWRLImp imp = (SWRLImp)o;
+    for (SWRLImp imp : getImps()) {
       imp.deleteImp();
     } // for
   } // deleteImps
@@ -310,21 +317,24 @@ public class SWRLFactory
     }
 
 
-    public Collection getVariables() {
+    public Collection<SWRLVariable> getVariables() {
         RDFSClass variableCls = owlModel.getRDFSNamedClass(SWRLNames.Cls.VARIABLE);
-        return variableCls.getInstances(true);
+        Set<SWRLVariable> result = new HashSet<SWRLVariable>();
+        
+        for (Object o : variableCls.getInstances(true))
+          if (o instanceof SWRLVariable) result.add((SWRLVariable)o);
+        
+        return result;
     }
 
-  public Collection getReferencedImps(RDFResource rdfResource)
+  public Collection<SWRLImp> getReferencedImps(RDFResource rdfResource)
   {
-    Collection result = new ArrayList();
+    Collection<SWRLImp> result = new ArrayList<SWRLImp>();
 
     if (rdfResource != null) {
-      Iterator iterator = getImps().iterator();
-      while (iterator.hasNext()) {
-        SWRLImp imp = (SWRLImp)iterator.next();
-        Set set = imp.getReferencedInstances();
-        if (set.contains(rdfResource) && !result.contains(imp)) result.add(imp);
+      for (SWRLImp imp : getImps()) {
+        Set<RDFResource> resources = imp.getReferencedInstances();
+        if (resources.contains(rdfResource) && !result.contains(imp)) result.add(imp);
       } // while
     } // if
     return result;
@@ -361,9 +371,7 @@ public class SWRLFactory
 
   private void enableStatusUpdate(Set<String> ruleGroupNames, boolean enable)
   {
-    Iterator iterator = getImps().iterator();
-    while (iterator.hasNext()) {
-      SWRLImp imp = (SWRLImp)iterator.next();
+    for (SWRLImp imp : getImps()) {
       if (ruleGroupNames.isEmpty() || imp.isInRuleGroups(ruleGroupNames)) {
         if (enable) imp.enable(); else imp.disable();
       } // if

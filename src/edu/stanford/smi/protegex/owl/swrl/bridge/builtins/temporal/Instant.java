@@ -51,7 +51,7 @@ public class Instant
   public Instant(Temporal temporal, java.util.Date date, int granularity) throws TemporalException
   {
     this.temporal = temporal;
-    this.granuleCount = temporal.utilDate2GranuleCount(date, granularity);
+    this.granuleCount = Temporal.utilDate2GranuleCount(date, granularity);
     this.granularity = granularity;
 
     clearGranuleCountArray();
@@ -65,7 +65,7 @@ public class Instant
   public Instant(Temporal temporal, java.sql.Date date, int granularity) throws TemporalException
   {
     this.temporal = temporal;
-    this.granuleCount  = temporal.sqlDate2GranuleCount(date, granularity);;
+    this.granuleCount  = Temporal.sqlDate2GranuleCount(date, granularity);;
     this.granularity = granularity;
 
     clearGranuleCountArray();
@@ -159,7 +159,6 @@ public class Instant
   public String getDatetimeString(int granularity) throws TemporalException
   {
     long localGranuleCount;
-    String result;
 
     if (isNow) localGranuleCount = getNowGranuleCount(granularity);
     else localGranuleCount = getGranuleCount(granularity);
@@ -179,7 +178,7 @@ public class Instant
     if (isNow) localGranuleCount = getNowGranuleCount(granularity);
     else localGranuleCount = granuleCount;
 
-    return temporal.granuleCount2UtilDate(localGranuleCount, granularity);
+    return Temporal.granuleCount2UtilDate(localGranuleCount, granularity);
   } //  getDatetime
 
   public java.sql.Date getSQLDate() throws TemporalException
@@ -194,7 +193,7 @@ public class Instant
     if (isNow) localGranuleCount = getNowGranuleCount(granularity);
     else localGranuleCount = granuleCount;
 
-    return temporal.granuleCount2SQLDate(localGranuleCount, granularity);
+    return Temporal.granuleCount2SQLDate(localGranuleCount, granularity);
   } //  getSQLDate
 
   public boolean isStartOfTime() { return (granuleCount == 0); }
@@ -322,24 +321,24 @@ public class Instant
 
     // Loop through each instant in the list trying to merge with other instants.
     while (!instants.isEmpty()) {
-      i1 = (Instant)instants.get(0);
+      i1 = instants.get(0);
       instants.remove(0); // Remove each instants as we deal with it.
 
       // See if we can merge this instant with the remaining instants in the list. If we merge this instant with an existing instant later
       // in the list, remove the later element.
-      Iterator iterator = instants.iterator();
+      Iterator<Instant> iterator = instants.iterator();
       while (iterator.hasNext()) { 
-	i2 = (Instant)iterator.next();
-	// Merge contiguous or overlapping periods.
-	if (i1.equals(i2, granularity)) {
-	  iterator.remove(); // We have merged with instant i2 - remove it.
-	} // if
+	    i2 = (Instant)iterator.next();
+	    // Merge contiguous or overlapping periods.
+	    if (i1.equals(i2, granularity)) {
+	      iterator.remove(); // We have merged with instant i2 - remove it.
+	    } // if
       } // while
       resultList.add(i1);
     } // while
       
     return resultList;
-  } // coalsece
+  } // coalesce
 
   private void initialize(Temporal temporal, String datetimeString, int granularity, boolean roundUp) throws TemporalException
   {

@@ -1,16 +1,37 @@
 
 package edu.stanford.smi.protegex.owl.swrl.sqwrl.impl;
 
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.*;
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.*;
-
-import edu.stanford.smi.protegex.owl.swrl.bridge.*;
-import edu.stanford.smi.protegex.owl.swrl.bridge.impl.OWLFactoryImpl;
-import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.*;
-
-import java.util.*;
-import java.math.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataFactory;
+import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValue;
+import edu.stanford.smi.protegex.owl.swrl.bridge.impl.OWLFactoryImpl;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.ClassValue;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.ObjectValue;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.PropertyValue;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLNames;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResult;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResultGenerator;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResultValue;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.InvalidAggregateFunctionNameException;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.InvalidColumnIndexException;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.InvalidColumnNameException;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.InvalidColumnTypeException;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.InvalidQueryException;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.InvalidRowIndexException;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.ResultStateException;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 
 /**
  ** This class implements the interfaces SQWRLResult and ResultGenerator. It can be used to generate a result structure and populate it with
@@ -78,10 +99,10 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
 {
   private List<String> allColumnNames, columnDisplayNames;
   private List<Integer> selectedColumnIndexes, orderByColumnIndexes;
-  private HashMap<Integer, String> aggregateColumnIndexes; // Map of (index, function) pairs
+  private Map<Integer, String> aggregateColumnIndexes; // Map of (index, function) pairs
   private List<List<SQWRLResultValue>> rows; // List of List of ResultValue objects.
   private List<SQWRLResultValue> rowData; // List of ResultValue objects used when assembling a row.
-  private HashMap<String, List<SQWRLResultValue>> columnVectorMap; // Maps column names to a vector of ResultValue objects for that column
+  private Map<String, List<SQWRLResultValue>> columnVectorMap; // Maps column names to a vector of ResultValue objects for that column
   private int numberOfColumns, rowIndex, rowDataColumnIndex;
   private boolean isConfigured, isPrepared, isRowOpen, isOrdered, isAscending, isDistinct, hasAggregates;
   private OWLDataFactory owlFactory;
@@ -297,7 +318,7 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
     columnVectorMap = new HashMap<String, List<SQWRLResultValue>>();
 
     if (getNumberOfColumns() > 0) {
-      List<List<SQWRLResultValue>> columns = new ArrayList(getNumberOfColumns());
+      List<List<SQWRLResultValue>> columns = new ArrayList<List<SQWRLResultValue>>(getNumberOfColumns());
       
       for (int c = 0; c < getNumberOfColumns(); c++) columns.add(new ArrayList<SQWRLResultValue>(getNumberOfRows()));
       
@@ -350,7 +371,7 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
 
   public SQWRLResultValue getValue(String columnName) throws SQWRLException
   {
-    List row;
+	List<SQWRLResultValue> row;
     int columnIndex;
     
     throwExceptionIfNotConfigured(); throwExceptionIfNotPrepared(); throwExceptionIfAtEndOfResult();
@@ -359,31 +380,30 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
     
     columnIndex = allColumnNames.indexOf(columnName);
     
-    row = (List)rows.get(rowIndex);
+    row = rows.get(rowIndex);
     return (SQWRLResultValue)row.get(columnIndex);
   } // getColumnValue
   
   public SQWRLResultValue getValue(int columnIndex) throws SQWRLException
   {
-    List row;
+	List<SQWRLResultValue> row;
 
     throwExceptionIfNotConfigured(); throwExceptionIfNotPrepared(); throwExceptionIfAtEndOfResult();
 
     checkColumnIndex(columnIndex);
     
-    row = (List)rows.get(rowIndex);
+    row = rows.get(rowIndex);
     return (SQWRLResultValue)row.get(columnIndex);
   } // getColumnValue
 
   public SQWRLResultValue getValue(int columnIndex, int rowIndex)throws SQWRLException
   {
-    SQWRLResultValue value = null;
     
     throwExceptionIfNotConfigured(); throwExceptionIfNotPrepared(); 
 
     checkColumnIndex(columnIndex); checkRowIndex(rowIndex); 
     
-    return (SQWRLResultValue)((List)rows.get(rowIndex)).get(columnIndex);
+    return rows.get(rowIndex).get(columnIndex);
   } // getValue
   
   public ObjectValue getObjectValue(String columnName) throws SQWRLException
@@ -564,14 +584,11 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
       throw new InvalidRowIndexException("Row index " + rowIndex + " out of bounds");
   } // checkRowIndex
   
-  private boolean containsOneOf(Collection collection1, Collection collection2)
+  private boolean containsOneOf(List<Integer> collection1, Set<Integer> collection2)
   {
-    Iterator iterator = collection2.iterator();
-
-    while (iterator.hasNext()) {
-      Object o = iterator.next();
-      if (collection1.contains(o)) return true;
-    } // while
+    for (Integer i : collection2)
+     if (collection1.contains(i)) return true;
+    
     return false;
   } // containsOneOf
 
@@ -594,7 +611,7 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
   } // distinct
 
   private List<List<SQWRLResultValue>> aggregate(List<List<SQWRLResultValue>> rows, List<String> allColumnNames, 
-                                            HashMap<Integer, String> aggregateColumnIndexes)
+                                                 Map<Integer, String> aggregateColumnIndexes)
     throws SQWRLException
   {
     List<List<SQWRLResultValue>> result = new ArrayList<List<SQWRLResultValue>>();

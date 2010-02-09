@@ -22,7 +22,7 @@ public abstract class AbstractSWRLIndividualsAtom extends DefaultSWRLAtom implem
     protected abstract String getOperatorName();
 
 
-    public void getReferencedInstances(Set set) {
+    public void getReferencedInstances(Set<RDFResource> set) {
 
     }
 

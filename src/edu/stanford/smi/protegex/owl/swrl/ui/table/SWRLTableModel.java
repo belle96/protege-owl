@@ -1,10 +1,8 @@
 package edu.stanford.smi.protegex.owl.swrl.ui.table;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -87,7 +85,7 @@ public class SWRLTableModel extends AbstractTableModel implements Disposable, Sy
   }
   
   
-  public Class getColumnClass(int column) 
+  public Class<?> getColumnClass(int column) 
   {
     if (column == COL_ENABLED) return Boolean.class;
     else return super.getColumnClass(column);
@@ -165,36 +163,23 @@ public class SWRLTableModel extends AbstractTableModel implements Disposable, Sy
 
   public void enableAll() 
   { 
-    Iterator iterator = imps.iterator();
-    while (iterator.hasNext()) {
-      SWRLImp imp = (SWRLImp)iterator.next();
-      imp.enable();
-    } // while
+	  for (SWRLImp imp :imps) imp.enable();
 
     fireTableRowsUpdated(0, getRowCount());
   } // enableAll
 
   public void disableAll() 
   { 
-    Iterator iterator = imps.iterator();
-    while (iterator.hasNext()) {
-      SWRLImp imp = (SWRLImp)iterator.next();
-      imp.disable();
-    } // while
+    for (SWRLImp imp :imps) imp.disable();
+ 
     fireTableRowsUpdated(0, getRowCount());
   } // disableAll
 
 
   private void addReferencingImps(RDFResource rdfResource) 
   {
-    OWLModel owlModel = rdfResource.getOWLModel();
-    Collection allImps = factory.getImps();
-    for (Iterator it = allImps.iterator(); it.hasNext();) {
-      SWRLImp imp = (SWRLImp) it.next();
-      if (isSuitable(imp)) {
-        imps.add(imp);
-      } // if
-    } // for
+    for (SWRLImp imp : factory.getImps()) 
+      if (isSuitable(imp)) imps.add(imp);
   } // addReferencingImps
 
   private int getRowFor(SWRLImp imp) 
@@ -217,7 +202,7 @@ public class SWRLTableModel extends AbstractTableModel implements Disposable, Sy
       return true;
     }
     else {
-      Set set = imp.getReferencedInstances();
+      Set<RDFResource> set = imp.getReferencedInstances();
       return set.contains(rdfResource);
     }
   }

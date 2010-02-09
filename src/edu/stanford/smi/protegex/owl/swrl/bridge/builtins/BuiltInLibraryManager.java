@@ -209,11 +209,11 @@ public abstract class BuiltInLibraryManager
     return method;
   } // resolveBuiltInMethod
 
-  // TODO: need to get constructor of library to catch exeptions it may throw.
+  // TODO: need to get constructor of library to catch exceptions it may throw.
   private static SWRLBuiltInLibrary loadBuiltInLibraryImpl(String ruleName, String prefix, String className) 
     throws UnresolvedBuiltInClassException, IncompatibleBuiltInClassException, BuiltInLibraryException
   {
-    Class swrlBuiltInLibraryClass;
+    Class<?> swrlBuiltInLibraryClass;
     SWRLBuiltInLibrary swrlBuiltInLibrary;
 
     try {
@@ -242,7 +242,7 @@ public abstract class BuiltInLibraryManager
   private static void checkBuiltInMethodSignature(String ruleName, String prefix, String builtInName, Method method) 
       throws IncompatibleBuiltInMethodException
   {
-    Class exceptionTypes[];
+    Class<?> exceptionTypes[];
     Type parameterTypes[];
 
     if (method.getReturnType() != Boolean.TYPE) 
@@ -271,7 +271,7 @@ public abstract class BuiltInLibraryManager
     return false;
   } // hasUnboundArguments
 
-  private static void checkBuiltInMethodsClassCompatibility(String ruleName, String prefix, Class cls) 
+  private static void checkBuiltInMethodsClassCompatibility(String ruleName, String prefix, Class<?> cls) 
     throws IncompatibleBuiltInClassException
   {
     if (!SWRLBuiltInLibrary.class.isAssignableFrom(cls)) 

@@ -2,6 +2,7 @@ package edu.stanford.smi.protegex.owl.swrl.model;
 
 import java.util.Set;
 
+import edu.stanford.smi.protegex.owl.model.RDFResource;
 import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParseException;
 
 /**
@@ -16,7 +17,7 @@ public interface SWRLImp extends SWRLIndividual
    * Deletes this and all depending objects of the rule.
    */
   void deleteImp();
-  Set getReferencedInstances();
+  Set<RDFResource> getReferencedInstances();
   SWRLAtomList getBody();
   void setBody(SWRLAtomList swrlAtomList);
   SWRLAtomList getHead();

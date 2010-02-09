@@ -7,6 +7,7 @@ import javax.swing.Icon;
 import edu.stanford.smi.protege.model.FrameID;
 import edu.stanford.smi.protege.model.KnowledgeBase;
 import edu.stanford.smi.protegex.owl.model.NamespaceUtil;
+import edu.stanford.smi.protegex.owl.model.RDFResource;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable;
 import edu.stanford.smi.protegex.owl.swrl.ui.icons.SWRLIcons;
 
@@ -34,6 +35,6 @@ public class DefaultSWRLVariable extends AbstractSWRLIndividual implements SWRLV
 
 
     @Override
-    public void getReferencedInstances(Set set) {
+    public void getReferencedInstances(Set<RDFResource> set) {
     }
 }

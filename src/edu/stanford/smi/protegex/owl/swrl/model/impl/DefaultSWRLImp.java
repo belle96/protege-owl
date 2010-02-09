@@ -25,6 +25,7 @@ import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLNamedClass;
 import edu.stanford.smi.protegex.owl.model.OWLObjectProperty;
 import edu.stanford.smi.protegex.owl.model.RDFList;
+import edu.stanford.smi.protegex.owl.model.RDFResource;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLAtomList;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLBuiltin;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLImp;
@@ -113,16 +114,14 @@ public class DefaultSWRLImp extends AbstractSWRLIndividual implements SWRLImp
 
   private void deleteHeadAndBody() {
     Slot directInstancesSlot = getKnowledgeBase().getSlot(Model.Slot.DIRECT_INSTANCES);
-    Collection instances = getReferencedInstances();
-    for (Iterator it = instances.iterator(); it.hasNext();) {
-      Object o = it.next();
-      if (o instanceof SWRLIndividual && !(o instanceof SWRLBuiltin)) {
-        SWRLIndividual swrlIndividual = (SWRLIndividual) o;
+    Collection<RDFResource> instances = getReferencedInstances();
+    for (RDFResource resource : instances) {
+      if (resource instanceof SWRLIndividual && !(resource instanceof SWRLBuiltin)) {
+        SWRLIndividual swrlIndividual = (SWRLIndividual)resource;
         if (!swrlIndividual.isDeleted()) {
-          Collection references = getKnowledgeBase().getReferences(swrlIndividual, -1);
+          Collection<Reference> references = getKnowledgeBase().getReferences(swrlIndividual, -1);
           boolean hasExternalRef = false;
-          for (Iterator rit = references.iterator(); rit.hasNext();) {
-            Reference reference = (Reference) rit.next();
+          for (Reference reference : references) {
             if (!directInstancesSlot.equals(reference.getSlot())) {
               Frame frame = reference.getFrame();
               if (!instances.contains(frame) && !equals(frame)) {
@@ -174,15 +173,15 @@ public Icon getIcon() {
                 OWLIcons.getReadOnlyIcon(SWRLIcons.getImpIcon(), "RoundedBoxFrame");
   }
 
-  public Set getReferencedInstances() 
+  public Set<RDFResource> getReferencedInstances() 
   {
-    Set set = new HashSet();
+    Set<RDFResource> set = new HashSet<RDFResource>();
     getReferencedInstances(set);
     return set;
   }
 
   @Override
-  public void getReferencedInstances(Set set) 
+  public void getReferencedInstances(Set<RDFResource> set) 
   {
     SWRLAtomList head = getHead();
     if (head != null) {

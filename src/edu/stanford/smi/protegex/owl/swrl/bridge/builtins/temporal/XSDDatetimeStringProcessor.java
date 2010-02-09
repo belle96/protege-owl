@@ -3,7 +3,6 @@ package edu.stanford.smi.protegex.owl.swrl.bridge.builtins.temporal;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 

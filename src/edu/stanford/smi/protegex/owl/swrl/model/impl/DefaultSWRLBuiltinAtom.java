@@ -17,12 +17,12 @@ public class DefaultSWRLBuiltinAtom extends DefaultSWRLAtom implements SWRLBuilt
   public DefaultSWRLBuiltinAtom(KnowledgeBase kb, FrameID id) { super(kb, id);} 
   public DefaultSWRLBuiltinAtom() {}
 
-  public void getReferencedInstances(Set set) {
+  public void getReferencedInstances(Set<RDFResource> set) {
     RDFList arguments = getArguments();
     if (arguments != null) {
       for (int size = arguments.size(); size > 0; size--) {
         Object first = arguments.getFirst();
-        if (first instanceof RDFResource) set.add(first);
+        if (first instanceof RDFResource) set.add((RDFResource)first);
         arguments = arguments.getRest();
       } // for
     } // if
