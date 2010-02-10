@@ -95,12 +95,10 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
   
   public Set<SWRLRule> getSWRLRules() throws OWLConversionFactoryException, SQWRLException, BuiltInException
   {
-    Collection imps = swrlFactory.getImps();
+    Collection<SWRLImp> imps = swrlFactory.getImps();
     Set<SWRLRule> result = new HashSet<SWRLRule>();
     
-    Iterator iterator = imps.iterator();
-    while (iterator.hasNext()) {
-      SWRLImp imp = (SWRLImp)iterator.next();
+    for (SWRLImp imp : imps) {
       if (imp.isEnabled()) {
         SWRLRule rule = getSWRLRule(imp.getName());
         result.add(rule);

@@ -19,7 +19,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.OWLProperty;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLBuiltInBridge;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLFactoryException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLBuiltInBridgeException;
-import edu.stanford.smi.protegex.owl.swrl.bridge.impl.OWLFactoryImpl;
+import edu.stanford.smi.protegex.owl.swrl.bridge.impl.OWLDataFactoryImpl;
 import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLOWLUtilException;
 import edu.stanford.smi.protegex.owl.swrl.util.SWRLOWLUtil;
 
@@ -51,7 +51,7 @@ public class XMLBridgeMapper
 
   public XMLBridgeMapper() 
   {
-    owlFactory = new OWLFactoryImpl();
+    owlFactory = new OWLDataFactoryImpl();
 
     rootElementProperty = owlFactory.getOWLObjectProperty(XMLDocumentMappingHasRootElementPropertyName);
     elementsProperty = owlFactory.getOWLObjectProperty(XMLDocumentMappingHasElementsPropertyName);

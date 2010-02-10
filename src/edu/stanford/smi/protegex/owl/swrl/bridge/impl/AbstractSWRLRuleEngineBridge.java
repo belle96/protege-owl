@@ -96,8 +96,8 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
   protected AbstractSWRLRuleEngineBridge(OWLModel owlModel) throws SWRLRuleEngineBridgeException
   {
     this.owlModel = owlModel;
-    activeOWLFactory = new OWLFactoryImpl(owlModel);
-    injectedOWLFactory = new OWLFactoryImpl();
+    activeOWLFactory = new OWLDataFactoryImpl(owlModel);
+    injectedOWLFactory = new OWLDataFactoryImpl();
     conversionFactory = new OWLConversionFactoryImpl(owlModel, activeOWLFactory);
     initialize();
     BuiltInLibraryManager.invokeAllBuiltInLibrariesResetMethod(this);

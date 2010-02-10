@@ -1,6 +1,7 @@
 package edu.stanford.smi.protegex.owl.swrl.ui.table;
 
 import java.awt.BorderLayout;
+import java.util.logging.Level;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -8,12 +9,17 @@ import javax.swing.JViewport;
 
 import edu.stanford.smi.protege.util.Disposable;
 import edu.stanford.smi.protege.util.LabeledComponent;
+import edu.stanford.smi.protege.util.Log;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.model.RDFResource;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BridgePluginManager;
+import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataFactory;
+import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLFactoryException;
+import edu.stanford.smi.protegex.owl.swrl.bridge.impl.OWLDataFactoryImpl;
 import edu.stanford.smi.protegex.owl.swrl.bridge.ui.ViewPluginAction;
 import edu.stanford.smi.protegex.owl.swrl.ui.tab.SWRLTab;
 import edu.stanford.smi.protegex.owl.ui.OWLLabeledComponent;
+import edu.stanford.smi.protegex.owl.ui.ProtegeUI;
 
 /**
  * A JPanel consisting of a SWRLTable and buttons to create and delete rules. It may have buttons to activate/deactivate any registered rule
@@ -49,7 +55,22 @@ public class SWRLTablePanel extends JPanel implements Disposable
   {
     tableModel = RDFResource == null ? new SWRLTableModel(owlModel) : new SWRLTableModel(RDFResource);
     table = new SWRLTable(tableModel, owlModel);
-    
+   
+    /* Start of test group
+  	OWLDataFactory owlFactory = new OWLDataFactoryImpl(owlModel);
+  	SWRLRuleGroupTreeTableModel model = null;
+  	
+  	try {
+  	  model = new SWRLRuleGroupTreeTableModel(owlFactory);
+  	} catch (OWLFactoryException e) {
+  		ProtegeUI.getModalDialogFactory().showErrorMessageDialog(owlModel, "Could not activate SWRLTab: " + e +
+  															     "\n. Your project might be in an inconsistent state now.");
+        Log.getLogger().log(Level.SEVERE, "Exception caught", e);
+  	}
+  	
+  	SWRLRuleGroupTreeTable table = new SWRLRuleGroupTreeTable(model);
+    */ // End of test group
+  	
     JScrollPane scrollPane = new JScrollPane(table);
     JViewport viewPort = scrollPane.getViewport();
     viewPort.setBackground(table.getBackground());

@@ -18,7 +18,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.OWLIndividual;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLObjectPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLProperty;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.MapperException;
-import edu.stanford.smi.protegex.owl.swrl.bridge.impl.OWLFactoryImpl;
+import edu.stanford.smi.protegex.owl.swrl.bridge.impl.OWLDataFactoryImpl;
 import edu.stanford.smi.protegex.owl.swrl.ddm.Column;
 import edu.stanford.smi.protegex.owl.swrl.ddm.DDMFactory;
 import edu.stanford.smi.protegex.owl.swrl.ddm.Database;
@@ -56,7 +56,7 @@ public class RelationalMapper implements Mapper, MapperGenerator
 
     readMaps(queryEngine);
 
-    owlFactory = new OWLFactoryImpl();
+    owlFactory = new OWLDataFactoryImpl();
   } // RelationalMapper
 
   public void open() throws MapperException

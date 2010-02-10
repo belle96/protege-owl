@@ -10,8 +10,8 @@ import java.util.logging.Level;
 import edu.stanford.smi.protege.model.Project;
 import edu.stanford.smi.protege.ui.ProjectManager;
 import edu.stanford.smi.protege.ui.ProjectView;
-import edu.stanford.smi.protege.util.Log;
 import edu.stanford.smi.protege.util.ApplicationProperties;
+import edu.stanford.smi.protege.util.Log;
 import edu.stanford.smi.protege.widget.AbstractTabWidget;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.model.util.ImportHelper;
@@ -37,6 +37,7 @@ public class SWRLTab extends AbstractTabWidget
 
 	  	activateSWRL();
 	    panel = new SWRLTablePanel((OWLModel) getKnowledgeBase(), null, this);
+	    	
 	    add(panel);
   } // initialize
 

@@ -41,7 +41,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLFactoryException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDType;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 
-public class OWLFactoryImpl implements OWLDataFactory
+public class OWLDataFactoryImpl implements OWLDataFactory
 {
   private Map<String, OWLClass> classes = new HashMap<String, OWLClass>();
   private Map<String, OWLIndividual> individuals = new HashMap<String, OWLIndividual>();
@@ -51,9 +51,9 @@ public class OWLFactoryImpl implements OWLDataFactory
   private OWLModel owlModel;
   private OWLConversionFactory conversionFactory;
 
-  public OWLFactoryImpl() { owlModel = null; }
+  public OWLDataFactoryImpl() { owlModel = null; }
 
-  public OWLFactoryImpl(OWLModel owlModel) 
+  public OWLDataFactoryImpl(OWLModel owlModel) 
   { 
     this.owlModel = owlModel; 
     conversionFactory = new OWLConversionFactoryImpl(owlModel, this);

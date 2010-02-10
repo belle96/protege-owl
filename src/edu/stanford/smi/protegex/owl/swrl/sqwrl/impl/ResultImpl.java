@@ -15,7 +15,7 @@ import java.util.Set;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataFactory;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValue;
-import edu.stanford.smi.protegex.owl.swrl.bridge.impl.OWLFactoryImpl;
+import edu.stanford.smi.protegex.owl.swrl.bridge.impl.OWLDataFactoryImpl;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.ClassValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.ObjectValue;
@@ -141,7 +141,7 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
     rowIndex = -1; // If there are no rows in the final result, it will remain at -1.
     rows = new ArrayList<List<SQWRLResultValue>>();
 
-    owlFactory = new OWLFactoryImpl();
+    owlFactory = new OWLDataFactoryImpl();
   } // prepare
 
   public void addColumns(List<String> columnNames) throws SQWRLException
