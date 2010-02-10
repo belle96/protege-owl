@@ -20,17 +20,21 @@ public interface OWLConversionFactory
   OWLDataProperty getOWLDataProperty(String propertyURI) throws OWLConversionFactoryException;
   SWRLRule getSWRLRule(String ruleURI) throws OWLConversionFactoryException, SQWRLException, BuiltInException;
   Set<SWRLRule> getSWRLRules() throws OWLConversionFactoryException, SQWRLException, BuiltInException;
+  Set<OWLIndividual> getAllOWLIndividualsOfClass(String classURI) throws OWLConversionFactoryException;
   
   Set<OWLPropertyAssertionAxiom> getOWLPropertyAssertionAxioms(String individualURI, String propertyURI) throws OWLConversionFactoryException, DataValueConversionException;
   Set<OWLPropertyAssertionAxiom> getOWLPropertyAssertionAxioms(String propertyURI) throws OWLConversionFactoryException, DataValueConversionException;
+  Set<OWLSameIndividualAxiom> getOWLSameIndividualAxioms() throws OWLConversionFactoryException;
+  Set<OWLDifferentIndividualsAxiom> getOWLDifferentIndividualsAxioms() throws OWLConversionFactoryException;
 
-  boolean isOWLClass(String className);
-  boolean isOWLProperty(String propertyName);
-  boolean isOWLObjectProperty(String propertyName);
-  boolean isOWLDataProperty(String propertyName);
-  boolean isOWLIndividual(String individualName);
-  boolean isOWLIndividualOfClass(String individualName, String className);
-  boolean isSWRLBuiltIn(String builtInName);
+  boolean isOWLClass(String classURI);
+  boolean isOWLProperty(String propertyURI);
+  boolean isOWLObjectProperty(String propertyURI);
+  boolean isOWLDataProperty(String propertyURI);
+  boolean isOWLIndividual(String individualURI);
+  boolean isOWLIndividualOfClass(String individualURI, String classURI);
+  boolean isSWRLBuiltIn(String builtInURI);
+  boolean couldBeOWLNamedClass(String classURI);
   String createNewResourceName(String prefix);
   boolean isValidURI(String uri);
   void putOWLClass(OWLClass owlClass) throws OWLConversionFactoryException;

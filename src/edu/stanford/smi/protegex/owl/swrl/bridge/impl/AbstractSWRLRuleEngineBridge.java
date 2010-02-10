@@ -5,21 +5,13 @@
 
 package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.stanford.smi.protegex.owl.model.OWLAllDifferent;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
-import edu.stanford.smi.protegex.owl.model.RDFIndividual;
-import edu.stanford.smi.protegex.owl.model.RDFProperty;
-import edu.stanford.smi.protegex.owl.model.RDFSClass;
-import edu.stanford.smi.protegex.owl.model.RDFSNamedClass;
 import edu.stanford.smi.protegex.owl.swrl.bridge.Atom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLAxiom;
@@ -36,6 +28,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.OWLIndividual;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLObjectPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLProperty;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLPropertyAssertionAxiom;
+import edu.stanford.smi.protegex.owl.swrl.bridge.OWLSameIndividualAxiom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLSubClassAxiom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLBuiltInBridge;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRule;
@@ -53,7 +46,6 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResult;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.InvalidQueryNameException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.ResultImpl;
-import edu.stanford.smi.protegex.owl.swrl.util.SWRLOWLUtil;
 
 /**
  ** This class provides an implementation of some of the core functionality required by SWRL rule engine and built-in bridges. Detailed
@@ -70,7 +62,7 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
   // Imported classes, properties, and individuals
   private HashMap<String, OWLClass> importedClasses;
   private HashMap<String, OWLIndividual> importedIndividuals;
-  private Set<String> importedObjectPropertyNames, importedDatatypePropertyNames;
+  private Set<String> importedObjectPropertyNames, importedDataPropertyNames;
   private Set<OWLAxiom> importedAxioms;
 
   // Inferred individuals and property assertion axioms
@@ -550,12 +542,12 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
   
   public boolean isOWLDataProperty(String propertyName) 
   { 
-	  return importedDatatypePropertyNames.contains(propertyName) || conversionFactory.isOWLDataProperty(propertyName);
+	  return importedDataPropertyNames.contains(propertyName) || conversionFactory.isOWLDataProperty(propertyName);
   } // isOWLDataProperty
   
   public boolean isOWLProperty(String propertyName) 
   { 
-	  return importedObjectPropertyNames.contains(propertyName) || importedDatatypePropertyNames.contains(propertyName) ||
+	  return importedObjectPropertyNames.contains(propertyName) || importedDataPropertyNames.contains(propertyName) ||
 	         conversionFactory.isOWLProperty(propertyName);
   } // isOWLProperty
   
@@ -625,16 +617,16 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
   } // writeInjectedAxioms
   
   private void importOWLClass(String classURI) throws SWRLRuleEngineBridgeException, OWLConversionFactoryException
-  {
-    // TODO: workaround because owlModel.createOWLNamedClass() called in OWLClass does not always return an OWL named class.
-    RDFSNamedClass rdfsNamedClass = SWRLOWLUtil.getRDFSNamedClass(owlModel, classURI);
-    if (rdfsNamedClass != null && (rdfsNamedClass.isMetaclass() || rdfsNamedClass.isAnonymous())) return;
+  {  
+    if (conversionFactory.couldBeOWLNamedClass(classURI)) {
+     OWLClass owlClass = conversionFactory.getOWLClass(classURI);
 
-    if (!importedClasses.containsKey(classURI)) {
-      OWLClass owlClass = activeOWLFactory.getOWLClass(classURI);
-      importedClasses.put(classURI, owlClass);
-      importOWLClassesByName(owlClass.getDirectSuperClassNames());
-      importOWLClassesByName(owlClass.getDirectSubClassNames());
+     if (!importedClasses.containsKey(classURI)) {
+    	 importedClasses.put(classURI, owlClass);
+    	 importOWLClassesByName(owlClass.getDirectSuperClassNames());
+    	 importOWLClassesByName(owlClass.getDirectSubClassNames());
+    	 importOWLClassesByName(owlClass.getEquivalentClassNames());
+     } // if
     } // if
   } // importOWLClass
 
@@ -655,24 +647,13 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
 
   private void importAllOWLIndividualsOfClass(String classURI) throws SWRLRuleEngineBridgeException, OWLConversionFactoryException
   {
-    RDFSClass rdfsClass = SWRLOWLUtil.getRDFSNamedClass(owlModel, classURI);
-    Collection instances = new ArrayList();
-
-    if (rdfsClass != null) {
-      instances.addAll(rdfsClass.getInstances(true));
-    } // if
-
-    Iterator iterator = instances.iterator();
-    while (iterator.hasNext()) {
-      Object o = iterator.next();
-      if (o instanceof edu.stanford.smi.protegex.owl.model.OWLIndividual) { 
-        edu.stanford.smi.protegex.owl.model.OWLIndividual individual = (edu.stanford.smi.protegex.owl.model.OWLIndividual)o;
-        importOWLIndividual(individual.getName());
-      } else if (o instanceof edu.stanford.smi.protegex.owl.model.OWLNamedClass) { // This will be OWL Full
-        edu.stanford.smi.protegex.owl.model.OWLNamedClass cls = (edu.stanford.smi.protegex.owl.model.OWLNamedClass)o;
-        importOWLClass(cls.getName());
-      } // if
-    } // while
+	 try {
+		 for (OWLIndividual individual : conversionFactory.getAllOWLIndividualsOfClass(classURI)) {
+			 importOWLIndividual(individual.getURI());
+		 } // for
+	 } catch (OWLConversionFactoryException e) {
+		 throw new SWRLBuiltInBridgeException("error importing OWL same individuals axioms: " + e);
+	}
   } // importAllOWLIndividualsOfClass
   
   private void importOWLPropertyAssertionAxioms(Set<String> propertyNames) throws SWRLRuleEngineBridgeException, OWLConversionFactoryException
@@ -682,36 +663,34 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
 
   private void importOWLPropertyAssertionAxioms(String propertyName) throws SWRLRuleEngineBridgeException, OWLConversionFactoryException
   {
-    edu.stanford.smi.protegex.owl.model.OWLProperty property = SWRLOWLUtil.getOWLProperty(owlModel, propertyName);
-
-    if (property != null) {
-      if (!(importedObjectPropertyNames.contains(propertyName) || importedDatatypePropertyNames.contains(propertyName))) {
-        Set<OWLPropertyAssertionAxiom> axioms = conversionFactory.getOWLPropertyAssertionAxioms(propertyName);
-        importedAxioms.addAll(axioms);
+	  if (!(importedObjectPropertyNames.contains(propertyName) || importedDataPropertyNames.contains(propertyName))) {
+		  Set<OWLPropertyAssertionAxiom> axioms = conversionFactory.getOWLPropertyAssertionAxioms(propertyName);
+		  
+		  importedAxioms.addAll(axioms);
         
-        for (OWLPropertyAssertionAxiom axiom : axioms) {
-          String subjectName = axiom.getSubject().getURI();
-          cacheOWLPropertyAssertionAxiom(axiom);
-          if (!referencedIndividualNames.contains(subjectName)) referencedIndividualNames.add(subjectName);
+		  for (OWLPropertyAssertionAxiom axiom : axioms) {
+			  String subjectName = axiom.getSubject().getURI();
+			  OWLProperty property = axiom.getProperty();
+			  
+			  cacheOWLPropertyAssertionAxiom(axiom);
+			  
+			  if (!referencedIndividualNames.contains(subjectName)) referencedIndividualNames.add(subjectName);
 
-          if (axiom instanceof OWLObjectPropertyAssertionAxiom) {
-            OWLObjectPropertyAssertionAxiom objectPropertyAssertionAxiom = (OWLObjectPropertyAssertionAxiom)axiom;
-            String objectName = objectPropertyAssertionAxiom.getObject().getURI();
-            if (!referencedIndividualNames.contains(objectName)) referencedIndividualNames.add(objectName);
-          } // if
-        } // for
-        
-        if (property.isObjectProperty()) importedObjectPropertyNames.add(propertyName);
-        else importedDatatypePropertyNames.add(propertyName);
+			  if (axiom instanceof OWLObjectPropertyAssertionAxiom) {
+				  OWLObjectPropertyAssertionAxiom objectPropertyAssertionAxiom = (OWLObjectPropertyAssertionAxiom)axiom;
+				  String objectName = objectPropertyAssertionAxiom.getObject().getURI();
+				  if (!referencedIndividualNames.contains(objectName)) referencedIndividualNames.add(objectName);
+				  importedObjectPropertyNames.add(propertyName);
+			  } else importedDataPropertyNames.add(propertyName);
 
-        importOWLClassesByName(SWRLOWLUtil.rdfResources2Names(property.getUnionDomain()));
-        importOWLClassesByName(SWRLOWLUtil.rdfResources2Names(property.getUnionRangeClasses()));
+			  importOWLClassesByName(property.getDomainClassNames());
+			  importOWLClassesByName(property.getRangeClassNames());
         
-        importOWLPropertyAssertionAxioms(SWRLOWLUtil.rdfResources2Names(property.getSuperproperties(true)));
-        importOWLPropertyAssertionAxioms(SWRLOWLUtil.rdfResources2Names(property.getSubproperties(true)));
-        importOWLPropertyAssertionAxioms(SWRLOWLUtil.rdfResources2Names(property.getEquivalentProperties()));
-      } // if
-    } // if
+			  importOWLPropertyAssertionAxioms(property.getSuperPropertyNames());
+			  importOWLPropertyAssertionAxioms(property.getSuperPropertyNames());
+			  importOWLPropertyAssertionAxioms(property.getEquivalentPropertyNames());
+		  } // for
+      	} // if
   } // importOWLPropertyAssertionAxioms
 
   private void importOWLIndividuals(Set<String> individualNames) throws SWRLRuleEngineBridgeException, OWLConversionFactoryException
@@ -719,11 +698,11 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
     for (String individualName : individualNames) importOWLIndividual(individualName);
   } // importOWLIndividuals
 
-  private void importOWLIndividual(String individualName) throws SWRLRuleEngineBridgeException, OWLConversionFactoryException
+  private void importOWLIndividual(String individualURI) throws SWRLRuleEngineBridgeException, OWLConversionFactoryException
   {
-    if (!importedIndividuals.containsKey(individualName)) {
-      OWLIndividual owlIndividual = activeOWLFactory.getOWLIndividual(individualName);
-      importedIndividuals.put(individualName, owlIndividual);
+    if (!importedIndividuals.containsKey(individualURI)) {
+      OWLIndividual owlIndividual = activeOWLFactory.getOWLIndividual(individualURI);
+      importedIndividuals.put(individualURI, owlIndividual);
       cacheOWLIndividual(owlIndividual);
       importOWLClasses(owlIndividual.getDefiningClasses());
       importOWLClasses(owlIndividual.getDefiningSuperclasses());
@@ -744,15 +723,6 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
     importDataValuedPropertyAxioms(); // cf. http://www.w3.org/TR/owl-ref, Section 6
     importAnnotations(); // cf. http://www.w3.org/TR/owl-ref, Section 7
   } // importAxioms
-
-  private void importClassDescriptions() throws SWRLRuleEngineBridgeException, OWLConversionFactoryException
-  {
-    importClassEnumerationDescriptions(); // 3.1.1
-    importPropertyRestrictions(); // 3.1.2
-    importIntersectionOfDescriptions(); // 3.1.3.1
-    importUnionOfDescriptions(); // 3.1.3.2
-    importComplementOfDescriptions(); // 3.1.3.3
-  } // importClassDescriptions
 
   // cf. http://www.w3.org/TR/owl-ref, Section 3.2
   private void importClassAxioms() throws SWRLRuleEngineBridgeException, OWLConversionFactoryException
@@ -777,9 +747,9 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
   // cf. http://www.w3.org/TR/owl-ref, Section 5
   private void importIndividualAxioms() throws SWRLRuleEngineBridgeException
   {
-    importSameAsAxioms();
-    importDifferentFromAxioms();
-    importAllDifferentsAxioms();
+    importOWLSameIndividualAxioms();
+    importOWLDifferentIndividualsAxioms();
+    importOWLAllDifferentsAxioms();
   } // importIndividualAxioms
 
   // cf. http://www.w3.org/TR/owl-ref, Section 3.1.1
@@ -796,132 +766,35 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
     importHasValueRestrictions();
   } // importPropertyRestrictions
 
-  // cf. http://www.w3.org/TR/owl-ref, Section 6
-  private void importDataValuedPropertyAxioms() throws SWRLRuleEngineBridgeException {}
-
-  // cf. http://www.w3.org/TR/owl-ref, Section 7
-  private void importAnnotations() throws SWRLRuleEngineBridgeException
+  private void importOWLSameIndividualAxioms() throws SWRLRuleEngineBridgeException
   {
-    // owl:versionInfo, rdfs:label, rdfs:comment, rdfs:seeAlso, rdfs:isDefinedBy 
-  } // importAnnotations
+	try {
+		for (OWLSameIndividualAxiom axiom : conversionFactory.getOWLSameIndividualAxioms()) {
+			importedAxioms.add(axiom);
+			cacheOWLIndividuals(axiom.getIndividuals());
+		} // for
+	} catch (OWLConversionFactoryException e) {
+		throw new SWRLBuiltInBridgeException("error importing OWL same individuals axioms: " + e);
+	}
+  } // importOWLSameIndividualAxioms
+
+  private void importOWLDifferentIndividualsAxioms() throws SWRLRuleEngineBridgeException
+  {
+	try {
+		for (OWLDifferentIndividualsAxiom axiom : conversionFactory.getOWLDifferentIndividualsAxioms()) {
+			importedAxioms.add(axiom);
+			cacheOWLIndividuals(axiom.getIndividuals());
+		} // for
+	} catch (OWLConversionFactoryException e) {
+		throw new SWRLBuiltInBridgeException("error importing OWL different individuals axioms: " + e);
+	}
+  } // importOWLDifferentIndividualsAxioms
+
+  private void importOWLAllDifferentsAxioms() throws SWRLRuleEngineBridgeException
+  {
+      // importOWLDifferentIndividualsAxioms effectively subsumes this method.
+  } // importOWLAllDifferentsAxioms
   
-  // cf. http://www.w3.org/TR/owl-ref, Section 3.1.2
-  private void importCardinalityRestrictions() throws SWRLRuleEngineBridgeException {}
-  // cf. http://www.w3.org/TR/owl-ref, Section 3.1.2
-  private void importMinCardinalityRestrictions() throws SWRLRuleEngineBridgeException {}
-  // cf. http://www.w3.org/TR/owl-ref, Section 3.1.2
-  private void importMaxCardinalityRestrictions() throws SWRLRuleEngineBridgeException {}
-  // cf. http://www.w3.org/TR/owl-ref, Section 3.1.2.1.1
-  private void importAllValuesFromRestrictions() throws SWRLRuleEngineBridgeException {}
-  // cf. http://www.w3.org/TR/owl-ref, Section 3.1.2.1.2
-  private void importSomeValuesFromRestrictions() throws SWRLRuleEngineBridgeException {}
-  // cf. http://www.w3.org/TR/owl-ref, Section 3.1.2.1.3
-  private void importHasValueRestrictions() throws SWRLRuleEngineBridgeException {}
-
-  // cf. http://www.w3.org/TR/owl-ref, Section 3.1.3.1
-  private void importIntersectionOfDescriptions() throws SWRLRuleEngineBridgeException {}
-  // cf. http://www.w3.org/TR/owl-ref, Section 3.1.3.2
-  private void importUnionOfDescriptions() throws SWRLRuleEngineBridgeException {}
-  // cf. http://www.w3.org/TR/owl-ref, Section 3.1.3.3
-  private void importComplementOfDescriptions() throws SWRLRuleEngineBridgeException {}
-
-  // cf. http://www.w3.org/TR/owl-ref, Section 4.2.1
-  private void importEquivalentPropertyAxioms() throws SWRLRuleEngineBridgeException {}
-  // cf. http://www.w3.org/TR/owl-ref, Section 4.2.2
-  private void importInverseOfAxioms() throws SWRLRuleEngineBridgeException {}
-  // cf. http://www.w3.org/TR/owl-ref, Section 4.3.1
-  private void importFunctionalPropertyAxioms() throws SWRLRuleEngineBridgeException {}
-  // cf. http://www.w3.org/TR/owl-ref, Section 4.3.2
-  private void importInverseFunctionalPropertyAxioms() throws SWRLRuleEngineBridgeException {}
-  // cf. http://www.w3.org/TR/owl-ref, Section 4.4.1
-  private void importTransitivePropertyAxioms() throws SWRLRuleEngineBridgeException {}
-  // cf. http://www.w3.org/TR/owl-ref, Section 4.4.2
-  private void importSymmetricPropertyAxioms() throws SWRLRuleEngineBridgeException {}
-
-  private void importEquivalentClassAxioms() throws SWRLRuleEngineBridgeException {}
-  private void importDisjointWithAxioms() throws SWRLRuleEngineBridgeException {}
-
-  // TODO: This is incredibly inefficient. Need to use method in the OWLModel to get individuals with a particular property.
-  private void importSameAsAxioms() throws SWRLRuleEngineBridgeException
-  {
-    RDFProperty sameAsProperty = SWRLOWLUtil.getOWLSameAsProperty(owlModel);
-    RDFSClass owlThingCls = SWRLOWLUtil.getOWLThingClass(owlModel);
-
-    Iterator individualsIterator1 = owlThingCls.getInstances(true).iterator();
-    while (individualsIterator1.hasNext()) {
-      Object object1 = individualsIterator1.next();
-      if (!(object1 instanceof edu.stanford.smi.protegex.owl.model.OWLIndividual)) continue; // Deal only with OWL individuals (could return metaclass, for example)
-      edu.stanford.smi.protegex.owl.model.OWLIndividual individual1 = (edu.stanford.smi.protegex.owl.model.OWLIndividual)object1;
-      if (individual1.hasPropertyValue(sameAsProperty)) {
-        Collection individuals = (Collection)individual1.getPropertyValues(sameAsProperty);
-        Iterator individualsIterator2 = individuals.iterator();
-        while (individualsIterator2.hasNext()) {
-          Object object2 = individualsIterator2.next();
-          if (!(object2 instanceof edu.stanford.smi.protegex.owl.model.OWLIndividual)) continue;
-          edu.stanford.smi.protegex.owl.model.OWLIndividual individual2 = (edu.stanford.smi.protegex.owl.model.OWLIndividual)object2;
-          importedAxioms.add(activeOWLFactory.getOWLSameIndividualsAxiom(activeOWLFactory.getOWLIndividual(individual1.getName()), 
-                                                                         activeOWLFactory.getOWLIndividual(individual2.getName())));
-        } // while
-      } // if
-    } // while
-  } // importSameAsAxioms
-
-  // TODO: This is incredibly inefficient (and almost duplicates previous method). Need to use method in the OWLModel to get individuals
-  // with a particular property.
-  private void importDifferentFromAxioms() throws SWRLRuleEngineBridgeException 
-  {
-    RDFProperty differentFromProperty = SWRLOWLUtil.getOWLDifferentFromProperty(owlModel);
-    RDFSClass owlThingCls = SWRLOWLUtil.getOWLThingClass(owlModel);
-
-    Iterator individualsIterator1 = owlThingCls.getInstances(true).iterator();
-    while (individualsIterator1.hasNext()) {
-      Object object1 = individualsIterator1.next();
-      if (!(object1 instanceof OWLIndividual)) continue; // Deal only with OWL individuals (could return metaclass, for example)
-      edu.stanford.smi.protegex.owl.model.OWLIndividual individual1 = (edu.stanford.smi.protegex.owl.model.OWLIndividual)object1;
-      if (individual1.hasPropertyValue(differentFromProperty)) {
-        Collection individuals = (Collection)individual1.getPropertyValues(differentFromProperty);
-        Iterator individualsIterator2 = individuals.iterator();
-        while (individualsIterator2.hasNext()) {
-          Object object2 = individualsIterator2.next();
-          if (!(object2 instanceof edu.stanford.smi.protegex.owl.model.OWLIndividual)) continue;
-          edu.stanford.smi.protegex.owl.model.OWLIndividual individual2 = (edu.stanford.smi.protegex.owl.model.OWLIndividual)object2;
-          importedAxioms.add(activeOWLFactory.getOWLDifferentIndividualsAxiom(activeOWLFactory.getOWLIndividual(individual1.getName()), 
-                                                                              activeOWLFactory.getOWLIndividual(individual2.getName())));
-        } // while
-      } // if
-    } // while
-  } // importDifferentFromAxioms
-
-  private void importAllDifferentsAxioms() throws SWRLRuleEngineBridgeException
-  {
-    Collection allDifferents = SWRLOWLUtil.getOWLAllDifferents(owlModel);
-
-    if (!allDifferents.isEmpty()) {
-      Iterator allDifferentsIterator = allDifferents.iterator();
-      while (allDifferentsIterator.hasNext()) {
-        OWLAllDifferent owlAllDifferent = (OWLAllDifferent)allDifferentsIterator.next();
-
-        if (owlAllDifferent.getDistinctMembers().size() != 0) {
-          OWLDifferentIndividualsAxiom owlDifferentIndividualsAxiom;
-          Set<OWLIndividual> individuals = new HashSet<OWLIndividual>();
-          
-          Iterator individualsIterator = owlAllDifferent.getDistinctMembers().iterator();
-          while (individualsIterator.hasNext()) {
-            RDFIndividual individual = (RDFIndividual)individualsIterator.next();
-            if (individual instanceof edu.stanford.smi.protegex.owl.model.OWLIndividual) { // Ignore non OWL individuals
-              String individualName = ((edu.stanford.smi.protegex.owl.model.OWLIndividual)individual).getName();
-              OWLIndividual owlIndividual = activeOWLFactory.getOWLIndividual(individualName);
-              individuals.add(owlIndividual);
-              cacheOWLIndividual(owlIndividual);
-            } // if
-          } // while
-          owlDifferentIndividualsAxiom = activeOWLFactory.getOWLDifferentIndividualsAxiom(individuals);
-          importedAxioms.add(owlDifferentIndividualsAxiom);
-        } // if
-        } // while
-    } // if
-  } // importAllDifferentsAxioms
-
   private void exportSWRLRules() throws SWRLRuleEngineBridgeException
   {
     for (SWRLRule rule : importedSWRLRules.values()) defineOWLAxiom(rule);
@@ -988,7 +861,7 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
     importedIndividuals = new HashMap<String, OWLIndividual>(); 
     importedAxioms = new HashSet<OWLAxiom>(); 
     importedObjectPropertyNames = new HashSet<String>();
-    importedDatatypePropertyNames = new HashSet<String>();
+    importedDataPropertyNames = new HashSet<String>();
     importedAxioms = new HashSet<OWLAxiom>();
 
     exportedClassNames = new HashSet<String>();
@@ -1008,7 +881,7 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
   private void checkOWLClassURI(String classURI) throws SWRLBuiltInBridgeException
   {
     if (!conversionFactory.isValidURI(classURI))
-      throw new SWRLBuiltInBridgeException("attempt to inject class with invalid URI " + classURI);
+    	throw new SWRLBuiltInBridgeException("attempt to inject class with invalid URI " + classURI);
   } // checkOWLClassURI
 
   private void cacheOWLPropertyAssertionAxiom(OWLPropertyAssertionAxiom axiom)
@@ -1041,6 +914,11 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
     if (!allOWLIndividuals.containsKey(individualName)) allOWLIndividuals.put(individualName, owlIndividual);
   } // cacheOWLIndividual  
 
+  private void cacheOWLIndividuals(Set<OWLIndividual> individuals)
+  {
+    for (OWLIndividual individual: individuals) cacheOWLIndividual(individual);
+  } // cacheOWLIndividuals
+
   private void exportOWLClass(OWLClass owlClass) throws SWRLBuiltInBridgeException
   {
     OWLDeclarationAxiom axiom = activeOWLFactory.getOWLDeclarationAxiom(owlClass);
@@ -1061,5 +939,59 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
       throw new SWRLBuiltInBridgeException("error exporting OWL axiom " + owlAxiom + ": " + e.getMessage());
     } // try
   } // exportOWLAxiom
+
+  // cf. http://www.w3.org/TR/owl-ref, Section 6
+  private void importDataValuedPropertyAxioms() throws SWRLRuleEngineBridgeException {}
+
+  // cf. http://www.w3.org/TR/owl-ref, Section 7
+  private void importAnnotations() throws SWRLRuleEngineBridgeException
+  {
+    // owl:versionInfo, rdfs:label, rdfs:comment, rdfs:seeAlso, rdfs:isDefinedBy 
+  } // importAnnotations
   
+  private void importClassDescriptions() throws SWRLRuleEngineBridgeException, OWLConversionFactoryException
+  {
+    importClassEnumerationDescriptions(); // 3.1.1
+    importPropertyRestrictions(); // 3.1.2
+    importIntersectionOfDescriptions(); // 3.1.3.1
+    importUnionOfDescriptions(); // 3.1.3.2
+    importComplementOfDescriptions(); // 3.1.3.3
+  } // importClassDescriptions
+
+  // cf. http://www.w3.org/TR/owl-ref, Section 3.1.2
+  private void importCardinalityRestrictions() throws SWRLRuleEngineBridgeException {}
+  // cf. http://www.w3.org/TR/owl-ref, Section 3.1.2
+  private void importMinCardinalityRestrictions() throws SWRLRuleEngineBridgeException {}
+  // cf. http://www.w3.org/TR/owl-ref, Section 3.1.2
+  private void importMaxCardinalityRestrictions() throws SWRLRuleEngineBridgeException {}
+  // cf. http://www.w3.org/TR/owl-ref, Section 3.1.2.1.1
+  private void importAllValuesFromRestrictions() throws SWRLRuleEngineBridgeException {}
+  // cf. http://www.w3.org/TR/owl-ref, Section 3.1.2.1.2
+  private void importSomeValuesFromRestrictions() throws SWRLRuleEngineBridgeException {}
+  // cf. http://www.w3.org/TR/owl-ref, Section 3.1.2.1.3
+  private void importHasValueRestrictions() throws SWRLRuleEngineBridgeException {}
+
+  // cf. http://www.w3.org/TR/owl-ref, Section 3.1.3.1
+  private void importIntersectionOfDescriptions() throws SWRLRuleEngineBridgeException {}
+  // cf. http://www.w3.org/TR/owl-ref, Section 3.1.3.2
+  private void importUnionOfDescriptions() throws SWRLRuleEngineBridgeException {}
+  // cf. http://www.w3.org/TR/owl-ref, Section 3.1.3.3
+  private void importComplementOfDescriptions() throws SWRLRuleEngineBridgeException {}
+
+  // cf. http://www.w3.org/TR/owl-ref, Section 4.2.1
+  private void importEquivalentPropertyAxioms() throws SWRLRuleEngineBridgeException {}
+  // cf. http://www.w3.org/TR/owl-ref, Section 4.2.2
+  private void importInverseOfAxioms() throws SWRLRuleEngineBridgeException {}
+  // cf. http://www.w3.org/TR/owl-ref, Section 4.3.1
+  private void importFunctionalPropertyAxioms() throws SWRLRuleEngineBridgeException {}
+  // cf. http://www.w3.org/TR/owl-ref, Section 4.3.2
+  private void importInverseFunctionalPropertyAxioms() throws SWRLRuleEngineBridgeException {}
+  // cf. http://www.w3.org/TR/owl-ref, Section 4.4.1
+  private void importTransitivePropertyAxioms() throws SWRLRuleEngineBridgeException {}
+  // cf. http://www.w3.org/TR/owl-ref, Section 4.4.2
+  private void importSymmetricPropertyAxioms() throws SWRLRuleEngineBridgeException {}
+
+  private void importEquivalentClassAxioms() throws SWRLRuleEngineBridgeException {}
+  private void importDisjointWithAxioms() throws SWRLRuleEngineBridgeException {}
+
 } // AbstractSWRLRuleEngineBridge

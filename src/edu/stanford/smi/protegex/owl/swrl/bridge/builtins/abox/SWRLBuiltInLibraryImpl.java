@@ -44,7 +44,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   public void reset() {}
 
   /**
-   ** Determine if a single argument is an OWL individual. If the argument is unbound, bind it to all OWL individuals in an ontology.
+   * Determine if a single argument is an OWL individual. If the argument is unbound, bind it to all OWL individuals in an ontology.
    */
   public boolean isIndividual(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -67,8 +67,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   // TODO: this needs serious cleanup.
   /**
-   ** Returns true if the individual named by the first argument has a property specified by the second argument with the value specified by
-   ** the third argument. If the third argument in unbound, bind it to all the values for this property for the specified individual.
+   * Returns true if the individual named by the first argument has a property specified by the second argument with the value specified by
+   * the third argument. If the third argument in unbound, bind it to all the values for this property for the specified individual.
    */
   public boolean hasValue(List<BuiltInArgument> arguments) throws BuiltInException
   {

@@ -106,7 +106,7 @@ public class SWRLOWLUtil
     OWLNamedClass cls;
 
     checkIfIsValidClassName(owlModel, className);
-
+   
     cls = owlModel.getOWLNamedClass(className);
 
     if (cls == null) cls = owlModel.createOWLNamedClass(className);
@@ -368,6 +368,11 @@ public class SWRLOWLUtil
 
     return (OWLClass)resource;
   } // getOWLClass
+  
+  public static RDFResource getRDFResource(OWLModel owlModel, String resourceName)
+  {
+	return owlModel.getRDFResource(resourceName);
+  } // getRDFResource
 
   public static RDFSClass getRDFSClass(OWLModel owlModel, String className) throws SWRLOWLUtilException
   {

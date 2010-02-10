@@ -3,11 +3,11 @@ package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.*;
 
-public class OWLSameIndividualsAxiomImpl extends OWLNaryIndividualAxiomImpl implements OWLSameIndividualsAxiom
+public class OWLSameIndividualAxiomImpl extends OWLNaryIndividualAxiomImpl implements OWLSameIndividualAxiom
 {
   private OWLIndividual individual1, individual2;
 
-  public OWLSameIndividualsAxiomImpl(OWLIndividual individual1, OWLIndividual individual2)
+  public OWLSameIndividualAxiomImpl(OWLIndividual individual1, OWLIndividual individual2)
   {
     addIndividual(individual1);
     addIndividual(individual2);
@@ -19,4 +19,4 @@ public class OWLSameIndividualsAxiomImpl extends OWLNaryIndividualAxiomImpl impl
   public OWLIndividual getIndividual2() { return individual2; }
 
   public String toString() { return "sameAs" + super.toString(); }  
-} // OWLSameIndividualsAxiomImpl
+} // OWLSameIndividualAxiomImpl
