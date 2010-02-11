@@ -7,12 +7,12 @@ import java.util.Set;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.ResultImpl;
 
 /**
- ** Interface representing a SWRL rule
+ * Interface representing a SWRL rule
  */
 public interface SWRLRule extends OWLAxiom
 {
-  String getRuleName();
-  void setRuleName(String ruleName);
+  String getURI();
+  void setURI(String uri);
   List<Atom> getHeadAtoms();
   List<Atom> getBodyAtoms();
   
@@ -32,9 +32,9 @@ public interface SWRLRule extends OWLAxiom
   List<Atom> getSQWRLPhase2BodyAtoms();
   
   String getRuleText();
-  public void setRuleText(String text);
-  Set<String> getRuleGroupNames();
-  void addRuleGroupNames(String ruleGroupName);
+  void setRuleText(String text);
+  String getRuleGroupName();
+  void setRuleGroupName(String ruleGroupName);
   boolean isEnabled();
   void setEnabled(Boolean enable);
   

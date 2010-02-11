@@ -13,10 +13,10 @@ public interface OWLProperty extends OWLEntity, PropertyValue, AtomArgument // A
   String getURI();
   String getPrefixedPropertyName();
 
-  Set<String> getDomainClassNames();
-  Set<String> getRangeClassNames();
-  Set<String> getSuperPropertyNames();
-  Set<String> getSubPropertyNames();
-  Set<String> getEquivalentPropertyNames();
-  Set<String> getEquivalentPropertySuperPropertyNames();
+  Set<String> getDomainClassURIs();
+  Set<String> getRangeClassURIs();
+  Set<String> getSuperPropertyURIs();
+  Set<String> getSubPropertyURIs();
+  Set<String> getEquivalentPropertyURIs();
+  Set<String> getEquivalentPropertySuperPropertyURIs();
 } // OWLProperty

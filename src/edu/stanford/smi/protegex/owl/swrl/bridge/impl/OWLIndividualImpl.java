@@ -18,24 +18,24 @@ public class OWLIndividualImpl extends PropertyValueImpl implements OWLIndividua
   private Set<OWLClass> definingClasses, definingSuperclasses, definingEquivalentClasses, definingEquivalentClassSuperclasses, classes;
   private Set<OWLIndividual> sameAsIndividuals;
 
-  public OWLIndividualImpl(String individualName)
+  public OWLIndividualImpl(String individualURI)
   {
-    initialize(individualName, individualName);
+    initialize(individualURI, individualURI);
   } // OWLIndividualImpl
 
-  public OWLIndividualImpl(String individualName, String prefixedIndividualName, OWLClass owlClass) 
+  public OWLIndividualImpl(String individualURI, String prefixedIndividualName, OWLClass owlClass) 
   {
-    initialize(individualName, prefixedIndividualName);
+    initialize(individualURI, prefixedIndividualName);
 
     addDefiningClass(owlClass);
   } // OWLIndividualImpl
 
-  public OWLIndividualImpl(String individualName, String prefixedIndividualName) 
+  public OWLIndividualImpl(String individualURI, String prefixedIndividualName) 
   {
-    initialize(individualName, prefixedIndividualName);
+    initialize(individualURI, prefixedIndividualName);
   } // OWLIndividualImpl
 
-  public void addDefiningClass(OWLClass definingClass) 
+  public void addDefiningClass(OWLClass definingClass)
   { definingClasses.add(definingClass); classes.add(definingClass); }
   public void addDefiningSuperclass(OWLClass definingSuperclass) 
   { definingSuperclasses.add(definingSuperclass); classes.add(definingSuperclass); }
@@ -60,8 +60,6 @@ public class OWLIndividualImpl extends PropertyValueImpl implements OWLIndividua
 
     return false;
   } // hasClass
-  
-  public String getRepresentation() { return getPrefixedIndividualName(); }
 
   public String toString() { return getPrefixedIndividualName(); }
 

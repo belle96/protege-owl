@@ -68,7 +68,7 @@ public class SWRLRuleGroupTreeTable extends JXTreeTable
             System.err.println("RuleGroup.name: " + ruleGroup.getGroupName());
           } else if (defNode.getUserObject() instanceof SWRLRule) {
             SWRLRule rule = (SWRLRule)defNode.getUserObject();
-            System.err.println("Rule.name: " + rule.getRuleName());
+            System.err.println("Rule.name: " + rule.getURI());
           } // if
         } // if
           

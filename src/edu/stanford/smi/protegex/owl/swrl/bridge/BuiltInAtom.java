@@ -11,7 +11,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
  */
 public interface BuiltInAtom  extends Atom
 {
-  String getBuiltInName();
+  String getBuiltInURI();
   String getBuiltInPrefixedName();
   List<BuiltInArgument> getArguments();
   int getNumberOfArguments();

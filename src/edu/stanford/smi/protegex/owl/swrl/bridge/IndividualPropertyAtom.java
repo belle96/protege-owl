@@ -6,7 +6,7 @@ package edu.stanford.smi.protegex.owl.swrl.bridge;
 */
 public interface IndividualPropertyAtom extends Atom
 {
-  String getPropertyName();
+  String getPropertyURI();
   String getPrefixedPropertyName();
   AtomArgument getArgument1();
   AtomArgument getArgument2();

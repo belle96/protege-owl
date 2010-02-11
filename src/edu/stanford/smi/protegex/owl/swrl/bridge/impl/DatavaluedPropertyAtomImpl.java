@@ -10,20 +10,20 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValue;
 */
 public class DatavaluedPropertyAtomImpl extends AtomImpl implements DatavaluedPropertyAtom
 {
-  private String propertyName, prefixedPropertyName;
+  private String propertyURI, prefixedPropertyName;
   private AtomArgument argument1, argument2;
   
-  public DatavaluedPropertyAtomImpl(String propertyName, String prefixedPropertyName, AtomArgument argument1, AtomArgument argument2)
+  public DatavaluedPropertyAtomImpl(String propertyURI, String prefixedPropertyName, AtomArgument argument1, AtomArgument argument2)
   {
-    this.propertyName = propertyName;
+    this.propertyURI = propertyURI;
     this.prefixedPropertyName = prefixedPropertyName;
     this.argument1 = argument1;
     this.argument2 = argument2;
   } // DatavaluedPropertyAtomImpl
 
-  public DatavaluedPropertyAtomImpl(String propertyName, String prefixedPropertyName)
+  public DatavaluedPropertyAtomImpl(String propertyURI, String prefixedPropertyName)
   {
-    this.propertyName = propertyName;
+    this.propertyURI = propertyURI;
     this.prefixedPropertyName = prefixedPropertyName;
     this.argument1 = null;
     this.argument2 = null;
@@ -32,7 +32,7 @@ public class DatavaluedPropertyAtomImpl extends AtomImpl implements DatavaluedPr
   public void setArgument1(AtomArgument argument1) { this.argument1 = argument1; }
   public void setArgument2(AtomArgument argument2) { this.argument2 = argument2; }
 
-  public String getPropertyName() { return propertyName; }  
+  public String getPropertyURI() { return propertyURI; }  
   public String getPrefixedPropertyName() { return prefixedPropertyName; }  
   public AtomArgument getArgument1() { return argument1; }
   public AtomArgument getArgument2() { return argument2; }

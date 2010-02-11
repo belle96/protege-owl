@@ -42,7 +42,7 @@ public class SWRLRuleGroupTreeTableModel extends DefaultTreeTableModel
     		  DefaultMutableTreeTableNode defNode = (DefaultMutableTreeTableNode)getChild(rootNode, i);
     		  if (defNode.getUserObject() instanceof SWRLRuleGroup) {
     			  SWRLRuleGroup ruleGroup = (SWRLRuleGroup)defNode.getUserObject();
-    			  if (rule.getRuleGroupNames().contains(ruleGroup.getGroupName())) {
+    			  if (rule.getRuleGroupName().equals(ruleGroup.getGroupName())) {
     				  defNode.add(new DefaultMutableTreeTableNode(rule));
     				  existingGroupFound = true;
     			  } // if
@@ -74,7 +74,7 @@ public class SWRLRuleGroupTreeTableModel extends DefaultTreeTableModel
 				case IsEnabledColumn:
 					result = rule.isEnabled(); break;
 				case RuleNameColumn:
-					result = rule.getRuleName(); break;
+					result = rule.getURI(); break;
 				case RuleTextColumn:
 					result = rule.getRuleText(); break;
 				} // switch
@@ -154,7 +154,7 @@ public class SWRLRuleGroupTreeTableModel extends DefaultTreeTableModel
 					rule.setEnabled((Boolean)value); break;
 				case RuleNameColumn:
 					System.err.println("rule name changed: " + value);
-					rule.setRuleName(value.toString()); break;
+					rule.setURI(value.toString()); break;
 				case RuleTextColumn:
 					System.err.println("rule text changed: " + value);
 					rule.setRuleText(value.toString()); break;

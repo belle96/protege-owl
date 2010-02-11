@@ -27,7 +27,7 @@ public class ClassAtomImpl extends AtomImpl implements ClassAtom
 
   public void setArgument1(AtomArgument argument1) { this.argument1 = argument1; }
     
-  public String getClassName() { return className; }
+  public String getClassURI() { return className; }
   public String getPrefixedClassName() { return prefixedClassName; }
   public AtomArgument getArgument1() { return argument1; }
 

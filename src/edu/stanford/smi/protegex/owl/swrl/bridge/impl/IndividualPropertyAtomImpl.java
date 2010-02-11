@@ -31,7 +31,7 @@ public class IndividualPropertyAtomImpl extends AtomImpl implements IndividualPr
   public void setArgument1(AtomArgument argument1) { this.argument1 = argument1; }
   public void setArgument2(AtomArgument argument2) { this.argument2 = argument2; }
 
-  public String getPropertyName() { return propertyName; }  
+  public String getPropertyURI() { return propertyName; }  
   public String getPrefixedPropertyName() { return prefixedPropertyName; }  
   public AtomArgument getArgument1() { return argument1; }
   public AtomArgument getArgument2() { return argument2; }  
