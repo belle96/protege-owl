@@ -40,8 +40,6 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.ResultImpl;
 /*
  * Implementation library for SQWRL built-ins. See <a href="http://protege.cim3.net/cgi-bin/wiki.pl?SQWRL">here</a> for documentation
  * on this built-in library.
- *
- *  
  */
 public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 {

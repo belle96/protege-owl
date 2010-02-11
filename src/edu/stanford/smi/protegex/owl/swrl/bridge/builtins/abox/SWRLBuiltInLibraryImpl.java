@@ -55,7 +55,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (isUnboundArgument) {
       MultiArgument multiArgument = argumentFactory.createMultiArgument(getVariableName(0, arguments));
       for (OWLIndividual individual : getInvokingBridge().getOWLIndividuals()) multiArgument.addArgument(individual);
-      arguments.set(0, multiArgument);
+      arguments.get(0).setBuiltInResult(multiArgument);
       result = !multiArgument.hasNoArguments();
     } else {
       String individualName = getArgumentAsAnIndividualName(0, arguments);
@@ -137,7 +137,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
               } // if
             } // for
           } // if
-          arguments.set(2, multiArgument);
+          arguments.get(2).setBuiltInResult(multiArgument);
           result = !multiArgument.hasNoArguments();
         } // if
       } // if
@@ -169,7 +169,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
           if (property.isObjectProperty()) multiArgument.addArgument(argumentFactory.createObjectPropertyArgument(property.getName()));
           else multiArgument.addArgument(argumentFactory.createDataPropertyArgument(property.getName()));
         } // for
-        arguments.set(1, multiArgument);
+        arguments.get(1).setBuiltInResult(multiArgument);
         result = !multiArgument.hasNoArguments();
       } else
         result = SWRLOWLUtil.getNumberOfPropertyValues(getInvokingBridge().getOWLModel(), individualName, propertyName, true) != 0;
@@ -200,7 +200,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
         MultiArgument multiArgument = argumentFactory.createMultiArgument(getVariableName(1, arguments));
         for (edu.stanford.smi.protegex.owl.model.OWLIndividual individual: SWRLOWLUtil.getIndividualsOfClass(getInvokingBridge().getOWLModel(), className)) 
           multiArgument.addArgument(argumentFactory.createIndividualArgument(individual.getName()));
-        arguments.set(1, multiArgument);
+        arguments.get(1).setBuiltInResult(multiArgument);
         result = !multiArgument.hasNoArguments();
       } else { // Bound argument
         String individualName = getArgumentAsAnIndividualName(1, arguments);

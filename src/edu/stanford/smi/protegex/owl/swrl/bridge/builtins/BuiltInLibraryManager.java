@@ -48,13 +48,13 @@ public abstract class BuiltInLibraryManager
    * rule engine. The built-in name should be the fully qualified name of the built-in (e.g.,
    * http://www.w3.org/2003/11/swrlb#lessThanOrEqual).
    */
-  public static boolean invokeSWRLBuiltIn(TargetSWRLRuleEngine targetRuleEngine, SWRLBuiltInBridge bridge, String ruleName, String builtInName, 
+  public static boolean invokeSWRLBuiltIn(TargetSWRLRuleEngine targetRuleEngine, SWRLBuiltInBridge bridge, String ruleName, String builtInURI, 
 		  								  int builtInIndex, boolean isInConsequent, List<BuiltInArgument> arguments) 
     throws BuiltInException
   {
-    String prefix = getPrefix(bridge, builtInName);
+    String prefix = getPrefix(bridge, builtInURI);
     String implementationClassName = getBuiltInLibraryImplementationClassName(prefix);
-    String builtInMethodName = getBuiltInMethodName(builtInName);
+    String builtInMethodName = getBuiltInMethodName(builtInURI);
     SWRLBuiltInLibrary library = loadBuiltInLibrary(bridge, ruleName, prefix, implementationClassName);
     Method method = resolveBuiltInMethod(ruleName, library, prefix, builtInMethodName); // TODO: cache the method
     
@@ -64,13 +64,13 @@ public abstract class BuiltInLibraryManager
 
     if (result) {
     	if(hasUnboundArguments(arguments)) // Make sure the built-in has bound all its arguments.
-         throw new BuiltInException("built-in " + builtInName + " in rule " + ruleName + " returned with unbound arguments");
+         throw new BuiltInException("built-in " + builtInURI + " in rule " + ruleName + " returned with unbound arguments");
       
-    	for (List<BuiltInArgument> binding : generateBuiltInArgumentBindings(ruleName, builtInName, builtInIndex, arguments)) {
+    	for (List<BuiltInArgument> binding : generateBuiltInArgumentBindings(ruleName, builtInURI, builtInIndex, arguments)) {
     	  try {
-    	    targetRuleEngine.defineBuiltInArgumentBinding(ruleName, builtInName, builtInIndex, binding);
+    	    targetRuleEngine.defineBuiltInArgumentBinding(ruleName, builtInURI, builtInIndex, binding);
     	  } catch (TargetSWRLRuleEngineException e) {
-    	    throw new BuiltInException("error defining argument binding for built-in " + builtInName + " in rule " + ruleName + ": " + e.getMessage());
+    	    throw new BuiltInException("error defining argument binding for built-in " + builtInURI + " in rule " + ruleName + ": " + e.getMessage());
     	  } // try
     	} // for
     } // if
@@ -93,12 +93,12 @@ public abstract class BuiltInLibraryManager
     return library;
   } // loadBuiltInLibrary
 
-  private static String getPrefix(SWRLBuiltInBridge bridge, String builtInName) 
+  private static String getPrefix(SWRLBuiltInBridge bridge, String builtInURI) 
   {
-    int hashIndex = builtInName.indexOf('#');
+    int hashIndex = builtInURI.indexOf('#');
 
     if (hashIndex != -1) {
-      return bridge.getOWLModel().getPrefixForResourceName(builtInName);
+      return bridge.getOWLModel().getPrefixForResourceName(builtInURI);
     } else return ""; // No prefix - try the base built-ins package. Ordinarily, built-ins should not be located here.
   } // getPrefix
 
@@ -108,12 +108,12 @@ public abstract class BuiltInLibraryManager
     return BuiltInLibraryPackageBaseName + prefix + ".SWRLBuiltInLibraryImpl";
   } // getBuiltInLibraryImplementationClassName
 
-  private static String getBuiltInMethodName(String builtInName)
+  private static String getBuiltInMethodName(String builtInURI)
   {
     String builtInMethodName;
 
-    if (builtInName.indexOf("#") == -1) builtInMethodName = builtInName;
-    else builtInMethodName = builtInName.substring(builtInName.indexOf("#") + 1, builtInName.length());
+    if (builtInURI.indexOf("#") == -1) builtInMethodName = builtInURI;
+    else builtInMethodName = builtInURI.substring(builtInURI.indexOf("#") + 1, builtInURI.length());
 
     return builtInMethodName;
   } // getBuiltInMethodName
@@ -139,26 +139,25 @@ public abstract class BuiltInLibraryManager
    * This method is called with a list of built-in arguments. Some argument positions may contain multi-arguments, indicating that there is more
    * than one pattern. If the result has more than one multi-argument, each multi-argument must have the same number of elements.
    */
-  public static Set<List<BuiltInArgument>> generateBuiltInArgumentBindings(String ruleName, String builtInName, int builtInIndex, List<BuiltInArgument> arguments) throws BuiltInException
+  public static Set<List<BuiltInArgument>> generateBuiltInArgumentBindings(String ruleName, String builtInURI, int builtInIndex, List<BuiltInArgument> arguments) throws BuiltInException
   {
     List<Integer> multiArgumentIndexes = getMultiArgumentIndexes(arguments);
     Set<List<BuiltInArgument>> bindings = new HashSet<List<BuiltInArgument>>();
-    MultiArgument multiArgument;
     
     if (multiArgumentIndexes.isEmpty()) // No multi-arguments - do a simple bind.
       bindings.add(arguments);
     else { // Generate all possible bindings.
       int firstMultiArgumentIndex = multiArgumentIndexes.get(0); // Pick the first multi-argument.
-      multiArgument = (MultiArgument)arguments.get(firstMultiArgumentIndex);
+      MultiArgument multiArgument = arguments.get(firstMultiArgumentIndex).getBuiltInMultiArgumentResult();
       int numberOfArgumentsInMultiArgument = multiArgument.getNumberOfArguments(); 
 
-      if (numberOfArgumentsInMultiArgument < 1) throw new BuiltInException("empty multi-argument for built-in " + builtInName + " in rule " + ruleName);
+      if (numberOfArgumentsInMultiArgument < 1) throw new BuiltInException("empty multi-argument for built-in " + builtInURI + " in rule " + ruleName);
       
       for (int i = 1; i < multiArgumentIndexes.size(); i++) {
       	int multiArgumentIndex = multiArgumentIndexes.get(i);
-      	multiArgument = (MultiArgument)arguments.get(multiArgumentIndex);
+      	multiArgument = arguments.get(multiArgumentIndex).getBuiltInMultiArgumentResult();
       	if (numberOfArgumentsInMultiArgument != multiArgument.getNumberOfArguments())
-      		 throw new BuiltInException("all multi-arguments must have the same number of elements for built-in " + builtInName + " in rule " + ruleName);
+      		 throw new BuiltInException("all multi-arguments must have the same number of elements for built-in " + builtInURI + " in rule " + ruleName);
       } // for
       
       for (int multiArgumentArgumentIndex = 0; multiArgumentArgumentIndex < numberOfArgumentsInMultiArgument; multiArgumentArgumentIndex++) {
@@ -176,18 +175,19 @@ public abstract class BuiltInLibraryManager
     List<Integer> result = new ArrayList<Integer>();
 
     for (int i = 0; i < arguments.size(); i++) 
-      if (arguments.get(i) instanceof MultiArgument) result.add(Integer.valueOf(i));
+      if (arguments.get(i).hasBuiltInMultiArgumentResult()) result.add(Integer.valueOf(i));
 
     return result;
   } // getMultiArgumentIndexes
 
   private static List<BuiltInArgument> generateArgumentsPattern(List<BuiltInArgument> arguments, int multiArgumentArgumentIndex)
+    throws BuiltInException
   {
     List<BuiltInArgument> result = new ArrayList<BuiltInArgument>();
 
-    for (BuiltInArgument argument: arguments) {
-      if (argument instanceof MultiArgument) {
-        MultiArgument multiArgument = (MultiArgument)argument;
+    for (BuiltInArgument argument : arguments) {
+      if (argument.hasBuiltInMultiArgumentResult()) {
+        MultiArgument multiArgument = argument.getBuiltInMultiArgumentResult();
         result.add(multiArgument.getArguments().get(multiArgumentArgumentIndex));
       } else result.add(argument);
     } // for
@@ -195,15 +195,15 @@ public abstract class BuiltInLibraryManager
     return result;
   } // generateArgumentsPattern  
 
-  private static Method resolveBuiltInMethod(String ruleName, SWRLBuiltInLibrary library, String prefix, String builtInName)
+  private static Method resolveBuiltInMethod(String ruleName, SWRLBuiltInLibrary library, String prefix, String builtInURI)
     throws UnresolvedBuiltInMethodException
   {
     Method method;
 
     try { 
-      method = library.getClass().getMethod(builtInName, new Class[] { List.class });
+      method = library.getClass().getMethod(builtInURI, new Class[] { List.class });
     } catch (Exception e) {
-      throw new UnresolvedBuiltInMethodException(ruleName, prefix, builtInName, e.getMessage());
+      throw new UnresolvedBuiltInMethodException(ruleName, prefix, builtInURI, e.getMessage());
     } // try
 
     return method;
@@ -239,19 +239,19 @@ public abstract class BuiltInLibraryManager
     return swrlBuiltInLibrary;
   } // loadBuiltInLibraryImpl
 
-  private static void checkBuiltInMethodSignature(String ruleName, String prefix, String builtInName, Method method) 
+  private static void checkBuiltInMethodSignature(String ruleName, String prefix, String builtInURI, Method method) 
       throws IncompatibleBuiltInMethodException
   {
     Class<?> exceptionTypes[];
     Type parameterTypes[];
 
     if (method.getReturnType() != Boolean.TYPE) 
-      throw new IncompatibleBuiltInMethodException(ruleName, prefix, builtInName, "Java method must return a boolean");
+      throw new IncompatibleBuiltInMethodException(ruleName, prefix, builtInURI, "Java method must return a boolean");
 
     exceptionTypes = method.getExceptionTypes();
 
     if ((exceptionTypes.length != 1) || (exceptionTypes[0] != BuiltInException.class))
-      throw new IncompatibleBuiltInMethodException(ruleName, prefix, builtInName, 
+      throw new IncompatibleBuiltInMethodException(ruleName, prefix, builtInURI, 
                                                    "Java method must throw a single exception of type BuiltInException");
 
     parameterTypes = method.getGenericParameterTypes();
@@ -260,7 +260,7 @@ public abstract class BuiltInLibraryManager
         (((ParameterizedType)parameterTypes[0]).getRawType() != List.class) ||
         (((ParameterizedType)parameterTypes[0]).getActualTypeArguments().length != 1) ||
         (((ParameterizedType)parameterTypes[0]).getActualTypeArguments()[0] != BuiltInArgument.class))
-      throw new IncompatibleBuiltInMethodException(ruleName, prefix, builtInName, 
+      throw new IncompatibleBuiltInMethodException(ruleName, prefix, builtInURI, 
                                                    "Java method must accept a single List of BuiltInArgument objects");
   } // checkBuiltInMethodSignature
 

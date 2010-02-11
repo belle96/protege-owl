@@ -141,7 +141,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
         for (OWLIndividual xmlElement : owlElements) 
           multiArgument.addArgument(argumentFactory.createIndividualArgument(xmlElement.getURI()));
         result = !multiArgument.hasNoArguments();
-        arguments.set(0, multiArgument);
+        arguments.get(0).setBuiltInResult(multiArgument);
       } // if
     } // if
     return result;
@@ -189,7 +189,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
         MultiArgument multiArgument = argumentFactory.createMultiArgument(getVariableName(0, arguments));
         for (OWLIndividual xmlElement : owlElements) 
           multiArgument.addArgument(argumentFactory.createIndividualArgument(xmlElement.getURI()));
-        arguments.set(0, multiArgument);
+        arguments.get(0).setBuiltInResult(multiArgument);
         result = !multiArgument.hasNoArguments();
       } // if
     } // if

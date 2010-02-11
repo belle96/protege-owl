@@ -907,7 +907,7 @@ public boolean processResultArgument(List<BuiltInArgument> arguments, int argume
   if (isUnboundArgument(argumentNumber, arguments)) {
     MultiArgument multiArgument = argumentFactory.createMultiArgument(getVariableName(argumentNumber, arguments));
     for (BuiltInArgument argument : resultArguments) multiArgument.addArgument(argument);
-    arguments.set(argumentNumber, multiArgument);
+    arguments.get(argumentNumber).setBuiltInResult(multiArgument);
     result = !multiArgument.hasNoArguments();
   } else {
     BuiltInArgument argument = arguments.get(argumentNumber);

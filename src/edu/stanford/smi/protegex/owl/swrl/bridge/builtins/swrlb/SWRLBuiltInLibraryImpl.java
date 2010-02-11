@@ -631,7 +631,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       multiArgument.addArgument(argumentFactory.createDataValueArgument(token));
     } // while
 
-    arguments.set(0, multiArgument);
+    arguments.get(0).setBuiltInResult(multiArgument);
     result = !multiArgument.hasNoArguments();
 
     return result;

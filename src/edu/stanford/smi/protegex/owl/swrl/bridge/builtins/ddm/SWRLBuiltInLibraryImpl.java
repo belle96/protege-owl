@@ -87,7 +87,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (isUnboundIndividualArgument) {
       MultiArgument multiArgument = argumentFactory.createMultiArgument(getVariableName(1, arguments));
       for (OWLIndividual individual : individuals) multiArgument.addArgument(individual);
-      arguments.set(1, multiArgument);
+      arguments.get(1).setBuiltInResult(multiArgument);
       result = !multiArgument.hasNoArguments();
     } else result = false;
 

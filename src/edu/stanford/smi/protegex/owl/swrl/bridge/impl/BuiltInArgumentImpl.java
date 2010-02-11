@@ -2,6 +2,7 @@
 package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
+import edu.stanford.smi.protegex.owl.swrl.bridge.MultiArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 
 /**
@@ -66,6 +67,14 @@ public class BuiltInArgumentImpl implements BuiltInArgument
   public boolean isUnbound() { return isArgumentUnbound; }
   public boolean isBound() { return !isArgumentUnbound; }
   public boolean hasBuiltInResult() { return builtInResult != null; }
+  public boolean hasBuiltInMultiArgumentResult() { return hasBuiltInResult() && builtInResult instanceof MultiArgument; }
+  
+  public MultiArgument getBuiltInMultiArgumentResult() throws BuiltInException
+  {
+	  if (!hasBuiltInMultiArgumentResult()) throw new BuiltInException("argument is not a multi-argument");
+	  
+	  return (MultiArgument)builtInResult;
+  } // getBuiltInMultiArgumentResult  
 
   public String toString()
   {
