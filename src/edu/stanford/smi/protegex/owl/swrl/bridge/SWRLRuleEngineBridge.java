@@ -8,10 +8,10 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLRuleEngineBridge
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngine;
 
 /**
- ** The SWRL Rule Engine Bridge defines the interface seen by an implementation of a SWRL rule engine. The implementation used this
- ** interface primarily to infer axioms and to invoke builtins.
- **
- ** Detailed documentation for this mechanism can be found <a href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLRuleEngineBridgeFAQ">here</a>.
+ * The SWRL Rule Engine Bridge defines the interface seen by an implementation of a SWRL rule engine. The implementation used this
+ * interface primarily to infer axioms and to invoke built-ins.
+ *
+ * Detailed documentation for this mechanism can be found <a href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLRuleEngineBridgeFAQ">here</a>.
  */
 public interface SWRLRuleEngineBridge extends SWRLRuleEngine, SQWRLQueryEngine
 {
@@ -28,4 +28,7 @@ public interface SWRLRuleEngineBridge extends SWRLRuleEngine, SQWRLQueryEngine
   boolean isOWLIndividual(String individualURI);
 
   OWLDataFactory getOWLDataFactory();
+  
+  String uri2Name(String uri);
+  String name2URI(String prefixedName);
 } // SWRLRuleEngineBridge

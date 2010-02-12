@@ -12,7 +12,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.OWLProperty;
 public abstract class OWLPropertyImpl extends BuiltInArgumentImpl implements OWLProperty
 {
   // There is an equals method defined on this class.
-  private String propertyURI, prefixedPropertyName;
+  private String propertyURI;
   private Set<String> domainClassURIs, rangeClassURIs, superPropertyURIs, subPropertyURIs, 
     equivalentPropertyURIs, equivalentPropertySuperPropertyURIs;
   
@@ -20,17 +20,9 @@ public abstract class OWLPropertyImpl extends BuiltInArgumentImpl implements OWL
   public OWLPropertyImpl(String propertyURI) 
   {
     this.propertyURI = propertyURI;
-    prefixedPropertyName = propertyURI;
     initialize();
   } // OWLPropertyImpl
 
-  public OWLPropertyImpl(String propertyURI, String prefixedPropertyName) 
-  {
-    this.propertyURI = propertyURI;
-    this.prefixedPropertyName = prefixedPropertyName;
-    initialize();
-  } // OWLPropertyImpl
-  
   public void setDomainClassURIs(Set<String> domainClassURIs) { this.domainClassURIs = domainClassURIs; }
   public void setRangeClassURIs(Set<String> rangeClassURIs) { this.rangeClassURIs = rangeClassURIs; }
   public void setSuperPropertyURIs(Set<String> superPropertyURIs) { this.superPropertyURIs = superPropertyURIs; }
@@ -39,7 +31,6 @@ public abstract class OWLPropertyImpl extends BuiltInArgumentImpl implements OWL
   public void setEquivalentPropertySuperPropertyURIs(Set<String> equivalentPropertySuperPropertyURIs) { this.equivalentPropertySuperPropertyURIs = equivalentPropertySuperPropertyURIs; }
 
   public String getURI() { return propertyURI; }
-  public String getPrefixedPropertyName() { return prefixedPropertyName; }
   public Set<String> getDomainClassURIs() { return domainClassURIs; }
   public Set<String> getRangeClassURIs() { return rangeClassURIs; }
   public Set<String> getSuperPropertyURIs() { return superPropertyURIs; }
@@ -47,15 +38,14 @@ public abstract class OWLPropertyImpl extends BuiltInArgumentImpl implements OWL
   public Set<String> getEquivalentPropertyURIs() { return equivalentPropertyURIs; }
   public Set<String> getEquivalentPropertySuperPropertyURIs() { return equivalentPropertySuperPropertyURIs; }
 
-  public String toString() { return getPrefixedPropertyName(); }
+  public String toString() { return getURI(); }
 
   public boolean equals(Object obj)
   {
     if(this == obj) return true;
     if((obj == null) || (obj.getClass() != this.getClass())) return false;
     OWLPropertyImpl impl = (OWLPropertyImpl)obj;
-    return (getURI() == impl.getURI() || (getURI() != null && getURI().equals(impl.getURI()))) && 
-      (getPrefixedPropertyName() == impl.getPrefixedPropertyName() || (getPrefixedPropertyName() != null && getPrefixedPropertyName().equals(impl.getPrefixedPropertyName()))) && 
+    return (getURI() == impl.getURI() || (getURI() != null && getURI().equals(impl.getURI()))) &&  
       (domainClassURIs == impl.domainClassURIs || (domainClassURIs != null && domainClassURIs.equals(impl.domainClassURIs))) &&
       (rangeClassURIs == impl.rangeClassURIs || (rangeClassURIs != null && rangeClassURIs.equals(impl.rangeClassURIs))) &&
       (subPropertyURIs == impl.subPropertyURIs || (subPropertyURIs != null && subPropertyURIs.equals(impl.subPropertyURIs))) &&
@@ -68,7 +58,6 @@ public abstract class OWLPropertyImpl extends BuiltInArgumentImpl implements OWL
   {
     int hash = 767;
     hash = hash + (null == getURI() ? 0 : getURI().hashCode());
-    hash = hash + (null == getPrefixedPropertyName() ? 0 : getPrefixedPropertyName().hashCode());
     hash = hash + (null == domainClassURIs ? 0 : domainClassURIs.hashCode());
     hash = hash + (null == rangeClassURIs ? 0 : rangeClassURIs.hashCode());
     hash = hash + (null == subPropertyURIs ? 0 : subPropertyURIs.hashCode());

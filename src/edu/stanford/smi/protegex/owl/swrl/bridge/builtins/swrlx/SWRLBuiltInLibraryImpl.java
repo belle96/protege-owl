@@ -71,7 +71,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       OWLIndividual owlIndividual = null;
       String createInvocationPattern 
         = createInvocationPattern(getInvokingBridge(), getInvokingRuleName(), getInvokingBuiltInIndex(), getIsInConsequent(),
-                                                  arguments.subList(1, arguments.size()));
+                                  arguments.subList(1, arguments.size()));
 
       if (individualInvocationMap.containsKey(createInvocationPattern)) owlIndividual = individualInvocationMap.get(createInvocationPattern);
       else {
@@ -101,7 +101,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   {
     checkNumberOfArgumentsAtLeast(2, arguments.size());
     
-    String builtInName = getArgumentAsAnIndividualName(0, arguments);
+    String builtInName = getArgumentAsAnIndividualURI(0, arguments);
     boolean result = false;
 
     try {

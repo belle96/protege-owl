@@ -222,7 +222,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     Document document = null;
 
     if (isArgumentAnIndividual(argumentNumber, arguments)) {
-      String individualName = getArgumentAsAnIndividualName(argumentNumber, arguments);
+      String individualName = getArgumentAsAnIndividualURI(argumentNumber, arguments);
       
       if (getInvokingBridge().isOWLIndividualOfClass(individualName, XMLBridgeMapper.XMLDocumentMappingOWLClassName)) {
       } else throw new InvalidBuiltInArgumentException(argumentNumber, "individual '" + individualName + "' is not a " +
@@ -241,7 +241,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     Element element = null;
 
     if (isArgumentAnIndividual(argumentNumber, arguments)) {
-      String individualName = getArgumentAsAnIndividualName(argumentNumber, arguments);
+      String individualName = getArgumentAsAnIndividualURI(argumentNumber, arguments);
       
       if (getInvokingBridge().isOWLIndividualOfClass(individualName, XMLBridgeMapper.XMLElementMappingOWLClassName)) {
       } else throw new InvalidBuiltInArgumentException(argumentNumber, "individual '" + individualName + "' is not a " +

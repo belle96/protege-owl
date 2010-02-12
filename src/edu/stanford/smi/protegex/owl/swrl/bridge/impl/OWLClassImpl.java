@@ -12,7 +12,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.OWLClass;
 public class OWLClassImpl extends BuiltInArgumentImpl implements OWLClass
 {
   // equals() method defined in this class.
-  private String classURI, prefixedClassName;
+  private String classURI;
   private Set<String> superclassURIs, directSuperClassURIs, directSubClassURIs, equivalentClassURIs, equivalentClassSuperclassURIs;
     
   // Constructor used when creating a OWLClass object to pass as a built-in argument 
@@ -35,7 +35,6 @@ public class OWLClassImpl extends BuiltInArgumentImpl implements OWLClass
   public void setEquivalentClassSuperclassURIs(Set<String> equivalentClassSuperclassURIs) { this.equivalentClassSuperclassURIs = equivalentClassSuperclassURIs; }
 
   public String getURI() { return classURI; }
-  public String getPrefixedClassName() { return prefixedClassName; }
   public Set<String> getSuperclassURIs() { return superclassURIs; }
   public Set<String> getDirectSuperClassURIs() { return directSuperClassURIs; }
   public Set<String> getDirectSubClassURIs() { return directSubClassURIs; }
@@ -44,7 +43,7 @@ public class OWLClassImpl extends BuiltInArgumentImpl implements OWLClass
 
   public boolean isNamedClass() { return true; }
 
-  public String toString() { return getPrefixedClassName(); }
+  public String toString() { return getURI(); }
 
   // We consider classes to be equal if they have the same name.
   public boolean equals(Object obj)
@@ -53,7 +52,6 @@ public class OWLClassImpl extends BuiltInArgumentImpl implements OWLClass
     if((obj == null) || (obj.getClass() != this.getClass())) return false;
     OWLClassImpl impl = (OWLClassImpl)obj;
     return (getURI() == impl.getURI() || (getURI() != null && getURI().equals(impl.getURI()))) &&
-           (getPrefixedClassName() == impl.getPrefixedClassName() || (getPrefixedClassName() != null && getPrefixedClassName().equals(impl.getPrefixedClassName()))) &&
            (superclassURIs != null && impl.superclassURIs != null && superclassURIs.equals(impl.superclassURIs)) &&
            (directSuperClassURIs != null && impl.directSuperClassURIs != null && directSuperClassURIs.equals(impl.directSuperClassURIs)) &&
            (directSubClassURIs != null && impl.directSubClassURIs != null && directSubClassURIs.equals(impl.directSubClassURIs)) &&
@@ -66,7 +64,6 @@ public class OWLClassImpl extends BuiltInArgumentImpl implements OWLClass
     int hash = 12;
 
     hash = hash + (null == getURI() ? 0 : getURI().hashCode());
-    hash = hash + (null == getPrefixedClassName() ? 0 : getPrefixedClassName().hashCode());
     hash = hash + (null == getSuperclassURIs() ? 0 : getSuperclassURIs().hashCode());
     hash = hash + (null == getDirectSuperClassURIs() ? 0 : getDirectSuperClassURIs().hashCode());
     hash = hash + (null == getDirectSubClassURIs() ? 0 : getDirectSubClassURIs().hashCode());
@@ -84,7 +81,6 @@ public class OWLClassImpl extends BuiltInArgumentImpl implements OWLClass
   private void initialize(String classURI, String prefixedClassName)
   {
     this.classURI = classURI;
-    this.prefixedClassName = prefixedClassName;
     superclassURIs = new HashSet<String>();
     directSuperClassURIs = new HashSet<String>();
     directSubClassURIs = new HashSet<String>();

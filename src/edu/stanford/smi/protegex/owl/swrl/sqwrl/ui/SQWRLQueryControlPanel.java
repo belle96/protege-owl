@@ -16,7 +16,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.BridgePluginManager;
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngine;
+import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRuleEngineBridge;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResult;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.InvalidQueryNameException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
@@ -24,12 +24,12 @@ import edu.stanford.smi.protegex.owl.swrl.ui.icons.SWRLIcons;
 
 public class SQWRLQueryControlPanel extends JPanel 
 {
-  private SQWRLQueryEngine queryEngine;
+  private SWRLRuleEngineBridge queryEngine;
   private HashMap<String, SQWRLQueryResultPanel> resultPanels;
   private JTextArea textArea;
   private static int MaximumOpenResultPanels = 8;
 
-  public SQWRLQueryControlPanel(SQWRLQueryEngine queryEngine) 
+  public SQWRLQueryControlPanel(SWRLRuleEngineBridge queryEngine) 
   {
     JPanel panel;
     JButton button;

@@ -18,11 +18,11 @@ import javax.swing.JTable;
 import javax.swing.JViewport;
 import javax.swing.table.AbstractTableModel;
 
+import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRuleEngineBridge;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.ClassValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.ObjectValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.PropertyValue;
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngine;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResult;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResultValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.InvalidQueryNameException;
@@ -32,13 +32,13 @@ public class SQWRLQueryResultPanel extends JPanel
 {
   private String queryName;
   private JTable table;
-  private SQWRLQueryEngine queryEngine;
+  private SWRLRuleEngineBridge queryEngine;
   private SQWRLResult result = null;
   private SQWRLQueryControlPanel controlPanel;
   private SQWRLQueryResultModel swrlQueryResultModel;
   private static File currentDirectory = null;
 
-  public SQWRLQueryResultPanel(SQWRLQueryEngine queryEngine, String queryName, SQWRLResult result, SQWRLQueryControlPanel controlPanel) 
+  public SQWRLQueryResultPanel(SWRLRuleEngineBridge queryEngine, String queryName, SQWRLResult result, SQWRLQueryControlPanel controlPanel) 
   {
     this.queryEngine = queryEngine;
     this.queryName = queryName;
@@ -224,16 +224,16 @@ public class SQWRLQueryResultPanel extends JPanel
         SQWRLResultValue value = (result == null) ? null : result.getValue(column, row);
         if (value instanceof ObjectValue) {
           ObjectValue objectValue = (ObjectValue)value;
-          representation += objectValue.getPrefixedIndividualName();
+          representation += queryEngine.uri2Name(objectValue.getURI());
         } else if (value instanceof DataValue) {
           DataValue datatypeValue = (DataValue)value;
           representation += datatypeValue.toString();
         } else if (value instanceof ClassValue) {
           ClassValue classValue = (ClassValue)value;
-          representation += classValue.getPrefixedClassName();
+          representation += queryEngine.uri2Name(classValue.getURI());
         } else if (value instanceof PropertyValue) {
           PropertyValue propertyValue = (PropertyValue)value;
-          representation += propertyValue.getPrefixedPropertyName();
+          representation += queryEngine.uri2Name(propertyValue.getURI());
         } // if
       } catch (SQWRLException e) {}
 

@@ -16,7 +16,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInLibraryExcept
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.InvalidBuiltInArgumentNumberException;
 
 /** 
- * A class that defined methods that must be implemented by a built-in library. See <a
+ * A class that defines methods that must be implemented by a built-in library. See <a
  * href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLBuiltInBridge">here</a> for documentation.
  *
  * The class AbstractSWRLBuiltInLibrary provides an implementation of this interface. 
@@ -37,8 +37,8 @@ public interface SWRLBuiltInLibrary
                               String prefix, String builtInMethodName, int builtInIndex, boolean isInConsequent,
                               List<BuiltInArgument> arguments) throws BuiltInException;
 
-    void checkIfInConsequent() throws BuiltInException;
-    void checkIfInAntecedent() throws BuiltInException;
+    void checkThatInConsequent() throws BuiltInException;
+    void checkThatInAntecedent() throws BuiltInException;
     void checkNumberOfArgumentsEqualTo(int expecting, int actual) throws InvalidBuiltInArgumentNumberException; 
 	void checkNumberOfArgumentsAtLeast(int expectingAtLeast, int actual) throws InvalidBuiltInArgumentNumberException; 
 	void checkNumberOfArgumentsAtMost(int expectingAtMost, int actual) throws InvalidBuiltInArgumentNumberException; 
@@ -78,16 +78,15 @@ public interface SWRLBuiltInLibrary
 	boolean isArgumentAnIndividual(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException; 
 	boolean isArgumentADatatypeValue(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException; 
 	void checkThatArgumentIsAnIndividual(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException; 
-	void checkThatArgumentIsAnOWLDatatypeValue(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException; 
-	String getArgumentAsAPrefixedIndividualName(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException; 
-	String getArgumentAsAnIndividualName(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException; 
+	void checkThatArgumentIsAnOWLDatatypeValue(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException;  
+	String getArgumentAsAnIndividualURI(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException; 
 	OWLIndividual getArgumentAsAnOWLIndividual(int argumentNumber,	List<BuiltInArgument> arguments) throws BuiltInException; 
-	String getArgumentAsAClassName(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException; 
+	String getArgumentAsAClassURI(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException; 
 	OWLClass getArgumentAsAnOWLClass(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException; 
 	OWLProperty getArgumentAsAnOWLProperty(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException; 
 	OWLDataValue getArgumentAsAnOWLDatatypeValue(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException; 
-	String getArgumentAsAResourceName(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException; 
-	String getArgumentAsAPropertyName(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException; 
+	String getArgumentAsAResourceURI(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException; 
+	String getArgumentAsAPropertyURI(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException; 
 	void checkArgumentNumber(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException; 
 	boolean isArgumentNumeric(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException; 
 	boolean isArgumentNonNumeric(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException; 

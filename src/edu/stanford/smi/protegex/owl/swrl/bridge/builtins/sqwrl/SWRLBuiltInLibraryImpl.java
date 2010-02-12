@@ -60,7 +60,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   {
     checkForUnboundArguments(arguments);
     checkNumberOfArgumentsAtLeast(1, arguments.size());
-    checkIfInConsequent();
+    checkThatInConsequent();
     ResultImpl result = getResult(getInvokingRuleName());
 
     if (!result.isRowOpen()) result.openRow();
@@ -80,7 +80,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean selectDistinct(List<BuiltInArgument> arguments) throws BuiltInException
   {
-	checkIfInConsequent();
+	checkThatInConsequent();
     return select(arguments);
   } // selectDistinct
   
@@ -105,7 +105,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean countDistinct(List<BuiltInArgument> arguments) throws BuiltInException
   {
-	checkIfInConsequent();
+	checkThatInConsequent();
     return count(arguments);
   } // countDistinct
 
@@ -120,7 +120,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 	BuiltInArgument element = arguments.get(1); // The second argument is always the value
 	Collection<BuiltInArgument> set;
 	
-	checkIfInAntecedent();
+	checkThatInAntecedent();
 	    
     if (collections.containsKey(collectionID)) set = collections.get(collectionID);
     else {  
@@ -142,7 +142,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 	BuiltInArgument element = arguments.get(1); // The second argument is always the value
 	Collection<BuiltInArgument> bag;
 	
-	checkIfInAntecedent();
+	checkThatInAntecedent();
 	    
     if (collections.containsKey(collectionID)) bag = collections.get(collectionID);
     else {  
@@ -160,7 +160,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean groupBy(List<BuiltInArgument> arguments) throws BuiltInException
   {
-	checkIfInAntecedent();
+	checkThatInAntecedent();
 	
 	return true; // Should never be invoked - is a directive only and is processed by SQWRL processor
   } // groupBy
@@ -169,7 +169,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   {
     String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 0, 1); // Does argument checking
     
-    checkIfInAntecedent();
+    checkThatInAntecedent();
     
     // System.err.println("isEmpty: arguments: " + arguments);
     // System.err.println("isEmpty: collectionID: " + collectionID);
@@ -187,7 +187,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
     int size = getCollection(collectionID).size(); // Checks collection ID validity
     
-    checkIfInAntecedent();
+    checkThatInAntecedent();
 
     return processResultArgument(arguments, 0, size);
   } // size
@@ -390,7 +390,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     Collection<BuiltInArgument> collection1 = getCollection(collectionID1);
     Collection<BuiltInArgument> collection2 = getCollection(collectionID2);
     
-    checkIfInAntecedent();
+    checkThatInAntecedent();
 
     for (BuiltInArgument element : collection1) if (collection2.contains(element)) return true;
 
@@ -416,7 +416,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 	    Collection<BuiltInArgument> collection2 = getCollection(collectionID2);
 	    Collection<BuiltInArgument> intersection = new HashSet<BuiltInArgument>(collection1);
 	    
-	    checkIfInAntecedent();
+	    checkThatInAntecedent();
 	    
 	    intersection.retainAll(collection2);
 
@@ -441,7 +441,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 	Collection<BuiltInArgument> collection2 = getCollection(collectionID2);
 	Set<BuiltInArgument> union = new HashSet<BuiltInArgument>(collection1);
 	
-	checkIfInAntecedent();
+	checkThatInAntecedent();
 	
 	union.addAll(collection2);
 	
@@ -466,7 +466,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 	Collection<BuiltInArgument> collection2 = getCollection(collectionID2);
 	Collection<BuiltInArgument> difference = new HashSet<BuiltInArgument>(collection1);
 	
-	checkIfInAntecedent();
+	checkThatInAntecedent();
 	
 	difference.removeAll(collection2);
 
@@ -482,7 +482,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 0, 2); // Does argument checking
     //BuiltInArgument element = arguments.get(1);
     
-    checkIfInAntecedent();
+    checkThatInAntecedent();
     
     return processResultArgument(arguments, 1, getCollection(collectionID));
     
@@ -493,7 +493,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean notContains(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-	checkIfInAntecedent();
+	checkThatInAntecedent();
 	
     return !contains(arguments);
   } // notContains
@@ -504,7 +504,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     Collection<BuiltInArgument> collection = getCollection(collectionID);
     boolean result = false;
 
-    checkIfInAntecedent();
+    checkThatInAntecedent();
     
     if (!collection.isEmpty()) {
       SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
@@ -522,7 +522,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     Collection<BuiltInArgument> collection = getCollection(collectionID);
     boolean result = false;
 
-    checkIfInAntecedent();
+    checkThatInAntecedent();
     
     if (!collection.isEmpty()) {
       SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
@@ -544,7 +544,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     Collection<BuiltInArgument> collection = getCollection(collectionID);
     boolean result = false;
 
-    checkIfInAntecedent();
+    checkThatInAntecedent();
     
     if (!collection.isEmpty()) {
       SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
@@ -566,7 +566,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     Collection<BuiltInArgument> collection = getCollection(collectionID);
     boolean result = false;
     
-    checkIfInAntecedent();
+    checkThatInAntecedent();
 
     if (!collection.isEmpty()) {
       SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
@@ -588,7 +588,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     Collection<BuiltInArgument> collection = getCollection(collectionID);
     boolean result = false;
 
-    checkIfInAntecedent();
+    checkThatInAntecedent();
       
     if (!collection.isEmpty()) {
       SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
@@ -609,7 +609,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     Collection<BuiltInArgument> collection = getCollection(collectionID);
     boolean result = false;
 
-    checkIfInAntecedent();
+    checkThatInAntecedent();
     
     if (!collection.isEmpty()) {
       SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);

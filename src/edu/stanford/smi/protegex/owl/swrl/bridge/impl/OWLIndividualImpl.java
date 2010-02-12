@@ -14,25 +14,13 @@ public class OWLIndividualImpl extends PropertyValueImpl implements OWLIndividua
 {
   // NOTE: equals() method defined in this class
 
-  private String individualURI, prefixedIndividualName;  
+  private String individualURI;  
   private Set<OWLClass> definingClasses, definingSuperclasses, definingEquivalentClasses, definingEquivalentClassSuperclasses, classes;
   private Set<OWLIndividual> sameAsIndividuals;
 
   public OWLIndividualImpl(String individualURI)
   {
-    initialize(individualURI, individualURI);
-  } // OWLIndividualImpl
-
-  public OWLIndividualImpl(String individualURI, String prefixedIndividualName, OWLClass owlClass) 
-  {
-    initialize(individualURI, prefixedIndividualName);
-
-    addDefiningClass(owlClass);
-  } // OWLIndividualImpl
-
-  public OWLIndividualImpl(String individualURI, String prefixedIndividualName) 
-  {
-    initialize(individualURI, prefixedIndividualName);
+    initialize(individualURI);
   } // OWLIndividualImpl
 
   public void addDefiningClass(OWLClass definingClass)
@@ -47,21 +35,20 @@ public class OWLIndividualImpl extends PropertyValueImpl implements OWLIndividua
   public void addSameAsIndividual(OWLIndividual sameAsIndividual) { sameAsIndividuals.add(sameAsIndividual); }
 
   public String getURI() { return individualURI; }
-  public String getPrefixedIndividualName() { return prefixedIndividualName; }
   public Set<OWLClass> getDefiningClasses() { return definingClasses; }
   public Set<OWLClass> getDefiningSuperclasses() { return definingSuperclasses; }
   public Set<OWLClass> getDefiningEquivalentClasses() { return definingEquivalentClasses; }
   public Set<OWLClass> getDefiningEquivalentClassSuperclasses() { return definingEquivalentClassSuperclasses; }
   public Set<OWLIndividual> getSameAsIndividuals() { return sameAsIndividuals; }
 
-  public boolean hasClass(String classURI) 
+  public boolean hasDefiningClass(String classURI) 
   {
     for (OWLClass owlClass : classes) if (owlClass.getURI().equals(classURI)) return true;
 
     return false;
   } // hasClass
 
-  public String toString() { return getPrefixedIndividualName(); }
+  public String toString() { return getURI(); }
 
   // We consider individuals to be equal if they have the same name.
   public boolean equals(Object obj)
@@ -70,7 +57,6 @@ public class OWLIndividualImpl extends PropertyValueImpl implements OWLIndividua
     if((obj == null) || (obj.getClass() != this.getClass())) return false;
     OWLIndividualImpl impl = (OWLIndividualImpl)obj;
     return (getURI() == impl.getURI() || (getURI() != null && getURI().equals(impl.getURI()))) &&
-           (getPrefixedIndividualName() == impl.getPrefixedIndividualName() || (getPrefixedIndividualName() != null && getPrefixedIndividualName().equals(impl.getPrefixedIndividualName()))) &&
            (definingClasses != null && impl.definingClasses != null && definingClasses.equals(impl.definingClasses)) &&
            (definingSuperclasses != null && impl.definingSuperclasses != null && definingSuperclasses.equals(impl.definingSuperclasses)) &&
            (definingEquivalentClasses != null && impl.definingEquivalentClasses != null && definingEquivalentClasses.equals(impl.definingEquivalentClasses)) &&
@@ -82,7 +68,6 @@ public class OWLIndividualImpl extends PropertyValueImpl implements OWLIndividua
     int hash = 8;
 
     hash = hash + (null == getURI() ? 0 : getURI().hashCode());
-    hash = hash + (null == getPrefixedIndividualName() ? 0 : getPrefixedIndividualName().hashCode());
     hash = hash + (null == getDefiningClasses() ? 0 : getDefiningClasses().hashCode());
     hash = hash + (null == getDefiningSuperclasses() ? 0 : getDefiningSuperclasses().hashCode());
     hash = hash + (null == getDefiningEquivalentClasses() ? 0 : getDefiningEquivalentClasses().hashCode());
@@ -96,10 +81,9 @@ public class OWLIndividualImpl extends PropertyValueImpl implements OWLIndividua
     return individualURI.compareTo(((OWLIndividualImpl)o).getURI());
   } // compareTo
 
-  private void initialize(String individualName, String prefixedIndividualName)
+  private void initialize(String individualURI)
   {
-    this.individualURI = individualName;
-    this.prefixedIndividualName = prefixedIndividualName;
+    this.individualURI = individualURI;
 
     definingClasses = new HashSet<OWLClass>();
     definingSuperclasses = new HashSet<OWLClass>();

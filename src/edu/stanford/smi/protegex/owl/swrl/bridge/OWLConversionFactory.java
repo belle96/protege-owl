@@ -33,6 +33,7 @@ public interface OWLConversionFactory
   boolean isOWLDataProperty(String propertyURI);
   boolean isOWLIndividual(String individualURI);
   boolean isOWLIndividualOfClass(String individualURI, String classURI);
+  
   boolean isSWRLBuiltIn(String builtInURI);
   boolean couldBeOWLNamedClass(String classURI);
   String createNewResourceName(String prefix);
@@ -40,5 +41,8 @@ public interface OWLConversionFactory
   void putOWLClass(OWLClass owlClass) throws OWLConversionFactoryException;
   void putOWLIndividual(OWLIndividual owlIndividual) throws OWLConversionFactoryException;
   void putOWLAxiom(OWLAxiom axiom) throws OWLConversionFactoryException;
+  
+  String uri2PrefixedName(String uri); 
+  String prefixedName2URI(String prefixedName);
 } // OWLConversionFactory
   

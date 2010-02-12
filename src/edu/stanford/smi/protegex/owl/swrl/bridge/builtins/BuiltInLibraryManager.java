@@ -49,7 +49,7 @@ public abstract class BuiltInLibraryManager
    * http://www.w3.org/2003/11/swrlb#lessThanOrEqual).
    */
   public static boolean invokeSWRLBuiltIn(TargetSWRLRuleEngine targetRuleEngine, SWRLBuiltInBridge bridge, String ruleName, String builtInURI, 
-		  								  int builtInIndex, boolean isInConsequent, List<BuiltInArgument> arguments) 
+		  								                    int builtInIndex, boolean isInConsequent, List<BuiltInArgument> arguments) 
     throws BuiltInException
   {
     String prefix = getPrefix(bridge, builtInURI);

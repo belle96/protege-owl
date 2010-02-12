@@ -73,7 +73,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
     checkNumberOfArgumentsAtLeast(2, arguments.size());
 
-    className = getArgumentAsAClassName(0, arguments);
+    className = getArgumentAsAClassURI(0, arguments);
 
     isUnboundIndividualArgument = isUnboundArgument(1, arguments);
 
@@ -106,7 +106,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     checkNumberOfArgumentsAtLeast(1, arguments.size());
     checkForUnboundArguments(arguments);
 
-    propertyName = getArgumentAsAPropertyName(0, arguments);
+    propertyName = getArgumentAsAPropertyURI(0, arguments);
 
     hasSubject = (arguments.size() > 1);
     hasObject = (arguments.size() > 2);
@@ -114,12 +114,12 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     owlProperty = getInvokingBridge().getOWLDataFactory().getOWLObjectProperty(propertyName);
     
     if (hasSubject) {
-      String subjectIndividualName = getArgumentAsAnIndividualName(1, arguments);
+      String subjectIndividualName = getArgumentAsAnIndividualURI(1, arguments);
       subjectOWLIndividual = getInvokingBridge().getOWLDataFactory().getOWLIndividual(subjectIndividualName);
     } // if
 
     if (hasObject) {
-      String objectIndividualName = getArgumentAsAnIndividualName(2, arguments);
+      String objectIndividualName = getArgumentAsAnIndividualURI(2, arguments);
       objectOWLIndividual = getInvokingBridge().getOWLDataFactory().getOWLIndividual(objectIndividualName);
     } // if    
     
@@ -149,7 +149,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     checkNumberOfArgumentsAtLeast(1, arguments.size());
     checkForUnboundArguments(arguments);
 
-    propertyName = getArgumentAsAPropertyName(0, arguments);
+    propertyName = getArgumentAsAPropertyURI(0, arguments);
 
     hasSubject = (arguments.size() > 1) && isArgumentAnIndividual(1, arguments);
     hasValue = (arguments.size() > 2 || (arguments.size() > 1 && isArgumentADatatypeValue(1, arguments)));
@@ -157,7 +157,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     owlProperty = getInvokingBridge().getOWLDataFactory().getOWLDataProperty(propertyName);
     
     if (hasSubject) {
-      String subjectIndividualName = getArgumentAsAnIndividualName(1, arguments);
+      String subjectIndividualName = getArgumentAsAnIndividualURI(1, arguments);
       subjectOWLIndividual = getInvokingBridge().getOWLDataFactory().getOWLIndividual(subjectIndividualName);
     } // if
     if (hasValue) {

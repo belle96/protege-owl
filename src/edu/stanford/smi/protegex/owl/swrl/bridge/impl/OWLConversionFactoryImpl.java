@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import edu.stanford.smi.protegex.owl.model.NamespaceUtil;
 import edu.stanford.smi.protegex.owl.model.OWLAllDifferent;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLNamedClass;
@@ -90,12 +91,12 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
   } // OWLConversionFactoryImpl
   
   public boolean isOWLClass(String className) { return SWRLOWLUtil.isOWLClass(owlModel, className); }
-  public boolean isOWLProperty(String propertyName) { return SWRLOWLUtil.isProperty(owlModel, propertyName); }
-  public boolean isOWLObjectProperty(String propertyName) { return SWRLOWLUtil.isObjectProperty(owlModel, propertyName); }
-  public boolean isOWLDataProperty(String propertyName) { return SWRLOWLUtil.isDatatypeProperty(owlModel, propertyName); }
-  public boolean isOWLIndividual(String individualName) { return SWRLOWLUtil.isOWLIndividual(owlModel, individualName); }
-  public boolean isOWLIndividualOfClass(String individualName, String className) { return SWRLOWLUtil.isIndividualOfClass(owlModel, individualName, className); }
-  public boolean isSWRLBuiltIn(String builtInName) { return SWRLOWLUtil.isSWRLBuiltIn(owlModel, builtInName); }
+  public boolean isOWLProperty(String propertyURI) { return SWRLOWLUtil.isProperty(owlModel, propertyURI); }
+  public boolean isOWLObjectProperty(String propertyURI) { return SWRLOWLUtil.isObjectProperty(owlModel, propertyURI); }
+  public boolean isOWLDataProperty(String propertyURI) { return SWRLOWLUtil.isDatatypeProperty(owlModel, propertyURI); }
+  public boolean isOWLIndividual(String individualURI) { return SWRLOWLUtil.isOWLIndividual(owlModel, individualURI); }
+  public boolean isOWLIndividualOfClass(String individualURI, String classURI) { return SWRLOWLUtil.isIndividualOfClass(owlModel, individualURI, classURI); }
+  public boolean isSWRLBuiltIn(String builtInURI) { return SWRLOWLUtil.isSWRLBuiltIn(owlModel, builtInURI); }
   public String createNewResourceName(String prefix) { return SWRLOWLUtil.createNewResourceName(owlModel, prefix); }
   
   public Set<SWRLRule> getSWRLRules() throws OWLConversionFactoryException, SQWRLException, BuiltInException
@@ -178,7 +179,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
   public OWLIndividual getOWLIndividual(String individualURI) throws OWLConversionFactoryException
   { 
     edu.stanford.smi.protegex.owl.model.OWLIndividual individual = SWRLOWLUtil.createOWLIndividual(owlModel, individualURI);
-    OWLIndividualImpl owlIndividual = new OWLIndividualImpl(individualURI, individual.getPrefixedName());
+    OWLIndividualImpl owlIndividual = new OWLIndividualImpl(individualURI);
 
     buildDefiningClasses(owlIndividual, individual);
     buildDefiningSuperclasses(owlIndividual, individual);
@@ -192,7 +193,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
   {
     edu.stanford.smi.protegex.owl.model.OWLObjectProperty property = SWRLOWLUtil.createOWLObjectProperty(owlModel, propertyURI);
     String prefixedPropertyName = property.getPrefixedName();
-    OWLObjectPropertyImpl owlObjectProperty = new OWLObjectPropertyImpl(propertyURI, prefixedPropertyName);
+    OWLObjectPropertyImpl owlObjectProperty = new OWLObjectPropertyImpl(propertyURI);
 
     initializeProperty(owlObjectProperty, property);
 
@@ -202,8 +203,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
   public OWLDataProperty getOWLDataProperty(String propertyURI) throws OWLConversionFactoryException
   { 
     edu.stanford.smi.protegex.owl.model.OWLDatatypeProperty property = SWRLOWLUtil.createOWLDatatypeProperty(owlModel, propertyURI);
-    String prefixedPropertyName = property.getPrefixedName();
-    OWLDataPropertyImpl owlDataProperty = new OWLDataPropertyImpl(propertyURI, prefixedPropertyName);
+    OWLDataPropertyImpl owlDataProperty = new OWLDataPropertyImpl(propertyURI);
 
     initializeProperty(owlDataProperty, property);
 
@@ -282,10 +282,24 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
   
   public boolean couldBeOWLNamedClass(String classURI)
   {
-	 RDFResource  resource= SWRLOWLUtil.getRDFResource(owlModel, classURI);
+	 RDFResource resource= SWRLOWLUtil.getRDFResource(owlModel, classURI);
 	 
 	 return (resource == null || resource instanceof OWLNamedClass);
   } // couldBeOWLNamedClass
+  
+  public String uri2PrefixedName(String uri)
+  {
+  	 String result = NamespaceUtil.getPrefixedName(owlModel, uri);
+  	 
+  	 return result;
+  } // uri2PrefixedName
+  
+  public String prefixedName2URI(String prefixedName)
+  {
+  	String result = NamespaceUtil.getFullName(owlModel, prefixedName);
+  	
+  	return result;
+  } // prefixedName2URI
   
   private OWLDataValue convertOWLDataValue(edu.stanford.smi.protegex.owl.model.RDFSLiteral literal) throws OWLConversionFactoryException 
   { 

@@ -5,7 +5,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.Argument;
@@ -30,8 +32,8 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.InvalidBuiltInArgume
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.InvalidBuiltInArgumentNumberException;
 
 /** 
- ** A class that must be subclassed by a class implementing a library of SWRL built-in methods. See <a
- ** href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLBuiltInBridge">here</a> for documentation.
+ * A class that must be subclassed by a class implementing a library of SWRL built-in methods. See <a
+ * href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLBuiltInBridge">here</a> for documentation.
  */
 public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
 {
@@ -46,10 +48,15 @@ public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
   private int invokingBuiltInIndex = -1;
   private boolean isInConsequent = false;
   private ArgumentFactory argumentFactory;
+  private Long invocationPatternID;
+  private Map<String, Long> invocationPatternMap;
 
   public AbstractSWRLBuiltInLibrary(String libraryName) 
-  { this.libraryName = libraryName;
+  { 
+  	 this.libraryName = libraryName;
      argumentFactory = ArgumentFactory.getFactory();
+     invocationPatternID = 0L;
+     invocationPatternMap = new HashMap<String, Long>();
   } // AbstractSWRLBuiltInLibrary
 
   public String getLibraryName() { return libraryName; }
@@ -78,6 +85,7 @@ public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
     return invokingBuiltInIndex;
   } // getInvokingBuiltInIndex
 
+
   public boolean getIsInConsequent() throws BuiltInLibraryException
   {
     if (invokingBridge == null) 
@@ -86,18 +94,18 @@ public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
     return isInConsequent;
   } // getIsInConsequent
 
-  public void checkIfInConsequent() throws BuiltInException
+  public void checkThatInConsequent() throws BuiltInException
   {
     if (invokingBridge == null) 
-      throw new BuiltInLibraryException("invalid call to checkIfInConsequent - should only be called from within a built-in");
+      throw new BuiltInLibraryException("invalid call to checkThatInConsequent - should only be called from within a built-in");
 
     if (!isInConsequent) throw new BuiltInException("built-in can only be used in consequent");
   } // checkIfInConsequent
 
-  public void checkIfInAntecedent() throws BuiltInException
+  public void checkThatInAntecedent() throws BuiltInException
   {
     if (invokingBridge == null) 
-      throw new BuiltInLibraryException("invalid call to checkIfInAntecedent - should only be called from within a built-in");
+      throw new BuiltInLibraryException("invalid call to checkThatInAntecedent - should only be called from within a built-in");
 
     if (isInConsequent) throw new BuiltInException("built-in can only be used in antecedent");
   } // checkIfInAntecedent
@@ -110,7 +118,10 @@ public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
       invokingBridge = bridge;
 
       reset();
-
+      
+      invocationPatternID = 0L;
+      invocationPatternMap = new HashMap<String, Long>();
+      
       invokingBridge = null;
     } // synchronized
   } // invokeResetMethod
@@ -402,33 +413,26 @@ public void checkThatArgumentIsAnOWLDatatypeValue(int argumentNumber, List<Built
   } // if
 } // checkThatArgumentIsAnOWLDatatypeValue
 
-public String getArgumentAsAPrefixedIndividualName(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException
-{
-  checkThatArgumentIsAnIndividual(argumentNumber, arguments);
-
-  return ((IndividualArgument)arguments.get(argumentNumber)).getPrefixedIndividualName();
-} // getArgumentAsAPrefixedIndividualName
-
-public String getArgumentAsAnIndividualName(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException
+public String getArgumentAsAnIndividualURI(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException
 {
   checkThatArgumentIsAnIndividual(argumentNumber, arguments);
 
   return ((IndividualArgument)arguments.get(argumentNumber)).getURI();
-} // getArgumentAsAnIndividualName
+} // getArgumentAsAnIndividualURI
 
 public OWLIndividual getArgumentAsAnOWLIndividual(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException
 {
   checkThatArgumentIsAnIndividual(argumentNumber, arguments);
 
   return (OWLIndividual)arguments.get(argumentNumber);
-} // getArgumentAsAnIndividualName
+} // getArgumentAsAnOWLIndividual
 
-public String getArgumentAsAClassName(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException
+public String getArgumentAsAClassURI(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException
 {
   checkThatArgumentIsAClass(argumentNumber, arguments);
 
   return ((ClassArgument)arguments.get(argumentNumber)).getURI();
-} // getArgumentAsAClassName
+} // getArgumentAsAClassURI
 
 public OWLClass getArgumentAsAnOWLClass(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException
 {
@@ -451,25 +455,25 @@ public OWLDataValue getArgumentAsAnOWLDatatypeValue(int argumentNumber, List<Bui
   return (OWLDataValue)arguments.get(argumentNumber);
 } // getArgumentAsAnOWLDatatypeValue
 
-public String getArgumentAsAResourceName(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException
+public String getArgumentAsAResourceURI(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException
 {
-  String resourceName = "";
+  String resourceURI = "";
 
   checkThatArgumentIsAClassPropertyOrIndividual(argumentNumber, arguments);
 
-  if (isArgumentAClass(argumentNumber, arguments)) resourceName = ((ClassArgument)arguments.get(argumentNumber)).getURI();
-  else if (isArgumentAProperty(argumentNumber, arguments)) resourceName = ((PropertyArgument)arguments.get(argumentNumber)).getURI();
-  else if (isArgumentAnIndividual(argumentNumber, arguments)) resourceName = ((IndividualArgument)arguments.get(argumentNumber)).getURI();
+  if (isArgumentAClass(argumentNumber, arguments)) resourceURI = ((ClassArgument)arguments.get(argumentNumber)).getURI();
+  else if (isArgumentAProperty(argumentNumber, arguments)) resourceURI = ((PropertyArgument)arguments.get(argumentNumber)).getURI();
+  else if (isArgumentAnIndividual(argumentNumber, arguments)) resourceURI = ((IndividualArgument)arguments.get(argumentNumber)).getURI();
 
-  return resourceName;
-} // getArgumentAsAResourceName
+  return resourceURI;
+} // getArgumentAsAResourceURI
 
-public String getArgumentAsAPropertyName(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException
+public String getArgumentAsAPropertyURI(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException
 {
   checkThatArgumentIsAProperty(argumentNumber, arguments);
 
   return ((PropertyArgument)arguments.get(argumentNumber)).getURI();
-} // getArgumentAsAPropertyName
+} // getArgumentAsAPropertyURI
 
 public void checkArgumentNumber(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException
 {
@@ -816,17 +820,17 @@ private String makeInvalidArgumentTypeMessage(BuiltInArgument argument, String e
   else {
     if (argument instanceof ClassArgument) {
       ClassArgument classArgument = (ClassArgument)argument;
-      message += "class with name '" + classArgument.getURI() + "'";
+      message += "class with name " + classArgument.getURI();
     } else if (argument instanceof PropertyArgument) {
       PropertyArgument propertyArgument = (PropertyArgument)argument;
-      message += "property with name '" + propertyArgument.getURI() + "'";
+      message += "property with name " + propertyArgument.getURI();
     } else if (argument instanceof IndividualArgument) {
       IndividualArgument individualArgument = (IndividualArgument)argument;
-      message += "individual with name '" + individualArgument.getURI() + "'";
+      message += "individual with name " + individualArgument.getURI();
     } else if (argument instanceof DataValueArgument) {
       DataValueArgument literal = (DataValueArgument)argument;
-      message += "literal with value '" + literal.toString() + "'";
-    } else message += "unknown type '" + argument.getClass().getName() + "'";
+      message += "literal with value " + literal.toString();
+    } else message += "unknown type " + argument.getClass().getName();
   } // if
   return message;
 } // makeInvalidArgumentTypeMessage
@@ -866,16 +870,24 @@ public Object getArgumentAsAPropertyValue(int argumentNumber, List<BuiltInArgume
 } // getArgumentAsAPropertyValue
 
 /**
- ** Create a string that represents a unique invocation pattern for a built-in for a bridge/rule/built-in/arguments combination.  
+ * Create a string that represents a unique invocation pattern for a built-in for a bridge/rule/built-in/arguments combination.  
  */
 public String createInvocationPattern(SWRLBuiltInBridge invokingBridge, String invokingRuleName, int invokingBuiltInIndex,
-                                             boolean isInConsequent, List<BuiltInArgument> arguments) throws BuiltInException
+                                       boolean isInConsequent, List<BuiltInArgument> arguments) throws BuiltInException
 {
   String pattern = "" + invokingBridge.hashCode() + "." + invokingRuleName + "." + invokingBuiltInIndex + "." + isInConsequent;
+  String result;
 
   for (int i = 0; i < arguments.size(); i++) pattern += "." + getArgumentAsAPropertyValue(i, arguments);
+  
+  if (invocationPatternMap.containsKey(pattern)) result = invocationPatternMap.get(pattern).toString();
+  else {
+  	invocationPatternMap.put(pattern, invocationPatternID);
+  	result = invocationPatternID.toString();
+  	invocationPatternID++;
+  }
 
-  return pattern;
+  return result;
 } // createInvocationPattern
 
 public void checkForUnboundArguments(String ruleName, String builtInName, List<BuiltInArgument> arguments) throws BuiltInException
@@ -994,34 +1006,34 @@ public boolean processResultArgument(List<BuiltInArgument> arguments, int argume
   return processResultArgument(arguments, argumentNumber, argumentFactory.createDataValueArgument(resultArgument));
 } // processResultArgument
 
-public String getOWLDatatypePropertyValueAsAString(SWRLBuiltInBridge bridge, String individualName, String propertyName)
+public String getOWLDatatypePropertyValueAsAString(SWRLBuiltInBridge bridge, String individualURI, String propertyURI)
   throws BuiltInException
 {
-  Set<OWLPropertyAssertionAxiom> axioms = bridge.getOWLPropertyAssertionAxioms(individualName, propertyName);
+  Set<OWLPropertyAssertionAxiom> axioms = bridge.getOWLPropertyAssertionAxioms(individualURI, propertyURI);
   OWLPropertyAssertionAxiom axiom;
   OWLDataValue value;
   
   axiom = axioms.toArray(new OWLPropertyAssertionAxiom[0])[0]; // Pick the first one
 
   if (!(axiom instanceof OWLDataPropertyAssertionAxiom))
-    throw new BuiltInException("property '" + propertyName + "' is not an OWL datavalued property assertion axiom");
+    throw new BuiltInException("property " + propertyURI + " does not refer to an OWL datavalued property assertion axiom");
 
   value = ((OWLDataPropertyAssertionAxiom)axiom).getObject();  
 
   return value.toString();
 } // getOWLDatatypePropertyValueAsAString
 
-public int getOWLDatatypePropertyValueAsAnInteger(SWRLBuiltInBridge bridge, String individualName, String propertyName)
+public int getOWLDatatypePropertyValueAsAnInteger(SWRLBuiltInBridge bridge, String individualURI, String propertyURI)
   throws BuiltInException
 {
-  Set<OWLPropertyAssertionAxiom> axioms = bridge.getOWLPropertyAssertionAxioms(individualName, propertyName);
+  Set<OWLPropertyAssertionAxiom> axioms = bridge.getOWLPropertyAssertionAxioms(individualURI, propertyURI);
   OWLPropertyAssertionAxiom axiom;
   OWLDataValue value;
 
   axiom = axioms.toArray(new OWLPropertyAssertionAxiom[0])[0];
 
   if (!(axiom instanceof OWLDataPropertyAssertionAxiom))
-    throw new BuiltInException("property '" + propertyName + "' is not an OWL datavalued property assertion axiom");
+    throw new BuiltInException("property " + propertyURI + " does not refer to an OWL datavalued property assertion axiom");
 
   value = ((OWLDataPropertyAssertionAxiom)axiom).getObject();  
 

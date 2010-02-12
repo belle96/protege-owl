@@ -7,8 +7,6 @@ import java.util.Set;
 
 public interface OWLClass extends OWLDescription, OWLEntity, ClassArgument, ClassValue
 {
-  String getPrefixedClassName();
-
   Set<String> getSuperclassURIs();
   Set<String> getDirectSuperClassURIs();
   Set<String> getDirectSubClassURIs();

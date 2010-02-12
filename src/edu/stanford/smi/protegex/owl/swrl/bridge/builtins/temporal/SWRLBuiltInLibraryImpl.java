@@ -222,7 +222,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   /**
    ** Returns true if the first timestamp argument is equal to the second timestamps argument plus the third count argument at the
-   ** granularity specified by the fourth argument. The timestamps are specified as either a ValidInstant, or xsd:DateTime
+   ** granularity specified by the fourth argument. The timestamps are specified as either a ValidInstant, or xsd:dateTime
    ** arguments. If the first argument is unbound, it is assigned the result of the addition.
    */
   public boolean add(List<BuiltInArgument> arguments) throws BuiltInException
@@ -316,17 +316,17 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       String datetimeString = getArgumentAsAString(argumentNumber, arguments);
       result = new Period(temporal, datetimeString, datetimeString, granularity);
     } else if (isArgumentAnIndividual(argumentNumber, arguments)) {
-      String individualName = getArgumentAsAnIndividualName(argumentNumber, arguments);
+      String individualName = getArgumentAsAnIndividualURI(argumentNumber, arguments);
       if (getInvokingBridge().isOWLIndividualOfClass(individualName, ValidInstantClassName)) {
         Instant instant = getValidInstant(individualName, granularity);
         result = new Period(temporal, instant, granularity);
       } else if (getInvokingBridge().isOWLIndividualOfClass(individualName,  ValidPeriodClassName)) {
         result = getValidPeriod(individualName, granularity);
-      } else throw new InvalidBuiltInArgumentException(argumentNumber, "individual '" + individualName + "' is not a " +
+      } else throw new InvalidBuiltInArgumentException(argumentNumber, "individual " + individualName + " is not a " +
                                                        ValidInstantClassName + " or " + ValidPeriodClassName);
     } else throw new InvalidBuiltInArgumentException(argumentNumber, "expecting an XSD datetime or " +
                                                      ValidInstantClassName + " or " + ValidPeriodClassName + " individual" +
-                                                     ", got '" + arguments.get(argumentNumber) + "'");
+                                                     ", got " + arguments.get(argumentNumber));
     return result;
   } // getArgumentAsAPeriod
 
@@ -339,12 +339,12 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       String datetimeString = getArgumentAsAString(argumentNumber, arguments);
       result = new Instant(temporal, datetimeString, granularity);
     } else if (isArgumentAnIndividual(argumentNumber, arguments)) {
-      String individualName = getArgumentAsAnIndividualName(argumentNumber, arguments);
-      if (getInvokingBridge().isOWLIndividualOfClass(individualName, ValidInstantClassName)) {
-        result = getValidInstant(individualName, granularity);
-      } else throw new InvalidBuiltInArgumentException(argumentNumber, "individual '" + individualName + "' is not a " + ValidInstantClassName);
+      String individualURI = getArgumentAsAnIndividualURI(argumentNumber, arguments);
+      if (getInvokingBridge().isOWLIndividualOfClass(individualURI, ValidInstantClassName)) {
+        result = getValidInstant(individualURI, granularity);
+      } else throw new InvalidBuiltInArgumentException(argumentNumber, "individual " + individualURI + " is not a " + ValidInstantClassName);
     } else throw new InvalidBuiltInArgumentException(argumentNumber, "expecting an XSD datetime or " + ValidInstantClassName + " individual" +
-                                                     ", got '" + arguments.get(argumentNumber) + "'");
+                                                     ", got " + arguments.get(argumentNumber));
     return result;
   } // getArgumentAsAnInstant
 
@@ -358,15 +358,15 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       granularityName = getArgumentAsAString(argumentNumber, arguments);
       granularity = Temporal.getIntegerGranularityRepresentation(granularityName);
     } else if (isArgumentAnIndividual(argumentNumber, arguments)) {
-      String individualName = getArgumentAsAnIndividualName(argumentNumber, arguments);
+      String individualName = getArgumentAsAnIndividualURI(argumentNumber, arguments);
       if (getInvokingBridge().isOWLIndividualOfClass(individualName, GranularityClassName)) {
         int hashIndex = individualName.indexOf('#');
         if (hashIndex == -1) granularityName = individualName;
         else granularityName = individualName.substring(hashIndex + 1, individualName.length());
         granularity = Temporal.getIntegerGranularityRepresentation(granularityName);
-      } else throw new InvalidBuiltInArgumentException(argumentNumber, "individual '" + individualName + "' is not a " + GranularityClassName);
+      } else throw new InvalidBuiltInArgumentException(argumentNumber, "individual " + individualName + " is not a " + GranularityClassName);
     } else throw new InvalidBuiltInArgumentException(argumentNumber, "expecting a " + GranularityClassName + " individual" +
-                                                     ", got '" + arguments.get(argumentNumber) + "'");
+                                                     ", got " + arguments.get(argumentNumber));
 
     return granularity;
   } // getArgumentAsAGranularity
@@ -380,7 +380,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       granularityName = getArgumentAsAString(argumentNumber, arguments);
       result = Temporal.isValidGranularityString(granularityName);
     } else if (isArgumentAnIndividual(argumentNumber, arguments)) {
-      String individualName = getArgumentAsAnIndividualName(argumentNumber, arguments);
+      String individualName = getArgumentAsAnIndividualURI(argumentNumber, arguments);
       result = getInvokingBridge().isOWLIndividualOfClass(individualName, GranularityClassName);
     } // if
 

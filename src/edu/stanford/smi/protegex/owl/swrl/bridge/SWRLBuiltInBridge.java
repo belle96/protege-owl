@@ -10,12 +10,12 @@ import java.util.Set;
 import java.util.List;
 
 /**
- ** The SWRL Built-in Bridge defines the methods seen by built-in implementations at run time. Ideally, built-in implementations should only
- ** use this interface to operate on the active ontology. However, some specialized libraries (e.g., abox and tbox) require direct access to
- ** the active ontology so will use the provided getOWLModel method.
- **
- ** Detailed documentation for the SWRl rule engine bridge mechanism can be found <a
- ** href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLRuleEngineBridgeFAQ">here</a>.
+ * The SWRL Built-in Bridge defines the methods seen by built-in implementations at run time. Ideally, built-in implementations should only
+ * use this interface to operate on the active ontology. However, some specialized libraries (e.g., abox and tbox) require direct access to
+ * the active ontology so will use the provided getOWLModel method.
+ *
+ * Detailed documentation for the SWRl rule engine bridge mechanism can be found <a
+ * href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLRuleEngineBridgeFAQ">here</a>.
  */
 public interface SWRLBuiltInBridge
 {

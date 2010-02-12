@@ -48,7 +48,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     checkNumberOfArgumentsAtLeast(2, arguments.size());
     checkThatArgumentIsAClassPropertyOrIndividual(0, arguments);
 
-    resourceName = getArgumentAsAResourceName(0, arguments);
+    resourceName = getArgumentAsAResourceURI(0, arguments);
     language = hasLanguage ? getArgumentAsAString(2, arguments) : "";
     
     if (isUnboundArgument) {
@@ -78,7 +78,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     checkNumberOfArgumentsEqualTo(2, arguments.size());
     checkThatArgumentIsAClassPropertyOrIndividual(0, arguments);
 
-    resourceName = getArgumentAsAResourceName(0, arguments);
+    resourceName = getArgumentAsAResourceURI(0, arguments);
 
     if (isUnboundArgument) {
      	MultiArgument multiArgument = argumentFactory.createMultiArgument(getVariableName(1, arguments));
