@@ -902,52 +902,52 @@ public class SWRLOWLUtil
     return (resource != null && resource instanceof OWLIndividual);
   } // isOWLIndividual
 
-  public static boolean isObjectProperty(OWLModel owlModel, String propertyName)
+  public static boolean isOWLObjectProperty(OWLModel owlModel, String propertyName)
   {
     RDFResource resource = owlModel.getRDFResource(propertyName);
 
-    return resource instanceof OWLProperty;
+    return resource instanceof OWLObjectProperty;
   } // isObjectProperty
 
-  public static boolean isDatatypeProperty(OWLModel owlModel, String propertyName, boolean mustExist) throws SWRLOWLUtilException
+  public static boolean isOWLDataProperty(OWLModel owlModel, String propertyName, boolean mustExist) throws SWRLOWLUtilException
   {
     OWLProperty property = getProperty(owlModel, propertyName, mustExist);
 
     return (property != null && !property.isObjectProperty());
-  } // isDatatypeProperty
+  } // isOWLDataProperty
 
-  public static boolean isDatatypeProperty(OWLModel owlModel, String propertyName)
+  public static boolean isOWLDataProperty(OWLModel owlModel, String propertyName)
   {
     RDFResource resource = owlModel.getRDFResource(propertyName);
 
-    return resource instanceof OWLProperty;
-  } // isDatatypeProperty
+    return resource instanceof OWLDatatypeProperty;
+  } // isOWLDataProperty
 
-  public static boolean isTransitiveProperty(OWLModel owlModel, String propertyName, boolean mustExist) throws SWRLOWLUtilException
+  public static boolean isOWLTransitiveProperty(OWLModel owlModel, String propertyName, boolean mustExist) throws SWRLOWLUtilException
   {
     OWLProperty property = getProperty(owlModel, propertyName, mustExist);
 
     return (property != null && property instanceof OWLObjectProperty && ((OWLObjectProperty)property).isTransitive());
-  } // isTransitiveProperty
+  } // isOWLTransitiveProperty
 
-  public static boolean isTransitiveProperty(OWLModel owlModel, String propertyName) throws SWRLOWLUtilException
+  public static boolean isOWLTransitiveProperty(OWLModel owlModel, String propertyName) throws SWRLOWLUtilException
   {
-    return isTransitiveProperty(owlModel, propertyName, true);
-  } // isTransitiveProperty
+    return isOWLTransitiveProperty(owlModel, propertyName, true);
+  } // isOWLTransitiveProperty
 
-  public static boolean isSymmetricProperty(OWLModel owlModel, String propertyName, boolean mustExist) throws SWRLOWLUtilException
+  public static boolean isOWLSymmetricProperty(OWLModel owlModel, String propertyName, boolean mustExist) throws SWRLOWLUtilException
   {
     OWLProperty property = getProperty(owlModel, propertyName, mustExist);
 
     return (property != null && property instanceof OWLObjectProperty && ((OWLObjectProperty)property).isSymmetric());
-  } // isSymmetricProperty
+  } // isOWLSymmetricProperty
 
-  public static boolean isFunctionalProperty(OWLModel owlModel, String propertyName, boolean mustExist) throws SWRLOWLUtilException
+  public static boolean isOWLFunctionalProperty(OWLModel owlModel, String propertyName, boolean mustExist) throws SWRLOWLUtilException
   {
     OWLProperty property = getProperty(owlModel, propertyName, mustExist);
 
     return property != null && property.isFunctional();
-  } // isFunctionalProperty
+  } // isOWLFunctionalProperty
 
   public static boolean isAnnotationProperty(OWLModel owlModel, String propertyName, boolean mustExist) throws SWRLOWLUtilException
   {

@@ -92,8 +92,8 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
   
   public boolean isOWLClass(String className) { return SWRLOWLUtil.isOWLClass(owlModel, className); }
   public boolean isOWLProperty(String propertyURI) { return SWRLOWLUtil.isProperty(owlModel, propertyURI); }
-  public boolean isOWLObjectProperty(String propertyURI) { return SWRLOWLUtil.isObjectProperty(owlModel, propertyURI); }
-  public boolean isOWLDataProperty(String propertyURI) { return SWRLOWLUtil.isDatatypeProperty(owlModel, propertyURI); }
+  public boolean isOWLObjectProperty(String propertyURI) { return SWRLOWLUtil.isOWLObjectProperty(owlModel, propertyURI); }
+  public boolean isOWLDataProperty(String propertyURI) { return SWRLOWLUtil.isOWLDataProperty(owlModel, propertyURI); }
   public boolean isOWLIndividual(String individualURI) { return SWRLOWLUtil.isOWLIndividual(owlModel, individualURI); }
   public boolean isOWLIndividualOfClass(String individualURI, String classURI) { return SWRLOWLUtil.isIndividualOfClass(owlModel, individualURI, classURI); }
   public boolean isSWRLBuiltIn(String builtInURI) { return SWRLOWLUtil.isSWRLBuiltIn(owlModel, builtInURI); }

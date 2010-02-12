@@ -67,11 +67,15 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
     int argumentIndex = 0;
     for (BuiltInArgument argument : arguments) {
-      if (argument instanceof DataValueArgument) result.addRowData((DataValue)argument);
-      else if (argument instanceof IndividualArgument) result.addRowData((ObjectValue)argument);
-      else if (argument instanceof ClassArgument) result.addRowData((ClassValue)argument);
-      else if (argument instanceof PropertyArgument) result.addRowData((PropertyValue)argument);
-      else throw new InvalidBuiltInArgumentException(argumentIndex, "unknown type '" + argument.getClass() + "'");
+      if (argument instanceof DataValueArgument) 
+      	result.addRowData((DataValue)argument);
+      else if (argument instanceof IndividualArgument) 
+      	result.addRowData((ObjectValue)argument);
+      else if (argument instanceof ClassArgument) 
+      	result.addRowData((ClassValue)argument);
+      else if (argument instanceof PropertyArgument) 
+      	result.addRowData((PropertyValue)argument);
+      else throw new InvalidBuiltInArgumentException(argumentIndex, "unknown type " + argument.getClass());
       argumentIndex++;
     } // for
     
@@ -80,7 +84,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean selectDistinct(List<BuiltInArgument> arguments) throws BuiltInException
   {
-	checkThatInConsequent();
+	  checkThatInConsequent();
     return select(arguments);
   } // selectDistinct
   

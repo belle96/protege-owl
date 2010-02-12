@@ -3,22 +3,19 @@ package edu.stanford.smi.protegex.owl.swrl.test;
 
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
-import edu.stanford.smi.protegex.owl.swrl.*;
-import edu.stanford.smi.protegex.owl.swrl.bridge.*;
-import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.*;
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.*;
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
-import edu.stanford.smi.protegex.owl.swrl.util.SWRLOWLUtil;
-import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLRuleEngineException;
-import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLOWLUtilException;
-import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRuleEngineBridge;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BridgeFactory;
+import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRuleEngineBridge;
+import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLOWLUtilException;
+import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLRuleEngineException;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngine;
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngineFactory;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLImp;
 import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParseException;
-import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParser;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.ObjectValue;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngine;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngineFactory;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResult;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
+import edu.stanford.smi.protegex.owl.swrl.util.SWRLOWLUtil;
 
 public class SQWRLTest
 {
@@ -39,6 +36,7 @@ public class SQWRLTest
       ruleEngine = BridgeFactory.createBridge(owlModel);
       SWRLFactory factory = new SWRLFactory(owlModel);
       SQWRLQueryEngine queryEngine = SQWRLQueryEngineFactory.create(owlModel);
+      SQWRLResult result;
 
       /*
         ruleEngine.infer();
@@ -53,18 +51,23 @@ public class SQWRLTest
       // SQWRLResult result = ruleEngine.getSQWRLResult("Rule-6");
 
       //      SWRLImp imp = factory.createImp("T1", "Adult(?a) " + SWRLParser.IMP_CHAR + " sqwrl:select(?a)");
-      SWRLImp imp = factory.createImp("T1", "Adult(?a) ^ Adult(?b) -> sqwrl:select(?a)");
+      SWRLImp imp = factory.createImp("T1", "Adult(?a) . sqwrl:makeSet(?s, ?a) . sqwrl:contains(?s, ?e) -> sqwrl:select(?e)");
 
-      queryEngine.runSQWRLQueries();
+      result = queryEngine.runSQWRLQuery("T1");
 
-      /*
       while (result.hasNext()) {
-        ObjectValue p = result.getObjectValue("?p");
-        ObjectValue c = result.getObjectValue("?c");
-        System.err.println("value: p=" + p + ", c=" + c);
+        ObjectValue e = result.getObjectValue("?e");
+        System.err.println("value: e=" + e);
         result.next();
       } // while
-      */
+
+      result = queryEngine.runSQWRLQuery("T1");
+
+      while (result.hasNext()) {
+        ObjectValue e = result.getObjectValue("?e");
+        System.err.println("value: e=" + e);
+        result.next();
+      } // while
 
     } catch (SQWRLException e) {
       System.err.println("SQWRL exception: " + e.getMessage());

@@ -148,7 +148,7 @@ public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
           throw new BuiltInMethodRuntimeException(ruleName, builtInName, targetException.getMessage(), targetException);
         } else throw new BuiltInException("unknown exception thrown by built-in " + builtInName + " in rule " + 
                                           ruleName + ": " + e.toString(), e);
-      } catch (Exception e) { // Should be one of IllegalAccessException or IllegalArgumentException
+      } catch (Throwable e) { // Should be one of IllegalAccessException or IllegalArgumentException
         throw new BuiltInLibraryException("internal built-in library exception when invoking built-in " + builtInName + " in rule " + 
                                           ruleName + ": " + e.getMessage(), e);        
       } // try

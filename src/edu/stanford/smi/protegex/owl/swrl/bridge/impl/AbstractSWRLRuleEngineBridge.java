@@ -543,7 +543,7 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
   
   public boolean isOWLObjectProperty(String propertyURI) 
   { 
-	return importedObjectPropertyURIs.contains(propertyURI) || conversionFactory.isOWLObjectProperty(propertyURI);
+	  return importedObjectPropertyURIs.contains(propertyURI) || conversionFactory.isOWLObjectProperty(propertyURI);
   } // isOWLObjectProperty
   
   public boolean isOWLDataProperty(String propertyURI) 

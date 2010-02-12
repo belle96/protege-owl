@@ -374,7 +374,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
         result = !multiArgument.hasNoArguments();
       } else {
         String propertyName = getArgumentAsAPropertyURI(0, arguments);
-        result = SWRLOWLUtil.isDatatypeProperty(getInvokingBridge().getOWLModel(), propertyName, false);
+        result = SWRLOWLUtil.isOWLDataProperty(getInvokingBridge().getOWLModel(), propertyName, false);
       } // if
     } catch (SWRLOWLUtilException e) {
       throw new BuiltInException(e.getMessage());
@@ -540,7 +540,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
     boolean result = false;
     try {
-      result = SWRLOWLUtil.isFunctionalProperty(getInvokingBridge().getOWLModel(), propertyName, true);
+      result = SWRLOWLUtil.isOWLFunctionalProperty(getInvokingBridge().getOWLModel(), propertyName, true);
     } catch (SWRLOWLUtilException e) {
       throw new BuiltInException(e.getMessage());
     } // try
@@ -890,7 +890,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
     boolean result = false;
     try {
-      result = SWRLOWLUtil.isSymmetricProperty(getInvokingBridge().getOWLModel(), propertyName, true);
+      result = SWRLOWLUtil.isOWLSymmetricProperty(getInvokingBridge().getOWLModel(), propertyName, true);
     } catch (SWRLOWLUtilException e) {
       throw new BuiltInException(e.getMessage());
     } // try
@@ -920,7 +920,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
     boolean result = false;
     try {
-      result = SWRLOWLUtil.isTransitiveProperty(getInvokingBridge().getOWLModel(), propertyName);
+      result = SWRLOWLUtil.isOWLTransitiveProperty(getInvokingBridge().getOWLModel(), propertyName);
     } catch (SWRLOWLUtilException e) {
       throw new BuiltInException(e.getMessage());
     } // try
@@ -1029,7 +1029,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
           if (!getInvokingBridge().isOWLClass(onClassName)) getInvokingBridge().injectOWLClass(onClassName);
         } else onClassName = getArgumentAsAClassURI(2, arguments);
 
-        if (SWRLOWLUtil.isObjectProperty(getInvokingBridge().getOWLModel(), onPropertyName)) onProperty = owlFactory.getOWLObjectProperty(onPropertyName);
+        if (SWRLOWLUtil.isOWLObjectProperty(getInvokingBridge().getOWLModel(), onPropertyName)) onProperty = owlFactory.getOWLObjectProperty(onPropertyName);
         else onProperty = owlFactory.getOWLDataProperty(onPropertyName);
 
         someValuesFrom = owlFactory.getOWLSomeValuesFrom(owlFactory.getOWLClass(restrictionName), onProperty, owlFactory.getOWLClass(onClassName));
