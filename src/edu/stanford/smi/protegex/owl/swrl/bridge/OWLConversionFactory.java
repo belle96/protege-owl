@@ -6,6 +6,7 @@ import java.util.Set;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.DataValueConversionException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLConversionFactoryException;
+import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParseException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 
 /**
@@ -18,7 +19,8 @@ public interface OWLConversionFactory
   OWLIndividual getOWLIndividual(String individualURI) throws OWLConversionFactoryException;
   OWLObjectProperty getOWLObjectProperty(String propertyURI) throws OWLConversionFactoryException;
   OWLDataProperty getOWLDataProperty(String propertyURI) throws OWLConversionFactoryException;
-  SWRLRule getSWRLRule(String ruleURI) throws OWLConversionFactoryException, SQWRLException, BuiltInException;
+  SWRLRule getSWRLRule(String ruleName) throws OWLConversionFactoryException, SQWRLException, BuiltInException;
+  SWRLRule createSWRLRule(String ruleName, String ruleText) throws OWLConversionFactoryException, SQWRLException, SWRLParseException, BuiltInException;
   Set<SWRLRule> getSWRLRules() throws OWLConversionFactoryException, SQWRLException, BuiltInException;
   Set<OWLIndividual> getAllOWLIndividualsOfClass(String classURI) throws OWLConversionFactoryException;
   

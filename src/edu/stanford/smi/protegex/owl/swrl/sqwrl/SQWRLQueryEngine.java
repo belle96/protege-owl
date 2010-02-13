@@ -1,6 +1,7 @@
 
 package edu.stanford.smi.protegex.owl.swrl.sqwrl;
 
+import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParseException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 
 /**
@@ -21,12 +22,12 @@ public interface SQWRLQueryEngine
   /**
    * Create and run a SQWRL query. Query will be created and added to ontology.
    */
-  //SQWRLResult runSQWRLQuery(String queryName, String query) throws SQWRLException, SWRLParseException;
+  SQWRLResult runSQWRLQuery(String queryName, String queryText) throws SQWRLException, SWRLParseException;
   
   /**
    * Create a SQWRL query.
    */
-  //void createSQWRLQuery(String queryName, String query) throws SQWRLException, SWRLParseException;
+  void createSQWRLQuery(String queryName, String queryText) throws SQWRLException, SWRLParseException;
   
   /**
    * Get the results from a SQWRL query. Null is returned if there is no result.

@@ -71,6 +71,7 @@ import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLImp;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLIndividualPropertyAtom;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLSameIndividualAtom;
+import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParseException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 import edu.stanford.smi.protegex.owl.swrl.util.SWRLOWLUtil;
 
@@ -114,13 +115,20 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
     return result;
   } // getSWRLRules
 
-  public SWRLRule getSWRLRule(String ruleURI) throws OWLConversionFactoryException, SQWRLException, BuiltInException
+  public SWRLRule createSWRLRule(String ruleName, String ruleText) 
+    throws OWLConversionFactoryException, SQWRLException, SWRLParseException, BuiltInException
+  {
+  	swrlFactory.createImp(ruleName, ruleText);
+  	return getSWRLRule(ruleName);
+  } // createSWRLRule
+  
+  public SWRLRule getSWRLRule(String ruleName) throws OWLConversionFactoryException, SQWRLException, BuiltInException
   {
     List<Atom> bodyAtoms = new ArrayList<Atom>();
     List<Atom> headAtoms = new ArrayList<Atom>();
-    SWRLImp imp = swrlFactory.getImp(ruleURI);
+    SWRLImp imp = swrlFactory.getImp(ruleName);
 
-    if (imp == null) throw new OWLConversionFactoryException("invalid rule name: '" + ruleURI + "'");
+    if (imp == null) throw new OWLConversionFactoryException("invalid rule name: " + ruleName + "");
 
     Iterator iterator = imp.getBody().getValues().iterator();
     while (iterator.hasNext()) {
