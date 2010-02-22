@@ -288,8 +288,8 @@ public class SWRLFactory
     RDFResource resource = owlModel.getRDFResource(name);
     SWRLImp result = null;
 
-    if (resource instanceof SWRLImp) result = (SWRLImp)resource;
-    else throw new SWRLFactoryException("invalid attempt to cast " + name + " into SWRLImp");
+    if (resource instanceof SWRLImp || resource == null) result = (SWRLImp) resource;
+    else throw new SWRLFactoryException("invalid attempt to cast " + name + " into SWRLImp (real type is " + resource.getProtegeType() + ")");
 
     return result;
   } // getImp
