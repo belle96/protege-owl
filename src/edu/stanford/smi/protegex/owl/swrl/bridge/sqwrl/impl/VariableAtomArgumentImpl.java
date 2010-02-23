@@ -1,18 +1,13 @@
 
-package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
+package edu.stanford.smi.protegex.owl.swrl.bridge.sqwrl.impl;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.VariableAtomArgument;
+import edu.stanford.smi.protegex.owl.swrl.bridge.tmp.ArgumentImpl;
 
 /**
- ** Interface representing an argument to a SWRL atom
+ * Interface representing a variable argument to a SWRL atom
  */
-public class VariableAtomArgumentImpl implements VariableAtomArgument
+public class VariableAtomArgumentImpl extends ArgumentImpl implements VariableAtomArgument
 {
-  private String variableName;
-
-  public VariableAtomArgumentImpl(String variableName) { this.variableName = variableName; }
-
-  public String getVariableName() { return variableName; }
-
-  public String toString() { return "?" + getVariableName(); }
+  public VariableAtomArgumentImpl(String variableName) { super(variableName); }
 } // VariableAtomArgumentImpl
