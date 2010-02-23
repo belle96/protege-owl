@@ -1,5 +1,5 @@
 
-package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
+package edu.stanford.smi.protegex.owl.swrl.bridge.sqwrl.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.MultiArgument;
 
 /**
- ** A class used to bind multiple arguments to a built-in argument
+ * A class used to bind multiple arguments to a built-in argument
  */
 public class MultiArgumentImpl extends BuiltInArgumentImpl implements MultiArgument
 {
@@ -28,8 +28,8 @@ public class MultiArgumentImpl extends BuiltInArgumentImpl implements MultiArgum
 
   public void addArgument(BuiltInArgument argument) 
   { 
-	argument.setVariableName(getVariableName());
-	arguments.add(argument);
+	  argument.setVariableName(getVariableName());
+	  arguments.add(argument);
   } // addArguments
   
   public void setArguments(List<BuiltInArgument> arguments) 
