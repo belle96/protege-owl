@@ -15,7 +15,7 @@ import edu.stanford.smi.protegex.owl.model.RDFResource;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BridgePluginManager;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataFactory;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLFactoryException;
-import edu.stanford.smi.protegex.owl.swrl.bridge.sqwrl.impl.OWLDataFactoryImpl;
+import edu.stanford.smi.protegex.owl.swrl.bridge.impl.OWLDataFactoryImpl;
 import edu.stanford.smi.protegex.owl.swrl.bridge.ui.ViewPluginAction;
 import edu.stanford.smi.protegex.owl.swrl.ui.tab.SWRLTab;
 import edu.stanford.smi.protegex.owl.ui.OWLLabeledComponent;

@@ -20,7 +20,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.OWLPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.builtins.AbstractSWRLBuiltInLibrary;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLConversionFactoryException;
-import edu.stanford.smi.protegex.owl.swrl.bridge.sqwrl.impl.OWLConversionFactoryImpl;
+import edu.stanford.smi.protegex.owl.swrl.bridge.impl.OWLConversionFactoryImpl;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
 import edu.stanford.smi.protegex.owl.swrl.util.SWRLOWLUtil;
 

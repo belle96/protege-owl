@@ -19,7 +19,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.OWLIndividual;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLObjectPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLProperty;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.MapperException;
-import edu.stanford.smi.protegex.owl.swrl.bridge.sqwrl.impl.OWLDataFactoryImpl;
+import edu.stanford.smi.protegex.owl.swrl.bridge.impl.OWLDataFactoryImpl;
 import edu.stanford.smi.protegex.owl.swrl.ddm.Column;
 import edu.stanford.smi.protegex.owl.swrl.ddm.DDMFactory;
 import edu.stanford.smi.protegex.owl.swrl.ddm.Database;
