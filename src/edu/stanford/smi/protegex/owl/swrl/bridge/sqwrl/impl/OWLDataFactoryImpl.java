@@ -1,7 +1,7 @@
 
 // TODO: very long - needs serious refactoring
 
-package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
+package edu.stanford.smi.protegex.owl.swrl.bridge.sqwrl.impl;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -35,10 +35,8 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRule;
 import edu.stanford.smi.protegex.owl.swrl.bridge.VariableAtomArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.VariableBuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
-import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.DataValueConversionException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLConversionFactoryException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLFactoryException;
-import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDType;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 
 public class OWLDataFactoryImpl implements OWLDataFactory
@@ -65,7 +63,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory
     
     if (hasOWLModel()) {
       try {
-        result = conversionFactory.getSWRLRules();
+        result = conversionFactory.getRules();
       } catch (OWLConversionFactoryException e) {
     	  throw new OWLFactoryException("conversion exception getting SWRL rule or SQWRL query: " + e.getMessage());
       } catch (SQWRLException e) {
@@ -180,19 +178,6 @@ public class OWLDataFactoryImpl implements OWLDataFactory
     return property; 
   } // getOWLDataProperty
 
-  public OWLDataValue getOWLDataValue(String s) { return new OWLDataValueImpl(s); }
-  public OWLDataValue getOWLDataValue(Number n) { return new OWLDataValueImpl(n); }
-  public OWLDataValue getOWLDataValue(boolean b){ return new OWLDataValueImpl(b); }
-  public OWLDataValue getOWLDataValue(Boolean b){ return new OWLDataValueImpl(b); }
-  public OWLDataValue getOWLDataValue(int i) { return new OWLDataValueImpl(i); }
-  public OWLDataValue getOWLDataValue(long l) { return new OWLDataValueImpl(l); }
-  public OWLDataValue getOWLDataValue(float f) { return new OWLDataValueImpl(f); }
-  public OWLDataValue getOWLDataValue(double d){ return new OWLDataValueImpl(d); }
-  public OWLDataValue getOWLDataValue(short s) { return new OWLDataValueImpl(s); }
-  public OWLDataValue getOWLDataValue(Byte b) { return new OWLDataValueImpl(b); }
-  public OWLDataValue getOWLDataValue(XSDType xsd) { return new OWLDataValueImpl(xsd); }
-  public OWLDataValue getOWLDataValue(Object o) throws DataValueConversionException { return new OWLDataValueImpl(o); } 
-
   // OWL axioms
   public OWLDataPropertyAssertionAxiom getOWLDataPropertyAssertionAxiom(OWLIndividual subject, OWLProperty property, OWLDataValue object) { return new OWLDatatypePropertyAssertionAxiomImpl(subject, property, object); }
   public OWLObjectPropertyAssertionAxiom getOWLObjectPropertyAssertionAxiom(OWLIndividual subject, OWLProperty property, OWLIndividual object)  { return new OWLObjectPropertyAssertionAxiomImpl(subject, property, object); }
@@ -210,7 +195,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory
   // Arguments to atoms and built-ins
   public VariableAtomArgument getSWRLVariableAtomArgument(String variableName) { return new VariableAtomArgumentImpl(variableName); }
   public VariableBuiltInArgument getSWRLVariableBuiltInArgument(String variableName) { return new VariableBuiltInArgumentImpl(variableName); }
-  public BuiltInArgument getSWRLBuiltInArgument(String variableName) { return new BuiltInArgumentImpl(variableName); }
+  public VariableBuiltInArgument getSWRLBuiltInArgument(String variableName) { return new VariableBuiltInArgumentImpl(variableName); }
 
   public BuiltInAtom getSWRLBuiltInAtom(String builtInURI, String builtInPrefixedName, List<BuiltInArgument> arguments) 
   { 
