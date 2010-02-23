@@ -1,5 +1,5 @@
 
-package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
+package edu.stanford.smi.protegex.owl.swrl.bridge.sqwrl.impl;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLClass;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLClassAssertionAxiom;
