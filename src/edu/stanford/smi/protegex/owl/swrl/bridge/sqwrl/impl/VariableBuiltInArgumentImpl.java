@@ -1,10 +1,10 @@
 
-package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
+package edu.stanford.smi.protegex.owl.swrl.bridge.sqwrl.impl;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.VariableBuiltInArgument;
 
 /**
- ** Interface representing a variable argument to a built-in
+ * Interface representing a variable argument to a built-in
  */
 public class VariableBuiltInArgumentImpl extends BuiltInArgumentImpl implements VariableBuiltInArgument
 {
