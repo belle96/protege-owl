@@ -5,7 +5,7 @@ import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLOWLUtilException;
 import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParseException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.ObjectValue;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.IndividualValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngine;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngineFactory;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResult;
@@ -31,7 +31,7 @@ public class SQWRLTest
       result = queryEngine.runSQWRLQuery("T1", "Adult(?a) . sqwrl:makeSet(?s, ?a) . sqwrl:contains(?s, ?e) -> sqwrl:select(?e)");
 
       while (result.hasNext()) {
-        ObjectValue e = result.getObjectValue("?e");
+        IndividualValue e = result.getObjectValue("?e");
         System.err.println("value: e=" + e);
         result.next();
       } // while
@@ -39,7 +39,7 @@ public class SQWRLTest
       result = queryEngine.runSQWRLQuery("PersonAverageDrugDosesAndAverageAllDrugDoses");
 
       while (result.hasNext()) {
-      	ObjectValue p = result.getObjectValue("?p");
+      	IndividualValue p = result.getObjectValue("?p");
       	DataValue avgP = result.getDataValue("?avgP");
       	DataValue avgD = result.getDataValue("?avgD");
         System.err.println("value: p=" + p + ", avgP=" + avgP + ", avgD=" + avgD);

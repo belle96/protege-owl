@@ -21,7 +21,7 @@ import javax.swing.table.AbstractTableModel;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRuleEngineBridge;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.ClassValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.ObjectValue;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.IndividualValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.PropertyValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResult;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResultValue;
@@ -222,8 +222,8 @@ public class SQWRLQueryResultPanel extends JPanel
       
       try { 
         SQWRLResultValue value = (result == null) ? null : result.getValue(column, row);
-        if (value instanceof ObjectValue) {
-          ObjectValue objectValue = (ObjectValue)value;
+        if (value instanceof IndividualValue) {
+          IndividualValue objectValue = (IndividualValue)value;
           representation += queryEngine.uri2Name(objectValue.getURI());
         } else if (value instanceof DataValue) {
           DataValue datatypeValue = (DataValue)value;

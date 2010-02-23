@@ -6,7 +6,7 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.ResultException;
 import java.util.List;
 
 /**
- ** Interface to configure a result and add data to it. See the Result class for detailed comments.
+ * Interface to configure a result and add data to it. See the Result class for detailed comments.
  */
 public interface SQWRLResultGenerator
 {  
@@ -35,4 +35,4 @@ public interface SQWRLResultGenerator
   boolean isRowOpen();
   boolean isPrepared();
   void prepared() throws ResultException;
-} // ResultGenerator
+} // SQWRLResultGenerator

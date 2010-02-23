@@ -3,22 +3,18 @@ package edu.stanford.smi.protegex.owl.swrl.sqwrl.impl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataFactory;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValue;
-import edu.stanford.smi.protegex.owl.swrl.bridge.impl.OWLDataFactoryImpl;
+import edu.stanford.smi.protegex.owl.swrl.bridge.tmp.DataValueImpl;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.ClassValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.ObjectValue;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.IndividualValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.PropertyValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLNames;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResult;
@@ -34,66 +30,66 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.ResultStateException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 
 /**
- ** This class implements the interfaces SQWRLResult and ResultGenerator. It can be used to generate a result structure and populate it with
- ** data; it can also be used to retrieve those data from the result.<p>
- **
- ** This class operates in three phases:<p>
- **
- ** (1) Configuration Phase: In this phase the structure of the result is defined. This phase opened by a call to the configure() method (which
- ** will also clear any existing data). In this phase the columns are defined; aggregation or ordering is also specified in this phase. This
- ** phase is closed by a call to the configured() method.<p>
- **
- ** (2) Preparation Phase: In this phase data are added to the result. This phase is implicitly opened by the call to the configured() method. It
- ** is closed by a call to the prepared() method.<p>
- **
- ** The interface ResultGenerator defines the calls used in these two phases.<p>
- **
- ** (3) Processing Phase: In this phase data may be retrieved from the result. This phase is implicitly opened by the call to the closed()
- ** method.<p>
- **
- ** The interface Result defines the calls used in the processing phase.<p>
- **
- ** An example configuration and data generation is:<p>
- **
- ** ResultImpl result = new ResultImpl("TestResult");<p>
- **
- ** result.addColumn("name");<p>
- ** result.addAggregateColumn("average", SQWRLNames.AvgAggregateFunction);<p><p>
- **
- ** result.configured();<>p<p>
- **
- ** result.openRow();<p>
- ** result.addData(new OWLFactory.getOWLIndividual("Fred"));<p>
- ** result.addData(new Literal(27));<p>
- ** result.closeRow();<p><p>
- **
- ** result.openRow();<p>
- ** result.addData(new OWLFactory.getOWLIndividual("Joe"));<p>
- ** result.addData(new Literal(34));<p>
- ** result.closeRow();<p><p>
- **
- ** result.openRow();<p>
- ** result.addData(new OWLFactory.getOWLIndividual("Joe"));<p>
- ** result.addData(new Literal(21));<p>
- ** result.closeRow();<p><p>
- ** 
- ** result.prepared();<p><p>
- **
- ** The result is now available for reading. The interface SQWRLResult defines the assessor methods. A row consists of a list of objects
- ** defined by the interface ResultValue. There are four possible types of values (1) DataValue, representing literals; (2) ObjectValue,
- ** representing OWL individuals; (3) ClassValue, representing OWL classes; and (4) PropertyValue, representing OWL properties.<p><p>
- **
- ** while (result.hasNext()) {<p>
- **  ObjectValue nameValue = result.getObjectValue("name");<p>
- **  DataValue averageValue = result.getDataValue("average");<p>
- **  System.out.println("Name: " + nameValue.getIndividualName());<p>
- **  System.out.println("Average: " + averageValue.getInt());<p>
- ** } // while<p><p>
- **
- ** A convenience method addColumns that takes a list of column names is also supplied.<p><p>
- **
- ** There is also a convenience method addRow, which takes a list of ResultValues. This method automatically does a row open and close. It
- ** is expecting the exact same number of list elements as there are columns in the result.<p>
+ * This class implements the interfaces SQWRLResult and ResultGenerator. It can be used to generate a result structure and populate it with
+ * data; it can also be used to retrieve those data from the result.<p>
+ *
+ * This class operates in three phases:<p>
+ *
+ * (1) Configuration Phase: In this phase the structure of the result is defined. This phase opened by a call to the configure() method (which
+ * will also clear any existing data). In this phase the columns are defined; aggregation or ordering is also specified in this phase. This
+ * phase is closed by a call to the configured() method.<p>
+ *
+ * (2) Preparation Phase: In this phase data are added to the result. This phase is implicitly opened by the call to the configured() method. It
+ * is closed by a call to the prepared() method.<p>
+ *
+ * The interface ResultGenerator defines the calls used in these two phases.<p>
+ *
+ * (3) Processing Phase: In this phase data may be retrieved from the result. This phase is implicitly opened by the call to the closed()
+ * method.<p>
+ *
+ * The interface Result defines the calls used in the processing phase.<p>
+ *
+ * An example configuration and data generation is:<p>
+ *
+ * ResultImpl result = new ResultImpl("TestResult");<p>
+ *
+ * result.addColumn("name");<p>
+ * result.addAggregateColumn("average", SQWRLNames.AvgAggregateFunction);<p><p>
+ *
+ * result.configured();<>p<p>
+ *
+ * result.openRow();<p>
+ * result.addRowData(new IndividualValue("Fred"));<p>
+ * result.addRowData(new DataValue(27));<p>
+ * result.closeRow();<p><p>
+ *
+ * result.openRow();<p>
+ * result.adRowdData(new IndividualValue("Joe"));<p>
+ * result.addRowData(new DataValue(34));<p>
+ * result.closeRow();<p><p>
+ *
+ * result.openRow();<p>
+ * result.addRowData(new IndividualValue("Joe"));<p>
+ * result.addRowData(new DataValue(21));<p>
+ * result.closeRow();<p><p>
+ * 
+ * result.prepared();<p><p>
+ *
+ * The result is now available for reading. The interface SQWRLResult defines the assessor methods. A row consists of a list of objects
+ * defined by the interface ResultValue. There are four possible types of values (1) DataValue, representing literals; (2) ObjectValue,
+ * representing OWL individuals; (3) ClassValue, representing OWL classes; and (4) PropertyValue, representing OWL properties.<p><p>
+ *
+ * while (result.hasNext()) {<p>
+ *  IndividualValue nameValue = result.getIndividualValue("name");<p>
+ *  DataValue averageValue = result.getDataValue("average");<p>
+ *  System.out.println("Name: " + nameValue.getURI());<p>
+ *  System.out.println("Average: " + averageValue.getInt());<p>
+ * } // while<p><p>
+ *
+ * A convenience method addColumns that takes a list of column names is also supplied.<p><p>
+ *
+ * There is also a convenience method addRow, which takes a list of ResultValues. This method automatically does a row open and close. It
+ * is expecting the exact same number of list elements as there are columns in the result.<p>
  */ 
 public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializable
 {
@@ -105,7 +101,6 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
   private Map<String, List<SQWRLResultValue>> columnVectorMap; // Maps column names to a vector of ResultValue objects for that column
   private int numberOfColumns, rowIndex, rowDataColumnIndex;
   private boolean isConfigured, isPrepared, isRowOpen, isOrdered, isAscending, isDistinct, hasAggregates;
-  private OWLDataFactory owlFactory;
 
   public ResultImpl() 
   {
@@ -140,8 +135,6 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
     // The following variables will not be externally valid until prepared() is called.
     rowIndex = -1; // If there are no rows in the final result, it will remain at -1.
     rows = new ArrayList<List<SQWRLResultValue>>();
-
-    owlFactory = new OWLDataFactoryImpl();
   } // prepare
 
   public void addColumns(List<String> columnNames) throws SQWRLException
@@ -281,7 +274,7 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
     rowDataColumnIndex++;
 
     if (rowDataColumnIndex == getNumberOfColumns()) closeRow(); 
-  } // addData    
+  } // addRowData    
 
   // Will ignore if row is aready closed
   public void closeRow() throws SQWRLException
@@ -406,14 +399,14 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
     return rows.get(rowIndex).get(columnIndex);
   } // getValue
   
-  public ObjectValue getObjectValue(String columnName) throws SQWRLException
+  public IndividualValue getObjectValue(String columnName) throws SQWRLException
   {
     if (!hasObjectValue(columnName)) 
       throw new InvalidColumnTypeException("expecting ObjectValue type for column '" + columnName + "'");
-    return (ObjectValue)getValue(columnName);
+    return (IndividualValue)getValue(columnName);
   } // getObjectValue
   
-  public ObjectValue getObjectValue(int columnIndex) throws SQWRLException
+  public IndividualValue getObjectValue(int columnIndex) throws SQWRLException
   {
     return getObjectValue(getColumnName(columnIndex));
   } // getObjectValue
@@ -470,22 +463,22 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
 
   public boolean hasObjectValue(String columnName) throws SQWRLException
   {
-    return getValue(columnName) instanceof ObjectValue;
+    return getValue(columnName) instanceof IndividualValue;
   } // hasObjectValue
   
   public boolean hasObjectValue(int columnIndex) throws SQWRLException
   {
-    return getValue(columnIndex) instanceof ObjectValue;
+    return getValue(columnIndex) instanceof IndividualValue;
   } // hasObjectValue
   
   public boolean hasDataValue(String columnName) throws SQWRLException
   {
-    return getValue(columnName) instanceof OWLDataValue;
+    return getValue(columnName) instanceof DataValue;
   } // hasDataValue
   
   public boolean hasDataValue(int columnIndex) throws SQWRLException
   {
-    return getValue(columnIndex) instanceof OWLDataValue;
+    return getValue(columnIndex) instanceof DataValue;
   } // hasDataValue
 
   public boolean hasClassValue(String columnName) throws SQWRLException
@@ -594,7 +587,7 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
 
   private boolean isNumericValue(SQWRLResultValue value)
   {
-    return ((value instanceof OWLDataValue) && (((OWLDataValue)value).isNumeric()));
+    return ((value instanceof DataValue) && (((DataValue)value).isNumeric()));
   } // isNumericValue
 
   // TODO: fix - very inefficient
@@ -684,21 +677,21 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
     return result;
   } // orderBy
 
-  private OWLDataValue min(List<SQWRLResultValue> values) throws SQWRLException
+  private DataValue min(List<SQWRLResultValue> values) throws SQWRLException
   {
-    OWLDataValue result = null, value;
+    DataValue result = null, value;
 
-    if (values.isEmpty()) throw new SQWRLException("empty aggregate list for '" + SQWRLNames.MinAggregateFunction + "'");
+    if (values.isEmpty()) throw new SQWRLException("empty aggregate list for " + SQWRLNames.MinAggregateFunction);
 
     for (SQWRLResultValue resultValue : values) {
 
-      if (!(resultValue instanceof OWLDataValue))
-        throw new SQWRLException("attempt to use '" + SQWRLNames.MinAggregateFunction + "' aggregate on non datatype '" + resultValue + "'");
+      if (!(resultValue instanceof DataValue))
+        throw new SQWRLException("attempt to use " + SQWRLNames.MinAggregateFunction + " aggregate on non datatype " + resultValue);
 
-      value = (OWLDataValue)resultValue;
+      value = (DataValue)resultValue;
 
       if (!value.isNumeric()) 
-        throw new SQWRLException("attempt to use '" + SQWRLNames.MinAggregateFunction + "' aggregate on non numeric datatype '" + value + "'");
+        throw new SQWRLException("attempt to use " + SQWRLNames.MinAggregateFunction + " aggregate on non numeric datatype " + value);
 
       if (result == null) result = value;
       else if (value.compareTo(result) < 0) result = value;
@@ -707,21 +700,21 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
     return result;
   } // min
 
-  private OWLDataValue max(List<SQWRLResultValue> values) throws SQWRLException
+  private DataValue max(List<SQWRLResultValue> values) throws SQWRLException
   {
-    OWLDataValue result = null, value;
+    DataValue result = null, value;
 
-    if (values.isEmpty()) throw new SQWRLException("empty aggregate list for '" + SQWRLNames.MaxAggregateFunction + "'");
+    if (values.isEmpty()) throw new SQWRLException("empty aggregate list for " + SQWRLNames.MaxAggregateFunction);
 
     for (SQWRLResultValue resultValue : values) {
 
-      if (!(resultValue instanceof OWLDataValue))
-        throw new SQWRLException("attempt to use '" + SQWRLNames.MaxAggregateFunction + "' aggregate on non datatype '" + resultValue + "'");
+      if (!(resultValue instanceof DataValue))
+        throw new SQWRLException("attempt to use " + SQWRLNames.MaxAggregateFunction + " aggregate on non datatype " + resultValue);
 
-      value = (OWLDataValue)resultValue;
+      value = (DataValue)resultValue;
 
       if (!value.isNumeric()) 
-        throw new SQWRLException("attempt to use '" + SQWRLNames.MaxAggregateFunction + "' aggregate on non numeric datatype '" + value + "'");
+        throw new SQWRLException("attempt to use " + SQWRLNames.MaxAggregateFunction + " aggregate on non numeric datatype " + value);
 
       if (result == null) result = value;
       else if (value.compareTo(result) > 0) result = value;
@@ -730,26 +723,26 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
     return result;
   } // max
 
-  private OWLDataValue sum(List<SQWRLResultValue> values) throws SQWRLException
+  private DataValue sum(List<SQWRLResultValue> values) throws SQWRLException
   {
     double sum = 0, value;
 
-    if (values.isEmpty()) throw new SQWRLException("empty aggregate list for '" + SQWRLNames.SumAggregateFunction + "'");
+    if (values.isEmpty()) throw new SQWRLException("empty aggregate list for " + SQWRLNames.SumAggregateFunction);
 
     for (SQWRLResultValue resultValue : values) {
 
-      if (!(resultValue instanceof OWLDataValue))
-        throw new SQWRLException("attempt to use '" + SQWRLNames.SumAggregateFunction + "' aggregate on non datatype '" + resultValue + "'");
+      if (!(resultValue instanceof DataValue))
+        throw new SQWRLException("attempt to use " + SQWRLNames.SumAggregateFunction + " aggregate on non data value: " + resultValue);
 
-        value = ((OWLDataValue)resultValue).getDouble();
+        value = ((DataValue)resultValue).getDouble();
 
       sum = sum + value;
     } // for
 
-    return owlFactory.getOWLDataValue(sum);
+    return new DataValueImpl(sum);
   } // sum
 
-  private OWLDataValue avg(List<SQWRLResultValue> values) throws SQWRLException
+  private DataValue avg(List<SQWRLResultValue> values) throws SQWRLException
   {
     double sum = 0, value;
     int count = 0;
@@ -758,28 +751,28 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
 
     for (SQWRLResultValue resultValue : values) {
 
-      if (!(resultValue instanceof OWLDataValue))
-        throw new SQWRLException("attempt to use '" + SQWRLNames.AvgAggregateFunction + "' aggregate on non datatype '" + resultValue + "'");
+      if (!(resultValue instanceof DataValue))
+        throw new SQWRLException("attempt to use " + SQWRLNames.AvgAggregateFunction + " aggregate on non data value: " + resultValue);
 
-        value = ((OWLDataValue)resultValue).getDouble();
+        value = ((DataValue)resultValue).getDouble();
 
       count++;
       sum = sum + value;
     } // for
 
-    return owlFactory.getOWLDataValue(sum / count);
+    return new DataValueImpl(sum / count);
   } // sum
 
-  private OWLDataValue count(List<SQWRLResultValue> values) throws SQWRLException
+  private DataValue count(List<SQWRLResultValue> values) throws SQWRLException
   {
-    return owlFactory.getOWLDataValue(values.size());
+    return new DataValueImpl(values.size());
   } // count
 
-  private OWLDataValue countDistinct(List<SQWRLResultValue> values) throws SQWRLException
+  private DataValue countDistinct(List<SQWRLResultValue> values) throws SQWRLException
   {
     Set<SQWRLResultValue> distinctValues = new HashSet<SQWRLResultValue>(values);
 
-    return owlFactory.getOWLDataValue(distinctValues.size());
+    return new DataValueImpl(distinctValues.size());
   } // countDistinct
 
   // TODO: linear search is not very efficient. 

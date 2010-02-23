@@ -34,8 +34,8 @@ public interface SQWRLResult
   SQWRLResultValue getValue(String columnName) throws SQWRLException;
   SQWRLResultValue getValue(int columnIndex) throws SQWRLException;
   SQWRLResultValue getValue(int columnIndex, int rowIndex) throws SQWRLException;
-  ObjectValue getObjectValue(String columnName) throws SQWRLException;
-  ObjectValue getObjectValue(int columnIndex) throws SQWRLException;
+  IndividualValue getObjectValue(String columnName) throws SQWRLException;
+  IndividualValue getObjectValue(int columnIndex) throws SQWRLException;
   DataValue getDataValue(String columnName) throws SQWRLException;
   DataValue getDataValue(int columnIndex) throws SQWRLException;
   ClassValue getClassValue(String columnName) throws SQWRLException;

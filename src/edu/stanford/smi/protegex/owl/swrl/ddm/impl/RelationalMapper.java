@@ -14,11 +14,12 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataFactory;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataProperty;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValue;
+import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValueFactory;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLIndividual;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLObjectPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLProperty;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.MapperException;
-import edu.stanford.smi.protegex.owl.swrl.bridge.impl.OWLDataFactoryImpl;
+import edu.stanford.smi.protegex.owl.swrl.bridge.sqwrl.impl.OWLDataFactoryImpl;
 import edu.stanford.smi.protegex.owl.swrl.ddm.Column;
 import edu.stanford.smi.protegex.owl.swrl.ddm.DDMFactory;
 import edu.stanford.smi.protegex.owl.swrl.ddm.Database;
@@ -45,6 +46,7 @@ public class RelationalMapper implements Mapper, MapperGenerator
   private Set<Database> databases;
   private Map<Database, DatabaseConnection> databaseConnections;
   private OWLDataFactory owlFactory;
+  private OWLDataValueFactory owlDataValueFactory;
 
   public RelationalMapper(SQWRLQueryEngine queryEngine) throws MapperException
   {
@@ -57,6 +59,7 @@ public class RelationalMapper implements Mapper, MapperGenerator
     readMaps(queryEngine);
 
     owlFactory = new OWLDataFactoryImpl();
+    owlDataValueFactory = OWLDataValueFactory.create();
   } // RelationalMapper
 
   public void open() throws MapperException
@@ -203,7 +206,7 @@ public class RelationalMapper implements Mapper, MapperGenerator
     throw new MapperException("not implemented");
   } // mapOWLbjectProperty
 
-  public Set<OWLDataPropertyAssertionAxiom> mapOWLDatatypeProperty(OWLProperty owlProperty, OWLIndividual subjectOWLIndividual,
+  public Set<OWLDataPropertyAssertionAxiom> mapOWLDataProperty(OWLProperty owlProperty, OWLIndividual subjectOWLIndividual,
                                                                        OWLDataValue objectOWLDatatypeValue) 
     throws MapperException
   {
@@ -240,7 +243,7 @@ public class RelationalMapper implements Mapper, MapperGenerator
       
       while (rs.next()) {
         OWLIndividual subject = owlFactory.getOWLIndividual(rs.getString(subjectPrimaryKeyColumnName));
-        OWLDataValue value = owlFactory.getOWLDataValue(rs.getFloat(valueColumnName)); // TODO: float only
+        OWLDataValue value = owlDataValueFactory.getOWLDataValue(rs.getFloat(valueColumnName)); // TODO: float only
         OWLDataPropertyAssertionAxiom axiom = owlFactory.getOWLDataPropertyAssertionAxiom(subject, owlProperty, value);
         result.add(axiom);
       } // while
@@ -254,25 +257,25 @@ public class RelationalMapper implements Mapper, MapperGenerator
     return result;
   } // mapOWLDatatypeProperty
 
-  public Set<OWLDataPropertyAssertionAxiom> mapOWLDatatypeProperty(OWLProperty owlProperty,
+  public Set<OWLDataPropertyAssertionAxiom> mapOWLDataProperty(OWLProperty owlProperty,
                                                                        OWLIndividual subjectOWLIndividual)
 
     throws MapperException
   {
-    return mapOWLDatatypeProperty(owlProperty, subjectOWLIndividual, null);
+    return mapOWLDataProperty(owlProperty, subjectOWLIndividual, null);
   } // mapOWLDatatypeProperty
 
-  public Set<OWLDataPropertyAssertionAxiom> mapOWLDatatypeProperty(OWLProperty owlProperty,
+  public Set<OWLDataPropertyAssertionAxiom> mapOWLDataProperty(OWLProperty owlProperty,
                                                                        OWLDataValue objectOWLDatatypeValue)
 
     throws MapperException
   {
-    return mapOWLDatatypeProperty(owlProperty, null, objectOWLDatatypeValue);
+    return mapOWLDataProperty(owlProperty, null, objectOWLDatatypeValue);
   } // mapOWLDatatypeProperty
 
-  public Set<OWLDataPropertyAssertionAxiom> mapOWLDatatypeProperty(OWLProperty owlProperty) throws MapperException
+  public Set<OWLDataPropertyAssertionAxiom> mapOWLDataProperty(OWLProperty owlProperty) throws MapperException
   {
-    return mapOWLDatatypeProperty(owlProperty, null, null);
+    return mapOWLDataProperty(owlProperty, null, null);
   } // mapOWLDatatypeProperty
 
   private OWLClassMap getOWLClassMap(String className) throws MapperException
