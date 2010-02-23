@@ -12,10 +12,10 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLRuleEngineBridgeException;
 
 /**
- ** Implementations library for SWRL Extensions built-in methods. See <a
- ** href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLExtensionsBuiltIns">here</a> for documentation on this library.
- **
- ** See <a href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLBuiltInBridge">here</a> for documentation on defining SWRL built-in libraries.
+ * Implementations library for SWRL Extensions built-in methods. See <a
+ * href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLExtensionsBuiltIns">here</a> for documentation on this library.
+ *
+ * See <a href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLBuiltInBridge">here</a> for documentation on defining SWRL built-in libraries.
  */
 public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 {
@@ -46,14 +46,14 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       OWLClass owlClass = null;
       String createInvocationPattern 
         = createInvocationPattern(getInvokingBridge(), getInvokingRuleName(), getInvokingBuiltInIndex(), getIsInConsequent(),
-                                                  arguments.subList(1, arguments.size()));
+                                  arguments.subList(1, arguments.size()));
 
       if (classInvocationMap.containsKey(createInvocationPattern)) owlClass = classInvocationMap.get(createInvocationPattern);
       else {
         owlClass = getInvokingBridge().injectOWLClass();
         classInvocationMap.put(createInvocationPattern, owlClass);
       } // if
-      arguments.get(0).setBuiltInResult(owlClass); // Bind the result to the first parameter      
+      arguments.get(0).setBuiltInResult(createClassArgument(owlClass.getURI())); // Bind the result to the first parameter      
     } // if
     
     return true;
@@ -78,7 +78,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
         owlIndividual = getInvokingBridge().injectOWLIndividual();
         individualInvocationMap.put(createInvocationPattern, owlIndividual);
       } // if
-      arguments.get(0).setBuiltInResult(owlIndividual); // Bind the result to the first parameter      
+      arguments.get(0).setBuiltInResult(createIndividualArgument(owlIndividual.getURI())); // Bind the result to the first parameter      
     } // if
     
     return true;

@@ -8,8 +8,8 @@ import java.util.List;
 
 import edu.stanford.smi.protegex.owl.model.OWLNamedClass;
 import edu.stanford.smi.protegex.owl.model.RDFResource;
-import edu.stanford.smi.protegex.owl.swrl.bridge.ArgumentFactory;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
+import edu.stanford.smi.protegex.owl.swrl.bridge.IndividualArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.MultiArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLClass;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLClassAssertionAxiom;
@@ -20,25 +20,23 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.OWLPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.builtins.AbstractSWRLBuiltInLibrary;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLConversionFactoryException;
+import edu.stanford.smi.protegex.owl.swrl.bridge.sqwrl.impl.OWLConversionFactoryImpl;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
 import edu.stanford.smi.protegex.owl.swrl.util.SWRLOWLUtil;
 
 /**
- ** Implementations library for SWRL ABox built-in methods. See <a
- ** href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLABoxBuiltIns">here</a> for documentation on this library.
- **
- ** See <a href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLBuiltInBridge">here</a> for documentation on defining SWRL built-in libraries.
+ * Implementations library for SWRL ABox built-in methods. See <a
+ * href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLABoxBuiltIns">here</a> for documentation on this library.
+ *
+ * See <a href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLBuiltInBridge">here</a> for documentation on defining SWRL built-in libraries.
  */
 public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 {
   private static String SWRLABoxLibraryName = "SWRLABoxBuiltIns";
 
-  private ArgumentFactory argumentFactory;
-
   public SWRLBuiltInLibraryImpl() 
   { 
     super(SWRLABoxLibraryName); 
-
-    argumentFactory = ArgumentFactory.getFactory();
   } // SWRLBuiltInLibraryImpl
 
   public void reset() {}
@@ -53,13 +51,16 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     boolean result = false;
 
     if (isUnboundArgument) {
-      MultiArgument multiArgument = argumentFactory.createMultiArgument(getVariableName(0, arguments));
-      for (OWLIndividual individual : getInvokingBridge().getOWLIndividuals()) multiArgument.addArgument(individual);
+      MultiArgument multiArgument = createMultiArgument(getVariableName(0, arguments));
+      for (OWLIndividual individual : getInvokingBridge().getOWLIndividuals()) {
+      	IndividualArgument argument = createIndividualArgument(individual.getURI());
+      	multiArgument.addArgument(argument);
+      } // for
       arguments.get(0).setBuiltInResult(multiArgument);
       result = !multiArgument.hasNoArguments();
     } else {
-      String individualName = getArgumentAsAnIndividualURI(0, arguments);
-      result = getInvokingBridge().isOWLIndividual(individualName);
+      String individualURI = getArgumentAsAnIndividualURI(0, arguments);
+      result = getInvokingBridge().isOWLIndividual(individualURI);
     } // if
 
     return result;
@@ -72,68 +73,70 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
    */
   public boolean hasValue(List<BuiltInArgument> arguments) throws BuiltInException
   {
-    String individualName, propertyName = null;
+    String individualURI, propertyURI = null;
     Object propertyValue = null;
     boolean propertyValueSupplied;
     boolean result = false, isObjectProperty;
 
     checkNumberOfArgumentsEqualTo(3, arguments.size());
-    individualName = getArgumentAsAnIndividualURI(0, arguments);
-    propertyName = getArgumentAsAPropertyURI(1, arguments);
+    individualURI = getArgumentAsAnIndividualURI(0, arguments);
+    propertyURI = getArgumentAsAPropertyURI(1, arguments);
 
     propertyValueSupplied = !isUnboundArgument(2, arguments);
 
     try {
-      isObjectProperty = getInvokingBridge().isOWLObjectProperty(propertyName);
+      isObjectProperty = getInvokingBridge().isOWLObjectProperty(propertyURI);
 
       if (getIsInConsequent()) {
-        OWLIndividual subject = getInvokingBridge().getOWLDataFactory().getOWLIndividual(individualName);
+        OWLIndividual subject = getInvokingBridge().getOWLDataFactory().getOWLIndividual(individualURI);
         OWLProperty property;
         OWLPropertyAssertionAxiom axiom;
 
         if (isObjectProperty) {
-          OWLIndividual value = getArgumentAsAnOWLIndividual(2, arguments);
-          property = getInvokingBridge().getOWLDataFactory().getOWLObjectProperty(propertyName);
+          IndividualArgument argument = getArgumentAsAnIndividual(2, arguments);
+          OWLIndividual value = getInvokingBridge().getOWLDataFactory().getOWLIndividual(argument.getURI());
+          property = getInvokingBridge().getOWLDataFactory().getOWLObjectProperty(propertyURI);
           axiom = getInvokingBridge().getOWLDataFactory().getOWLObjectPropertyAssertionAxiom(subject, property, value);
         } else {
-          OWLDataValue value = getArgumentAsAnOWLDatatypeValue(2, arguments);
-          property = getInvokingBridge().getOWLDataFactory().getOWLDataProperty(propertyName);
-          axiom = getInvokingBridge().getOWLDataFactory().getOWLDataPropertyAssertionAxiom(subject, property, value);
+          DataValue dataValue = getArgumentAsADataValue(2, arguments);
+          OWLDataValue owlDataValue = getInvokingBridge().getOWLDataValueFactory().getOWLDataValue(dataValue);  
+          property = getInvokingBridge().getOWLDataFactory().getOWLDataProperty(propertyURI);
+          axiom = getInvokingBridge().getOWLDataFactory().getOWLDataPropertyAssertionAxiom(subject, property, owlDataValue);
         } // if
         getInvokingBridge().injectOWLAxiom(axiom);
       } else { // In antecedent
         if (propertyValueSupplied) {
           propertyValue = getArgumentAsAPropertyValue(2, arguments);
           if (isObjectProperty) {
-            RDFResource resource = SWRLOWLUtil.getObjectPropertyValue(getInvokingBridge().getOWLModel(), individualName, propertyName);
+            RDFResource resource = SWRLOWLUtil.getObjectPropertyValue(getInvokingBridge().getOWLModel(), individualURI, propertyURI);
             result = propertyValue.equals(resource.getName());
           } else 
-            result = SWRLOWLUtil.getDatavaluedPropertyValues(getInvokingBridge().getOWLModel(), individualName, propertyName).contains(propertyValue);
+            result = SWRLOWLUtil.getDatavaluedPropertyValues(getInvokingBridge().getOWLModel(), individualURI, propertyURI).contains(propertyValue);
         } else { // Property value unbound
-          MultiArgument multiArgument = argumentFactory.createMultiArgument(getVariableName(2, arguments));
+          MultiArgument multiArgument = createMultiArgument(getVariableName(2, arguments));
           if (isObjectProperty) {
-            for (RDFResource value : SWRLOWLUtil.getObjectPropertyValues(getInvokingBridge().getOWLModel(), individualName, propertyName)) {
+            for (RDFResource value : SWRLOWLUtil.getObjectPropertyValues(getInvokingBridge().getOWLModel(), individualURI, propertyURI)) {
               if (value instanceof edu.stanford.smi.protegex.owl.model.OWLIndividual) {
                 edu.stanford.smi.protegex.owl.model.OWLIndividual individual = (edu.stanford.smi.protegex.owl.model.OWLIndividual)value;
-                multiArgument.addArgument(argumentFactory.createIndividualArgument(individual.getName()));
+                multiArgument.addArgument(createIndividualArgument(individual.getName()));
               } else if (value instanceof edu.stanford.smi.protegex.owl.model.OWLNamedClass) {
                 edu.stanford.smi.protegex.owl.model.OWLNamedClass cls = (edu.stanford.smi.protegex.owl.model.OWLNamedClass)value;
-                multiArgument.addArgument(argumentFactory.createClassArgument(cls.getName()));
+                multiArgument.addArgument(createClassArgument(cls.getName()));
               } else if (value instanceof edu.stanford.smi.protegex.owl.model.OWLDatatypeProperty) {
                 edu.stanford.smi.protegex.owl.model.OWLDatatypeProperty owlDatatypeProperty = (edu.stanford.smi.protegex.owl.model.OWLDatatypeProperty)value;
-                multiArgument.addArgument(argumentFactory.createDataPropertyArgument(owlDatatypeProperty.getName()));
+                multiArgument.addArgument(createDataPropertyArgument(owlDatatypeProperty.getName()));
               } else if (value instanceof edu.stanford.smi.protegex.owl.model.OWLObjectProperty) {
                 edu.stanford.smi.protegex.owl.model.OWLObjectProperty owlObjectProperty = (edu.stanford.smi.protegex.owl.model.OWLObjectProperty)value;
-                multiArgument.addArgument(argumentFactory.createObjectPropertyArgument(owlObjectProperty.getName()));
+                multiArgument.addArgument(createObjectPropertyArgument(owlObjectProperty.getName()));
               } // if
             } // for
           } else { // Data property
-            for (Object value : SWRLOWLUtil.getDatavaluedPropertyValues(getInvokingBridge().getOWLModel(), individualName, propertyName)) {
+            for (Object value : SWRLOWLUtil.getDatavaluedPropertyValues(getInvokingBridge().getOWLModel(), individualURI, propertyURI)) {
               if (value instanceof edu.stanford.smi.protegex.owl.model.RDFSLiteral) {
                 edu.stanford.smi.protegex.owl.model.RDFSLiteral literal = (edu.stanford.smi.protegex.owl.model.RDFSLiteral)value;
-                multiArgument.addArgument(argumentFactory.createDataValueArgument(getInvokingBridge().getOWLDataFactory().getOWLDataValue(literal)));
+                multiArgument.addArgument(OWLConversionFactoryImpl.convertRDFSLiteral2DataValueArgument(getInvokingBridge().getOWLModel(), literal));
               } else {
-                multiArgument.addArgument(argumentFactory.createDataValueArgument(getInvokingBridge().getOWLDataFactory().getOWLDataValue(value)));
+                multiArgument.addArgument(createDataValueArgument(value));
               } // if
             } // for
           } // if
@@ -149,30 +152,30 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   } // hasValue
 
   /**
-   ** Returns true if the individual named by the first argument has a property specified by the second argument. If the second argument in
-   ** unbound, bind it to all the properties that currently have a value for this individual.
+   * Returns true if the individual named by the first argument has a property specified by the second argument. If the second argument in
+   * unbound, bind it to all the properties that currently have a value for this individual.
    */
   public boolean hasProperty(List<BuiltInArgument> arguments) throws BuiltInException
   {
-    String individualName, propertyName = null;
+    String individualURI, propertyURI = null;
     boolean hasUnboundPropertyArgument = isUnboundArgument(1, arguments);
     boolean result = false;
 
     checkNumberOfArgumentsInRange(2, 3, arguments.size());
-    individualName = getArgumentAsAnIndividualURI(0, arguments);
-    propertyName = getArgumentAsAPropertyURI(1, arguments);
+    individualURI = getArgumentAsAnIndividualURI(0, arguments);
+    propertyURI = getArgumentAsAPropertyURI(1, arguments);
 
     try {
       if (hasUnboundPropertyArgument) {
-        MultiArgument multiArgument = argumentFactory.createMultiArgument(getVariableName(1, arguments));
-        for (edu.stanford.smi.protegex.owl.model.OWLProperty property : SWRLOWLUtil.getPropertiesOfIndividual(getInvokingBridge().getOWLModel(), individualName)) {
-          if (property.isObjectProperty()) multiArgument.addArgument(argumentFactory.createObjectPropertyArgument(property.getName()));
-          else multiArgument.addArgument(argumentFactory.createDataPropertyArgument(property.getName()));
+        MultiArgument multiArgument = createMultiArgument(getVariableName(1, arguments));
+        for (edu.stanford.smi.protegex.owl.model.OWLProperty property : SWRLOWLUtil.getPropertiesOfIndividual(getInvokingBridge().getOWLModel(), individualURI)) {
+          if (property.isObjectProperty()) multiArgument.addArgument(createObjectPropertyArgument(property.getName()));
+          else multiArgument.addArgument(createDataPropertyArgument(property.getName()));
         } // for
         arguments.get(1).setBuiltInResult(multiArgument);
         result = !multiArgument.hasNoArguments();
       } else
-        result = SWRLOWLUtil.getNumberOfPropertyValues(getInvokingBridge().getOWLModel(), individualName, propertyName, true) != 0;
+        result = SWRLOWLUtil.getNumberOfPropertyValues(getInvokingBridge().getOWLModel(), individualURI, propertyURI, true) != 0;
     } catch (OWLConversionFactoryException e) {
       throw new BuiltInException(e.getMessage());
     } // try
@@ -181,30 +184,30 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   } // hasProperty
 
   /**
-   ** Returns true if the class named by the first argument has an individual identified by the second argument. If the second argument is
-   ** unbound, bind it to all individuals of the class.
+   * Returns true if the class named by the first argument has an individual identified by the second argument. If the second argument is
+   * unbound, bind it to all individuals of the class.
    */
   public boolean hasIndividual(List<BuiltInArgument> arguments) throws BuiltInException
   {
     boolean isUnboundArgument = isUnboundArgument(1, arguments);   
-    String className;
+    String classURI;
     boolean result = false;
 
     checkNumberOfArgumentsEqualTo(2, arguments.size());
     checkThatArgumentIsAClass(0, arguments);
 
-    className = getArgumentAsAClassURI(0, arguments);
+    classURI = getArgumentAsAClassURI(0, arguments);
 
     try {
       if (isUnboundArgument) {
-        MultiArgument multiArgument = argumentFactory.createMultiArgument(getVariableName(1, arguments));
-        for (edu.stanford.smi.protegex.owl.model.OWLIndividual individual: SWRLOWLUtil.getIndividualsOfClass(getInvokingBridge().getOWLModel(), className)) 
-          multiArgument.addArgument(argumentFactory.createIndividualArgument(individual.getName()));
+        MultiArgument multiArgument = createMultiArgument(getVariableName(1, arguments));
+        for (edu.stanford.smi.protegex.owl.model.OWLIndividual individual: SWRLOWLUtil.getIndividualsOfClass(getInvokingBridge().getOWLModel(), classURI)) 
+          multiArgument.addArgument(createIndividualArgument(individual.getName()));
         arguments.get(1).setBuiltInResult(multiArgument);
         result = !multiArgument.hasNoArguments();
       } else { // Bound argument
-        String individualName = getArgumentAsAnIndividualURI(1, arguments);
-        result = getInvokingBridge().isOWLIndividualOfClass(individualName, className);
+        String individualURI = getArgumentAsAnIndividualURI(1, arguments);
+        result = getInvokingBridge().isOWLIndividualOfClass(individualURI, classURI);
       } // if
     } catch (OWLConversionFactoryException e) {
       throw new BuiltInException(e.getMessage());
@@ -213,28 +216,28 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   } // hasIndividual
 
   /**
-   ** Returns true if the OWL class, property, or individual named by the first argument has a URI identified by the second
-   ** argument. If the second argument is unbound, bind it to URI of the resource.
+   * Returns true if the OWL class, property, or individual named by the first argument has a URI identified by the second
+   * argument. If the second argument is unbound, bind it to URI of the resource.
    */
   public boolean hasURI(List<BuiltInArgument> arguments) throws BuiltInException
   {
     boolean isUnboundArgument = isUnboundArgument(1, arguments);   
-    String resourceName, uri;
+    String resourceURI, uri;
     boolean result = false;
 
     checkNumberOfArgumentsEqualTo(2, arguments.size());
     checkThatArgumentIsAClassPropertyOrIndividual(0, arguments);
 
-    resourceName = getArgumentAsAResourceURI(0, arguments);
+    resourceURI = getArgumentAsAURI(0, arguments);
 
     try {
       if (isUnboundArgument) {
-        uri = SWRLOWLUtil.getURI(getInvokingBridge().getOWLModel(), resourceName);
-        arguments.get(1).setBuiltInResult(argumentFactory.createDataValueArgument(uri));
+        uri = SWRLOWLUtil.getURI(getInvokingBridge().getOWLModel(), resourceURI);
+        arguments.get(1).setBuiltInResult(createDataValueArgument(uri));
         result = true;
       } else { // Bound argument
         uri = getArgumentAsAString(1, arguments);
-        result = uri.equals(SWRLOWLUtil.getURI(getInvokingBridge().getOWLModel(), resourceName));
+        result = uri.equals(SWRLOWLUtil.getURI(getInvokingBridge().getOWLModel(), resourceURI));
       } // if
     } catch (OWLConversionFactoryException e) {
       throw new BuiltInException(e.getMessage());
@@ -243,46 +246,46 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   } // hasURI
 
   /**
-   ** Returns true if the individual named by the first argument is an instance of the class identified by the second argument. If the
-   ** second argument is unbound, bind it to all defining classes of the individual.
+   * Returns true if the individual named by the first argument is an instance of the class identified by the second argument. If the
+   * second argument is unbound, bind it to all defining classes of the individual.
    */
   public boolean hasClass(List<BuiltInArgument> arguments) throws BuiltInException
   {
     boolean isUnboundArgument = isUnboundArgument(1, arguments);   
-    String individualName;
+    String individualURI;
     boolean result = false;
 
     checkNumberOfArgumentsEqualTo(2, arguments.size());
 
-    individualName = getArgumentAsAnIndividualURI(0, arguments);
+    individualURI = getArgumentAsAnIndividualURI(0, arguments);
 
     try {
       if (getIsInConsequent()) {
-        String className;
+        String classURI;
         OWLClass owlClass;
         OWLIndividual owlIndividual;
         OWLClassAssertionAxiom axiom;
 
         if (isArgumentAString(1, arguments)) { 
-          className = SWRLOWLUtil.getFullName(getInvokingBridge().getOWLModel(), getArgumentAsAString(1, arguments));;
-          if (!getInvokingBridge().isOWLClass(className)) getInvokingBridge().injectOWLClass(className);
-        } else className = getArgumentAsAClassURI(1, arguments);
+          classURI = SWRLOWLUtil.getFullName(getInvokingBridge().getOWLModel(), getArgumentAsAString(1, arguments));;
+          if (!getInvokingBridge().isOWLClass(classURI)) getInvokingBridge().injectOWLClass(classURI);
+        } else classURI = getArgumentAsAClassURI(1, arguments);
 
-        owlClass  = getInvokingBridge().getOWLDataFactory().getOWLClass(className);
-        owlIndividual = getInvokingBridge().getOWLDataFactory().getOWLIndividual(individualName);
+        owlClass  = getInvokingBridge().getOWLDataFactory().getOWLClass(classURI);
+        owlIndividual = getInvokingBridge().getOWLDataFactory().getOWLIndividual(individualURI);
         axiom = getInvokingBridge().getOWLDataFactory().getOWLClassAssertionAxiom(owlIndividual, owlClass);
 
         getInvokingBridge().injectOWLAxiom(axiom);
       } else {
         if (isUnboundArgument) {
-          MultiArgument multiArgument = argumentFactory.createMultiArgument(getVariableName(1, arguments));
-          for (OWLNamedClass cls: SWRLOWLUtil.getClassesOfIndividual(getInvokingBridge().getOWLModel(), individualName)) 
-            multiArgument.addArgument(argumentFactory.createClassArgument(cls.getName()));
+          MultiArgument multiArgument = createMultiArgument(getVariableName(1, arguments));
+          for (OWLNamedClass cls: SWRLOWLUtil.getClassesOfIndividual(getInvokingBridge().getOWLModel(), individualURI)) 
+            multiArgument.addArgument(createClassArgument(cls.getName()));
           arguments.get(1).setBuiltInResult(multiArgument);
           result = !multiArgument.hasNoArguments();
         } else { // Bound argument
-          String className = getArgumentAsAClassURI(1, arguments);
-          result = getInvokingBridge().isOWLIndividualOfClass(individualName, className);
+          String classURI = getArgumentAsAClassURI(1, arguments);
+          result = getInvokingBridge().isOWLIndividualOfClass(individualURI, classURI);
         } // if
       } // if
     } catch (OWLConversionFactoryException e) {
@@ -298,23 +301,23 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
    */
   public boolean hasNumberOfPropertyValues(List<BuiltInArgument> arguments) throws BuiltInException
   {
-    String individualName, propertyName = null;
+    String individualURI, propertyURI = null;
     int numberOfPropertyValues;
     boolean hasUnboundNumberOfPropertyValuesArgument = isUnboundArgument(0, arguments);
     boolean result = false;
 
     checkNumberOfArgumentsEqualTo(3, arguments.size());
-    individualName = getArgumentAsAnIndividualURI(1, arguments);
-    propertyName = getArgumentAsAPropertyURI(2, arguments);
+    individualURI = getArgumentAsAnIndividualURI(1, arguments);
+    propertyURI = getArgumentAsAPropertyURI(2, arguments);
 
     try {
       if (hasUnboundNumberOfPropertyValuesArgument) {
-        numberOfPropertyValues = SWRLOWLUtil.getNumberOfPropertyValues(getInvokingBridge().getOWLModel(), individualName, propertyName, true);
-        arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument(numberOfPropertyValues));
+        numberOfPropertyValues = SWRLOWLUtil.getNumberOfPropertyValues(getInvokingBridge().getOWLModel(), individualURI, propertyURI, true);
+        arguments.get(0).setBuiltInResult(createDataValueArgument(numberOfPropertyValues));
         result = true;
       } else {
         numberOfPropertyValues = getArgumentAsAnInteger(0, arguments);
-        result = SWRLOWLUtil.getNumberOfPropertyValues(getInvokingBridge().getOWLModel(), individualName, propertyName, true) == numberOfPropertyValues;
+        result = SWRLOWLUtil.getNumberOfPropertyValues(getInvokingBridge().getOWLModel(), individualURI, propertyURI, true) == numberOfPropertyValues;
       } // if
     } catch (OWLConversionFactoryException e) {
       throw new BuiltInException(e.getMessage());
@@ -327,14 +330,14 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   {
     checkNumberOfArgumentsEqualTo(1, arguments.size());
 
-    return isArgumentALiteral(0, arguments);
+    return isArgumentADataValue(0, arguments);
   } // isConstant
 
   public boolean notConstant(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(1, arguments.size());
 
-    return !isArgumentALiteral(0, arguments);
+    return !isArgumentADataValue(0, arguments);
   } // notConstant
 
   public boolean isNumeric(List<BuiltInArgument> arguments) throws BuiltInException

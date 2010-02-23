@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.nfunk.jep.JEP;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.ArgumentFactory;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.builtins.AbstractSWRLBuiltInLibrary;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
@@ -20,15 +19,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 {
   private static String SWRLMLibraryName = "SWRLTabMathematicalBuiltIns";
 
-  private ArgumentFactory argumentFactory;
-
   private JEP jep = null;
 
   public SWRLBuiltInLibraryImpl() 
   { 
     super(SWRLMLibraryName); 
-
-    argumentFactory = ArgumentFactory.getFactory();
   } // SWRLMLibraryImpl
 
   public void reset() 
@@ -50,7 +45,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     argument2 = getArgumentAsADouble(1, arguments);
 
     if (isUnboundArgument(0, arguments)) {
-      arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument(java.lang.Math.sqrt(argument2)));
+      arguments.get(0).setBuiltInResult(createDataValueArgument(java.lang.Math.sqrt(argument2)));
       result = true;
     } else {
       argument1 = getArgumentAsADouble(0, arguments);
@@ -74,7 +69,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     argument2 = getArgumentAsADouble(1, arguments);
 
     if (isUnboundArgument(0, arguments)) {
-      arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument(java.lang.Math.log(argument2)));
+      arguments.get(0).setBuiltInResult(createDataValueArgument(java.lang.Math.log(argument2)));
       result = true;
     } else {
       argument1 = getArgumentAsADouble(0, arguments);
@@ -118,7 +113,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (getJEP().hasError()) throw new BuiltInException("exception parsing expression '" + expression + "': " + getJEP().getErrorInfo());
 
     if (isUnboundArgument(0, arguments)) {
-      arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument(value));
+      arguments.get(0).setBuiltInResult(createDataValueArgument(value));
       result = true;
     } else {
       result = value == getArgumentAsADouble(0, arguments);

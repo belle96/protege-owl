@@ -3,7 +3,6 @@ package edu.stanford.smi.protegex.owl.swrl.bridge.builtins.rdfb;
 
 import java.util.List;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.ArgumentFactory;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.MultiArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.builtins.AbstractSWRLBuiltInLibrary;
@@ -20,13 +19,10 @@ import edu.stanford.smi.protegex.owl.swrl.util.SWRLOWLUtil;
 public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 {
   private static String SWRLRDFLibraryName = "SWRLRDFBuiltIns";
-  private ArgumentFactory argumentFactory;
-
+  
   public SWRLBuiltInLibraryImpl() 
   { 
     super(SWRLRDFLibraryName); 
-    
-    argumentFactory = ArgumentFactory.getFactory();
   } // SWRLBuiltInLibraryImpl
 
   public void reset() 
@@ -48,13 +44,13 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     checkNumberOfArgumentsAtLeast(2, arguments.size());
     checkThatArgumentIsAClassPropertyOrIndividual(0, arguments);
 
-    resourceName = getArgumentAsAResourceURI(0, arguments);
+    resourceName = getArgumentAsAURI(0, arguments);
     language = hasLanguage ? getArgumentAsAString(2, arguments) : "";
     
     if (isUnboundArgument) {
-    	MultiArgument multiArgument = argumentFactory.createMultiArgument(getVariableName(1, arguments));
+    	MultiArgument multiArgument = createMultiArgument(getVariableName(1, arguments));
     	for (String label : SWRLOWLUtil.getRDFSLabels(getInvokingBridge().getOWLModel(), resourceName, language))
-    		multiArgument.addArgument(argumentFactory.createDataValueArgument(label));
+    		multiArgument.addArgument(createDataValueArgument(label));
     	arguments.get(1).setBuiltInResult(multiArgument);
     	result = !multiArgument.hasNoArguments();
     } else { // Bound argument
@@ -78,12 +74,12 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     checkNumberOfArgumentsEqualTo(2, arguments.size());
     checkThatArgumentIsAClassPropertyOrIndividual(0, arguments);
 
-    resourceName = getArgumentAsAResourceURI(0, arguments);
+    resourceName = getArgumentAsAURI(0, arguments);
 
     if (isUnboundArgument) {
-     	MultiArgument multiArgument = argumentFactory.createMultiArgument(getVariableName(1, arguments));
+     	MultiArgument multiArgument = createMultiArgument(getVariableName(1, arguments));
     	for (String language : SWRLOWLUtil.getRDFSLabelLanguages(getInvokingBridge().getOWLModel(), resourceName))
-    		multiArgument.addArgument(argumentFactory.createDataValueArgument(language));
+    		multiArgument.addArgument(createDataValueArgument(language));
     	arguments.get(1).setBuiltInResult(multiArgument);
     	result = !multiArgument.hasNoArguments();
     } else { // Bound argument

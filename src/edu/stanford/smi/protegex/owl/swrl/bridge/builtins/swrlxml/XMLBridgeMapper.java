@@ -14,12 +14,13 @@ import org.jdom.filter.ContentFilter;
 import org.jdom.filter.Filter;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataFactory;
+import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValueFactory;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLIndividual;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLProperty;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLBuiltInBridge;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLFactoryException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLBuiltInBridgeException;
-import edu.stanford.smi.protegex.owl.swrl.bridge.impl.OWLDataFactoryImpl;
+import edu.stanford.smi.protegex.owl.swrl.bridge.sqwrl.impl.OWLDataFactoryImpl;
 import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLOWLUtilException;
 import edu.stanford.smi.protegex.owl.swrl.util.SWRLOWLUtil;
 
@@ -47,21 +48,23 @@ public class XMLBridgeMapper
   private OWLProperty rootElementProperty, elementsProperty, subElementsProperty, nameProperty, namespacePrefixProperty, namespaceURIProperty, 
     contentProperty, valueProperty, attributesProperty;
 
-  private OWLDataFactory owlFactory;
+  private OWLDataFactory owlDataFactory;
+  private OWLDataValueFactory owlDataValueFactory;
 
   public XMLBridgeMapper() 
   {
-    owlFactory = new OWLDataFactoryImpl();
-
-    rootElementProperty = owlFactory.getOWLObjectProperty(XMLDocumentMappingHasRootElementPropertyName);
-    elementsProperty = owlFactory.getOWLObjectProperty(XMLDocumentMappingHasElementsPropertyName);
-    nameProperty = owlFactory.getOWLDataProperty(XMLMappingHasNamePropertyName);
-    namespacePrefixProperty = owlFactory.getOWLDataProperty(XMLMappingHasNamespacePrefixPropertyName);
-    namespaceURIProperty = owlFactory.getOWLDataProperty(XMLMappingHasNamespaceURIPropertyName);
-    contentProperty = owlFactory.getOWLDataProperty(XMLElementMappingHasContentPropertyName);
-    subElementsProperty = owlFactory.getOWLObjectProperty(XMLElementMappingHasSubElementsPropertyName);
-    valueProperty = owlFactory.getOWLDataProperty(XMLAttributeMappingHasValuePropertyName);
-    attributesProperty = owlFactory.getOWLObjectProperty(XMLElementMappingHasAttributesPropertyName);
+    owlDataFactory = new OWLDataFactoryImpl();
+    owlDataValueFactory = OWLDataValueFactory.create();
+    
+    rootElementProperty = owlDataFactory.getOWLObjectProperty(XMLDocumentMappingHasRootElementPropertyName);
+    elementsProperty = owlDataFactory.getOWLObjectProperty(XMLDocumentMappingHasElementsPropertyName);
+    nameProperty = owlDataFactory.getOWLDataProperty(XMLMappingHasNamePropertyName);
+    namespacePrefixProperty = owlDataFactory.getOWLDataProperty(XMLMappingHasNamespacePrefixPropertyName);
+    namespaceURIProperty = owlDataFactory.getOWLDataProperty(XMLMappingHasNamespaceURIPropertyName);
+    contentProperty = owlDataFactory.getOWLDataProperty(XMLElementMappingHasContentPropertyName);
+    subElementsProperty = owlDataFactory.getOWLObjectProperty(XMLElementMappingHasSubElementsPropertyName);
+    valueProperty = owlDataFactory.getOWLDataProperty(XMLAttributeMappingHasValuePropertyName);
+    attributesProperty = owlDataFactory.getOWLObjectProperty(XMLElementMappingHasAttributesPropertyName);
   } // XMLBridgeMapper
 
   public Document xmlDocumentMapping2Document(SWRLBuiltInBridge bridge) throws XMLBridgeMapperException
@@ -140,7 +143,7 @@ public class XMLBridgeMapper
     if (isSchema(rootElement)) throw new XMLBridgeMapperException("not expecting 'schema' root element");
 
     try {
-      xmlDocumentMapping = bridge.injectOWLIndividualOfClass(owlFactory.getOWLClass(XMLDocumentMappingOWLClassName));
+      xmlDocumentMapping = bridge.injectOWLIndividualOfClass(owlDataFactory.getOWLClass(XMLDocumentMappingOWLClassName));
       element2XMLElementMapping(doc, bridge, xmlDocumentMapping, null, rootElement);
     } catch (SWRLBuiltInBridgeException e) {
       throw new XMLBridgeMapperException("bridge error mapping Document to OWL XML ontology: " + e.getMessage());
@@ -155,7 +158,7 @@ public class XMLBridgeMapper
                                          OWLIndividual parentElementMapping, Element element) 
     throws XMLBridgeMapperException, SWRLBuiltInBridgeException, OWLFactoryException
   {
-    OWLIndividual elementMapping = bridge.injectOWLIndividualOfClass(owlFactory.getOWLClass(XMLElementMappingOWLClassName));
+    OWLIndividual elementMapping = bridge.injectOWLIndividualOfClass(owlDataFactory.getOWLClass(XMLElementMappingOWLClassName));
     String elementName = element.getName();
     String elementNamespacePrefix = element.getNamespace().getPrefix();
     String elementNamespaceURI = element.getNamespace().getURI();
@@ -163,28 +166,28 @@ public class XMLBridgeMapper
     String content = "";
 
     if (parentElementMapping == null)
-      bridge.injectOWLAxiom(owlFactory.getOWLObjectPropertyAssertionAxiom(xmlDocumentMapping, rootElementProperty, elementMapping));
+      bridge.injectOWLAxiom(owlDataFactory.getOWLObjectPropertyAssertionAxiom(xmlDocumentMapping, rootElementProperty, elementMapping));
     else 
-      bridge.injectOWLAxiom(owlFactory.getOWLObjectPropertyAssertionAxiom(parentElementMapping, subElementsProperty, elementMapping));
+      bridge.injectOWLAxiom(owlDataFactory.getOWLObjectPropertyAssertionAxiom(parentElementMapping, subElementsProperty, elementMapping));
 
-    bridge.injectOWLAxiom(owlFactory.getOWLObjectPropertyAssertionAxiom(xmlDocumentMapping, elementsProperty, elementMapping));
+    bridge.injectOWLAxiom(owlDataFactory.getOWLObjectPropertyAssertionAxiom(xmlDocumentMapping, elementsProperty, elementMapping));
 
-    bridge.injectOWLAxiom(owlFactory.getOWLDataPropertyAssertionAxiom(elementMapping, nameProperty, 
-                                                                      owlFactory.getOWLDataValue(elementName)));
+    bridge.injectOWLAxiom(owlDataFactory.getOWLDataPropertyAssertionAxiom(elementMapping, nameProperty, 
+                                                                          owlDataValueFactory.getOWLDataValue(elementName)));
 
-    bridge.injectOWLAxiom(owlFactory.getOWLDataPropertyAssertionAxiom(elementMapping, namespacePrefixProperty, 
-                                                                      owlFactory.getOWLDataValue(elementNamespacePrefix)));
+    bridge.injectOWLAxiom(owlDataFactory.getOWLDataPropertyAssertionAxiom(elementMapping, namespacePrefixProperty, 
+                                                                          owlDataValueFactory.getOWLDataValue(elementNamespacePrefix)));
 
-    bridge.injectOWLAxiom(owlFactory.getOWLDataPropertyAssertionAxiom(elementMapping, namespaceURIProperty, 
-                                                                      owlFactory.getOWLDataValue(elementNamespaceURI)));
+    bridge.injectOWLAxiom(owlDataFactory.getOWLDataPropertyAssertionAxiom(elementMapping, namespaceURIProperty, 
+                                                                          owlDataValueFactory.getOWLDataValue(elementNamespaceURI)));
  
     for (Object o : element.getContent(textFilter)) {
       Text text = (Text)o;
       content += text.getValue();
     } // for
     
-    bridge.injectOWLAxiom(owlFactory.getOWLDataPropertyAssertionAxiom(elementMapping, contentProperty, 
-                                                                      owlFactory.getOWLDataValue(content)));
+    bridge.injectOWLAxiom(owlDataFactory.getOWLDataPropertyAssertionAxiom(elementMapping, contentProperty, 
+                                                                          owlDataValueFactory.getOWLDataValue(content)));
 
     for (Attribute attribute : getAttributes(element)) attribute2XMLAttributeMapping(doc, bridge, elementMapping, attribute);
 
@@ -194,23 +197,23 @@ public class XMLBridgeMapper
   private void attribute2XMLAttributeMapping(Document doc, SWRLBuiltInBridge bridge, OWLIndividual elementMapping, Attribute attribute) 
     throws XMLBridgeMapperException, SWRLBuiltInBridgeException, OWLFactoryException
   {
-    OWLIndividual attributeMapping = bridge.injectOWLIndividualOfClass(owlFactory.getOWLClass(XMLAttributeMappingOWLClassName));
+    OWLIndividual attributeMapping = bridge.injectOWLIndividualOfClass(owlDataFactory.getOWLClass(XMLAttributeMappingOWLClassName));
     String attributeName = attribute.getName();
     String attributeValue = attribute.getValue();
     String attributeNamespacePrefix = attribute.getNamespace().getPrefix();
     String attributeNamespaceURI = attribute.getNamespace().getURI();
     
-    bridge.injectOWLAxiom(owlFactory.getOWLDataPropertyAssertionAxiom(attributeMapping, nameProperty, owlFactory.getOWLDataValue(attributeName)));
+    bridge.injectOWLAxiom(owlDataFactory.getOWLDataPropertyAssertionAxiom(attributeMapping, nameProperty, owlDataValueFactory.getOWLDataValue(attributeName)));
     
-    bridge.injectOWLAxiom(owlFactory.getOWLDataPropertyAssertionAxiom(attributeMapping, valueProperty, owlFactory.getOWLDataValue(attributeValue)));
+    bridge.injectOWLAxiom(owlDataFactory.getOWLDataPropertyAssertionAxiom(attributeMapping, valueProperty, owlDataValueFactory.getOWLDataValue(attributeValue)));
 
-    bridge.injectOWLAxiom(owlFactory.getOWLDataPropertyAssertionAxiom(attributeMapping, namespacePrefixProperty,
-                                                                      owlFactory.getOWLDataValue(attributeNamespacePrefix)));
+    bridge.injectOWLAxiom(owlDataFactory.getOWLDataPropertyAssertionAxiom(attributeMapping, namespacePrefixProperty,
+                                                                          owlDataValueFactory.getOWLDataValue(attributeNamespacePrefix)));
 
-    bridge.injectOWLAxiom(owlFactory.getOWLDataPropertyAssertionAxiom(attributeMapping, namespaceURIProperty,
-                                                                      owlFactory.getOWLDataValue(attributeNamespaceURI)));
+    bridge.injectOWLAxiom(owlDataFactory.getOWLDataPropertyAssertionAxiom(attributeMapping, namespaceURIProperty,
+                                                                          owlDataValueFactory.getOWLDataValue(attributeNamespaceURI)));
 
-    bridge.injectOWLAxiom(owlFactory.getOWLObjectPropertyAssertionAxiom(elementMapping, attributesProperty, attributeMapping));
+    bridge.injectOWLAxiom(owlDataFactory.getOWLObjectPropertyAssertionAxiom(elementMapping, attributesProperty, attributeMapping));
   } // attribute2XMLAttributeMapping
 
   private Element createElement(Document doc, Element parentElement, String elementName)

@@ -2,9 +2,13 @@
 package edu.stanford.smi.protegex.owl.swrl.bridge.builtins.temporal;
 
 import java.util.List;
+import java.util.Set;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.ArgumentFactory;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
+import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataPropertyAssertionAxiom;
+import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValue;
+import edu.stanford.smi.protegex.owl.swrl.bridge.OWLPropertyAssertionAxiom;
+import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLBuiltInBridge;
 import edu.stanford.smi.protegex.owl.swrl.bridge.builtins.AbstractSWRLBuiltInLibrary;
 import edu.stanford.smi.protegex.owl.swrl.bridge.builtins.temporal.exceptions.TemporalException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
@@ -45,13 +49,9 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   private static String HasFinishTimePropertyName = Namespace + "hasFinishTime";
 
   private Temporal temporal;
-  private ArgumentFactory argumentFactory;
-
-  public SWRLBuiltInLibraryImpl() 
+    public SWRLBuiltInLibraryImpl() 
   { 
     super(TemporalLibraryName); 
-
-    argumentFactory = ArgumentFactory.getFactory();
   } // SWRLBuiltInLibraryImpl
 
   public void reset()
@@ -127,7 +127,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       } // if
 
       if (isUnboundArgument(0, arguments)) {
-        arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument(operationResult)); // Bind the result to the first parameter
+        arguments.get(0).setBuiltInResult(createDataValueArgument(operationResult)); // Bind the result to the first parameter
         result = true;
       } else {
         long argument1 = getArgumentAsALong(0, arguments);
@@ -240,7 +240,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       operationResult.addGranuleCount(granuleCount, granularity);
 
       if (isUnboundArgument(0, arguments)) {
-        arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument(new XSDDateTime(operationResult.toString()))); // Bind the result to the first parameter
+        arguments.get(0).setBuiltInResult(createDataValueArgument(new XSDDateTime(operationResult.toString()))); // Bind the result to the first parameter
         result = true;
       } else {
         Instant argument1 = getArgumentAsAnInstant(0, arguments, granularity);
@@ -312,7 +312,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   {
     Period result = null;
 
-    if (isArgumentALiteral(argumentNumber, arguments)) {
+    if (isArgumentADataValue(argumentNumber, arguments)) {
       String datetimeString = getArgumentAsAString(argumentNumber, arguments);
       result = new Period(temporal, datetimeString, datetimeString, granularity);
     } else if (isArgumentAnIndividual(argumentNumber, arguments)) {
@@ -335,7 +335,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   {
     Instant result = null;
 
-    if (isArgumentALiteral(argumentNumber, arguments)) {
+    if (isArgumentADataValue(argumentNumber, arguments)) {
       String datetimeString = getArgumentAsAString(argumentNumber, arguments);
       result = new Instant(temporal, datetimeString, granularity);
     } else if (isArgumentAnIndividual(argumentNumber, arguments)) {
@@ -354,7 +354,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     String granularityName;
     int granularity = -1;
 
-    if (isArgumentALiteral(argumentNumber, arguments)) {
+    if (isArgumentADataValue(argumentNumber, arguments)) {
       granularityName = getArgumentAsAString(argumentNumber, arguments);
       granularity = Temporal.getIntegerGranularityRepresentation(granularityName);
     } else if (isArgumentAnIndividual(argumentNumber, arguments)) {
@@ -376,7 +376,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     String granularityName;
     boolean result = false;
 
-    if (isArgumentALiteral(argumentNumber, arguments)) {
+    if (isArgumentADataValue(argumentNumber, arguments)) {
       granularityName = getArgumentAsAString(argumentNumber, arguments);
       result = Temporal.isValidGranularityString(granularityName);
     } else if (isArgumentAnIndividual(argumentNumber, arguments)) {
@@ -390,7 +390,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   private Instant getValidInstant(String individualName, int granularity) 
     throws BuiltInException, TemporalException
   {
-    String datetimeString = getOWLDatatypePropertyValueAsAString(getInvokingBridge(), individualName, HasTimePropertyName);
+    String datetimeString = getDataPropertyValueAsAString(getInvokingBridge(), individualName, HasTimePropertyName);
 
     return new Instant(temporal, datetimeString, granularity);
   } // getValidInstant
@@ -398,10 +398,45 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   private Period getValidPeriod(String individualName, int granularity) 
     throws BuiltInException, TemporalException
   {
-    String startDatetimeString = getOWLDatatypePropertyValueAsAString(getInvokingBridge(), individualName, HasStartTimePropertyName);
-    String finishDatetimeString = getOWLDatatypePropertyValueAsAString(getInvokingBridge(), individualName, HasFinishTimePropertyName);
+    String startDatetimeString = getDataPropertyValueAsAString(getInvokingBridge(), individualName, HasStartTimePropertyName);
+    String finishDatetimeString = getDataPropertyValueAsAString(getInvokingBridge(), individualName, HasFinishTimePropertyName);
 
     return new Period(temporal, startDatetimeString, finishDatetimeString, granularity);
   } // getValidPeriod
 
+  private String getDataPropertyValueAsAString(SWRLBuiltInBridge bridge, String individualURI, String propertyURI)
+   throws BuiltInException
+  {
+    Set<OWLPropertyAssertionAxiom> axioms = bridge.getOWLPropertyAssertionAxioms(individualURI, propertyURI);
+    OWLPropertyAssertionAxiom axiom;
+    OWLDataValue value;
+
+    axiom = axioms.toArray(new OWLPropertyAssertionAxiom[0])[0]; // Pick the first one
+
+    if (!(axiom instanceof OWLDataPropertyAssertionAxiom))
+      throw new BuiltInException("property " + propertyURI + " does not refer to an OWL datavalued property assertion axiom");
+
+    value = ((OWLDataPropertyAssertionAxiom)axiom).getObject();
+
+    return value.toString();
+  } // getDataPropertyValueAsAString
+  
+  public int getDataPropertyValueAsAnInteger(SWRLBuiltInBridge bridge, String individualURI, String propertyURI)
+    throws BuiltInException
+  {
+    Set<OWLPropertyAssertionAxiom> axioms = bridge.getOWLPropertyAssertionAxioms(individualURI, propertyURI);
+    OWLPropertyAssertionAxiom axiom;
+    OWLDataValue value;
+
+    axiom = axioms.toArray(new OWLPropertyAssertionAxiom[0])[0];
+
+    if (!(axiom instanceof OWLDataPropertyAssertionAxiom))
+      throw new BuiltInException("property " + propertyURI + " does not refer to an OWL datavalued property assertion axiom");
+
+    value = ((OWLDataPropertyAssertionAxiom)axiom).getObject();
+
+    return value.getInt();
+  } // getDataPropertyValueAsInteger
+
+  
 } // SWRLBuiltInLibraryImpl

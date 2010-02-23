@@ -13,7 +13,6 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.xpath.XPath;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.ArgumentFactory;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.MultiArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLClass;
@@ -27,8 +26,6 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 {
   private static String SWRLXMLLibraryName = "SWRLXMLBuiltIns";
 
-  private ArgumentFactory argumentFactory;
-
   private OWLClass xmlElementOWLClass = null;
 
   public SWRLBuiltInLibraryImpl() throws BuiltInLibraryException
@@ -36,8 +33,6 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     super(SWRLXMLLibraryName); 
 
     reset();
-
-    argumentFactory = ArgumentFactory.getFactory();
   } // SWRLBuiltInLibraryImpl
 
   private XMLProcessor xmlProcessor;
@@ -88,7 +83,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
         } // try
       } else xmlDocument = documentMappings.get(inputXMLStreamName);
 
-      arguments.get(0).setBuiltInResult(xmlDocument); // Bind the result to the first parameter
+      arguments.get(0).setBuiltInResult(createIndividualArgument(xmlDocument.getURI())); // Bind the result to the first parameter
       result = true;
     } // if
     return result;
@@ -134,12 +129,13 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
       if (owlElements.isEmpty()) result = false;
       else if (owlElements.size() == 1) {
-        arguments.get(0).setBuiltInResult((OWLIndividual)owlElements.toArray()[0]); // Bind the single individual to the first parameter
+      	OWLIndividual individual = (OWLIndividual)owlElements.toArray()[0]; // Bind the single individual to the first parameter
+      	arguments.get(0).setBuiltInResult(createIndividualArgument(individual.getURI()));
         result = true;
       } else {
-        MultiArgument multiArgument = argumentFactory.createMultiArgument(getVariableName(0, arguments));
+        MultiArgument multiArgument = createMultiArgument(getVariableName(0, arguments));
         for (OWLIndividual xmlElement : owlElements) 
-          multiArgument.addArgument(argumentFactory.createIndividualArgument(xmlElement.getURI()));
+          multiArgument.addArgument(createIndividualArgument(xmlElement.getURI()));
         result = !multiArgument.hasNoArguments();
         arguments.get(0).setBuiltInResult(multiArgument);
       } // if
@@ -183,12 +179,13 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       
       if (owlElements.isEmpty()) result = false;
       else if (owlElements.size() == 1) {
-        arguments.get(0).setBuiltInResult((OWLIndividual)owlElements.toArray()[0]); // Bind the single individual to the first parameter
+      	OWLIndividual individual = (OWLIndividual)owlElements.toArray()[0]; // Bind the single individual to the first parameter
+      	arguments.get(0).setBuiltInResult(createIndividualArgument(individual.getURI()));
         result = true;
       } else {
-        MultiArgument multiArgument = argumentFactory.createMultiArgument(getVariableName(0, arguments));
+        MultiArgument multiArgument = createMultiArgument(getVariableName(0, arguments));
         for (OWLIndividual xmlElement : owlElements) 
-          multiArgument.addArgument(argumentFactory.createIndividualArgument(xmlElement.getURI()));
+          multiArgument.addArgument(createIndividualArgument(xmlElement.getURI()));
         arguments.get(0).setBuiltInResult(multiArgument);
         result = !multiArgument.hasNoArguments();
       } // if
@@ -210,7 +207,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       String attributeValue = element.getAttributeValue(attributeName);
 
       if (attributeValue != null) {
-        arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument(attributeValue));
+        arguments.get(0).setBuiltInResult(createDataValueArgument(attributeValue));
         result = true;
       } // if
     } // if
@@ -225,14 +222,14 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       String individualName = getArgumentAsAnIndividualURI(argumentNumber, arguments);
       
       if (getInvokingBridge().isOWLIndividualOfClass(individualName, XMLBridgeMapper.XMLDocumentMappingOWLClassName)) {
-      } else throw new InvalidBuiltInArgumentException(argumentNumber, "individual '" + individualName + "' is not a " +
+      } else throw new InvalidBuiltInArgumentException(argumentNumber, "individual " + individualName + " is not a " +
                                                        XMLBridgeMapper.XMLDocumentMappingOWLClassName);
 
       if (documents.containsKey(individualName)) document = documents.get(individualName);
-      else throw new InvalidBuiltInArgumentException(argumentNumber, "" + XMLBridgeMapper.XMLDocumentMappingOWLClassName + " individual '" + 
-                                                     individualName + "' does not refer to a valid document");
+      else throw new InvalidBuiltInArgumentException(argumentNumber, "" + XMLBridgeMapper.XMLDocumentMappingOWLClassName + " individual " + 
+                                                     individualName + " does not refer to a valid document");
     } else throw new InvalidBuiltInArgumentException(argumentNumber, "expecting a " +  XMLBridgeMapper.XMLDocumentMappingOWLClassName + " individual" +
-                                                     ", got '" + arguments.get(argumentNumber) + "'");
+                                                     ", got " + arguments.get(argumentNumber));
     return document;
   } // getArgumentAsADocument
 

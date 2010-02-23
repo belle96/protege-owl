@@ -16,7 +16,6 @@ import java.util.regex.PatternSyntaxException;
 
 import org.apache.commons.lang.StringUtils;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.ArgumentFactory;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.MultiArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.builtins.AbstractSWRLBuiltInLibrary;
@@ -39,7 +38,6 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 {
   private static String SWRLBLibraryName = "SWRLCoreBuiltIns";
   private static String SWRLBPrefix = "swrlb:";
-  private ArgumentFactory argumentFactory;
   private DateFormat dateFormat;
 
   private static String SWRLB_ADD = SWRLBPrefix + "add";
@@ -63,8 +61,6 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   public SWRLBuiltInLibraryImpl() 
   { 
     super(SWRLBLibraryName); 
-
-    argumentFactory = ArgumentFactory.getFactory();
   } // SWRLBuiltInLibraryImpl
 
   public void reset() {}
@@ -290,7 +286,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
         throw new InvalidBuiltInArgumentException(1, "expecting a Boolean");
 
       boolean operationResult = !getArgumentAsABoolean(1, arguments);
-      arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument(operationResult)); // Bind the result to the first parameter
+      arguments.get(0).setBuiltInResult(createDataValueArgument(operationResult)); // Bind the result to the first parameter
       result = true;
     } else {
       if (!areAllArgumentsBooleans(arguments))
@@ -325,11 +321,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     checkForUnboundNonFirstArguments(arguments);
 
     for (int argumentNumber = 1; argumentNumber < arguments.size(); argumentNumber++) { // Exception thrown if argument is not a literal.
-      operationResult = operationResult.concat(getArgumentAsALiteral(argumentNumber, arguments).toString());
+      operationResult = operationResult.concat(getArgumentAsADataValue(argumentNumber, arguments).toString());
     } // for
 
     if (isUnboundArgument(0, arguments)) {
-      arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument(operationResult)); // Bind the result to the first parameter
+      arguments.get(0).setBuiltInResult(createDataValueArgument(operationResult)); // Bind the result to the first parameter
       result = true;
     } else {
       String argument1 = getArgumentAsAString(0, arguments);
@@ -358,7 +354,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } else operationResult = argument2.substring(startIndex);
 
     if (hasUnboundArguments(arguments)) {
-      arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument(operationResult)); // Bind the result to the first parameter
+      arguments.get(0).setBuiltInResult(createDataValueArgument(operationResult)); // Bind the result to the first parameter
       result = true;
     } else {
       String argument1 = getArgumentAsAString(0, arguments);
@@ -380,7 +376,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     operationResult = argument2.length();
 
     if (hasUnboundArguments(arguments)) {
-      arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument(operationResult)); // Bind the result to the first parameter
+      arguments.get(0).setBuiltInResult(createDataValueArgument(operationResult)); // Bind the result to the first parameter
       result = true;
     } else {
       String argument1 = getArgumentAsAString(0, arguments);
@@ -401,7 +397,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     operationResult = argument2.toUpperCase();
 
     if (hasUnboundArguments(arguments)) {
-      arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument(operationResult)); // Bind the result to the first parameter
+      arguments.get(0).setBuiltInResult(createDataValueArgument(operationResult)); // Bind the result to the first parameter
       result = true;
     } else {
       String argument1 = getArgumentAsAString(0, arguments);
@@ -423,7 +419,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     operationResult = argument2.toLowerCase();
 
     if (hasUnboundArguments(arguments)) {
-      arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument(operationResult)); // Bind the result to the first parameter
+      arguments.get(0).setBuiltInResult(createDataValueArgument(operationResult)); // Bind the result to the first parameter
       result = true;
     } else {
       String argument1 = getArgumentAsAString(0, arguments);
@@ -488,7 +484,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     String operationResult = StringUtils.replaceChars(argument2, argument3, argument4);
 
     if (isUnboundArgument(0, arguments)) {
-      arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument(operationResult)); 
+      arguments.get(0).setBuiltInResult(createDataValueArgument(operationResult)); 
       result = true;
     } else {
       String argument1 = getArgumentAsAString(0, arguments);
@@ -509,7 +505,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     String operationResult = StringUtils.substringAfter(argument2, argument3);
 
     if (isUnboundArgument(0, arguments)) {
-      arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument(operationResult)); 
+      arguments.get(0).setBuiltInResult(createDataValueArgument(operationResult)); 
       result = true;
     } else {
       String argument1 = getArgumentAsAString(0, arguments);
@@ -530,7 +526,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     String operationResult = StringUtils.substringBefore(argument2, argument3);
 
     if (isUnboundArgument(0, arguments)) {
-      arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument(operationResult)); 
+      arguments.get(0).setBuiltInResult(createDataValueArgument(operationResult)); 
       result = true;
     } else {
       String argument1 = getArgumentAsAString(0, arguments);
@@ -575,7 +571,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     String operationResult = m.replaceAll(replacement);
 
     if (isUnboundArgument(0, arguments)) {
-      arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument(operationResult)); 
+      arguments.get(0).setBuiltInResult(createDataValueArgument(operationResult)); 
       result = true;
     } else {
       String output = getArgumentAsAString(0, arguments);
@@ -599,7 +595,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     String operationResult = m.replaceAll(" ").trim();
 
     if (isUnboundArgument(0, arguments)) {
-      arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument(operationResult)); 
+      arguments.get(0).setBuiltInResult(createDataValueArgument(operationResult)); 
       result = true;
     } else {
       String output = getArgumentAsAString(0, arguments);
@@ -625,10 +621,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
     tokenizer = new StringTokenizer(inputString.trim(), delimeters);
     
-    MultiArgument multiArgument = argumentFactory.createMultiArgument(getVariableName(0, arguments));
+    MultiArgument multiArgument = createMultiArgument(getVariableName(0, arguments));
     while (tokenizer.hasMoreTokens()) {
       String token = tokenizer.nextToken();
-      multiArgument.addArgument(argumentFactory.createDataValueArgument(token));
+      multiArgument.addArgument(createDataValueArgument(token));
     } // while
 
     arguments.get(0).setBuiltInResult(multiArgument);
@@ -1165,16 +1161,16 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
       if (builtInName.equalsIgnoreCase(SWRLB_SIN) ||
           builtInName.equalsIgnoreCase(SWRLB_COS) || builtInName.equalsIgnoreCase(SWRLB_TAN))
-        arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument(operationResult));
+        arguments.get(0).setBuiltInResult(createDataValueArgument(operationResult));
       else if (isShortMostPreciseArgument(boundArguments))
-        arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument((short)operationResult)); 
+        arguments.get(0).setBuiltInResult(createDataValueArgument((short)operationResult)); 
       else if (isIntegerMostPreciseArgument(boundArguments))
-        arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument((int)operationResult));
+        arguments.get(0).setBuiltInResult(createDataValueArgument((int)operationResult));
       else if (isFloatMostPreciseArgument(boundArguments))
-        arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument((float)operationResult));
+        arguments.get(0).setBuiltInResult(createDataValueArgument((float)operationResult));
       else if (isLongMostPreciseArgument(boundArguments))
-        arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument((long)operationResult));
-      else arguments.get(0).setBuiltInResult(argumentFactory.createDataValueArgument(operationResult));
+        arguments.get(0).setBuiltInResult(createDataValueArgument((long)operationResult));
+      else arguments.get(0).setBuiltInResult(createDataValueArgument(operationResult));
 
       result = true;
     } else result = (argument1 == operationResult);
