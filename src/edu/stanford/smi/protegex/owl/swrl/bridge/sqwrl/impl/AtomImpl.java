@@ -1,55 +1,56 @@
 
-package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
+package edu.stanford.smi.protegex.owl.swrl.bridge.sqwrl.impl;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.*;
-
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
-/*
-** Base class representing information about atoms in a SWRL rule
-*/
+import edu.stanford.smi.protegex.owl.swrl.bridge.Atom;
+
+/**
+ * Base class representing information about atoms in a SWRL rule
+ */
 public class AtomImpl implements Atom
 {
-  private Set<String> referencedClassNames;
-  private Set<String> referencedPropertyNames;
-  private Set<String> referencedIndividualNames;
+  private Set<String> referencedClassURIs;
+  private Set<String> referencedPropertyURIs;
+  private Set<String> referencedIndividualURIs;
   private Set<String> referencedVariableNames;
 
   public AtomImpl() 
   { 
-    referencedClassNames = new HashSet<String>();
-    referencedPropertyNames = new HashSet<String>();
-    referencedIndividualNames = new HashSet<String>();
+    referencedClassURIs = new HashSet<String>();
+    referencedPropertyURIs = new HashSet<String>();
+    referencedIndividualURIs = new HashSet<String>();
     referencedVariableNames = new HashSet<String>();
   } // AtomImpl
 
-  public boolean hasReferencedClasses() { return referencedClassNames.size() != 0; }
-  public Set<String> getReferencedClassNames() { return referencedClassNames; }
-  public boolean hasReferencedProperties() { return referencedPropertyNames.size() != 0; }
-  public Set<String> getReferencedPropertyNames() { return referencedPropertyNames; }
-  public boolean hasReferencedIndividuals() { return referencedIndividualNames.size() != 0; }
-  public Set<String> getReferencedIndividualNames() { return referencedIndividualNames; }
+  public boolean hasReferencedClasses() { return referencedClassURIs.size() != 0; }
+  public Set<String> getReferencedClassURIs() { return referencedClassURIs; }
+  public boolean hasReferencedProperties() { return referencedPropertyURIs.size() != 0; }
+  public Set<String> getReferencedPropertyURIs() { return referencedPropertyURIs; }
+  public boolean hasReferencedIndividuals() { return referencedIndividualURIs.size() != 0; }
+  public Set<String> getReferencedIndividualURIs() { return referencedIndividualURIs; }
   public boolean hasReferencedVariables() { return referencedVariableNames.size() != 0; }
-  public Set<String> getReferencedVariableNames() { return referencedVariableNames; }
+  public Set<String> getReferencedVariableURIs() { return referencedVariableNames; }
   
-  public void addReferencedClassName(String className) 
+  public void addReferencedClassURI(String classURI) 
   { 
-    if (!referencedClassNames.contains(className)) referencedClassNames.add(className); 
-  } // addReferencedIndividualName
+    if (!referencedClassURIs.contains(classURI)) referencedClassURIs.add(classURI); 
+  } // addReferencedClassURI
 
-  public void addReferencedPropertyName(String propertyName) 
+  public void addReferencedPropertyURI(String propertyURI) 
   { 
-    if (!referencedPropertyNames.contains(propertyName)) referencedPropertyNames.add(propertyName); 
-  } // addReferencedIndividualName
+    if (!referencedPropertyURIs.contains(propertyURI)) referencedPropertyURIs.add(propertyURI); 
+  } // addReferencedPropertyURI
 
-  public void addReferencedIndividualName(String individualName) 
+  public void addReferencedIndividualURI(String individualURI) 
   { 
-    if (!referencedIndividualNames.contains(individualName)) referencedIndividualNames.add(individualName); 
-  } // addReferencedIndividualName
+    if (!referencedIndividualURIs.contains(individualURI)) referencedIndividualURIs.add(individualURI); 
+  } // addReferencedIndividualURI
   
   public void addReferencedVariableName(String variableName) 
   { 
     if (!referencedVariableNames.contains(variableName)) referencedVariableNames.add(variableName); 
   } // addReferencedVariableName
+
 } // AtomImpl

@@ -1,5 +1,5 @@
 
-package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
+package edu.stanford.smi.protegex.owl.swrl.bridge.sqwrl.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,36 +25,36 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.ResultImpl;
  */
 public class SWRLRuleImpl implements SWRLRule
 {
-  private String ruleName;
-  private Set<String> ruleGroupNames;
+  private String ruleURI;
+  private String ruleGroupName;
   private List<Atom> bodyAtoms, headAtoms;
   private Set<String> referencedVariableNames;
   private ResultImpl sqwrlResult = null;
   private boolean hasSQWRLBuiltIns, hasSQWRLCollectionBuiltIns;
   private boolean enabled = true;
   
-  public SWRLRuleImpl(String ruleName, List<Atom> bodyAtoms, List<Atom> headAtoms) throws SQWRLException, BuiltInException
+  public SWRLRuleImpl(String ruleURI, List<Atom> bodyAtoms, List<Atom> headAtoms) throws SQWRLException, BuiltInException
   {
-    this.ruleName = ruleName;
+    this.ruleURI = ruleURI;
     this.bodyAtoms = bodyAtoms;
     this.headAtoms = headAtoms;
     hasSQWRLBuiltIns = false;
     hasSQWRLCollectionBuiltIns = false;
-    ruleGroupNames = new HashSet<String>();
+    ruleGroupName = "";
     buildReferencedVariableNames();
     processUnboundArguments();
     processSQWRLBuiltIns();
   } // SWRLRuleImpl
   
-  public String getRuleName() { return ruleName; }
-  public void setRuleName(String ruleName) { this.ruleName = ruleName; }
+  public String getURI() { return ruleURI; }
+  public void setURI(String ruleURI) { this.ruleURI = ruleURI; }
   public void setRuleText(String text) {}
   public List<Atom> getHeadAtoms() { return headAtoms; }
   public List<Atom> getBodyAtoms() { return bodyAtoms; }
   public boolean isSQWRL() { return hasSQWRLBuiltIns || hasSQWRLCollectionBuiltIns; }
   public boolean usesSQWRLCollections() { return hasSQWRLCollectionBuiltIns; }
-  public Set<String> getRuleGroupNames() { return ruleGroupNames; }
-  public void addRuleGroupNames(String ruleGroupName) { ruleGroupNames.add(ruleGroupName); }
+  public String getRuleGroupName() { return ruleGroupName; }
+  public void setRuleGroupName(String ruleGroupName) { this.ruleGroupName = ruleGroupName; }
   public boolean isEnabled() { return enabled; }
   public void setEnabled(Boolean enable) { this.enabled = enable; }
   public String getRuleText() { return toString(); }
@@ -119,7 +119,7 @@ public class SWRLRuleImpl implements SWRLRule
     for (Atom atom : getBodyAtoms()) {
       if (atom instanceof BuiltInAtom) bodyBuiltInAtoms.add((BuiltInAtom)atom);
       else {
-        bodyNonBuiltInAtoms.add(atom); variableNamesUsedByNonBuiltInBodyAtoms.addAll(atom.getReferencedVariableNames());
+        bodyNonBuiltInAtoms.add(atom); variableNamesUsedByNonBuiltInBodyAtoms.addAll(atom.getReferencedVariableURIs());
       } // if
     } // for
 
@@ -179,7 +179,7 @@ public class SWRLRuleImpl implements SWRLRule
     for (Atom atom : atoms) {
       if (atom instanceof BuiltInAtom) {
         BuiltInAtom builtInAtom = (BuiltInAtom)atom;
-        if (builtInNames.contains(builtInAtom.getBuiltInName())) result.add(builtInAtom);
+        if (builtInNames.contains(builtInAtom.getBuiltInURI())) result.add(builtInAtom);
         } // if
     } // for
     return result;
@@ -198,7 +198,7 @@ public class SWRLRuleImpl implements SWRLRule
   {
     referencedVariableNames = new HashSet<String>();
     
-    for (Atom atom : getBodyAtoms()) referencedVariableNames.addAll(atom.getReferencedVariableNames());
+    for (Atom atom : getBodyAtoms()) referencedVariableNames.addAll(atom.getReferencedVariableURIs());
   } // buildReferencedVariableNames
 
   private void processSQWRLBuiltIns() throws DataValueConversionException, SQWRLException, BuiltInException
@@ -236,7 +236,7 @@ public class SWRLRuleImpl implements SWRLRule
      preprocessBuiltInIndexes();
 
      for (BuiltInAtom builtInAtom : getBuiltInAtomsFromHead(SQWRLNames.getHeadBuiltInNames())) {
-       String builtInName = builtInAtom.getBuiltInName();
+       String builtInName = builtInAtom.getBuiltInURI();
        hasSQWRLBuiltIns = true;
        
        for (BuiltInArgument argument : builtInAtom.getArguments()) {
@@ -332,7 +332,7 @@ public class SWRLRuleImpl implements SWRLRule
     Set<String> cascadedUnboundVariableNames = new HashSet<String>();
 
     for (BuiltInAtom builtInAtom : getBuiltInAtomsFromBody()) {
-      String builtInName = builtInAtom.getBuiltInName();
+      String builtInName = builtInAtom.getBuiltInURI();
       //String builtInPrefixedName = builtInAtom.getBuiltInPrefixedName();
       if (builtInAtom.isSQWRLMakeCollection() || builtInAtom.isSQWRLCollectionOperation()) {
         Set<String> argumentsVariableNames = builtInAtom.getArgumentsVariableNames();

@@ -1,5 +1,5 @@
 
-package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
+package edu.stanford.smi.protegex.owl.swrl.bridge.sqwrl.impl;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,29 +17,29 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLNames;
  */
 public class BuiltInAtomImpl extends AtomImpl implements BuiltInAtom
 {
-  private String builtInName, builtInPrefixedName;
+  private String builtInURI, builtInPrefixedName;
   private List<BuiltInArgument> arguments; 
   private int builtInIndex = -1; // Index of this built-in atom in rule body; left-to-right, first built-in index is 0, second in 1, and so on
   private boolean sqwrlCollectionResultsUsed = false;
   private Set<String> dependsOnVariableNames = new HashSet<String>();
   
-  public BuiltInAtomImpl(String builtInName, String builtInPrefixedName, List<BuiltInArgument> arguments)
+  public BuiltInAtomImpl(String builtInURI, String builtInPrefixedName, List<BuiltInArgument> arguments)
   {
-    this.builtInName = builtInName;
+    this.builtInURI = builtInURI;
     this.builtInPrefixedName = builtInPrefixedName;
     this.arguments = arguments;
   } // BuiltInArgument
 
-  public BuiltInAtomImpl(String builtInName, String builtInPrefixedName)
+  public BuiltInAtomImpl(String builtInURI, String builtInPrefixedName)
   {
-    this.builtInName = builtInName;
+    this.builtInURI = builtInURI;
     this.builtInPrefixedName = builtInPrefixedName;
     this.arguments = new ArrayList<BuiltInArgument>();
   } // BuiltInArgument
 
   public void setBuiltInArguments(List<BuiltInArgument> arguments) { this.arguments = arguments; }
 
-  public String getBuiltInName() { return builtInName; }  
+  public String getBuiltInURI() { return builtInURI; }  
   public String getBuiltInPrefixedName() { return builtInPrefixedName; }  
 
   public List<BuiltInArgument> getArguments() { return arguments; }
@@ -49,9 +49,9 @@ public class BuiltInAtomImpl extends AtomImpl implements BuiltInAtom
   public Set<String> getDependsOnVariableNames() { return dependsOnVariableNames; }
 
   public boolean usesSQWRLCollectionResults() { return sqwrlCollectionResultsUsed; } 
-  public boolean isSQWRLMakeCollection() { return SQWRLNames.isSQWRLCollectionMakeBuiltIn(builtInName); }
-  public boolean isSQWRLGroupCollection() { return SQWRLNames.isSQWRLCollectionGroupBuiltIn(builtInName); }
-  public boolean isSQWRLCollectionOperation() { return SQWRLNames.isSQWRLCollectionOperationBuiltIn(builtInName); } 
+  public boolean isSQWRLMakeCollection() { return SQWRLNames.isSQWRLCollectionMakeBuiltIn(builtInURI); }
+  public boolean isSQWRLGroupCollection() { return SQWRLNames.isSQWRLCollectionGroupBuiltIn(builtInURI); }
+  public boolean isSQWRLCollectionOperation() { return SQWRLNames.isSQWRLCollectionOperationBuiltIn(builtInURI); } 
 
   public void setUsesSQWRLCollectionResults() { sqwrlCollectionResultsUsed = true; }
   

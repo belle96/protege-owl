@@ -1,5 +1,5 @@
 
-package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
+package edu.stanford.smi.protegex.owl.swrl.bridge.sqwrl.impl;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -7,45 +7,34 @@ import java.util.Set;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLClass;
 
 /**
- ** Class representing an OWL named class
+ * Class representing an OWL named class
  */
 public class OWLClassImpl extends BuiltInArgumentImpl implements OWLClass
 {
   // equals() method defined in this class.
-  private String classURI, prefixedClassName;
-  private Set<String> superclassNames, directSuperClassNames, directSubClassNames, equivalentClassNames, equivalentClassSuperclassNames;
+  private String classURI;
+  private Set<OWLClass> superClasses, subClasses, equivalentClasses;
     
   // Constructor used when creating a OWLClass object to pass as a built-in argument 
   public OWLClassImpl(String classURI)
   {
-    initialize(classURI, classURI);
+    initialize(classURI);
   } // OWLClassImpl
 
-  // Constructor used when creating a OWLClass object from a built-in
-  public OWLClassImpl(String classURI, String superclassURI)
-  {
-    initialize(classURI, superclassURI);
-    superclassNames.add(superclassURI);
-  } // OWLClassImpl
-
-  public void setSuperclassNames(Set<String> superclassNames) { this.superclassNames = superclassNames; }
-  public void setDirectSuperClassNames(Set<String> directSuperClassNames) { this.directSuperClassNames = directSuperClassNames; }
-  public void setDirectSubClassNames(Set<String> directSubClassNames) { this.directSubClassNames = directSubClassNames; }
-  public void setEquivalentClassNames(Set<String> equivalentClassNames) { this.equivalentClassNames = equivalentClassNames; }
-  public void setEquivalentClassSuperclassNames(Set<String> equivalentClassSuperclassNames) { this.equivalentClassSuperclassNames = equivalentClassSuperclassNames; }
+  public void addSuperClass(OWLClass superclass) { superClasses.add(superclass); }
+  public void addSubClass(OWLClass subClass) { subClasses.add(subClass); }
+  public void addEquivalentClass(OWLClass equivalentClass) { equivalentClasses.add(equivalentClass); }
 
   public String getURI() { return classURI; }
-  public String getPrefixedClassName() { return prefixedClassName; }
-  public Set<String> getSuperclassNames() { return superclassNames; }
-  public Set<String> getDirectSuperClassNames() { return directSuperClassNames; }
-  public Set<String> getDirectSubClassNames() { return directSubClassNames; }
-  public Set<String> getEquivalentClassNames() { return equivalentClassNames; }
-  public Set<String> getEquivalentClassSuperclassNames() { return equivalentClassSuperclassNames; }
+  public Set<OWLClass> getTypes() { return superClasses; }
+   
+  public Set<OWLClass> getSuperClasses() { return superClasses; }
+  public Set<OWLClass> getSubClasses() { return subClasses; }
+  public Set<OWLClass> getEquivalentClasses() { return equivalentClasses; }
 
   public boolean isNamedClass() { return true; }
-  public String getRepresentation() { return getPrefixedClassName(); }
 
-  public String toString() { return getPrefixedClassName(); }
+  public String toString() { return getURI(); }
 
   // We consider classes to be equal if they have the same name.
   public boolean equals(Object obj)
@@ -53,44 +42,24 @@ public class OWLClassImpl extends BuiltInArgumentImpl implements OWLClass
     if(this == obj) return true;
     if((obj == null) || (obj.getClass() != this.getClass())) return false;
     OWLClassImpl impl = (OWLClassImpl)obj;
-    return (getURI() == impl.getURI() || (getURI() != null && getURI().equals(impl.getURI()))) &&
-           (getPrefixedClassName() == impl.getPrefixedClassName() || (getPrefixedClassName() != null && getPrefixedClassName().equals(impl.getPrefixedClassName()))) &&
-           (superclassNames != null && impl.superclassNames != null && superclassNames.equals(impl.superclassNames)) &&
-           (directSuperClassNames != null && impl.directSuperClassNames != null && directSuperClassNames.equals(impl.directSuperClassNames)) &&
-           (directSubClassNames != null && impl.directSubClassNames != null && directSubClassNames.equals(impl.directSubClassNames)) &&
-           (equivalentClassNames != null && impl.equivalentClassNames != null && equivalentClassNames.equals(impl.equivalentClassNames)) &&
-           (equivalentClassSuperclassNames != null && impl.equivalentClassSuperclassNames != null && equivalentClassSuperclassNames.equals(impl.equivalentClassSuperclassNames));
-  } // equals
+    return (getURI() == impl.getURI() || (getURI() != null && getURI().equals(impl.getURI())));
+    } // equals
 
   public int hashCode()
   {
     int hash = 12;
 
     hash = hash + (null == getURI() ? 0 : getURI().hashCode());
-    hash = hash + (null == getPrefixedClassName() ? 0 : getPrefixedClassName().hashCode());
-    hash = hash + (null == getSuperclassNames() ? 0 : getSuperclassNames().hashCode());
-    hash = hash + (null == getDirectSuperClassNames() ? 0 : getDirectSuperClassNames().hashCode());
-    hash = hash + (null == getDirectSubClassNames() ? 0 : getDirectSubClassNames().hashCode());
-    hash = hash + (null == getEquivalentClassNames() ? 0 : getEquivalentClassNames().hashCode());
-    hash = hash + (null == getEquivalentClassSuperclassNames() ? 0 : getEquivalentClassSuperclassNames().hashCode());
-
+    
     return hash;
   } // hashCode
 
-  public int compareTo(Object o)
-  {
-    return classURI.compareTo(((OWLClassImpl)o).getURI());
-  } // compareTo
-
-  private void initialize(String classURI, String prefixedClassName)
+  private void initialize(String classURI)
   {
     this.classURI = classURI;
-    this.prefixedClassName = prefixedClassName;
-    superclassNames = new HashSet<String>();
-    directSuperClassNames = new HashSet<String>();
-    directSubClassNames = new HashSet<String>();
-    equivalentClassNames = new HashSet<String>();
-    equivalentClassSuperclassNames = new HashSet<String>();
+    superClasses = new HashSet<OWLClass>();
+    subClasses = new HashSet<OWLClass>();
+    equivalentClasses = new HashSet<OWLClass>();
   } // initialize
 
 } // OWLClassImpl
