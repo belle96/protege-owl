@@ -52,5 +52,6 @@ public interface SWRLBuiltInBridge
   SWRLRule getSWRLRule(String ruleName) throws SWRLBuiltInBridgeException;
 
   OWLDataFactory getOWLDataFactory();
+  OWLDataValueFactory getOWLDataValueFactory();
   OWLModel getOWLModel(); // TODO: Protege-OWL dependency - remove
 } // SWRLBuiltInBridge

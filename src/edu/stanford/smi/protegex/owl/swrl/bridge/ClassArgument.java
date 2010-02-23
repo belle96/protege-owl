@@ -1,10 +1,12 @@
 
 package edu.stanford.smi.protegex.owl.swrl.bridge;
 
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResultValue;
+
 /**
- ** Interface representing OWL named class arguments to atoms and built-ins
+ * Interface representing OWL named class arguments to atoms and built-ins
  */
-public interface ClassArgument extends ClassDescriptionArgument, AtomArgument
+public interface ClassArgument extends BuiltInArgument, AtomArgument
 {
   String getURI();
 } // ClassArgument

@@ -1,9 +1,9 @@
 
 package edu.stanford.smi.protegex.owl.swrl.bridge;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.*;
+import java.util.Set;
 
-import java.util.*;
+import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.MapperException;
 
 public interface Mapper
 {
@@ -16,10 +16,10 @@ public interface Mapper
   Set<OWLIndividual> mapOWLClass(OWLClass owlClass) throws MapperException;
   Set<OWLIndividual> mapOWLClass(OWLClass owlClass, OWLIndividual owlIndividual) throws MapperException;
 
-  Set<OWLDataPropertyAssertionAxiom> mapOWLDatatypeProperty(OWLProperty owlProperty) throws MapperException;
-  Set<OWLDataPropertyAssertionAxiom> mapOWLDatatypeProperty(OWLProperty owlProperty, OWLIndividual subject) throws MapperException;
-  Set<OWLDataPropertyAssertionAxiom> mapOWLDatatypeProperty(OWLProperty owlProperty, OWLDataValue value) throws MapperException;
-  Set<OWLDataPropertyAssertionAxiom> mapOWLDatatypeProperty(OWLProperty owlProperty, OWLIndividual subject, OWLDataValue value) 
+  Set<OWLDataPropertyAssertionAxiom> mapOWLDataProperty(OWLProperty owlProperty) throws MapperException;
+  Set<OWLDataPropertyAssertionAxiom> mapOWLDataProperty(OWLProperty owlProperty, OWLIndividual subject) throws MapperException;
+  Set<OWLDataPropertyAssertionAxiom> mapOWLDataProperty(OWLProperty owlProperty, OWLDataValue value) throws MapperException;
+  Set<OWLDataPropertyAssertionAxiom> mapOWLDataProperty(OWLProperty owlProperty, OWLIndividual subject, OWLDataValue value) 
     throws MapperException;
 
   Set<OWLObjectPropertyAssertionAxiom> mapOWLObjectProperty(OWLProperty owlProperty) throws MapperException;

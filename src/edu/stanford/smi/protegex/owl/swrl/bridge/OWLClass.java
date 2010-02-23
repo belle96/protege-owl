@@ -1,15 +1,12 @@
 
 package edu.stanford.smi.protegex.owl.swrl.bridge;
 
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.ClassValue;
-
 import java.util.Set;
 
-public interface OWLClass extends OWLDescription, OWLEntity, ClassArgument, ClassValue
+public interface OWLClass extends OWLDescription, OWLEntity
 {
-  Set<String> getSuperclassURIs();
-  Set<String> getDirectSuperClassURIs();
-  Set<String> getDirectSubClassURIs();
-  Set<String> getEquivalentClassURIs();
-  Set<String> getEquivalentClassSuperclassURIs();
+	Set<OWLClass> getTypes();
+	Set<OWLClass> getSuperClasses();
+	Set<OWLClass> getSubClasses();
+  Set<OWLClass> getEquivalentClasses();
 } // OWLClass

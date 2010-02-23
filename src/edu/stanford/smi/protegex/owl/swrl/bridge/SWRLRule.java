@@ -9,10 +9,10 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.ResultImpl;
 /**
  * Interface representing a SWRL rule
  */
-public interface SWRLRule extends OWLAxiom
+public interface SWRLRule extends OWLAxiom, OWLEntity
 {
-  String getURI();
   void setURI(String uri);
+  
   List<Atom> getHeadAtoms();
   List<Atom> getBodyAtoms();
   

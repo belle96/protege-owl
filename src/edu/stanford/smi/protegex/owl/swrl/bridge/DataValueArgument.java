@@ -1,11 +1,12 @@
 
 package edu.stanford.smi.protegex.owl.swrl.bridge;
 
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResultValue;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
 
 /**
- ** Interface representing OWL data value arguments to atoms and built-ins
+ * Interface representing OWL data value argument to atoms and built-ins
  */
-public interface DataValueArgument extends BuiltInArgument, AtomArgument, SQWRLResultValue
+public interface DataValueArgument extends BuiltInArgument, AtomArgument, Comparable<DataValueArgument>
 {
+	DataValue getDataValue();
 } // DataValueArgument

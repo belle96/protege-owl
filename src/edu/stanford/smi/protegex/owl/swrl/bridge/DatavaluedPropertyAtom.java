@@ -1,13 +1,12 @@
 
 package edu.stanford.smi.protegex.owl.swrl.bridge;
 
-/*
-** Interface representing a SWRL data valued property atom
-*/
+/**
+ * Interface representing a SWRL data valued property atom
+ */
 public interface DatavaluedPropertyAtom extends Atom
 {
   String getPropertyURI();
-  String getPrefixedPropertyName();
   AtomArgument getArgument1();
   AtomArgument getArgument2();
 } // DatavaluedPropertyAtom

@@ -21,19 +21,19 @@ public interface OWLConversionFactory
   OWLDataProperty getOWLDataProperty(String propertyURI) throws OWLConversionFactoryException;
   SWRLRule getSWRLRule(String ruleName) throws OWLConversionFactoryException, SQWRLException, BuiltInException;
   SWRLRule createSWRLRule(String ruleName, String ruleText) throws OWLConversionFactoryException, SQWRLException, SWRLParseException, BuiltInException;
-  Set<SWRLRule> getSWRLRules() throws OWLConversionFactoryException, SQWRLException, BuiltInException;
   Set<OWLIndividual> getAllOWLIndividualsOfClass(String classURI) throws OWLConversionFactoryException;
   
   Set<OWLPropertyAssertionAxiom> getOWLPropertyAssertionAxioms(String individualURI, String propertyURI) throws OWLConversionFactoryException, DataValueConversionException;
   Set<OWLPropertyAssertionAxiom> getOWLPropertyAssertionAxioms(String propertyURI) throws OWLConversionFactoryException, DataValueConversionException;
-  Set<OWLSameIndividualAxiom> getOWLSameIndividualAxioms() throws OWLConversionFactoryException;
+  
   Set<OWLDifferentIndividualsAxiom> getOWLDifferentIndividualsAxioms() throws OWLConversionFactoryException;
 
-  boolean isOWLClass(String classURI);
-  boolean isOWLProperty(String propertyURI);
-  boolean isOWLObjectProperty(String propertyURI);
-  boolean isOWLDataProperty(String propertyURI);
-  boolean isOWLIndividual(String individualURI);
+  Set<SWRLRule> getRules() throws OWLConversionFactoryException, SQWRLException, BuiltInException;
+  Set<OWLSameIndividualAxiom> getSameIndividualAxioms() throws OWLConversionFactoryException;
+  boolean containsClassReference(String classURI);
+  boolean containsObjectPropertyReference(String propertyURI);
+  boolean containsDataPropertyReference(String propertyURI);
+  boolean containsIndividualReference(String individualURI);
   boolean isOWLIndividualOfClass(String individualURI, String classURI);
   
   boolean isSWRLBuiltIn(String builtInURI);
@@ -46,5 +46,5 @@ public interface OWLConversionFactory
   
   String uri2PrefixedName(String uri); 
   String prefixedName2URI(String prefixedName);
-} // OWLConversionFactory
+ } // OWLConversionFactory
   

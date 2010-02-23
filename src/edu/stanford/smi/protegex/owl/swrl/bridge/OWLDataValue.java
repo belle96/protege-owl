@@ -3,15 +3,15 @@ package edu.stanford.smi.protegex.owl.swrl.bridge;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.DataValueConversionException;
 
-public interface OWLDataValue extends OWLPropertyValue, DataValueArgument, Comparable 
+/**
+ * Convenience wrapper around OWLAPI classes OWLLiteral and OWLDataType
+ */
+public interface OWLDataValue extends OWLPropertyValue 
 {
   // Java types
   boolean isString();
-
   boolean isBoolean();
-
   boolean isNumeric();
-
   boolean isInteger();
   boolean isLong();
   boolean isFloat();
@@ -29,9 +29,7 @@ public interface OWLDataValue extends OWLPropertyValue, DataValueArgument, Compa
   boolean isComparable();
 
   String getString() throws DataValueConversionException;
-
   boolean getBoolean() throws DataValueConversionException;
-
   int getInt() throws DataValueConversionException;
   long getLong() throws DataValueConversionException;
   float getFloat() throws DataValueConversionException;
@@ -42,4 +40,4 @@ public interface OWLDataValue extends OWLPropertyValue, DataValueArgument, Compa
 
   String toString();
 
-} // OWLDatatValue
+} // OWLDataValue
