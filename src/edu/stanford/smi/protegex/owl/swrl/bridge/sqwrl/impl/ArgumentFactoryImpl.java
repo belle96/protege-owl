@@ -1,5 +1,5 @@
 
-package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
+package edu.stanford.smi.protegex.owl.swrl.bridge.sqwrl.impl;
 
 import java.util.List;
 
@@ -10,32 +10,41 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.DataPropertyArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.DataValueArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.IndividualArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.MultiArgument;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValue;
 import edu.stanford.smi.protegex.owl.swrl.bridge.ObjectPropertyArgument;
+import edu.stanford.smi.protegex.owl.swrl.bridge.VariableBuiltInArgument;
+import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.DataValueConversionException;
+import edu.stanford.smi.protegex.owl.swrl.bridge.tmp.ClassArgumentImpl;
+import edu.stanford.smi.protegex.owl.swrl.bridge.tmp.DataPropertyArgumentImpl;
+import edu.stanford.smi.protegex.owl.swrl.bridge.tmp.DataValueArgumentImpl;
+import edu.stanford.smi.protegex.owl.swrl.bridge.tmp.DataValueImpl;
+import edu.stanford.smi.protegex.owl.swrl.bridge.tmp.IndividualArgumentImpl;
+import edu.stanford.smi.protegex.owl.swrl.bridge.tmp.ObjectPropertyArgumentImpl;
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDType;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
 
 public class ArgumentFactoryImpl extends ArgumentFactory
 {
-  public ClassArgument createClassArgument(String className) { return new OWLClassImpl(className); }
+  public ClassArgument createClassArgument(String classURI) { return new ClassArgumentImpl(classURI); }
+  public ObjectPropertyArgument createObjectPropertyArgument(String propertyURI) { return new ObjectPropertyArgumentImpl(propertyURI); }
+  public DataPropertyArgument createDataPropertyArgument(String propertyURI) { return new DataPropertyArgumentImpl(propertyURI); }
+  public IndividualArgument createIndividualArgument(String individualURI) { return new IndividualArgumentImpl(individualURI); }
 
-  public IndividualArgument createIndividualArgument(String individualName) { return new OWLIndividualImpl(individualName); }
+  public DataValueArgument createDataValueArgument(DataValue dataValue) { return new DataValueArgumentImpl(dataValue); }
+  
+  public DataValueArgument createDataValueArgument(String s) { return new DataValueArgumentImpl(new DataValueImpl(s)); }
+  public DataValueArgument createDataValueArgument(boolean b) { return new DataValueArgumentImpl(new DataValueImpl(b)); }
+  public DataValueArgument createDataValueArgument(Boolean b) { return new DataValueArgumentImpl(new DataValueImpl(b)); }
+  public DataValueArgument createDataValueArgument(int i) { return new DataValueArgumentImpl(new DataValueImpl(i)); }
+  public DataValueArgument createDataValueArgument(long l) { return new DataValueArgumentImpl(new DataValueImpl(l)); }
+  public DataValueArgument createDataValueArgument(float f) { return new DataValueArgumentImpl(new DataValueImpl(f)); }
+  public DataValueArgument createDataValueArgument(double d){ return new DataValueArgumentImpl(new DataValueImpl(d)); }
+  public DataValueArgument createDataValueArgument(short s) { return new DataValueArgumentImpl(new DataValueImpl(s)); }
+  public DataValueArgument createDataValueArgument(Byte b) { return new DataValueArgumentImpl(new DataValueImpl(b)); }
+  public DataValueArgument createDataValueArgument(XSDType xsd) { return new DataValueArgumentImpl(new DataValueImpl(xsd)); }
+  
+  public DataValueArgument createDataValueArgument(Object o) throws DataValueConversionException { return new DataValueArgumentImpl(new DataValueImpl(o)); }
 
-  public ObjectPropertyArgument createObjectPropertyArgument(String propertyName) { return new OWLObjectPropertyImpl(propertyName); }
-  public DataPropertyArgument createDataPropertyArgument(String propertyName) { return new OWLDataPropertyImpl(propertyName); }
-
-  public DataValueArgument createDataValueArgument(String s) { return new OWLDataValueImpl(s); }
-  public DataValueArgument createDataValueArgument(Number n) { return new OWLDataValueImpl(n); }
-  public DataValueArgument createDataValueArgument(boolean b){ return new OWLDataValueImpl(b); }
-  public DataValueArgument createDataValueArgument(int i) { return new OWLDataValueImpl(i); }
-  public DataValueArgument createDataValueArgument(long l) { return new OWLDataValueImpl(l); }
-  public DataValueArgument createDataValueArgument(float f) { return new OWLDataValueImpl(f); }
-  public DataValueArgument createDataValueArgument(double d){ return new OWLDataValueImpl(d); }
-  public DataValueArgument createDataValueArgument(short s) { return new OWLDataValueImpl(s); }
-  public DataValueArgument createDataValueArgument(Byte b) { return new OWLDataValueImpl(b); }
-  public DataValueArgument createDataValueArgument(XSDType xsd) { return new OWLDataValueImpl(xsd); }
-
-  public DataValueArgument createDataValueArgument(OWLDataValue dataValue) { return dataValue; }
-
+  public VariableBuiltInArgument createVariableBuiltInArgument(String variableName) { return new VariableBuiltInArgumentImpl(variableName); }
   public MultiArgument createMultiArgument(String variableName) { return new MultiArgumentImpl(variableName); }
   public MultiArgument createMultiArgument(String variableName, List<BuiltInArgument> arguments) { return new MultiArgumentImpl(variableName, arguments); }
 } // ArgumentFactory
