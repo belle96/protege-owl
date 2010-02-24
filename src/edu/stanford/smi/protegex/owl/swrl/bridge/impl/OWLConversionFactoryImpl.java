@@ -182,9 +182,9 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
             
       if (!classURI.equals(OWLNames.Cls.THING)) {
       	
-      	 for (String superClassURI : SWRLOWLUtil.rdfResources2Names(owlNamedClass.getNamedSuperclasses(false)))
+      	 for (String superClassURI : SWRLOWLUtil.rdfResources2OWLNamedClassURIs(owlNamedClass.getNamedSuperclasses(false)))
       	   owlClassImpl.addSuperClass(getOWLClass(superClassURI));
-      	 for (String subClassURI : SWRLOWLUtil.rdfResources2Names(owlNamedClass.getNamedSubclasses(false)))
+      	 for (String subClassURI : SWRLOWLUtil.rdfResources2OWLNamedClassURIs(owlNamedClass.getNamedSubclasses(false)))
       	   owlClassImpl.addSubClass(getOWLClass(subClassURI));
       	 for (String equivalentClassURI : SWRLOWLUtil.rdfResources2OWLNamedClassNames(owlNamedClass.getEquivalentClasses()))
       	   owlClassImpl.addEquivalentClass(getOWLClass(equivalentClassURI));
@@ -650,13 +650,18 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
       } else  if (o instanceof edu.stanford.smi.protegex.owl.model.OWLProperty) {
         edu.stanford.smi.protegex.owl.model.OWLProperty property = (edu.stanford.smi.protegex.owl.model.OWLProperty)o;
         String propertyArgumentURI = ((edu.stanford.smi.protegex.owl.model.OWLObjectProperty)property).getURI();
-      if (property.isObjectProperty()) arguments.add(argumentFactory.createObjectPropertyArgument(propertyArgumentURI));
-      else  arguments.add(argumentFactory.createDataPropertyArgument(propertyArgumentURI));
-      builtInAtom.addReferencedPropertyURI(propertyArgumentURI);
-      } else  if (o instanceof RDFSLiteral) arguments.add(convertRDFSLiteral2DataValueArgument(owlModel, (RDFSLiteral)o));
-      else  if (o instanceof String) arguments.add(argumentFactory.createDataValueArgument((String)o));
-      else  if (o instanceof Boolean) arguments.add(argumentFactory.createDataValueArgument((Boolean)o));
-      else throw new OWLConversionFactoryException("unknown type for argument " + o + " to built-in " + builtInPrefixedName);
+        if (property.isObjectProperty()) arguments.add(argumentFactory.createObjectPropertyArgument(propertyArgumentURI));
+        else  arguments.add(argumentFactory.createDataPropertyArgument(propertyArgumentURI));
+        builtInAtom.addReferencedPropertyURI(propertyArgumentURI);
+      } else if (o instanceof RDFSLiteral) arguments.add(convertRDFSLiteral2DataValueArgument(owlModel, (RDFSLiteral)o));
+      else {
+      	try {
+      	  arguments.add(argumentFactory.createDataValueArgument(o));
+      	} catch (DataValueConversionException e) {
+          throw new OWLConversionFactoryException("error converting argument to built-in " + builtInPrefixedName + 
+          		                                    " with value " + o + " of unknown type " + o.getClass() + ": " + e.getMessage());
+      	} // try
+      } // if
     } // while
 
     builtInAtom.setBuiltInArguments(arguments);
@@ -952,17 +957,17 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
   private void initializeProperty(OWLPropertyImpl owlPropertyImpl, edu.stanford.smi.protegex.owl.model.OWLProperty property)
     throws OWLConversionFactoryException
   {
-  	 for (String domainClassURI : SWRLOWLUtil.rdfResources2Names(property.getUnionDomain()))
+  	 for (String domainClassURI : SWRLOWLUtil.rdfResources2OWLNamedClassURIs(property.getUnionDomain()))
   	  owlPropertyImpl.addDomainClass(getOWLClass(domainClassURI));
-  	 for (String rangeClassURI : SWRLOWLUtil.rdfResources2Names(property.getUnionRangeClasses()))
+  	 for (String rangeClassURI : SWRLOWLUtil.rdfResources2OWLNamedClassURIs(property.getUnionRangeClasses()))
   	   owlPropertyImpl.addRangeClass(getOWLClass(rangeClassURI));
-  	 for (String superPropertyURI : SWRLOWLUtil.rdfResources2Names(property.getSuperproperties(false)))
+  	 for (String superPropertyURI : SWRLOWLUtil.rdfResources2OWLNamedClassURIs(property.getSuperproperties(false)))
   	   if (property.isObjectProperty()) owlPropertyImpl.addSuperProperty(getOWLObjectProperty(superPropertyURI));
   	   else owlPropertyImpl.addSuperProperty(getOWLDataProperty(superPropertyURI));
-  	 for (String subPropertyURI : SWRLOWLUtil.rdfResources2Names(property.getSubproperties(false)))
+  	 for (String subPropertyURI : SWRLOWLUtil.rdfResources2OWLNamedClassURIs(property.getSubproperties(false)))
   	   if (property.isObjectProperty()) owlPropertyImpl.addSuperProperty(getOWLObjectProperty(subPropertyURI));
   	   else owlPropertyImpl.addSuperProperty(getOWLDataProperty(subPropertyURI));
-  	 for (String equivalentPropertyURI : SWRLOWLUtil.rdfResources2Names(property.getEquivalentProperties()))
+  	 for (String equivalentPropertyURI : SWRLOWLUtil.rdfResources2OWLNamedClassURIs(property.getEquivalentProperties()))
   	   if (property.isObjectProperty()) owlPropertyImpl.addSuperProperty(getOWLObjectProperty(equivalentPropertyURI));
   	   else owlPropertyImpl.addSuperProperty(getOWLDataProperty(equivalentPropertyURI));
   } // initializeProperty

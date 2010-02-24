@@ -103,13 +103,17 @@ public class SWRLOWLUtil
   
   public static OWLNamedClass createOWLNamedClass(OWLModel owlModel, String className) throws SWRLOWLUtilException
   {
+    RDFResource resource;
     OWLNamedClass cls;
 
     checkIfIsValidClassName(owlModel, className);
    
-    cls = owlModel.getOWLNamedClass(className);
-
-    if (cls == null) cls = owlModel.createOWLNamedClass(className);
+    resource = owlModel.getRDFResource(className);
+    
+    if (resource != null) {
+      if (resource instanceof OWLNamedClass) cls = (OWLNamedClass)resource;
+      else throw new SWRLOWLUtilException("class " + className + " is not an OWL named class");
+    } else cls = owlModel.createOWLNamedClass(className);
 
     return cls;
   } // createOWLNamedClass
@@ -973,7 +977,7 @@ public class SWRLOWLUtil
     RDFResource resource = owlModel.getRDFResource(individualName);
 
     if (mustExist && (resource == null || !(resource instanceof OWLIndividual))) 
-      throwException("no individual named '" + individualName + "' in ontology");
+      throwException("no individual named " + individualName + " in ontology");
         
     if (resource != null) {
       if (resource instanceof OWLIndividual) return (OWLIndividual)resource;
@@ -986,7 +990,7 @@ public class SWRLOWLUtil
     RDFResource resource = owlModel.getRDFResource(className);
 
     if (mustExist && (resource == null || !(resource instanceof OWLNamedClass))) 
-      throwException("no class named '" + className + "' in ontology");
+      throwException("no class named " + className + " in ontology");
         
     if (resource != null) {
       if (resource instanceof OWLNamedClass) return (OWLNamedClass)resource;
@@ -999,7 +1003,7 @@ public class SWRLOWLUtil
     RDFResource resource = owlModel.getRDFResource(className);
 
     if (mustExist && (resource == null || !(resource instanceof OWLClass))) 
-      throwException("no class named '" + className + "' in ontology");
+      throwException("no class named " + className + " in ontology");
         
     if (resource != null) {
       if (resource instanceof OWLClass) return (OWLClass)resource;
@@ -1740,40 +1744,31 @@ public class SWRLOWLUtil
     
   } // rdfResources2OWLNamedClassNames
 
-  public static Set<String> rdfResources2Names(Collection resources) 
+  public static Set<String> rdfResources2URIs(Collection resources) 
   {
     Set<String> result = new HashSet<String>();
     
-    // TODO: bug in Property.getUnionDomain that causes it to return non RDFResource objects so we need to work around it.
-    // for (RDFResource resource : resources) result.add(resource.getName());
-
     Iterator iterator = resources.iterator();
     while (iterator.hasNext()) {
       Object o = iterator.next();
-      if (o instanceof RDFResource) result.add(((RDFResource)o).getName());
+      if (o instanceof RDFResource) result.add(((RDFResource)o).getURI());
     } // if
 
     return result;
   } // rdfResources2Names            
 
-  public static Set<String> rdfResources2NamesList(Collection<RDFResource> resources) throws SWRLOWLUtilException
+  public static Set<String> rdfResources2OWLNamedClassURIs(Collection resources) 
   {
-    RDFResource resource;
     Set<String> result = new HashSet<String>();
-
-    if (resources == null) return result;
     
     Iterator iterator = resources.iterator();
     while (iterator.hasNext()) {
-      Object object = iterator.next();
+      Object o = iterator.next();
+      if (o instanceof OWLNamedClass) result.add(((OWLNamedClass)o).getURI());
+    } // if
 
-      if (!(object instanceof RDFResource)) throwException("rdfResources2NamesList passed non-resource object '" + object + "'");
-
-      resource = (RDFResource)object;
-      result.add(resource.getName());
-    } // while
     return result;
-  } // rdfResources2NamesList            
+  } // rdfResources2OWLNamedClassURIs
 
   public static boolean hasInconsistentClasses(OWLModel owlModel) 
   {
@@ -1789,7 +1784,7 @@ public class SWRLOWLUtil
   {
     RDFSDatatype datatype = owlModel.getRDFSDatatypeByName(type);
 
-    if (datatype == null) throw new SWRLOWLUtilException("error getting RDFSDatatype '" + type + "'");
+    if (datatype == null) throw new SWRLOWLUtilException("error getting RDFSDatatype " + type);
 
     return datatype;
   } // getRDFSDatatype

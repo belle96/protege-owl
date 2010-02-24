@@ -8,8 +8,9 @@ import java.util.Set;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInAtom;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValue;
+import edu.stanford.smi.protegex.owl.swrl.bridge.DataValueArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLNames;
 
 /**
@@ -144,9 +145,12 @@ public class BuiltInAtomImpl extends AtomImpl implements BuiltInAtom
 
     for (BuiltInArgument argument : getArguments()) {
       if (!isFirst) result += ", ";
-      if (argument instanceof OWLDataValue && ((OWLDataValue)argument).isString())
-        result += "\"" + argument + "\"";
-      else result += "" + argument;
+      if (argument instanceof DataValueArgument) {
+      	DataValueArgument dataValueArgument = (DataValueArgument)argument;
+      	DataValue dataValue = dataValueArgument.getDataValue();
+        if (dataValue.isString()) result += "\"" + dataValue + "\"";
+        else result += "" + dataValue;
+      } else result += "" + argument;
       isFirst = false;
     } // for
 

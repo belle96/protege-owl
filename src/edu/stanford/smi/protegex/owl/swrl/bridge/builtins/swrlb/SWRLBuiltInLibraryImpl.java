@@ -78,11 +78,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       if (isArgumentAString(1, arguments)) {
         String s2 = getArgumentAsAString(1, arguments);
         result = s1.compareTo(s2) > 0;
-      } else throw new InvalidBuiltInArgumentException(1, "expecting string argument for comparison, got '" + getArgumentAsAString(1, arguments) + "'");
+      } else throw new InvalidBuiltInArgumentException(1, "expecting string argument for comparison, got " + getArgumentAsAString(1, arguments));
     } else if (isArgumentNumeric(0, arguments)) {
       if (isArgumentNumeric(1, arguments)) result = compareTwoNumericArguments(arguments) > 0;
-      else throw new InvalidBuiltInArgumentException(1, "expecting numeric argument for comparison, got '" + getArgumentAsAString(1, arguments) + "'");
-    } else throw new InvalidBuiltInArgumentException(0, "expecting string or numeric argument for comparison, got '" + getArgumentAsAString(0, arguments) + "'");
+      else throw new InvalidBuiltInArgumentException(1, "expecting numeric argument for comparison, got " + getArgumentAsAString(1, arguments));
+    } else throw new InvalidBuiltInArgumentException(0, "expecting string or numeric argument for comparison, got " + getArgumentAsAString(0, arguments));
 
     return result;
   } // greaterThan
@@ -98,11 +98,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       if (isArgumentAString(1, arguments)) {
         String s2 = getArgumentAsAString(1, arguments);
         result = s1.compareTo(s2) < 0;
-      } else throw new InvalidBuiltInArgumentException(1, "expecting string argument for comparison, got '" + getArgumentAsAString(1, arguments) + "'");
+      } else throw new InvalidBuiltInArgumentException(1, "expecting string argument for comparison, got " + getArgumentAsAString(1, arguments));
     } else if (isArgumentNumeric(0, arguments)) {
       if (isArgumentNumeric(1, arguments)) result = compareTwoNumericArguments(arguments) < 0;
-      else throw new InvalidBuiltInArgumentException(1, "expecting numeric argument for comparison, got '" + getArgumentAsAString(1, arguments) + "'");
-    } else throw new InvalidBuiltInArgumentException(0, "expecting string or numeric argument for comparison, got '" + getArgumentAsAString(0, arguments) + "'");
+      else throw new InvalidBuiltInArgumentException(1, "expecting numeric argument for comparison, got " + getArgumentAsAString(1, arguments));
+    } else throw new InvalidBuiltInArgumentException(0, "expecting string or numeric argument for comparison, got " + getArgumentAsAString(0, arguments));
 
     return result;
   } // lessThan
@@ -130,8 +130,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       } else result = false;
     } else if (isArgumentNumeric(0, arguments)) {
       if (isArgumentNumeric(1, arguments)) result = compareTwoNumericArguments(arguments) == 0;
-      else throw new InvalidBuiltInArgumentException(1, "expecting numeric argument for comparison, got '" + getArgumentAsAString(1, arguments) + "'");
-    } else throw new InvalidBuiltInArgumentException(0, "expecting string, numeric or boolean argument for comparison, got '" + getArgumentAsAString(0, arguments) + "'");
+      else throw new InvalidBuiltInArgumentException(1, "expecting numeric argument for comparison, got " + getArgumentAsAString(1, arguments));
+    } else throw new InvalidBuiltInArgumentException(0, "expecting string, numeric or boolean argument for comparison, got " + getArgumentAsAString(0, arguments));
 
     return result;
   } // equal

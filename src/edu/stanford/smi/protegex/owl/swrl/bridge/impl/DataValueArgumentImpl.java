@@ -15,5 +15,23 @@ public class DataValueArgumentImpl extends BuiltInArgumentImpl implements DataVa
 	
 	public DataValue getDataValue() { return dataValue; }
 	
+	public String toString() { return dataValue.toString(); }
+	
 	public int compareTo(DataValueArgument argument) { return dataValue.compareTo(argument.getDataValue()); }
+	
+	public boolean equals(Object obj)
+  {
+    if(this == obj) return true;
+    if((obj == null) || (obj.getClass() != this.getClass())) return false;
+    DataValueArgumentImpl impl = (DataValueArgumentImpl)obj;
+    return (getDataValue() == impl.getDataValue() || (getDataValue() != null && getDataValue().equals(impl.getDataValue())));
+    } // equals
+
+  public int hashCode()
+  {
+    int hash = 12;
+    hash = hash + (null == getDataValue() ? 0 : getDataValue().hashCode());   
+    return hash;
+  } // hashCode
+
 } // DataValueArgumentImpl

@@ -2,8 +2,9 @@
 package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.AtomArgument;
+import edu.stanford.smi.protegex.owl.swrl.bridge.DataValueArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.DatavaluedPropertyAtom;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValue;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
 
 /**
  * Class representing a SWRL data valued property atom
@@ -38,9 +39,12 @@ public class DatavaluedPropertyAtomImpl extends AtomImpl implements DatavaluedPr
   { 
     String result = "" + getPropertyURI() + "(" + getArgument1() + ", ";
 
-    if (getArgument2() instanceof OWLDataValue && ((OWLDataValue)getArgument2()).isString())
-      result += "\"" + getArgument2() + "\"";
-    else result += "" + getArgument2();
+    if (getArgument2() instanceof DataValueArgument) {
+    	DataValueArgument dataValueArgument = (DataValueArgument)getArgument2();
+    	DataValue dataValue = dataValueArgument.getDataValue();
+    	if (dataValue.isString()) result += "\"" + dataValue + "\"";
+    	else result += "" + dataValue;
+    } else result += "" + getArgument2();
 
     result += ")"; 
 

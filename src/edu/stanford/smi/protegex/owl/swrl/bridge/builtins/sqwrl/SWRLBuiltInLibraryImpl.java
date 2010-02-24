@@ -149,11 +149,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean makeSet(List<BuiltInArgument> arguments) throws BuiltInException
   {
-	String collectionID = getCollectionIDInMake(arguments); // Get unique ID for set; does argument checking
-	BuiltInArgument element = arguments.get(1); // The second argument is always the value
-	Collection<BuiltInArgument> set;
+	  String collectionID = getCollectionIDInMake(arguments); // Get unique ID for set; does argument checking
+	  BuiltInArgument element = arguments.get(1); // The second argument is always the value
+	  Collection<BuiltInArgument> set;
 	
-	checkThatInAntecedent();
+	  checkThatInAntecedent();
 	    
     if (collections.containsKey(collectionID)) set = collections.get(collectionID);
     else {  

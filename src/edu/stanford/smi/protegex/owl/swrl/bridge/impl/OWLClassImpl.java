@@ -9,7 +9,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.OWLClass;
 /**
  * Class representing an OWL named class
  */
-public class OWLClassImpl extends BuiltInArgumentImpl implements OWLClass
+public class OWLClassImpl implements OWLClass
 {
   // equals() method defined in this class.
   private String classURI;

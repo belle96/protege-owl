@@ -10,7 +10,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.OWLProperty;
 /**
  * Class representing an OWL property
  */
-public abstract class OWLPropertyImpl extends BuiltInArgumentImpl implements OWLProperty
+public abstract class OWLPropertyImpl implements OWLProperty
 {
   // There is an equals method defined on this class.
   private String propertyURI;

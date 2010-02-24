@@ -175,7 +175,7 @@ public class DataValueImpl  implements DataValue {
     if(this == obj) return true;
     if((obj == null) || (obj.getClass() != this.getClass())) return false;
     DataValueImpl info = (DataValueImpl)obj;
-    return (value != null && info.value != null && value.toString().equals(info.value.toString()));
+    return (value != null && info.value != null && value.equals(info.value));
   } // equals
 
   public int hashCode()

@@ -9,4 +9,6 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.VariableAtomArgument;
 public class VariableAtomArgumentImpl extends ArgumentImpl implements VariableAtomArgument
 {
   public VariableAtomArgumentImpl(String variableName) { super(variableName); }
+  
+  public String toString() { return getVariableName(); }
 } // VariableAtomArgumentImpl

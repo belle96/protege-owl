@@ -62,7 +62,7 @@ public abstract class BuiltInArgumentImpl extends ArgumentImpl implements BuiltI
     if(this == obj) return true;
     if((obj == null) || (obj.getClass() != this.getClass())) return false;
     BuiltInArgumentImpl impl = (BuiltInArgumentImpl)obj;
-    return this.equals(impl) && 
+    return super.equals((ArgumentImpl)impl) && 
            ((builtInResult == impl.builtInResult) || (builtInResult != null && builtInResult.equals(impl.builtInResult)));
   } // equals
 

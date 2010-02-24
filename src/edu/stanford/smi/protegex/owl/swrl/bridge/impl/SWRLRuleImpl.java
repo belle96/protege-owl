@@ -12,7 +12,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.Atom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInAtom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.ClassAtom;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValue;
+import edu.stanford.smi.protegex.owl.swrl.bridge.DataValueArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRule;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.DataValueConversionException;
@@ -287,9 +287,10 @@ public class SWRLRuleImpl implements SWRLRule
            if (columnIndex != -1) sqwrlResult.addOrderByColumn(columnIndex, false);
            else throw new SQWRLException("variable ?" + variableName + " must be selected before it can be ordered");
          } else if (builtInName.equalsIgnoreCase(SQWRLNames.ColumnNames)) {
-           if (argument instanceof OWLDataValue && ((OWLDataValue)argument).isString()) {
-             OWLDataValue literal = (OWLDataValue)argument; sqwrlResult.addColumnDisplayName(literal.getString());
-           } else throw new SQWRLException("only string literals allowed as column names - found '" + argument + "'");
+           if (argument instanceof DataValueArgument && ((DataValueArgument)argument).getDataValue().isString()) {
+             DataValueArgument dataValueArgument = (DataValueArgument)argument;
+             sqwrlResult.addColumnDisplayName(dataValueArgument.getDataValue().getString());
+           } else throw new SQWRLException("only string literals allowed as column names - found: " + argument);
          } // if
          argumentIndex++;
        } // for
