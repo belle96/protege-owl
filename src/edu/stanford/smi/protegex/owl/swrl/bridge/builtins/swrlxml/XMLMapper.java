@@ -80,7 +80,7 @@ public class XMLMapper
 
       if (propertyValue == null) throw new XMLMapperException("no document root element specified");
       else if (propertyValue instanceof OWLIndividual) xmlRootElement = (OWLIndividual)propertyValue;
-      else throw new XMLMapperException("invalid document root element '" + propertyValue + "'");
+      else throw new XMLMapperException("invalid document root element " + propertyValue);
 
       xmlElement2Element(doc, xmlRootElement, null);
     } catch (SWRLOWLUtilException e) {
@@ -136,7 +136,7 @@ public class XMLMapper
     Element rootElement = doc.getRootElement();
     OWLIndividual xmlDocument;
 
-    if (isSchema(rootElement)) throw new XMLMapperException("not expecting 'schema' root element");
+    if (isSchema(rootElement)) throw new XMLMapperException("not expecting schema root element");
 
     addSWRLXMLImport();
 
@@ -282,7 +282,7 @@ public class XMLMapper
   public Element getComplexTypeChild(Element element) throws XMLMapperException
   {
     if (!hasComplexTypeChild(element))
-      throw new XMLMapperException("expecting complexType child for element '" + getNameAttributeValue(element) + "'");
+      throw new XMLMapperException("expecting complexType child for element " + getNameAttributeValue(element));
     return element.getChild("complexType", element.getNamespace());
   } // getComplexTypeChild
 
@@ -305,7 +305,7 @@ public class XMLMapper
   private String getAttributeValue(Element element, String attributeName) throws XMLMapperException
   {
     if (!hasAttribute(element, attributeName))
-      throw new XMLMapperException("no '" + attributeName + "' attribute found in element '" + element.getName() + "'");
+      throw new XMLMapperException("no " + attributeName + " attribute found in element " + element.getName());
 
     return element.getAttributeValue(attributeName);
   } // getAttributeValue
@@ -313,7 +313,7 @@ public class XMLMapper
   public Element getFirstChild(Element element) throws XMLMapperException
   {
     if (element.getChildren() == null) 
-      throw new XMLMapperException("getFirstChild called on non-parent element '" + getNameAttributeValue(element) + "'");
+      throw new XMLMapperException("getFirstChild called on non-parent element " + getNameAttributeValue(element));
 
     return (Element)element.getChildren().get(0);
   } // getFirstChild

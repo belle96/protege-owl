@@ -29,14 +29,14 @@ public interface SWRLBuiltInBridge
   void injectOWLIndividual(OWLIndividual owlIndividual) throws SWRLBuiltInBridgeException;
   OWLIndividual injectOWLIndividualOfClass(OWLClass owlClass) throws SWRLBuiltInBridgeException;
 
-  boolean isOWLClass(String className);
-  boolean isOWLObjectProperty(String propertyName);
-  boolean isOWLDataProperty(String propertyName);
-  boolean isOWLIndividual(String individualName);
-  boolean isOWLIndividualOfClass(String individualName, String className);
+  boolean isOWLClass(String classURI);
+  boolean isOWLObjectProperty(String propertyURI);
+  boolean isOWLDataProperty(String propertyURI);
+  boolean isOWLIndividual(String individualURI);
+  boolean isOWLIndividualOfClass(String individualURI, String classURI);
   Set<OWLIndividual> getOWLIndividuals();
 
-  Set<OWLPropertyAssertionAxiom> getOWLPropertyAssertionAxioms(String individualName, String propertyName) throws SWRLBuiltInBridgeException;
+  Set<OWLPropertyAssertionAxiom> getOWLPropertyAssertionAxioms(String individualURI, String propertyURI) throws SWRLBuiltInBridgeException;
 
   /**
    * Invoke a SWRL built-in. Should not be called by built-ins in general; provided (perhaps temporarily) for specialized invocation

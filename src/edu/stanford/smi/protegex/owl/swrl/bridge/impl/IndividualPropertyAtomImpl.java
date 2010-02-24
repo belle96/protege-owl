@@ -19,9 +19,9 @@ public class IndividualPropertyAtomImpl extends AtomImpl implements IndividualPr
     this.argument2 = argument2;
   } // IndividualPropertyAtomImpl
 
-  public IndividualPropertyAtomImpl(String propertyName)
+  public IndividualPropertyAtomImpl(String propertyURI)
   {
-    this.propertyURI = propertyName;
+    this.propertyURI = propertyURI;
     this.argument1 = null;
     this.argument2 = null;
   } // IndividualPropertyAtomImpl

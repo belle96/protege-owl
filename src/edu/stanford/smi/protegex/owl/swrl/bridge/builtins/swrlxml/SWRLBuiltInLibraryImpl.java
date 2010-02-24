@@ -77,9 +77,9 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
           documentMappings.put(inputXMLStreamName, xmlDocument);
           documents.put(xmlDocument.getURI(), doc);
         } catch (XMLProcessorException e) {
-          throw new BuiltInException("error processing XML stream '" + inputXMLStreamName + "': " + e.getMessage());
+          throw new BuiltInException("error processing XML stream " + inputXMLStreamName + ": " + e.getMessage());
         } catch (XMLBridgeMapperException e) {
-          throw new BuiltInException("error mapping XML stream '" + inputXMLStreamName + "': " + e.getMessage());
+          throw new BuiltInException("error mapping XML stream " + inputXMLStreamName + ": " + e.getMessage());
         } // try
       } else xmlDocument = documentMappings.get(inputXMLStreamName);
 
@@ -114,7 +114,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
             Element element;
             
             if (!(o instanceof Element)) 
-              throw new BuiltInException("path '" + path + "' must only refer to XML elements, found '" + o.getClass().getName() + "'");
+              throw new BuiltInException("path " + path + " must only refer to XML elements, found " + o.getClass());
 
             element = (Element)o;
             elements.put(xmlElement.getURI(), element);
@@ -123,7 +123,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
           } // while
           if (!owlElements.isEmpty()) elementMappings.put(path, owlElements);
         } catch (JDOMException e) {
-          throw new BuiltInException("JDOM error processing XML path '" + path + "': " + e.getMessage());
+          throw new BuiltInException("JDOM error processing XML path " + path + ": " + e.getMessage());
         } // try
       } else owlElements = elementMappings.get(path);
 
@@ -166,7 +166,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
           Element element;
           
           if (!(o instanceof Element)) 
-            throw new BuiltInException("path '" + path + "' must only refer to XML elements, found '" + o.getClass().getName() + "'");
+            throw new BuiltInException("path " + path + " must only refer to XML elements, found " + o.getClass());
           
           element = (Element)o;
           elements.put(xmlElement.getURI(), element);
@@ -174,7 +174,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
           owlElements.add(xmlElement);
         } // while
       } catch (JDOMException e) {
-        throw new BuiltInException("JDOM error processing XML path '" + path + "': " + e.getMessage());
+        throw new BuiltInException("JDOM error processing XML path " + path + ": " + e.getMessage());
       } // try
       
       if (owlElements.isEmpty()) result = false;
@@ -219,15 +219,15 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     Document document = null;
 
     if (isArgumentAnIndividual(argumentNumber, arguments)) {
-      String individualName = getArgumentAsAnIndividualURI(argumentNumber, arguments);
+      String individualURI = getArgumentAsAnIndividualURI(argumentNumber, arguments);
       
-      if (getInvokingBridge().isOWLIndividualOfClass(individualName, XMLBridgeMapper.XMLDocumentMappingOWLClassName)) {
-      } else throw new InvalidBuiltInArgumentException(argumentNumber, "individual " + individualName + " is not a " +
+      if (getInvokingBridge().isOWLIndividualOfClass(individualURI, XMLBridgeMapper.XMLDocumentMappingOWLClassName)) {
+      } else throw new InvalidBuiltInArgumentException(argumentNumber, "individual " + individualURI + " is not a " +
                                                        XMLBridgeMapper.XMLDocumentMappingOWLClassName);
 
-      if (documents.containsKey(individualName)) document = documents.get(individualName);
+      if (documents.containsKey(individualURI)) document = documents.get(individualURI);
       else throw new InvalidBuiltInArgumentException(argumentNumber, "" + XMLBridgeMapper.XMLDocumentMappingOWLClassName + " individual " + 
-                                                     individualName + " does not refer to a valid document");
+                                                     individualURI + " does not refer to a valid document");
     } else throw new InvalidBuiltInArgumentException(argumentNumber, "expecting a " +  XMLBridgeMapper.XMLDocumentMappingOWLClassName + " individual" +
                                                      ", got " + arguments.get(argumentNumber));
     return document;
@@ -238,17 +238,17 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     Element element = null;
 
     if (isArgumentAnIndividual(argumentNumber, arguments)) {
-      String individualName = getArgumentAsAnIndividualURI(argumentNumber, arguments);
+      String individualURI = getArgumentAsAnIndividualURI(argumentNumber, arguments);
       
-      if (getInvokingBridge().isOWLIndividualOfClass(individualName, XMLBridgeMapper.XMLElementMappingOWLClassName)) {
-      } else throw new InvalidBuiltInArgumentException(argumentNumber, "individual '" + individualName + "' is not a " +
+      if (getInvokingBridge().isOWLIndividualOfClass(individualURI, XMLBridgeMapper.XMLElementMappingOWLClassName)) {
+      } else throw new InvalidBuiltInArgumentException(argumentNumber, "individual " + individualURI + " is not a " +
                                                        XMLBridgeMapper.XMLElementMappingOWLClassName);
 
-      if (elements.containsKey(individualName)) element = elements.get(individualName);
-      else throw new InvalidBuiltInArgumentException(argumentNumber, "" + XMLBridgeMapper.XMLElementMappingOWLClassName + " individual '" + 
-                                                     individualName + "' does not refer to a valid element");
+      if (elements.containsKey(individualURI)) element = elements.get(individualURI);
+      else throw new InvalidBuiltInArgumentException(argumentNumber, "" + XMLBridgeMapper.XMLElementMappingOWLClassName + " individual " + 
+                                                     individualURI + " does not refer to a valid element");
     } else throw new InvalidBuiltInArgumentException(argumentNumber, "expecting a " +  XMLBridgeMapper.XMLElementMappingOWLClassName + " individual" +
-                                                     ", got '" + arguments.get(argumentNumber) + "'");
+                                                     ", got " + arguments.get(argumentNumber) + "");
     return element;
   } // getArgumentAsAnElement
 

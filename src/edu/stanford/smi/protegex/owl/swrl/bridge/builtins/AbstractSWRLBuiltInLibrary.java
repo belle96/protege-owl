@@ -854,7 +854,7 @@ public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
 	    } else if (argument instanceof DataValueArgument) {
 	      DataValueArgument dataValue = (DataValueArgument)argument;
 	      message += "data value with value " + dataValue.toString();
-	    } else message += "unknown type " + argument.getClass().getName();
+	    } else message += "unknown type " + argument.getClass();
 	  } // if
 	  
 	  return message;
@@ -888,7 +888,7 @@ public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
 	    if (dataValue.isNumeric()) result = dataValue.getNumber();
 	    else if (dataValue.isString()) result = dataValue.getString();
 	    else throw new BuiltInException("data value with value " + dataValue.toString() + " not supported - strings and number data values only");
-	  } else throw new BuiltInException("argument " + argument + " of unknown type " + argument.getClass().getName());
+	  } else throw new BuiltInException("argument " + argument + " of unknown type " + argument.getClass());
 	
 	  return result;
 	} // getArgumentAsAPropertyValue

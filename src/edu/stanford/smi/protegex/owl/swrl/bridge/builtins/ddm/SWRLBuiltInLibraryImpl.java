@@ -65,18 +65,18 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     boolean result = false, isUnboundIndividualArgument;
     OWLClass owlClass = null;
     Set<OWLIndividual> individuals = new HashSet<OWLIndividual>();
-    String className;
+    String classURI;
     Mapper mapper = null;
 
     checkNumberOfArgumentsAtLeast(2, arguments.size());
 
-    className = getArgumentAsAClassURI(0, arguments);
+    classURI = getArgumentAsAClassURI(0, arguments);
 
     isUnboundIndividualArgument = isUnboundArgument(1, arguments);
 
-    if (!isUnboundIndividualArgument) throw new BuiltInException("bound arguments not yet implemented, class = '" + className + "'");
+    if (!isUnboundIndividualArgument) throw new BuiltInException("bound arguments not yet implemented, class = '" + classURI + "'");
 
-    owlClass = getInvokingBridge().getOWLDataFactory().getOWLClass(className);  
+    owlClass = getInvokingBridge().getOWLDataFactory().getOWLClass(classURI);  
    
     individuals = mapper.mapOWLClass(owlClass);
     
@@ -100,18 +100,18 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     OWLProperty owlProperty;
     OWLIndividual subjectOWLIndividual = null, objectOWLIndividual = null;
     Set<OWLObjectPropertyAssertionAxiom> axioms = new HashSet<OWLObjectPropertyAssertionAxiom>();
-    String propertyName;
+    String propertyURI;
     Mapper mapper;
 
     checkNumberOfArgumentsAtLeast(1, arguments.size());
     checkForUnboundArguments(arguments);
 
-    propertyName = getArgumentAsAPropertyURI(0, arguments);
+    propertyURI = getArgumentAsAPropertyURI(0, arguments);
 
     hasSubject = (arguments.size() > 1);
     hasObject = (arguments.size() > 2);
 
-    owlProperty = getInvokingBridge().getOWLDataFactory().getOWLObjectProperty(propertyName);
+    owlProperty = getInvokingBridge().getOWLDataFactory().getOWLObjectProperty(propertyURI);
     
     if (hasSubject) {
       String subjectIndividualName = getArgumentAsAnIndividualURI(1, arguments);
@@ -144,18 +144,18 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     DataValue dataValue = null;
     OWLDataValue owlDataValue;
     Set<OWLDataPropertyAssertionAxiom> axioms = new HashSet<OWLDataPropertyAssertionAxiom>();
-    String propertyName;
+    String propertyURI;
     Mapper mapper = null;
 
     checkNumberOfArgumentsAtLeast(1, arguments.size());
     checkForUnboundArguments(arguments);
 
-    propertyName = getArgumentAsAPropertyURI(0, arguments);
+    propertyURI = getArgumentAsAPropertyURI(0, arguments);
 
     hasSubject = (arguments.size() > 1) && isArgumentAnIndividual(1, arguments);
     hasValue = (arguments.size() > 2 || (arguments.size() > 1 && isArgumentADatatypeValue(1, arguments)));
 
-    owlProperty = getInvokingBridge().getOWLDataFactory().getOWLDataProperty(propertyName);
+    owlProperty = getInvokingBridge().getOWLDataFactory().getOWLDataProperty(propertyURI);
     
     if (hasSubject) {
       String subjectIndividualURI = getArgumentAsAnIndividualURI(1, arguments);

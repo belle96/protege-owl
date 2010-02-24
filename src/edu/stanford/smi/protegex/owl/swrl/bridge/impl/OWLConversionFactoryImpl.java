@@ -109,7 +109,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
     individuals = new HashMap<String, OWLIndividual>();
   } // OWLConversionFactoryImpl
   
-  public boolean containsClassReference(String className) { return SWRLOWLUtil.isOWLClass(owlModel, className); }
+  public boolean containsClassReference(String classURI) { return SWRLOWLUtil.isOWLClass(owlModel, classURI); }
   public boolean isOWLProperty(String propertyURI) { return SWRLOWLUtil.isProperty(owlModel, propertyURI); }
   public boolean containsObjectPropertyReference(String propertyURI) { return SWRLOWLUtil.isOWLObjectProperty(owlModel, propertyURI); }
   public boolean containsDataPropertyReference(String propertyURI) { return SWRLOWLUtil.isOWLDataProperty(owlModel, propertyURI); }
@@ -373,7 +373,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
                                                    " of type " + datatype);
     } catch (DataValueConversionException e) {
       throw new OWLConversionFactoryException("error creating an OWLDataValue object for RDFS literal value " + literal.getString() + 
-                                              " with type " + datatype.getName() + ": " + e.getMessage());
+                                              " with type " + datatype.getURI() + ": " + e.getMessage());
     } // try
 
     return dataValueArgument;
@@ -416,7 +416,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
                                                    " of type '" + datatype);
     } catch (DataValueConversionException e) {
       throw new OWLConversionFactoryException("error creating an OWLDataValue object for RDFS literal value " + literal.getString() + 
-                                              " with type " + datatype.getName() + ": " + e.getMessage());
+                                              " with type " + datatype.getURI() + ": " + e.getMessage());
     } // try
 
     return dataValue;

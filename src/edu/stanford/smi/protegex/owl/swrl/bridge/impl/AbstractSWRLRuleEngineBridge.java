@@ -368,8 +368,8 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
 
     public Set<OWLIndividual> getOWLIndividuals() { return new HashSet<OWLIndividual>(allOWLIndividuals.values()); }
 
-  public boolean isInjectedOWLClass(String className) { return injectedOWLClasses.containsKey(className); }
-  public boolean isInjectedOWLIndividual(String individualName) { return injectedOWLIndividuals.containsKey(individualName); }
+  public boolean isInjectedOWLClass(String classURI) { return injectedOWLClasses.containsKey(classURI); }
+  public boolean isInjectedOWLIndividual(String individualURI) { return injectedOWLIndividuals.containsKey(individualURI); }
   public boolean isInjectedOWLAxiom(OWLAxiom axiom) { return injectedOWLAxioms.contains(axiom); }
 
   // Convenience methods to display the contents of the bridge

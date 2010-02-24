@@ -166,7 +166,6 @@ public class DataValueImpl  implements DataValue {
     return "" + value;
   } // toString
 
-  public String getValueClassName() { return value.getClass().getName(); }
   public Object getValue() { return value; }
   private void setValue(Object value) { this.value = value; }
 

@@ -323,7 +323,7 @@ public class XMLBridgeMapper
   private String getAttributeValue(Element element, String attributeName) throws XMLBridgeMapperException
   {
     if (!hasAttribute(element, attributeName))
-      throw new XMLBridgeMapperException("no '" + attributeName + "' attribute found in element '" + element.getName() + "'");
+      throw new XMLBridgeMapperException("no " + attributeName + " attribute found in element " + element.getName());
 
     return element.getAttributeValue(attributeName);
   } // getAttributeValue

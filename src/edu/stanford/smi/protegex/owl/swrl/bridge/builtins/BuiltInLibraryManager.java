@@ -126,7 +126,7 @@ public abstract class BuiltInLibraryManager
     try {
       library.invokeResetMethod(bridge);
     } catch (Exception e) {
-      throw new BuiltInLibraryException("error calling 'reset' method in built-in library '" + library.getClass().getName() + "'");
+      throw new BuiltInLibraryException("error calling reset method in built-in library " + library.getClass());
     } // try
   } // invokeBuiltInLibraryResetMethod
   
