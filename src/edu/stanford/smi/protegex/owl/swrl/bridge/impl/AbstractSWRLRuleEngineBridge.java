@@ -135,7 +135,7 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
 
   } // importSWRLRulesAndOWLKnowledge
   
-  public String uri2Name(String uri)
+  public String uri2PrefixedName(String uri)
   {
   	return conversionFactory.uri2PrefixedName(uri);
   }

@@ -224,16 +224,16 @@ public class SQWRLQueryResultPanel extends JPanel
         SQWRLResultValue value = (result == null) ? null : result.getValue(column, row);
         if (value instanceof IndividualValue) {
           IndividualValue objectValue = (IndividualValue)value;
-          representation += queryEngine.uri2Name(objectValue.getURI());
+          representation += queryEngine.uri2PrefixedName(objectValue.getURI());
         } else if (value instanceof DataValue) {
           DataValue datatypeValue = (DataValue)value;
           representation += datatypeValue.toString();
         } else if (value instanceof ClassValue) {
           ClassValue classValue = (ClassValue)value;
-          representation += queryEngine.uri2Name(classValue.getURI());
+          representation += queryEngine.uri2PrefixedName(classValue.getURI());
         } else if (value instanceof PropertyValue) {
           PropertyValue propertyValue = (PropertyValue)value;
-          representation += queryEngine.uri2Name(propertyValue.getURI());
+          representation += queryEngine.uri2PrefixedName(propertyValue.getURI());
         } // if
       } catch (SQWRLException e) {}
 

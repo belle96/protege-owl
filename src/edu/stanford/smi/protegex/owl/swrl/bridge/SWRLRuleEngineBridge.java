@@ -29,6 +29,6 @@ public interface SWRLRuleEngineBridge extends SWRLRuleEngine, SQWRLQueryEngine
 
   OWLDataFactory getOWLDataFactory();
   
-  String uri2Name(String uri);
+  String uri2PrefixedName(String uri);
   String name2URI(String prefixedName);
 } // SWRLRuleEngineBridge
