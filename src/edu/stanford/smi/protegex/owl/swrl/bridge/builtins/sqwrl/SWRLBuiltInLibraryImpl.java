@@ -85,7 +85,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       	ObjectPropertyArgument objectPropertyArgument = (ObjectPropertyArgument)argument;
       	ObjectPropertyValue objectPropertyValue =  resultValueFactory.createObjectPropertyValue(objectPropertyArgument.getURI());
       	result.addRowData(objectPropertyValue); 
-      } else if (argument instanceof ObjectPropertyArgument) { 
+      } else if (argument instanceof DataPropertyArgument) { 
        	DataPropertyArgument dataPropertyArgument = (DataPropertyArgument)argument;
        	DataPropertyValue dataPropertyValue =  resultValueFactory.createDataPropertyValue(dataPropertyArgument.getURI());
        	result.addRowData(dataPropertyValue);
@@ -127,7 +127,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     	ObjectPropertyArgument objectPropertyArgument = (ObjectPropertyArgument)argument;
     	ObjectPropertyValue objectPropertyValue =  resultValueFactory.createObjectPropertyValue(objectPropertyArgument.getURI());
     	result.addRowData(objectPropertyValue); 
-    } else if (argument instanceof ObjectPropertyArgument) { 
+    } else if (argument instanceof DataPropertyArgument) { 
      	DataPropertyArgument dataPropertyArgument = (DataPropertyArgument)argument;
      	DataPropertyValue dataPropertyValue =  resultValueFactory.createDataPropertyValue(dataPropertyArgument.getURI());
      	result.addRowData(dataPropertyValue);
