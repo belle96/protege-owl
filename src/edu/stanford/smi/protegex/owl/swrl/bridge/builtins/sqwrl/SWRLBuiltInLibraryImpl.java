@@ -23,7 +23,6 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.DataPropertyArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.DataValueArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.IndividualArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.ObjectPropertyArgument;
-import edu.stanford.smi.protegex.owl.swrl.bridge.PropertyArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.builtins.AbstractSWRLBuiltInLibrary;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.InvalidBuiltInArgumentException;
@@ -244,28 +243,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       } else throw new InvalidBuiltInArgumentException(0, "expecting numeric literal, got " + argument);
       
       result = true;
-    } else { // SQWRL collection operator
-      String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
-      Collection<BuiltInArgument> collection = getCollection(collectionID); // Check collectionID validity
-      
-      if (collection.isEmpty()) result = false;
-      else {
-    	DataValueArgument minValue = null;
-        
-    	for (BuiltInArgument element : collection) {
-          checkThatElementIsComparable(element);
-          DataValueArgument value = (DataValueArgument)element;
-          
-          if (minValue == null) minValue = value;
-          else if (value.compareTo(minValue) < 0) minValue = value; // TODO: fix this - can cause difficult-to-find class casts
-        } // for
-        
-        // System.err.println("setMin: set: " + set);
-        // System.err.println("setMin: min: " + minValue);
-
-        result = processResultArgument(arguments, 0, minValue);
-      } // if
-    } // if
+    } else result = least(arguments); // SQWRL collection operator
+    
     return result;
   } // min
 
@@ -288,24 +267,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       } else throw new InvalidBuiltInArgumentException(0, "expecting numeric literal, got: " + argument);
 
       result = true;
-    } else { // SQWRL collection operator
-      String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
-      Collection<BuiltInArgument> collection = getCollection(collectionID); // Checks collectionID validity
-      
-      if (collection.isEmpty()) result = false;
-      else {
-        DataValueArgument maxValue = null, value;
-        for (BuiltInArgument element : collection) {
-          checkThatElementIsComparable(element);
-          value = (DataValueArgument)element;
-          
-          if (maxValue == null) maxValue = value;
-          else if (value.compareTo(maxValue) > 0) maxValue = value; // TODO: fix this - can cause difficult-to-find class casts
-        } // for
-        
-        result = processResultArgument(arguments, 0, maxValue);
-      } // if
-    } // if
+    } else result = greatest(arguments); // SQWRL collection operator
+     
     return result;
   } // max
 
@@ -420,7 +383,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     return result;
   } // median
 
-    public boolean intersects(List<BuiltInArgument> arguments) throws BuiltInException 
+  public boolean intersects(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
     String setName1 = getCollectionName(arguments, 0); 
     String setName2 = getCollectionName(arguments, 1);
@@ -470,82 +433,129 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean union(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-	String setName1 = getCollectionName(arguments, 1); 
-	String setName2 = getCollectionName(arguments, 2);
-	int set1NumberOfGroupElements = getCollectionNumberOfGroupElements(setName1);
-	int set2NumberOfGroupElements = getCollectionNumberOfGroupElements(setName2);
-	int setResultNumberOfGroupElements = set1NumberOfGroupElements + set2NumberOfGroupElements;
-	String collectionIDResult = getCollectionIDInMultiCollectionOperation(arguments, 0, 3, 0, setResultNumberOfGroupElements); // Does argument checking
-	String collectionID1 = getCollectionIDInMultiCollectionOperation(arguments, 1, 3, 0, set1NumberOfGroupElements); // Does argument checking
-	String collectionID2 = getCollectionIDInMultiCollectionOperation(arguments, 2, 3, 0 + set1NumberOfGroupElements, set2NumberOfGroupElements); // Does argument checking
-	Collection<BuiltInArgument> collection1 = getCollection(collectionID1);
-	Collection<BuiltInArgument> collection2 = getCollection(collectionID2);
-	Set<BuiltInArgument> union = new HashSet<BuiltInArgument>(collection1);
-	
-	checkThatInAntecedent();
-	
-	union.addAll(collection2);
-	
-	if (!collections.containsKey(collectionIDResult)) collections.put(collectionIDResult, union);
-	
-	if (isUnboundArgument(0, arguments)) arguments.get(0).setBuiltInResult(createDataValueArgument(collectionIDResult));
-	
-	return true;
-  } // union
+		String setName1 = getCollectionName(arguments, 1); 
+		String setName2 = getCollectionName(arguments, 2);
+		int set1NumberOfGroupElements = getCollectionNumberOfGroupElements(setName1);
+		int set2NumberOfGroupElements = getCollectionNumberOfGroupElements(setName2);
+		int setResultNumberOfGroupElements = set1NumberOfGroupElements + set2NumberOfGroupElements;
+		String collectionIDResult = getCollectionIDInMultiCollectionOperation(arguments, 0, 3, 0, setResultNumberOfGroupElements); // Does argument checking
+		String collectionID1 = getCollectionIDInMultiCollectionOperation(arguments, 1, 3, 0, set1NumberOfGroupElements); // Does argument checking
+		String collectionID2 = getCollectionIDInMultiCollectionOperation(arguments, 2, 3, 0 + set1NumberOfGroupElements, set2NumberOfGroupElements); // Does argument checking
+		Collection<BuiltInArgument> collection1 = getCollection(collectionID1);
+		Collection<BuiltInArgument> collection2 = getCollection(collectionID2);
+		Set<BuiltInArgument> union = new HashSet<BuiltInArgument>(collection1);
+		
+		checkThatInAntecedent();
+		
+		union.addAll(collection2);
+		
+		if (!collections.containsKey(collectionIDResult)) collections.put(collectionIDResult, union);
+		
+		if (isUnboundArgument(0, arguments)) arguments.get(0).setBuiltInResult(createDataValueArgument(collectionIDResult));
+		
+		return true;
+	} // union
 
   public boolean difference(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-	String setName1 = getCollectionName(arguments, 1); 
-	String setName2 = getCollectionName(arguments, 2);
-	int set1NumberOfGroupElements = getCollectionNumberOfGroupElements(setName1);
-	int set2NumberOfGroupElements = getCollectionNumberOfGroupElements(setName2);
-	int setResultNumberOfGroupElements = set1NumberOfGroupElements + set2NumberOfGroupElements;
-	String collectionIDResult = getCollectionIDInMultiCollectionOperation(arguments, 0, 3, 0, setResultNumberOfGroupElements); // Does argument checking
-	String collectionID1 = getCollectionIDInMultiCollectionOperation(arguments, 1, 3, 0, set1NumberOfGroupElements); // Does argument checking
-	String collectionID2 = getCollectionIDInMultiCollectionOperation(arguments, 2, 3, 0 + set1NumberOfGroupElements, set2NumberOfGroupElements); // Does argument checking
-	Collection<BuiltInArgument> collection1 = getCollection(collectionID1);
-	Collection<BuiltInArgument> collection2 = getCollection(collectionID2);
-	Collection<BuiltInArgument> difference = new HashSet<BuiltInArgument>(collection1);
+		String setName1 = getCollectionName(arguments, 1); 
+		String setName2 = getCollectionName(arguments, 2);
+		int set1NumberOfGroupElements = getCollectionNumberOfGroupElements(setName1);
+		int set2NumberOfGroupElements = getCollectionNumberOfGroupElements(setName2);
+		int setResultNumberOfGroupElements = set1NumberOfGroupElements + set2NumberOfGroupElements;
+		String collectionIDResult = getCollectionIDInMultiCollectionOperation(arguments, 0, 3, 0, setResultNumberOfGroupElements); // Does argument checking
+		String collectionID1 = getCollectionIDInMultiCollectionOperation(arguments, 1, 3, 0, set1NumberOfGroupElements); // Does argument checking
+		String collectionID2 = getCollectionIDInMultiCollectionOperation(arguments, 2, 3, 0 + set1NumberOfGroupElements, set2NumberOfGroupElements); // Does argument checking
+		Collection<BuiltInArgument> collection1 = getCollection(collectionID1);
+		Collection<BuiltInArgument> collection2 = getCollection(collectionID2);
+		Collection<BuiltInArgument> difference = new HashSet<BuiltInArgument>(collection1);
+		
+		checkThatInAntecedent();
+		
+		difference.removeAll(collection2);
 	
-	checkThatInAntecedent();
-	
-	difference.removeAll(collection2);
-
-	if (!collections.containsKey(collectionIDResult)) collections.put(collectionIDResult, difference);
-	
-	if (isUnboundArgument(0, arguments)) arguments.get(0).setBuiltInResult(createDataValueArgument(collectionIDResult));
-	
-	return true;
+		if (!collections.containsKey(collectionIDResult)) collections.put(collectionIDResult, difference);
+		
+		if (isUnboundArgument(0, arguments)) arguments.get(0).setBuiltInResult(createDataValueArgument(collectionIDResult));
+		
+		return true;
   } // difference
 
   public boolean contains(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
     String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 0, 2); // Does argument checking
-    //BuiltInArgument element = arguments.get(1);
     
     checkThatInAntecedent();
     
     return processResultArgument(arguments, 1, getCollection(collectionID));
-    
-    // System.err.println("sqwrl.contains: arguments: " + arguments);
-       
-    //return getCollection(collectionID).contains(element);
   } // contains
 
   public boolean notContains(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-	checkThatInAntecedent();
+	  checkThatInAntecedent();
 	
     return !contains(arguments);
   } // notContains
 
+  public boolean nth(List<BuiltInArgument> arguments) throws BuiltInException 
+  { 
+    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
+    int n = getArgumentAsAPositiveInteger(2, arguments) - 1; // 1-offset for user, 0 for processing
+    Collection<BuiltInArgument> collection = getCollection(collectionID);
+    boolean result = false;
+
+    checkThatInAntecedent();
+    
+    if (!collection.isEmpty()) {
+      SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
+      BuiltInArgument array[] = (BuiltInArgument[])sortedSet.toArray(new BuiltInArgument[sortedSet.size()]);
+      
+      if (n >= 0 && n < array.length) {
+        BuiltInArgument nth = array[n];
+        result = processResultArgument(arguments, 0, nth);
+      } else result = false;
+    } // if
+
+    return result;
+  } // nth
+
+  public boolean notNth(List<BuiltInArgument> arguments) throws BuiltInException 
+  { 
+    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
+    int n = getArgumentAsAPositiveInteger(2, arguments) - 1;  // 1-offset for user, 0 for processing
+    Collection<BuiltInArgument> collection = getCollection(collectionID);
+    boolean result = false;
+
+    checkThatInAntecedent();
+    
+    if (!collection.isEmpty()) {
+      SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
+      BuiltInArgument array[] = (BuiltInArgument[])sortedSet.toArray(new BuiltInArgument[sortedSet.size()]);
+
+      if (n >= 0 && n < array.length) {
+        BuiltInArgument nth = array[n];
+        sortedSet.remove(nth);
+        result = processResultArgument(arguments, 0, sortedSet);
+      } else result = false;
+    } // if
+
+    return result;
+  } // notNth
+
+  public boolean last(List<BuiltInArgument> arguments) throws BuiltInException { return greatest(arguments); }
+  public boolean notLast(List<BuiltInArgument> arguments) throws BuiltInException { return notGreatest(arguments); }
+  public boolean lastN(List<BuiltInArgument> arguments) throws BuiltInException { return greatestN(arguments); }
+  public boolean notLastN(List<BuiltInArgument> arguments) throws BuiltInException { return notGreatestN(arguments); }
+  public boolean first(List<BuiltInArgument> arguments) throws BuiltInException { return least(arguments); }
+  public boolean notFirst(List<BuiltInArgument> arguments) throws BuiltInException { return notLeast(arguments); }
+  public boolean firstN(List<BuiltInArgument> arguments) throws BuiltInException { return leastN(arguments); }
+  public boolean notFirstN(List<BuiltInArgument> arguments) throws BuiltInException { return notLeastN(arguments); }
+  
   public boolean greatest(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
     String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
     Collection<BuiltInArgument> collection = getCollection(collectionID);
     boolean result = false;
-
-    checkThatInAntecedent();
     
     if (!collection.isEmpty()) {
       SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
@@ -555,6 +565,22 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
     return result;
   } // greatest
+
+  public boolean notGreatest(List<BuiltInArgument> arguments) throws BuiltInException 
+  { 
+    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
+    Collection<BuiltInArgument> collection = getCollection(collectionID);
+    boolean result = false;
+    
+    if (!collection.isEmpty()) {
+      SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
+      BuiltInArgument greatest = sortedSet.last();
+      sortedSet.remove(greatest);
+      result = processResultArgument(arguments, 0, sortedSet);
+    } // if
+
+    return result;
+  } // notGreatest
 
   public boolean greatestN(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
@@ -600,6 +626,43 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     return result;
   } // notGreatestN
 
+  public boolean least(List<BuiltInArgument> arguments) throws BuiltInException 
+  { 
+    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
+    Collection<BuiltInArgument> collection = getCollection(collectionID);
+    boolean result = false;
+
+    checkThatInAntecedent();
+    
+    if (!collection.isEmpty()) {
+      SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
+      BuiltInArgument least = sortedSet.first();
+
+      result = processResultArgument(arguments, 0, least);
+    } // if
+
+    return result;
+  } // least
+
+  public boolean notLeast(List<BuiltInArgument> arguments) throws BuiltInException 
+  { 
+    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
+    Collection<BuiltInArgument> collection = getCollection(collectionID);
+    boolean result = false;
+
+    checkThatInAntecedent();
+    
+    if (!collection.isEmpty()) {
+      SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
+      BuiltInArgument least = sortedSet.first();
+      sortedSet.remove(least);
+
+      result = processResultArgument(arguments, 0, sortedSet);
+    } // if
+
+    return result;
+  } // least
+
   public boolean leastN(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
     String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
@@ -644,24 +707,6 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     return result;
   } // leastN
 
-  public boolean least(List<BuiltInArgument> arguments) throws BuiltInException 
-  { 
-    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
-    Collection<BuiltInArgument> collection = getCollection(collectionID);
-    boolean result = false;
-
-    checkThatInAntecedent();
-    
-    if (!collection.isEmpty()) {
-      SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
-      BuiltInArgument least = sortedSet.first();
-
-      result = processResultArgument(arguments, 0, least);
-    } // if
-
-    return result;
-  } // least
-
   // Internal methods
 
   private boolean isCollection(String collectionID) { return collections.containsKey(collectionID); }
@@ -683,7 +728,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   private String getCollectionIDInMake(List<BuiltInArgument> arguments) throws BuiltInException
   {
-	checkNumberOfArgumentsAtLeast(2, arguments.size());
+	  checkNumberOfArgumentsAtLeast(2, arguments.size());
 	
     String ruleName = getInvokingRuleName();
     String collectionName = getCollectionName(arguments, 0); // Always the first argument for a collection
@@ -720,15 +765,14 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     String groupPattern = "";
 
     if (hasGroupPattern) {
-    	groupPattern = createInvocationPattern(getInvokingBridge(), ruleName, 0, false, 
-    			                               arguments.subList(numberOfCoreArguments, arguments.size()));
+    	groupPattern = createInvocationPattern(getInvokingBridge(), ruleName, 0, false, arguments.subList(numberOfCoreArguments, arguments.size()));
     } // if
 
     return setName + ":" + groupPattern;
   } // getCollectionIDInSingleCollectionOperation
 
   private String getCollectionIDInMultiCollectionOperation(List<BuiltInArgument> arguments, int setArgumentNumber, 
-                                             	           int coreArgumentNumber, int groupArgumentOffset, int numberOfRelevantGroupArguments) 
+                                             	             int coreArgumentNumber, int groupArgumentOffset, int numberOfRelevantGroupArguments) 
    throws BuiltInException
   {
     String ruleName = getInvokingRuleName();

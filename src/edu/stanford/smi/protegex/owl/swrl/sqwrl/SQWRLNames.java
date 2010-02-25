@@ -43,13 +43,28 @@ public class SQWRLNames
   public static final String IsEmpty = SQWRLNamespace + "isEmpty";
   public static final String NotIsEmpty = SQWRLNamespace + "notIsEmpty";
   public static final String Contains = SQWRLNamespace + "contains";
+  public static final String NotContains = SQWRLNamespace + "notContains";
+  public static final String Nth = SQWRLNamespace + "nth";
+  public static final String NotNth = SQWRLNamespace + "notNth";
+  
+  public static final String Last = SQWRLNamespace + "last";
+  public static final String NotLast = SQWRLNamespace + "notLast";
+  public static final String LastN = SQWRLNamespace + "lastN";
+  public static final String NotLastN = SQWRLNamespace + "notLastN";
+  public static final String First = SQWRLNamespace + "first";
+  public static final String NotFirst = SQWRLNamespace + "notFirst";
+  public static final String FirstN = SQWRLNamespace + "firstN";
+  public static final String NotFirstN = SQWRLNamespace + "notFirstN";
+  
   public static final String Greatest = SQWRLNamespace + "greatest";
+  public static final String NotGreatest = SQWRLNamespace + "notGreatest";
   public static final String GreatestN = SQWRLNamespace + "greatestN";
   public static final String NotGreatestN = SQWRLNamespace + "notGreatestN";
   public static final String Least = SQWRLNamespace + "least";
+  public static final String NotLeast = SQWRLNamespace + "notLeast";
   public static final String LeastN = SQWRLNamespace + "leastN";
-  public static final String NotContains = SQWRLNamespace + "notContains";
-
+  public static final String NotLeastN = SQWRLNamespace + "notLeastN";
+  
   // Multi-collection operations
   public static final String Intersection = SQWRLNamespace + "intersection";
   public static final String Union = SQWRLNamespace + "union";
@@ -63,9 +78,10 @@ public class SQWRLNames
   private static final String collectionMakeBuiltInNamesArray[] = { MakeSet, MakeBag };
   private static final String collectionGroupBuiltInNamesArray[] = { GroupBy };
  
-  private static final String singleCollectionOperationBuiltInNamesArray[] = { Size, IsEmpty, Contains, 
-	  Greatest, GreatestN, NotGreatestN, Least, LeastN,
-      NotIsEmpty, NotContains,
+  private static final String singleCollectionOperationBuiltInNamesArray[] = 
+    { Size, IsEmpty, NotIsEmpty, Contains, NotContains, Nth, NotNth,
+  	  First, NotFirst, FirstN, NotFirstN, Last, NotLast, LastN, NotLastN,
+  	  Least, NotLeast, LeastN, NotLeastN, Greatest, NotGreatest, GreatestN, NotGreatestN,
       Min, Max, Sum, Avg, Median};
 
   private static final String multiCollectionOperationBuiltInNamesArray[] = { Intersection, Union, Difference, Intersects, NotIntersects };
