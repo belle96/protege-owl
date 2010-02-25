@@ -113,7 +113,7 @@ public class SWRLRuleImpl implements SWRLRule
     List<BuiltInAtom> bodyBuiltInAtoms = new ArrayList<BuiltInAtom>();
     List<Atom> bodyNonBuiltInAtoms = new ArrayList<Atom>();
     Set<String> variableNamesUsedByNonBuiltInBodyAtoms = new HashSet<String>(); // By definition, these will always be bound.
-    Set<String> boundBuiltInVariableNames = new HashSet<String>(); // Names of variables bound by built-ins in this rule.
+    Set<String> variableNamesBoundByBuiltIns = new HashSet<String>(); // Names of variables bound by built-ins in this rule
  
     // Process the body atoms and build up list of (1) built-in body atoms, and (2) the variables used by non-built body in atoms.
     for (Atom atom : getBodyAtoms()) {
@@ -138,9 +138,9 @@ public class SWRLRuleImpl implements SWRLRule
           // unbound when this built-in is called. We thus set this built-in argument to unbound. If a built-in binds an argument, all later
           // built-ins (proceeding from left to right) will be passed the bound value of this variable during rule execution.
           if (!variableNamesUsedByNonBuiltInBodyAtoms.contains(argumentVariableName) &&
-              !boundBuiltInVariableNames.contains(argumentVariableName)) {
+              !variableNamesBoundByBuiltIns.contains(argumentVariableName)) {
             argument.setUnbound(); // Tell the built-in that it is expected to bind this argument.
-            boundBuiltInVariableNames.add(argumentVariableName); // Flag this as a bound variable for later built-ins.
+            variableNamesBoundByBuiltIns.add(argumentVariableName); // Flag this as a bound variable for later built-ins.
           } // if
         } // if
       } // for
@@ -317,6 +317,7 @@ public class SWRLRuleImpl implements SWRLRule
         if (builtInAtom.getNumberOfArguments() < 2) throw new SQWRLException("groupBy must have at least two arguments");
         if (!collectionNames.contains(collectionName)) throw new SQWRLException("groupBy applied to undefined collection ?" + collectionName);
         if (collectionGroupArgumentsMap.containsKey(collectionName)) throw new SQWRLException("groupBy specified more than once for same collection ?" + collectionName);
+        if (hasUnboundArgument(groupArguments)) throw new SQWRLException("unbound group argument passed to groupBy for collection ?" + collectionName);
         
         collectionGroupArgumentsMap.put(collectionName, groupArguments); // Store group arguments
 
@@ -366,6 +367,12 @@ public class SWRLRuleImpl implements SWRLRule
       } // if
     } // for
   } // preprocessSQWRLCollectionOperationBuiltIns
+  
+  private boolean hasUnboundArgument(List<BuiltInArgument> arguments)
+  {
+  	for (BuiltInArgument argument : arguments) if (argument.isUnbound()) return true;
+  	return false;
+  }
 
   public String toString()
   {
