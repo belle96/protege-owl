@@ -63,6 +63,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.DataValueConversionException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.InvalidPropertyNameException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLConversionFactoryException;
+import edu.stanford.smi.protegex.owl.swrl.bridge.sqwrl.impl.DataValueImpl;
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDAnyURI;
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDDate;
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDDateTime;

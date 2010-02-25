@@ -27,4 +27,7 @@ public interface DataValue extends SQWRLResultValue
   boolean isString();
   
   Object getValue();
+  
+  String toString();
+  String toQuotedString();
 } // DataValue

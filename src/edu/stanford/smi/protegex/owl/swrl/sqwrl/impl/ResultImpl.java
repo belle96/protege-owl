@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.impl.DataValueImpl;
+import edu.stanford.smi.protegex.owl.swrl.bridge.sqwrl.impl.DataValueImpl;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.ClassValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.IndividualValue;

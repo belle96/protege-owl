@@ -39,5 +39,6 @@ public interface OWLDataValue extends OWLPropertyValue
   Number getNumber() throws DataValueConversionException;
 
   String toString();
+  String toQuotedString();
 
 } // OWLDataValue

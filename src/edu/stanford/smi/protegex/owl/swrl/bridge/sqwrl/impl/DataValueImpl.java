@@ -1,5 +1,5 @@
 
-package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
+package edu.stanford.smi.protegex.owl.swrl.bridge.sqwrl.impl;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -160,10 +160,14 @@ public class DataValueImpl  implements DataValue {
     return ((java.lang.Byte)value).byteValue();
   } // getByte
 
-  // The caller can decide to quote or not.
   public String toString() 
   { 
     return "" + value;
+  } // toString
+  
+  public String toQuotedString() 
+  { 
+    return "\"" + value.toString().replaceAll("\"", "\\\\\"") + "\"";
   } // toString
 
   public Object getValue() { return value; }

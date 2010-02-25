@@ -16,5 +16,6 @@ public class ClassValueImpl implements ClassValue
   {
     return classURI.compareTo(((ClassValueImpl)o).getURI());
   } // compareTo
-
+	
+	public String toString() { return classURI; }
 }

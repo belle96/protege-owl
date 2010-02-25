@@ -27,7 +27,7 @@ public class SQWRLTest
       OWLModel owlModel = SWRLOWLUtil.createJenaOWLModel(owlFileName);
       SQWRLQueryEngine queryEngine = SQWRLQueryEngineFactory.create(owlModel);
       SQWRLResult result;
-
+      
       result = queryEngine.runSQWRLQuery("T1", "Adult(?a) . sqwrl:makeSet(?s, ?a) . sqwrl:contains(?s, ?e) -> sqwrl:select(?e)");
 
       while (result.hasNext()) {

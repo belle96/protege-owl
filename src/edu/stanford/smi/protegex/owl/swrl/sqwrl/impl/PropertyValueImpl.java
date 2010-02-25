@@ -15,5 +15,6 @@ public abstract class PropertyValueImpl implements PropertyValue
   {
     return getURI().compareTo(((PropertyValueImpl)o).getURI());
   } // compareTo
- 
+	
+	public String toString() { return propertyURI; }
 }

@@ -15,5 +15,7 @@ public class IndividualValueImpl implements IndividualValue
   {
     return getURI().compareTo(((IndividualValueImpl)o).getURI());
   } // compareTo
- 
+	
+	public String toString() { return individualURI; }
+
 }
