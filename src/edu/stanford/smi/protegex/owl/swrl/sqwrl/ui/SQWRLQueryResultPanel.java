@@ -158,11 +158,11 @@ public class SQWRLQueryResultPanel extends JPanel
             } // while
             result.reset();
             writer.close();
-            controlPanel.appendText("Sucessfully saved results of query '" + queryName + "' to CSV file '" + selectedFile.getPath() + "'.\n");
+            controlPanel.appendText("Sucessfully saved results of query " + queryName + " to CSV file " + selectedFile.getPath() + ".\n");
           } // if
         } // if
       } catch (Throwable e) {
-        JOptionPane.showMessageDialog(null, "Error saving file '" + selectedFile.getPath() + "': " + e.getMessage(), "Error saving file",
+        JOptionPane.showMessageDialog(null, "Error saving file " + selectedFile.getPath() + ": " + e.getMessage(), "Error saving file",
                                       JOptionPane.ERROR_MESSAGE);
         // TODO: findbugs - stream not closed on all paths
       } // try

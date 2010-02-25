@@ -171,8 +171,8 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
 
     if (isOrdered && (isAscending != ascending)) {
       if (isAscending) 
-        throw new SQWRLException("attempt to order column '" + allColumnNames.get(orderedColumnIndex) + "' ascending when descending was previously selected");
-      else throw new SQWRLException("attempt to order column '" + allColumnNames.get(orderedColumnIndex) + "' descending when ascending was previously selected");
+        throw new SQWRLException("attempt to order column " + allColumnNames.get(orderedColumnIndex) + " ascending when descending was previously selected");
+      else throw new SQWRLException("attempt to order column " + allColumnNames.get(orderedColumnIndex) + " descending when ascending was previously selected");
     } // if
 
     isOrdered = true;
@@ -184,7 +184,7 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
   public void addColumnDisplayName(String columnName) throws SQWRLException
   {
     if (columnName.length() == 0 || columnName.indexOf(',') != -1) 
-      throw new SQWRLException("invalid column name '" + columnName + "' - no commas or empty names allowed");
+      throw new SQWRLException("invalid column name " + columnName + " - no commas or empty names allowed");
 
     columnDisplayNames.add(columnName);
   } // addColumnDisplayName
@@ -268,8 +268,8 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
         (!aggregateColumnIndexes.get(Integer.valueOf(rowDataColumnIndex)).equals(SQWRLNames.CountAggregateFunction)) && 
         (!aggregateColumnIndexes.get(Integer.valueOf(rowDataColumnIndex)).equals(SQWRLNames.CountDistinctAggregateFunction)) && 
         (!isNumericValue(value)))
-        throw new SQWRLException("attempt to add non numeric value '" + value + "' to min, max, sum, or avg aggregate column '" + 
-                                  allColumnNames.get(rowDataColumnIndex) + "'");
+        throw new SQWRLException("attempt to add non numeric value " + value + " to min, max, sum, or avg aggregate column " + 
+                                  allColumnNames.get(rowDataColumnIndex));
     rowData.add(value);
     rowDataColumnIndex++;
 
@@ -402,7 +402,7 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
   public IndividualValue getObjectValue(String columnName) throws SQWRLException
   {
     if (!hasObjectValue(columnName)) 
-      throw new InvalidColumnTypeException("expecting ObjectValue type for column '" + columnName + "'");
+      throw new InvalidColumnTypeException("expecting ObjectValue type for column " + columnName);
     return (IndividualValue)getValue(columnName);
   } // getObjectValue
   
@@ -414,14 +414,14 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
   public DataValue getDataValue(String columnName) throws SQWRLException
   {
     if (!hasDataValue(columnName)) 
-      throw new InvalidColumnTypeException("expecting DataValue type for column '" + columnName + "'");
+      throw new InvalidColumnTypeException("expecting DataValue type for column " + columnName);
     return (DataValue)getValue(columnName);
   } // getDataValue
 
   public ClassValue getClassValue(String columnName) throws SQWRLException
   {
     if (!hasClassValue(columnName)) 
-      throw new InvalidColumnTypeException("expecting ClassValue type for column '" + columnName + "'");
+      throw new InvalidColumnTypeException("expecting ClassValue type for column " + columnName);
     return (ClassValue)getValue(columnName);
   } // getClassValue
 
@@ -438,7 +438,7 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
   public PropertyValue getPropertyValue(String columnName) throws SQWRLException
   {
     if (!hasPropertyValue(columnName)) 
-      throw new InvalidColumnTypeException("expecting PropertyValue type for column '" + columnName + "'");
+      throw new InvalidColumnTypeException("expecting PropertyValue type for column " + columnName);
     return (PropertyValue)getValue(columnName);
   } // getPropertyValue
   
@@ -552,7 +552,7 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
 
   private void checkColumnName(String columnName) throws InvalidColumnNameException
   {
-    if (!allColumnNames.contains(columnName)) throw new InvalidColumnNameException("Invalid column name: " + columnName);
+    if (!allColumnNames.contains(columnName)) throw new InvalidColumnNameException("invalid column name " + columnName);
   } // checkColumnName
   
   private void throwExceptionIfRowNotOpen() throws SQWRLException
@@ -574,7 +574,7 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
   private void checkRowIndex(int rowIndex) throws SQWRLException
   {
     if (rowIndex < 0 || rowIndex >= getNumberOfRows())
-      throw new InvalidRowIndexException("Row index " + rowIndex + " out of bounds");
+      throw new InvalidRowIndexException("row index " + rowIndex + " out of bounds");
   } // checkRowIndex
   
   private boolean containsOneOf(List<Integer> collection1, Set<Integer> collection2)
@@ -655,7 +655,7 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
         else if (aggregateFunctionName.equalsIgnoreCase(SQWRLNames.AvgAggregateFunction)) value = avg(values);
         else if (aggregateFunctionName.equalsIgnoreCase(SQWRLNames.CountAggregateFunction)) value = count(values);
         else if (aggregateFunctionName.equalsIgnoreCase(SQWRLNames.CountDistinctAggregateFunction)) value = countDistinct(values);
-        else throw new InvalidAggregateFunctionNameException("invalid aggregate function '" + aggregateFunctionName + "'");
+        else throw new InvalidAggregateFunctionNameException("invalid aggregate function " + aggregateFunctionName);
 
         row.set(aggregateColumnIndex.intValue(), value);
       } // for
@@ -747,12 +747,12 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
     double sum = 0, value;
     int count = 0;
 
-    if (values.isEmpty()) throw new SQWRLException("empty aggregate list for '" + SQWRLNames.AvgAggregateFunction + "'");
+    if (values.isEmpty()) throw new SQWRLException("empty aggregate list for function " + SQWRLNames.AvgAggregateFunction);
 
     for (SQWRLResultValue resultValue : values) {
 
       if (!(resultValue instanceof DataValue))
-        throw new SQWRLException("attempt to use " + SQWRLNames.AvgAggregateFunction + " aggregate on non data value: " + resultValue);
+        throw new SQWRLException("attempt to use " + SQWRLNames.AvgAggregateFunction + " aggregate on non data value " + resultValue);
 
         value = ((DataValue)resultValue).getDouble();
 

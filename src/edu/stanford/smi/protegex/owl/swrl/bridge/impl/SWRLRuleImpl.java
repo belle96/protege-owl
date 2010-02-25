@@ -277,12 +277,12 @@ public class SWRLRuleImpl implements SWRLRule
            if (isArgumentAVariable) columnName = "avg(?" + variableName + ")"; else columnName = "avg[" + argument + "]";
            sqwrlResult.addAggregateColumn(columnName, SQWRLNames.AvgAggregateFunction);
          } else if (builtInName.equalsIgnoreCase(SQWRLNames.OrderBy)) {
-           if (!isArgumentAVariable) throw new SQWRLException("only variables allowed for ordered columns - found '" + argument + "'");
+           if (!isArgumentAVariable) throw new SQWRLException("only variables allowed for ordered columns - found " + argument);
            columnIndex = selectedVariableNames.indexOf(variableName);
            if (columnIndex != -1) sqwrlResult.addOrderByColumn(columnIndex, true);
            else throw new SQWRLException("variable ?" + variableName + " must be selected before it can be ordered");
          } else if (builtInName.equalsIgnoreCase(SQWRLNames.OrderByDescending)) {
-           if (!isArgumentAVariable) throw new SQWRLException("only variables allowed for ordered columns - found '" + argument + "'");
+           if (!isArgumentAVariable) throw new SQWRLException("only variables allowed for ordered columns - found " + argument);
            columnIndex = selectedVariableNames.indexOf(variableName);
            if (columnIndex != -1) sqwrlResult.addOrderByColumn(columnIndex, false);
            else throw new SQWRLException("variable ?" + variableName + " must be selected before it can be ordered");
@@ -290,7 +290,7 @@ public class SWRLRuleImpl implements SWRLRule
            if (argument instanceof DataValueArgument && ((DataValueArgument)argument).getDataValue().isString()) {
              DataValueArgument dataValueArgument = (DataValueArgument)argument;
              sqwrlResult.addColumnDisplayName(dataValueArgument.getDataValue().getString());
-           } else throw new SQWRLException("only string literals allowed as column names - found: " + argument);
+           } else throw new SQWRLException("only string literals allowed as column names - found " + argument);
          } // if
          argumentIndex++;
        } // for
