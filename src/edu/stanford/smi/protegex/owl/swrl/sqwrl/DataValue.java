@@ -8,7 +8,7 @@ public interface DataValue extends SQWRLResultValue
 {
   String getString() throws DataValueConversionException; 
   Number getNumber() throws DataValueConversionException;
-  XSDType getSDType() throws DataValueConversionException; 
+  XSDType getXSDType() throws DataValueConversionException; 
   boolean getBoolean() throws DataValueConversionException; 
   int getInt() throws DataValueConversionException; 
   long getLong() throws DataValueConversionException; 

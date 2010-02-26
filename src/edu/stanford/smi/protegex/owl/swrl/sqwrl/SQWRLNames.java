@@ -24,6 +24,9 @@ public class SQWRLNames
   public static final String OrderBy = SQWRLNamespace + "orderBy";
   public static final String OrderByDescending = SQWRLNamespace + "orderByDescending";
   public static final String ColumnNames = SQWRLNamespace + "columnNames";
+  public static final String Limit = SQWRLNamespace + "limit";
+  public static final String MinN = "minN"; 
+  public static final String MaxN = "maxN";
 
   public static final String MinAggregateFunction = "min"; 
   public static final String MaxAggregateFunction = "max"; 
@@ -72,79 +75,95 @@ public class SQWRLNames
   public static final String Intersects = SQWRLNamespace + "intersects";
   public static final String NotIntersects = SQWRLNamespace + "notIntersects";
   
-  private static final String headBuiltInNamesArray[] 
-     = { Select, SelectDistinct, Count, CountDistinct, Avg, Min, Max, Sum, OrderBy, OrderByDescending, ColumnNames };
-
+  private static final String headSelectionBuiltInNamesArray[] = { Select, SelectDistinct, OrderBy, OrderByDescending, ColumnNames };
+  private static final String headAggregationBuiltInNamesArray[] = { Count, CountDistinct, Avg, Min, Max, Sum };
+  private static final String headSlicingBuiltInNamesArray[] = { Limit, 
+                                                 	               Nth, NotNth,
+                                                 	 	             First, Last, NotFirst, NotLast, FirstN, NotFirstN, LastN, NotLastN,
+                                                 	 	             Least, Greatest, LeastN, NotLeastN, GreatestN, NotGreatestN};
+  
   private static final String collectionMakeBuiltInNamesArray[] = { MakeSet, MakeBag };
   private static final String collectionGroupBuiltInNamesArray[] = { GroupBy };
  
   private static final String singleCollectionOperationBuiltInNamesArray[] = 
-    { Size, IsEmpty, NotIsEmpty, Contains, NotContains, Nth, NotNth,
-  	  First, NotFirst, FirstN, NotFirstN, Last, NotLast, LastN, NotLastN,
-  	  Least, NotLeast, LeastN, NotLeastN, Greatest, NotGreatest, GreatestN, NotGreatestN,
-      Min, Max, Sum, Avg, Median};
+  { Size, IsEmpty, NotIsEmpty, Contains, NotContains, 
+  	Nth, NotNth,
+	  First, NotFirst, FirstN, NotFirstN, Last, NotLast, LastN, NotLastN,
+	  Least, NotLeast, LeastN, NotLeastN, Greatest, NotGreatest, GreatestN, NotGreatestN,
+    Min, Max, Sum, Avg, Median};
 
   private static final String multiCollectionOperationBuiltInNamesArray[] = { Intersection, Union, Difference, Intersects, NotIntersects };
-
   private static final String createCollectionOperationBuiltInNamesArray[] = { Intersection, Union, Difference };
-
   public static  final String aggregateFunctionNames[] = { MinAggregateFunction, MaxAggregateFunction, SumAggregateFunction,
                                                            AvgAggregateFunction, MedianAggregateFunction,
                                                            CountAggregateFunction, CountDistinctAggregateFunction };
 
-  private static Set<String> headBuiltInNames, collectionMakeBuiltInNames, collectionGroupBuiltInNames, collectionMakeAndGroupBuiltInNames, 
-    collectionOperationBuiltInNames, singleCollectionOperationBuiltInNames,
-    multiCollectionOperationBuiltInNames, createCollectionOperationBuiltInNames, sqwrlBuiltInNames; 
+  private static Set<String> sqwrlBuiltInNames, headBuiltInNames, headSelectionBuiltInNames, headAggregationBuiltInNames, 
+                             headSlicingBuiltInNames;
+  
+  private static Set<String> collectionMakeBuiltInNames, collectionGroupBuiltInNames, collectionMakeAndGroupBuiltInNames;
+  
+  private static Set<String> collectionOperationBuiltInNames, singleCollectionOperationBuiltInNames,
+                             multiCollectionOperationBuiltInNames, createCollectionOperationBuiltInNames; 
 
   static {
-    headBuiltInNames = new HashSet<String>();
+  	sqwrlBuiltInNames =  new HashSet<String>();
+  	headBuiltInNames = new HashSet<String>();
+  	headSelectionBuiltInNames = new HashSet<String>();
+  	headAggregationBuiltInNames = new HashSet<String>();
+  	headSlicingBuiltInNames = new HashSet<String>();
+  	
     collectionMakeBuiltInNames = new HashSet<String>();
     collectionGroupBuiltInNames = new HashSet<String>();
     collectionMakeAndGroupBuiltInNames = new HashSet<String>();
+    
+    collectionOperationBuiltInNames = new HashSet<String>();
     singleCollectionOperationBuiltInNames = new HashSet<String>();
     multiCollectionOperationBuiltInNames = new HashSet<String>();
-    collectionOperationBuiltInNames = new HashSet<String>();
     createCollectionOperationBuiltInNames = new HashSet<String>();
-    sqwrlBuiltInNames =  new HashSet<String>();
-
-    for (String builtInName : headBuiltInNamesArray) headBuiltInNames.add(builtInName);
+    
+    for (String builtInName : headSelectionBuiltInNamesArray) headSelectionBuiltInNames.add(builtInName);
+    for (String builtInName : headAggregationBuiltInNamesArray) headAggregationBuiltInNames.add(builtInName);
+    for (String builtInName : headSlicingBuiltInNamesArray) headSlicingBuiltInNames.add(builtInName);
+    headBuiltInNames.addAll(headSelectionBuiltInNames);
+    headBuiltInNames.addAll(headAggregationBuiltInNames);
+    headBuiltInNames.addAll(headSlicingBuiltInNames);
+    
     for (String builtInName : collectionMakeBuiltInNamesArray) collectionMakeBuiltInNames.add(builtInName);
     for (String builtInName : collectionGroupBuiltInNamesArray) collectionGroupBuiltInNames.add(builtInName);
-    
     collectionMakeAndGroupBuiltInNames.addAll(collectionMakeBuiltInNames);
     collectionMakeAndGroupBuiltInNames.addAll(collectionGroupBuiltInNames);
 
-    for (String builtInName : singleCollectionOperationBuiltInNamesArray) {
-        singleCollectionOperationBuiltInNames.add(builtInName);
-        collectionOperationBuiltInNames.add(builtInName);
-      } // for 
+    for (String builtInName : createCollectionOperationBuiltInNamesArray) createCollectionOperationBuiltInNames.add(builtInName);
+    for (String builtInName : singleCollectionOperationBuiltInNamesArray) singleCollectionOperationBuiltInNames.add(builtInName);
+    for (String builtInName : multiCollectionOperationBuiltInNamesArray) multiCollectionOperationBuiltInNames.add(builtInName);
+    collectionOperationBuiltInNames.addAll(createCollectionOperationBuiltInNames);
+    collectionOperationBuiltInNames.addAll(singleCollectionOperationBuiltInNames);
+    collectionOperationBuiltInNames.addAll(multiCollectionOperationBuiltInNames);
 
-    for (String builtInName : multiCollectionOperationBuiltInNamesArray) {
-        multiCollectionOperationBuiltInNames.add(builtInName);
-        collectionOperationBuiltInNames.add(builtInName);
-    } // for 
-
-    for (String builtInName : createCollectionOperationBuiltInNamesArray) {
-      createCollectionOperationBuiltInNames.add(builtInName);
-      collectionOperationBuiltInNames.add(builtInName);
-    } // for
-
-    sqwrlBuiltInNames.addAll(collectionMakeBuiltInNames);
-    sqwrlBuiltInNames.addAll(collectionGroupBuiltInNames);
+    sqwrlBuiltInNames.addAll(headBuiltInNames);
+    sqwrlBuiltInNames.addAll(collectionMakeAndGroupBuiltInNames);
     sqwrlBuiltInNames.addAll(collectionOperationBuiltInNames);
   } // static
 
   public static Set<String> getSQWRLBuiltInNames() { return sqwrlBuiltInNames; }
   public static Set<String> getHeadBuiltInNames() { return headBuiltInNames; }
+  public static Set<String> getHeadSelectionBuiltInNames() { return headSelectionBuiltInNames; }
+  public static Set<String> getHeadSlicingBuiltInNames() { return headSlicingBuiltInNames; }
+  public static Set<String> getHeadAggregationBuiltInNames() { return headAggregationBuiltInNames; }
   public static Set<String> getCollectionMakeBuiltInNames() { return collectionMakeBuiltInNames; }
   public static Set<String> getCollectionGroupBuiltInNames() { return collectionGroupBuiltInNames; }
   public static Set<String> getCollectionMakeAndGroupBuiltInNames() { return collectionMakeAndGroupBuiltInNames; }
   public static Set<String> getCollectionOperationBuiltInNames() { return collectionOperationBuiltInNames; }
 
-  public static boolean isSQWRLCollectionOperationBuiltIn(String builtInName) { return collectionOperationBuiltInNames.contains(builtInName); }
+  public static boolean isSQWRLBuiltIn(String builtInName) { return sqwrlBuiltInNames.contains(builtInName); }
+  public static boolean isSQWRLHeadBuiltIn(String builtInName) { return headBuiltInNames.contains(builtInName); }
+  public static boolean isSQWRLHeadSelectionBuiltIn(String builtInName) { return headSelectionBuiltInNames.contains(builtInName); }
+  public static boolean isSQWRLHeadAggregationBuiltIn(String builtInName) { return headAggregationBuiltInNames.contains(builtInName); }
+  public static boolean isSQWRLHeadSlicingBuiltIn(String builtInName) { return headSlicingBuiltInNames.contains(builtInName); }
   public static boolean isSQWRLCollectionMakeBuiltIn(String builtInName) { return collectionMakeBuiltInNames.contains(builtInName); }
   public static boolean isSQWRLCollectionGroupBuiltIn(String builtInName) { return collectionGroupBuiltInNames.contains(builtInName); }
-  public static boolean isSQWRLBuiltIn(String builtInName) { return sqwrlBuiltInNames.contains(builtInName); }
+  public static boolean isSQWRLCollectionOperationBuiltIn(String builtInName) { return collectionOperationBuiltInNames.contains(builtInName); }
 
   public static void checkAggregateFunctionName(String aggregateFunctionName) throws InvalidAggregateFunctionNameException
   {
@@ -153,7 +172,7 @@ public class SQWRLNames
     for (int i = 0; i < aggregateFunctionNames.length; i++) 
       if (aggregateFunctionNames[i].equalsIgnoreCase(aggregateFunctionName)) found = true;
 
-    if (!found) throw new InvalidAggregateFunctionNameException("invalid aggregate function '" + aggregateFunctionName + "'");
+    if (!found) throw new InvalidAggregateFunctionNameException("invalid aggregate function " + aggregateFunctionName);
   } // checkAggregateFunctionName
 
 } // SQWRLNames

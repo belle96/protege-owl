@@ -137,14 +137,15 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean countDistinct(List<BuiltInArgument> arguments) throws BuiltInException
   {
-	checkThatInConsequent();
+	  checkThatInConsequent();
     return count(arguments);
   } // countDistinct
 
-  // The use of columnNames, orderBy, orderByDescending is handled at initial processing in the SWRLRule object.  
-  public boolean columnNames(List<BuiltInArgument> arguments) throws BuiltInException { return false; } 
-  public boolean orderBy(List<BuiltInArgument> arguments) throws BuiltInException { return false; } 
-  public boolean orderByDescending(List<BuiltInArgument> arguments) throws BuiltInException { return false; }
+  // These built-ins handled at initial processing in the SWRLRule object.  
+  public boolean columnNames(List<BuiltInArgument> arguments) throws BuiltInException { return true; } 
+  public boolean orderBy(List<BuiltInArgument> arguments) throws BuiltInException { return true; } 
+  public boolean orderByDescending(List<BuiltInArgument> arguments) throws BuiltInException { return true; }
+  public boolean limit(List<BuiltInArgument> arguments) throws BuiltInException { return true; }
 
   public boolean makeSet(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -499,45 +500,49 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean nth(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
-    int n = getArgumentAsAPositiveInteger(2, arguments) - 1; // 1-offset for user, 0 for processing
-    Collection<BuiltInArgument> collection = getCollection(collectionID);
     boolean result = false;
+  	
+  	if (getIsInConsequent()) result = true; // Already processed - ignore
+  	else {
+  		String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
+      int n = getArgumentAsAPositiveInteger(2, arguments) - 1; // 1-offset for user, 0 for processing
+      Collection<BuiltInArgument> collection = getCollection(collectionID);
 
-    checkThatInAntecedent();
-    
-    if (!collection.isEmpty()) {
-      SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
-      BuiltInArgument array[] = (BuiltInArgument[])sortedSet.toArray(new BuiltInArgument[sortedSet.size()]);
+      if (!collection.isEmpty()) {
+      	SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
+      	BuiltInArgument array[] = (BuiltInArgument[])sortedSet.toArray(new BuiltInArgument[sortedSet.size()]);
       
-      if (n >= 0 && n < array.length) {
-        BuiltInArgument nth = array[n];
-        result = processResultArgument(arguments, 0, nth);
-      } else result = false;
-    } // if
+      	if (n >= 0 && n < array.length) {
+      		BuiltInArgument nth = array[n];
+      		result = processResultArgument(arguments, 0, nth);
+      	} else result = false;
+      } // if
+  	} // if
 
     return result;
   } // nth
 
   public boolean notNth(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
-    int n = getArgumentAsAPositiveInteger(2, arguments) - 1;  // 1-offset for user, 0 for processing
-    Collection<BuiltInArgument> collection = getCollection(collectionID);
     boolean result = false;
-
-    checkThatInAntecedent();
+  	
+  	if (getIsInConsequent()) result = true; // Already processed - ignore
+  	else {
+      String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
+      int n = getArgumentAsAPositiveInteger(2, arguments) - 1;  // 1-offset for user, 0 for processing
+      Collection<BuiltInArgument> collection = getCollection(collectionID);
     
-    if (!collection.isEmpty()) {
-      SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
-      BuiltInArgument array[] = (BuiltInArgument[])sortedSet.toArray(new BuiltInArgument[sortedSet.size()]);
+      if (!collection.isEmpty()) {
+        SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
+        BuiltInArgument array[] = (BuiltInArgument[])sortedSet.toArray(new BuiltInArgument[sortedSet.size()]);
 
-      if (n >= 0 && n < array.length) {
-        BuiltInArgument nth = array[n];
-        sortedSet.remove(nth);
-        result = processResultArgument(arguments, 0, sortedSet);
-      } else result = false;
-    } // if
+        if (n >= 0 && n < array.length) {
+          BuiltInArgument nth = array[n];
+          sortedSet.remove(nth);
+          result = processResultArgument(arguments, 0, sortedSet);
+        } else result = false;
+      } // if
+  	} // if
 
     return result;
   } // notNth
@@ -553,156 +558,176 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   
   public boolean greatest(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
-    Collection<BuiltInArgument> collection = getCollection(collectionID);
     boolean result = false;
+  	
+  	if (getIsInConsequent()) result = true; // Already processed - ignore
+  	else {
+      String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
+      Collection<BuiltInArgument> collection = getCollection(collectionID);
     
-    if (!collection.isEmpty()) {
-      SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
-      BuiltInArgument greatest = sortedSet.last();
-      result = processResultArgument(arguments, 0, greatest);
-    } // if
+      if (!collection.isEmpty()) {
+        SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
+        BuiltInArgument greatest = sortedSet.last();
+        result = processResultArgument(arguments, 0, greatest);
+      } // if
+  	} // if
 
     return result;
   } // greatest
 
   public boolean notGreatest(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
-    Collection<BuiltInArgument> collection = getCollection(collectionID);
     boolean result = false;
+  	
+  	if (getIsInConsequent()) result = true; // Already processed - ignore
+  	else {
+  		String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
+      Collection<BuiltInArgument> collection = getCollection(collectionID);
     
-    if (!collection.isEmpty()) {
-      SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
-      BuiltInArgument greatest = sortedSet.last();
-      sortedSet.remove(greatest);
-      result = processResultArgument(arguments, 0, sortedSet);
-    } // if
+      if (!collection.isEmpty()) {
+        SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
+        BuiltInArgument greatest = sortedSet.last();
+        sortedSet.remove(greatest);
+        result = processResultArgument(arguments, 0, sortedSet);
+      } // if
+  	} // if
 
     return result;
   } // notGreatest
 
   public boolean greatestN(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
-    int n = getArgumentAsAPositiveInteger(2, arguments);
-    Collection<BuiltInArgument> collection = getCollection(collectionID);
     boolean result = false;
-
-    checkThatInAntecedent();
+  	
+  	if (getIsInConsequent()) result = true; // Already processed - ignore
+  	else {
+  		String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
+  	  int n = getArgumentAsAPositiveInteger(2, arguments);
+      Collection<BuiltInArgument> collection = getCollection(collectionID);
     
-    if (!collection.isEmpty()) {
-      SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
-      BuiltInArgument array[] = (BuiltInArgument[])sortedSet.toArray(new BuiltInArgument[sortedSet.size()]);
-      Set<BuiltInArgument> greatestNSet = new HashSet<BuiltInArgument>();
+      if (!collection.isEmpty()) {
+        SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
+        BuiltInArgument array[] = (BuiltInArgument[])sortedSet.toArray(new BuiltInArgument[sortedSet.size()]);
+        Set<BuiltInArgument> greatestNSet = new HashSet<BuiltInArgument>();
 
-      for (int i = collection.size() - 1; i >= collection.size() - n && i >= 0; i--) greatestNSet.add(array[i]);
+        for (int i = collection.size() - 1; i >= collection.size() - n && i >= 0; i--) greatestNSet.add(array[i]);
 
-      result = processResultArgument(arguments, 0, greatestNSet);
-    } // if
+        result = processResultArgument(arguments, 0, greatestNSet);
+      } // if
+  	} // if
 
     return result;
   } // greatestN
  
   public boolean notGreatestN(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
-    int n = getArgumentAsAPositiveInteger(2, arguments);
-    Collection<BuiltInArgument> collection = getCollection(collectionID);
     boolean result = false;
+  	
+  	if (getIsInConsequent()) result = true; // Already processed - ignore
+  	else {
+      String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
+      int n = getArgumentAsAPositiveInteger(2, arguments);
+      Collection<BuiltInArgument> collection = getCollection(collectionID);
 
-    checkThatInAntecedent();
-    
-    if (!collection.isEmpty()) {
-      SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
-      BuiltInArgument array[] = (BuiltInArgument[])sortedSet.toArray(new BuiltInArgument[sortedSet.size()]);
-      Set<BuiltInArgument> notGreatestNSet = new HashSet<BuiltInArgument>();
+      if (!collection.isEmpty()) {
+        SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
+        BuiltInArgument array[] = (BuiltInArgument[])sortedSet.toArray(new BuiltInArgument[sortedSet.size()]);
+        Set<BuiltInArgument> notGreatestNSet = new HashSet<BuiltInArgument>();
 
-      for (int i = 0; i < collection.size() - n; i++) notGreatestNSet.add(array[i]);
+        for (int i = 0; i < collection.size() - n; i++) notGreatestNSet.add(array[i]);
 
-      result = processResultArgument(arguments, 0, notGreatestNSet);
-    } // if
+        result = processResultArgument(arguments, 0, notGreatestNSet);
+      } // if
+  	} // if
 
     return result;
   } // notGreatestN
 
   public boolean least(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
-    Collection<BuiltInArgument> collection = getCollection(collectionID);
     boolean result = false;
-
-    checkThatInAntecedent();
+  	
+  	if (getIsInConsequent()) result = true; // Already processed - ignore
+  	else {
+  	  String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
+      Collection<BuiltInArgument> collection = getCollection(collectionID);
     
-    if (!collection.isEmpty()) {
-      SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
-      BuiltInArgument least = sortedSet.first();
+      if (!collection.isEmpty()) {
+        SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
+        BuiltInArgument least = sortedSet.first();
 
-      result = processResultArgument(arguments, 0, least);
-    } // if
+        result = processResultArgument(arguments, 0, least);
+      } // if
+  	} // if
 
     return result;
   } // least
 
   public boolean notLeast(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
-    Collection<BuiltInArgument> collection = getCollection(collectionID);
     boolean result = false;
-
-    checkThatInAntecedent();
+  	
+  	if (getIsInConsequent()) result = true; // Already processed - ignore
+  	else {
+      String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
+      Collection<BuiltInArgument> collection = getCollection(collectionID);
     
-    if (!collection.isEmpty()) {
-      SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
-      BuiltInArgument least = sortedSet.first();
-      sortedSet.remove(least);
+      if (!collection.isEmpty()) {
+        SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
+        BuiltInArgument least = sortedSet.first();
+        sortedSet.remove(least);
 
-      result = processResultArgument(arguments, 0, sortedSet);
-    } // if
+        result = processResultArgument(arguments, 0, sortedSet);
+      } // if
+  	} // if
 
     return result;
   } // least
 
   public boolean leastN(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
-    int n = getArgumentAsAPositiveInteger(2, arguments);
-    Collection<BuiltInArgument> collection = getCollection(collectionID);
     boolean result = false;
+  	
+  	if (getIsInConsequent()) result = true; // Already processed - ignore
+  	else {
+      String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
+      int n = getArgumentAsAPositiveInteger(2, arguments);
+      Collection<BuiltInArgument> collection = getCollection(collectionID);
     
-    checkThatInAntecedent();
+      if (!collection.isEmpty()) {
+        SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
+        BuiltInArgument array[] = (BuiltInArgument[])sortedSet.toArray(new BuiltInArgument[sortedSet.size()]);
+        Set<BuiltInArgument> leastNSet = new HashSet<BuiltInArgument>();
 
-    if (!collection.isEmpty()) {
-      SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
-      BuiltInArgument array[] = (BuiltInArgument[])sortedSet.toArray(new BuiltInArgument[sortedSet.size()]);
-      Set<BuiltInArgument> leastNSet = new HashSet<BuiltInArgument>();
-
-      for (int i = 0; i < n && i < collection.size(); i++) leastNSet.add(array[i]);
+        for (int i = 0; i < n && i < collection.size(); i++) leastNSet.add(array[i]);
       
-      result = processResultArgument(arguments, 0, leastNSet);
-    } // if
+        result = processResultArgument(arguments, 0, leastNSet);
+      } // if
+  	} // if
 
     return result;
   } // leastN
 
   public boolean notLeastN(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-    String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
-    int n = getArgumentAsAPositiveInteger(2, arguments);
-    Collection<BuiltInArgument> collection = getCollection(collectionID);
     boolean result = false;
+  	
+  	if (getIsInConsequent()) result = true; // Already processed - ignore
+  	else {
+      String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
+      int n = getArgumentAsAPositiveInteger(2, arguments);
+      Collection<BuiltInArgument> collection = getCollection(collectionID);
 
-    checkThatInAntecedent();
-      
-    if (!collection.isEmpty()) {
-      SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
-      BuiltInArgument array[] = (BuiltInArgument[])sortedSet.toArray(new BuiltInArgument[sortedSet.size()]);
-      Set<BuiltInArgument> notLeastNSet = new HashSet<BuiltInArgument>();
+      if (!collection.isEmpty()) {
+        SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
+        BuiltInArgument array[] = (BuiltInArgument[])sortedSet.toArray(new BuiltInArgument[sortedSet.size()]);
+        Set<BuiltInArgument> notLeastNSet = new HashSet<BuiltInArgument>();
 
-      for (int i = n - 1; i < collection.size(); i++) notLeastNSet.add(array[i]);
+        for (int i = n - 1; i < collection.size(); i++) notLeastNSet.add(array[i]);
       
-      result = processResultArgument(arguments, 0, notLeastNSet);
-    } // if
+        result = processResultArgument(arguments, 0, notLeastNSet);
+      } // if
+  	} // if
 
     return result;
   } // leastN

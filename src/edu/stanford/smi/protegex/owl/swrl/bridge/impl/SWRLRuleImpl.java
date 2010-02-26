@@ -229,6 +229,7 @@ public class SWRLRuleImpl implements SWRLRule
     for (BuiltInAtom builtInAtom : getBuiltInAtomsFromHead()) builtInAtom.setBuiltInIndex(builtInIndex++);
   } // preprocessBuiltInIndexes
 
+  //TODO: too long- refactor
   private void preprocessSQWRLHeadBuiltIns() throws DataValueConversionException, SQWRLException, BuiltInException
   {
      List<String> selectedVariableNames = new ArrayList<String>();
@@ -238,63 +239,98 @@ public class SWRLRuleImpl implements SWRLRule
      for (BuiltInAtom builtInAtom : getBuiltInAtomsFromHead(SQWRLNames.getHeadBuiltInNames())) {
        String builtInName = builtInAtom.getBuiltInURI();
        hasSQWRLBuiltIns = true;
-       
+          
        for (BuiltInArgument argument : builtInAtom.getArguments()) {
          boolean isArgumentAVariable = argument.isVariable();
          String variableName = null, columnName;
          int argumentIndex = 0, columnIndex;
 
-         if (isArgumentAVariable) {
-           variableName = argument.getVariableName(); selectedVariableNames.add(variableName);
+         if (SQWRLNames.isSQWRLHeadSelectionBuiltIn(builtInName) || SQWRLNames.isSQWRLHeadAggregationBuiltIn(builtInName)) {
+	         if (isArgumentAVariable) { variableName = argument.getVariableName(); selectedVariableNames.add(variableName); }
+	                 
+	         if (builtInName.equalsIgnoreCase(SQWRLNames.Select)) {
+	           if (isArgumentAVariable) columnName = "?" + variableName;
+	           else columnName = "[" + argument + "]";
+	           sqwrlResult.addColumn(columnName);
+	         } else if (builtInName.equalsIgnoreCase(SQWRLNames.SelectDistinct)) {
+	           if (isArgumentAVariable) columnName = "?" + variableName; else columnName = "[" + argument + "]";
+	           sqwrlResult.addColumn(columnName); sqwrlResult.setIsDistinct();
+	         } else if (builtInName.equalsIgnoreCase(SQWRLNames.Count)) {
+	           if (isArgumentAVariable) columnName = "count(?" + variableName + ")"; else columnName = "[" + argument + "]";
+	           sqwrlResult.addAggregateColumn(columnName, SQWRLNames.CountAggregateFunction);
+	         } else if (builtInName.equalsIgnoreCase(SQWRLNames.CountDistinct)) {
+	           if (isArgumentAVariable) columnName = "countDistinct(?" + variableName + ")"; else columnName = "[" + argument + "]";
+	           sqwrlResult.addAggregateColumn(columnName, SQWRLNames.CountDistinctAggregateFunction);
+	         } else if (builtInName.equalsIgnoreCase(SQWRLNames.Min)) {
+	           if (isArgumentAVariable) columnName = "min(?" + variableName + ")"; else columnName = "min[" + argument + "]";
+	           sqwrlResult.addAggregateColumn(columnName, SQWRLNames.MinAggregateFunction);
+	         } else if (builtInName.equalsIgnoreCase(SQWRLNames.Max)) {
+	           if (isArgumentAVariable) columnName = "max(?" + variableName + ")"; else columnName = "max[" + argument + "]";
+	           sqwrlResult.addAggregateColumn(columnName, SQWRLNames.MaxAggregateFunction);
+	         } else if (builtInName.equalsIgnoreCase(SQWRLNames.Sum)) {
+	           if (isArgumentAVariable) columnName = "sum(?" + variableName + ")"; else columnName = "sum[" + argument + "]";
+	           sqwrlResult.addAggregateColumn(columnName, SQWRLNames.SumAggregateFunction);
+	         } else if (builtInName.equalsIgnoreCase(SQWRLNames.Median)) {
+	           if (isArgumentAVariable) columnName = "median(?" + variableName + ")"; else columnName = "median[" + argument + "]";
+	           sqwrlResult.addAggregateColumn(columnName, SQWRLNames.MedianAggregateFunction);
+	         } else if (builtInName.equalsIgnoreCase(SQWRLNames.Avg)) {
+	           if (isArgumentAVariable) columnName = "avg(?" + variableName + ")"; else columnName = "avg[" + argument + "]";
+	           sqwrlResult.addAggregateColumn(columnName, SQWRLNames.AvgAggregateFunction);
+	         } else if (builtInName.equalsIgnoreCase(SQWRLNames.OrderBy)) {
+	           if (!isArgumentAVariable) throw new SQWRLException("only variables allowed for ordered columns - found " + argument);
+	           columnIndex = selectedVariableNames.indexOf(variableName);
+	           if (columnIndex != -1) sqwrlResult.addOrderByColumn(columnIndex, true);
+	           else throw new SQWRLException("variable ?" + variableName + " must be selected before it can be ordered");
+	         } else if (builtInName.equalsIgnoreCase(SQWRLNames.OrderByDescending)) {
+	           if (!isArgumentAVariable) throw new SQWRLException("only variables allowed for ordered columns - found " + argument);
+	           columnIndex = selectedVariableNames.indexOf(variableName);
+	           if (columnIndex != -1) sqwrlResult.addOrderByColumn(columnIndex, false);
+	           else throw new SQWRLException("variable ?" + variableName + " must be selected before it can be ordered");
+	         } else if (builtInName.equalsIgnoreCase(SQWRLNames.ColumnNames)) {
+	           if (argument instanceof DataValueArgument && ((DataValueArgument)argument).getDataValue().isString()) {
+	             DataValueArgument dataValueArgument = (DataValueArgument)argument;
+	             sqwrlResult.addColumnDisplayName(dataValueArgument.getDataValue().getString());
+	           } else throw new SQWRLException("only string literals allowed as column names - found " + argument);
+	         } // if
+	         argumentIndex++;
          } // if
-         
-         if (builtInName.equalsIgnoreCase(SQWRLNames.Select)) {
-           if (isArgumentAVariable) columnName = "?" + variableName;
-           else columnName = "[" + argument + "]";
-           sqwrlResult.addColumn(columnName);
-         } else if (builtInName.equalsIgnoreCase(SQWRLNames.SelectDistinct)) {
-           if (isArgumentAVariable) columnName = "?" + variableName; else columnName = "[" + argument + "]";
-           sqwrlResult.addColumn(columnName); sqwrlResult.setIsDistinct();
-         } else if (builtInName.equalsIgnoreCase(SQWRLNames.Count)) {
-           if (isArgumentAVariable) columnName = "count(?" + variableName + ")"; else columnName = "[" + argument + "]";
-           sqwrlResult.addAggregateColumn(columnName, SQWRLNames.CountAggregateFunction);
-         } else if (builtInName.equalsIgnoreCase(SQWRLNames.CountDistinct)) {
-           if (isArgumentAVariable) columnName = "countDistinct(?" + variableName + ")"; else columnName = "[" + argument + "]";
-           sqwrlResult.addAggregateColumn(columnName, SQWRLNames.CountDistinctAggregateFunction);
-         } else if (builtInName.equalsIgnoreCase(SQWRLNames.Min)) {
-           if (isArgumentAVariable) columnName = "min(?" + variableName + ")"; else columnName = "min[" + argument + "]";
-           sqwrlResult.addAggregateColumn(columnName, SQWRLNames.MinAggregateFunction);
-         } else if (builtInName.equalsIgnoreCase(SQWRLNames.Max)) {
-           if (isArgumentAVariable) columnName = "max(?" + variableName + ")"; else columnName = "max[" + argument + "]";
-           sqwrlResult.addAggregateColumn(columnName, SQWRLNames.MaxAggregateFunction);
-         } else if (builtInName.equalsIgnoreCase(SQWRLNames.Sum)) {
-           if (isArgumentAVariable) columnName = "sum(?" + variableName + ")"; else columnName = "sum[" + argument + "]";
-           sqwrlResult.addAggregateColumn(columnName, SQWRLNames.SumAggregateFunction);
-         } else if (builtInName.equalsIgnoreCase(SQWRLNames.Median)) {
-           if (isArgumentAVariable) columnName = "median(?" + variableName + ")"; else columnName = "median[" + argument + "]";
-           sqwrlResult.addAggregateColumn(columnName, SQWRLNames.MedianAggregateFunction);
-         } else if (builtInName.equalsIgnoreCase(SQWRLNames.Avg)) {
-           if (isArgumentAVariable) columnName = "avg(?" + variableName + ")"; else columnName = "avg[" + argument + "]";
-           sqwrlResult.addAggregateColumn(columnName, SQWRLNames.AvgAggregateFunction);
-         } else if (builtInName.equalsIgnoreCase(SQWRLNames.OrderBy)) {
-           if (!isArgumentAVariable) throw new SQWRLException("only variables allowed for ordered columns - found " + argument);
-           columnIndex = selectedVariableNames.indexOf(variableName);
-           if (columnIndex != -1) sqwrlResult.addOrderByColumn(columnIndex, true);
-           else throw new SQWRLException("variable ?" + variableName + " must be selected before it can be ordered");
-         } else if (builtInName.equalsIgnoreCase(SQWRLNames.OrderByDescending)) {
-           if (!isArgumentAVariable) throw new SQWRLException("only variables allowed for ordered columns - found " + argument);
-           columnIndex = selectedVariableNames.indexOf(variableName);
-           if (columnIndex != -1) sqwrlResult.addOrderByColumn(columnIndex, false);
-           else throw new SQWRLException("variable ?" + variableName + " must be selected before it can be ordered");
-         } else if (builtInName.equalsIgnoreCase(SQWRLNames.ColumnNames)) {
-           if (argument instanceof DataValueArgument && ((DataValueArgument)argument).getDataValue().isString()) {
-             DataValueArgument dataValueArgument = (DataValueArgument)argument;
-             sqwrlResult.addColumnDisplayName(dataValueArgument.getDataValue().getString());
-           } else throw new SQWRLException("only string literals allowed as column names - found " + argument);
-         } // if
-         argumentIndex++;
        } // for
-     } // for
+         
+       if (SQWRLNames.isSQWRLHeadSlicingBuiltIn(builtInName)) {
+      	 if (!sqwrlResult.isOrdered() && !builtInName.equals(SQWRLNames.Limit)) throw new SQWRLException("slicing operator used without an order clause");
+        	 
+      	 if (builtInName.equalsIgnoreCase(SQWRLNames.Least) || builtInName.equalsIgnoreCase(SQWRLNames.First)) {
+      		 if (!builtInAtom.getArguments().isEmpty()) throw new SQWRLException("first or least do not accept arguments");
+      		 sqwrlResult.setFirst();
+      	 } else if (builtInName.equalsIgnoreCase(SQWRLNames.NotLeast) || builtInName.equalsIgnoreCase(SQWRLNames.NotFirst)) {
+        		 if (!builtInAtom.getArguments().isEmpty()) throw new SQWRLException("not first or least do not accept arguments");
+        		 sqwrlResult.setNotFirst();
+      	 } else if (builtInName.equalsIgnoreCase(SQWRLNames.Greatest) || builtInName.equalsIgnoreCase(SQWRLNames.Last)) {
+      		 if (!builtInAtom.getArguments().isEmpty()) throw new SQWRLException("greatest or last do not accept arguments");
+      		 sqwrlResult.setLast();
+      	 } else if (builtInName.equalsIgnoreCase(SQWRLNames.NotGreatest) || builtInName.equalsIgnoreCase(SQWRLNames.NotLast)) {
+      		 if (!builtInAtom.getArguments().isEmpty()) throw new SQWRLException("not greatest or last do not accept arguments");
+      		 sqwrlResult.setNotLast();
+      	 } else {
+      		 if (builtInAtom.getArguments().size() != 1) throw new SQWRLException("slicing operator " + builtInName + " expecting an integer");
+        		 
+      		 BuiltInArgument argument = builtInAtom.getArguments().get(0);
+        	 if (argument instanceof DataValueArgument && ((DataValueArgument)argument).getDataValue().isLong()) {
+             int n = (int)((DataValueArgument)argument).getDataValue().getLong();
+             if (n < 1) throw new SQWRLException("argument to slicing operator " + builtInName + " must be a positive integer");
+        		 
+        		 if (builtInName.equalsIgnoreCase(SQWRLNames.Limit)) sqwrlResult.setLimit(n);
+             else if (builtInName.equalsIgnoreCase(SQWRLNames.Nth)) sqwrlResult.setNth(n);
+             else if (builtInName.equalsIgnoreCase(SQWRLNames.NotNth)) sqwrlResult.setNotNth(n);
+             else if (builtInName.equalsIgnoreCase(SQWRLNames.FirstN) || builtInName.equalsIgnoreCase(SQWRLNames.LeastN)) sqwrlResult.setFirst(n);
+             else if (builtInName.equalsIgnoreCase(SQWRLNames.LastN) || builtInName.equalsIgnoreCase(SQWRLNames.GreatestN)) sqwrlResult.setLast(n);
+             else if (builtInName.equalsIgnoreCase(SQWRLNames.NotLastN) || builtInName.equalsIgnoreCase(SQWRLNames.NotGreatestN)) sqwrlResult.setNotLast(n);
+             else if (builtInName.equalsIgnoreCase(SQWRLNames.NotFirstN) || builtInName.equalsIgnoreCase(SQWRLNames.NotLeastN)) sqwrlResult.setNotFirst(n);
+             else throw new SQWRLException("unknown slicing operator " + builtInName);
+        	 } // if	
+      	 } // if
+       } // if
+     } // for       
   } // preprocessSQWRLHeadBuiltIns
 
   // We store the group arguments for each collection specified in the make operation; these arguments are later appended to the collection

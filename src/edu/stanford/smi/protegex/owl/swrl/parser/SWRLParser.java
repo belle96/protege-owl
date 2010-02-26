@@ -111,7 +111,9 @@ public class SWRLParser
     
     if (!parseOnly) {
       head = swrlFactory.createAtomList();
+      head.setInHead(true);
       body = swrlFactory.createAtomList();
+      head.setInHead(false);
     } // if
     
     if (!parseOnly && !tokenizer.hasMoreTokens()) throw new SWRLParseException("Empty rule.");
@@ -176,7 +178,7 @@ public class SWRLParser
     } // if
 
     if (isEnumeratedList) checkAndSkipToken("(", "Expecting parameters enclosed in parentheses for data range atom.");
-    else checkAndSkipToken("(", "Expecting parameters enclosed in parentheses for atom '" + identifier + "'.");
+    else checkAndSkipToken("(", "Expecting parameters enclosed in parentheses for atom " + identifier + ".");
     
     if (isEnumeratedList) atom = parseEnumeratedListParameters(enumeratedList);
     else if (isSameAs(identifier)) atom = parseSameAsAtomParameters();
@@ -186,7 +188,7 @@ public class SWRLParser
     else if (isOWLDatatypePropertyName(identifier)) atom = parseDatavaluedPropertyAtomParameters(identifier);
     else if (isBuiltinName(identifier)) atom = parseBuiltinParameters(identifier);
     else if (isXSDDatatype(identifier)) atom = parseXSDDatatypeParameters(identifier);
-    else throw new SWRLParseException("Invalid atom name '" + identifier + "'.");
+    else throw new SWRLParseException("Invalid atom name " + identifier + ".");
     
     return atom;
   } // parseAtom
@@ -196,10 +198,10 @@ public class SWRLParser
     String token = getNextNonSpaceToken(unexpectedTokenMessage);
     
     if (!token.equalsIgnoreCase(skipToken)) 
-      throw new SWRLParseException("Expecting '" + skipToken + "', got '" + token + "'. " + unexpectedTokenMessage);
+      throw new SWRLParseException("Expecting " + skipToken + ", got " + token + "; " + unexpectedTokenMessage);
   } // checkAndSkipToken
 
-  // Does not deal with escaped quotation characters.
+  // TODO: Does not deal with escaped quotation characters.
   private String getNextStringToken(String noTokenMessage) throws SWRLParseException 
   {
     String token = "";

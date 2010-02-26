@@ -34,6 +34,7 @@
   <swrl:Builtin rdf:ID="intersects"/>
   <swrl:Builtin rdf:ID="notIntersects"/>
   <swrl:Builtin rdf:ID="nth"/>
+  <swrl:Builtin rdf:ID="limit"/>
   <swrl:Builtin rdf:ID="notNth"/>
   <swrl:Builtin rdf:ID="last"/>
   <swrl:Builtin rdf:ID="notLast"/>

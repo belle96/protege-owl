@@ -77,6 +77,8 @@ public class SWRLFactory
     SWRLImp swrlImp = createImp();
     swrlImp.setHead(head);
     swrlImp.setBody(body);
+    head.setInHead(true);
+    head.setInHead(false);
     return swrlImp;
   } // SWRLImp
  

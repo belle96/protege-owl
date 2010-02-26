@@ -77,7 +77,7 @@ public class DataValueImpl  implements DataValue {
     return (Number)value; 
   } // getNumber
 
-  public XSDType getSDType() throws DataValueConversionException 
+  public XSDType getXSDType() throws DataValueConversionException 
   { 
     if (!isXSDType()) 
       throw new DataValueConversionException("cannot convert value of type " + value.getClass().getCanonicalName() + " to XSDType"); 

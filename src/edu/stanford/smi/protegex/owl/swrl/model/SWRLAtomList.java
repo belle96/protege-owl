@@ -7,6 +7,6 @@ import edu.stanford.smi.protegex.owl.model.RDFList;
  * @author Holger Knublauch  <holger@knublauch.com>
  */
 public interface SWRLAtomList extends RDFList, SWRLIndividual {
-
+  void setInHead(boolean isInHead);
 } // SWRLAtomList
 

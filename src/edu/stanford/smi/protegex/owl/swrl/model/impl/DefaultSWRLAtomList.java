@@ -21,12 +21,16 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLNames;
 
 public class DefaultSWRLAtomList extends DefaultRDFList implements SWRLAtomList 
 {
+	private boolean isInHead = false;
+	
   public DefaultSWRLAtomList(KnowledgeBase kb, FrameID id) {
     super(kb, id);
   } // DefaultSWRLAtomList
 
   public DefaultSWRLAtomList() {}
 
+  public void setInHead(boolean isInHead) { this.isInHead = isInHead; }
+  
   public String getBrowserText() 
   {
     String s = "";
@@ -37,18 +41,18 @@ public class DefaultSWRLAtomList extends DefaultRDFList implements SWRLAtomList
     if (getValues() != null) {
       Iterator iterator = getValues().iterator();
       while (iterator.hasNext()) {
-    	Instance instance = (Instance)iterator.next();
+    	  Instance instance = (Instance)iterator.next();
         if (instance instanceof SWRLBuiltinAtom) {
         	SWRLBuiltin builtIn = ((SWRLBuiltinAtom)instance).getBuiltin();
         	if (builtIn == null) {
         		if (atomProcessed) s += "  " + SWRLParser.AND_CHAR + "  ";
-                s += SWRLUtil.getSWRLBrowserText((RDFObject)instance, "BUILTIN ATOM");
+            s += SWRLUtil.getSWRLBrowserText((RDFObject)instance, "BUILTIN ATOM");
         	} else {
         		String builtInName = builtIn.getName();
-        		if ((SQWRLNames.isSQWRLCollectionMakeBuiltIn(builtInName) || SQWRLNames.isSQWRLCollectionGroupBuiltIn(builtInName)) && !setBuildEncountered) {
+        		if (!isInHead && (SQWRLNames.isSQWRLCollectionMakeBuiltIn(builtInName) || SQWRLNames.isSQWRLCollectionGroupBuiltIn(builtInName)) && !setBuildEncountered) {
         			setBuildEncountered = true;
         			s += "  " + SWRLParser.RING_CHAR + "  " + SWRLUtil.getSWRLBrowserText((RDFObject)instance, "ATOM");
-        		} else if (SQWRLNames.getCollectionOperationBuiltInNames().contains(builtInName) && !setOperationEncountered && atomProcessed) {
+        		} else if (!isInHead && SQWRLNames.getCollectionOperationBuiltInNames().contains(builtInName) && !setOperationEncountered && atomProcessed) {
         			setOperationEncountered = true;
         			s += "  " + SWRLParser.RING_CHAR + "  " + SWRLUtil.getSWRLBrowserText((RDFObject)instance, "ATOM");
         		} else {

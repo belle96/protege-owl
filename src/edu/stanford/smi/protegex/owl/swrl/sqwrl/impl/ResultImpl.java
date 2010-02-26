@@ -101,6 +101,8 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
   private Map<String, List<SQWRLResultValue>> columnVectorMap; // Maps column names to a vector of ResultValue objects for that column
   private int numberOfColumns, rowIndex, rowDataColumnIndex;
   private boolean isConfigured, isPrepared, isRowOpen, isOrdered, isAscending, isDistinct, hasAggregates;
+  private int limit = -1, nth = -1, firstN = -1, lastN = -1;
+  private boolean notNthSelection = false, firstSelection = false, lastSelection = false, notFirstSelection = false, notLastSelection = false;
 
   public ResultImpl() 
   {
@@ -276,7 +278,7 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
     if (rowDataColumnIndex == getNumberOfColumns()) closeRow(); 
   } // addRowData    
 
-  // Will ignore if row is aready closed
+  // Will ignore if row is already closed
   public void closeRow() throws SQWRLException
   {
     throwExceptionIfNotConfigured(); throwExceptionIfAlreadyPrepared(); 
@@ -302,9 +304,48 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
     else if (isDistinct) rows = distinct(rows);
 
     if (isOrdered) rows = orderBy(rows, allColumnNames, orderByColumnIndexes, isAscending);
-
+    
+    if (hasLimit()) rows = rows.subList(0, limit);
+    else if (hasNth()) {
+    	if (nth <= 0 || nth > rows.size()) rows.clear();
+    	else rows = rows.subList(nth - 1, nth);
+    } else if (hasNotNth()) {
+    	if (nth > 0 || nth <= rows.size()) rows.remove(nth - 1);
+    } else if (hasFirstSelection()) {
+    	if (firstN <= 0) rows.clear();
+    	else rows = rows.subList(0, firstN);
+    } else if (hasNotFirstSelection()) {
+    	if (firstN > 0 && firstN <= rows.size()) rows = rows.subList(firstN, rows.size());
+    } else if (hasLastSelection()) {
+    	if (lastN <= 0) rows.clear();
+    	else if (lastN <= rows.size()) rows = rows.subList(rows.size() - lastN, rows.size());
+    } else if (hasNotLastSelection()) {
+    	if (lastN > 0 && lastN <= rows.size()) rows = rows.subList(0, lastN);
+    }
+    
     prepareColumnVectors();
   } // prepared
+  
+  // nth, firstN, etc. are 1-indexed
+  public void setLimit(int limit) { this.limit = limit; }
+  public void setNth(int nth) { this.nth = nth; }
+  public void setNotNth(int nth) { notNthSelection = true; this.nth = nth; }
+  public void setFirst() { firstSelection = true; firstN = 1;}
+  public void setFirst(int n) { firstSelection = true; firstN = n; }
+  public void setLast() { lastSelection = true; lastN = 1;}
+  public void setLast(int n) { lastSelection = true; lastN = n; }
+  public void setNotFirst() { notFirstSelection = true; firstN = 1;}
+  public void setNotFirst(int n) { notFirstSelection = true; firstN = n; }
+  public void setNotLast() { notLastSelection = true; lastN = 1;}
+  public void setNotLast(int n) { notLastSelection = true; lastN = n; }
+  
+  private boolean hasLimit() { return limit != -1; }
+  private boolean hasNth() { return !hasNotNth() && nth != -1; }
+  private boolean hasNotNth() { return notNthSelection; }
+  private boolean hasFirstSelection() { return firstSelection; }
+  private boolean hasLastSelection() { return lastSelection; }
+  private boolean hasNotFirstSelection() { return notFirstSelection; }
+  private boolean hasNotLastSelection() { return notLastSelection; }
 
   private void prepareColumnVectors() throws SQWRLException
   {

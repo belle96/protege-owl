@@ -144,24 +144,34 @@ public class DefaultSWRLImp extends AbstractSWRLIndividual implements SWRLImp
 
   public SWRLAtomList getHead() 
   { 
-    Object propertyValue = getPropertyValue(getOWLModel().getRDFProperty(SWRLNames.Slot.HEAD)); 
+    Object propertyValue = getPropertyValue(getOWLModel().getRDFProperty(SWRLNames.Slot.HEAD));
+    SWRLAtomList atomList = null;
 
-    if (propertyValue instanceof SWRLAtomList) return (SWRLAtomList)propertyValue;
+    if (propertyValue instanceof SWRLAtomList) atomList = (SWRLAtomList)propertyValue;
     else if (propertyValue instanceof RDFList) { // To deal with: <swrl:head rdf:parseType="Collection">
       ((RDFList)propertyValue).setRDFType(getOWLModel().getSystemFrames().getAtomListCls());
-      return (SWRLAtomList)getOWLModel().getFrame(((RDFList)propertyValue).getName());
-    } else return null;
+      atomList = (SWRLAtomList)getOWLModel().getFrame(((RDFList)propertyValue).getName());
+    } 
+
+if (atomList != null) atomList.setInHead(true);
+    
+    return atomList;
   } // getHead
 
   public SWRLAtomList getBody() 
   { 
-    Object propertyValue = getPropertyValue(getOWLModel().getRDFProperty(SWRLNames.Slot.BODY)); 
+    Object propertyValue = getPropertyValue(getOWLModel().getRDFProperty(SWRLNames.Slot.BODY));
+    SWRLAtomList atomList = null; 
 
-    if (propertyValue instanceof SWRLAtomList) return (SWRLAtomList)propertyValue;
+    if (propertyValue instanceof SWRLAtomList) atomList = (SWRLAtomList)propertyValue;
     else if (propertyValue instanceof RDFList) { // To deal with: <swrl:body rdf:parseType="Collection">
       ((RDFList)propertyValue).setRDFType(getOWLModel().getSystemFrames().getAtomListCls());
-      return (SWRLAtomList)getOWLModel().getFrame(((RDFList)propertyValue).getName());
-    } else return null;
+      return atomList = (SWRLAtomList)getOWLModel().getFrame(((RDFList)propertyValue).getName());
+    }
+    
+    if (atomList != null) atomList.setInHead(false);
+    
+    return atomList;
   } // getBody
 
   public void setBody(SWRLAtomList swrlAtomList) { setPropertyValue(getOWLModel().getRDFProperty(SWRLNames.Slot.BODY), swrlAtomList); } 
