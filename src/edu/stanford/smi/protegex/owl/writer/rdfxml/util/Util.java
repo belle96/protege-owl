@@ -272,17 +272,7 @@ public class Util {
      */
     public static void insertResourceAsElement(RDFResource resource,
                                                XMLWriter writer) throws IOException {
-        String tagName = RDFNames.Slot.RESOURCE;
-        if (writer.getDefaultNamespace().equals(resource.getNamespace())) {
-            // LocalName
-            tagName = resource.getLocalName();
-        }
-        else {
-            // Need to get the namespace prefix from the rdfwriter
-            String prefix = writer.getNamespacePrefixes().getPrefixForNamespace(resource.getNamespace());
-            tagName = prefix + ":" + resource.getLocalName();
-        }
-        writer.writeStartElement(tagName);
+        writer.writeStartElement(resource.getNamespace(), resource.getLocalName());
     }
 
 

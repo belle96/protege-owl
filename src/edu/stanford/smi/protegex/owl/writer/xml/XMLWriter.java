@@ -67,6 +67,14 @@ public interface XMLWriter {
      */
     public void writeStartElement(String name) throws IOException;
 
+    /**
+     * Writes the start of an element with namespace and a name
+     * 
+     * @param namespace The namespace of the element to be written (e.g. http://smi-protege.stanford.edu/ontologes/test.owl#)
+     */
+    public void writeStartElement(String namespace, String name) throws IOException;
+
+    
 
     /**
      * Writes the closing tag of the last element to be started.

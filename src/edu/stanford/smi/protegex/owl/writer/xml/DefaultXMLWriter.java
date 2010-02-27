@@ -3,6 +3,8 @@ package edu.stanford.smi.protegex.owl.writer.xml;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 
+import edu.stanford.smi.protegex.owl.model.RDFNames;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.util.*;
@@ -28,8 +30,10 @@ public class DefaultXMLWriter implements XMLWriter {
     private String xmlBase;
 
     private XMLWriterNamespaceManager xmlWriterNamespaceManager;
+    
+    private int newNamespacePrefixIndex = 0;
 
-    private Map entities;
+    private Map<String, String> entities;
 
     private static final int TEXT_CONTENT_WRAP_LIMIT = 15;
 
@@ -59,7 +63,7 @@ public class DefaultXMLWriter implements XMLWriter {
                 return ((String) o1).length() - ((String) o2).length();
             }
         });
-        entities = new LinkedHashMap();
+        entities = new LinkedHashMap<String, String>();
         for (Iterator it = namespaces.iterator(); it.hasNext();) {
             String curNamespace = (String) it.next();
             String curPrefix = xmlWriterNamespaceManager.getPrefixForNamespace(curNamespace);
@@ -70,9 +74,9 @@ public class DefaultXMLWriter implements XMLWriter {
 
     private String swapForEntity(String value) {
         String repVal;
-        for (Iterator it = entities.keySet().iterator(); it.hasNext();) {
-            String curEntity = (String) it.next();
-            String entityVal = (String) entities.get(curEntity);
+        for (Iterator<String> it = entities.keySet().iterator(); it.hasNext();) {
+            String curEntity = it.next();
+            String entityVal = entities.get(curEntity);
             if (value.length() > curEntity.length()) {
                 repVal = StringUtils.replaceOnce(value, curEntity, entityVal);
                 if (repVal.length() < value.length()) {
@@ -121,6 +125,30 @@ public class DefaultXMLWriter implements XMLWriter {
         }
         elementStack.push(element);
     }
+    
+    public void writeStartElement(String namespace, String name) throws IOException {
+        boolean needsLocalNamespaceDecl = false;
+        String prefix = null;
+        String tagName = RDFNames.Slot.RESOURCE;
+        if (getDefaultNamespace().equals(namespace)) {
+            tagName = name;
+        }
+        else if ((prefix = getNamespacePrefixes().getPrefixForNamespace(namespace)) != null) {
+            tagName = prefix + ":" + name;
+        }
+        else {
+            do {
+                prefix = "p" + (newNamespacePrefixIndex++);
+            }
+            while (getNamespacePrefixes().getPrefixes().contains(prefix));
+            tagName = prefix + ":" + name;
+            needsLocalNamespaceDecl = true;
+        }
+        writeStartElement(tagName);
+        if (needsLocalNamespaceDecl) {
+            writeAttribute("xmlns:" + prefix, namespace);
+        }
+    }
 
 
     public void writeEndElement() throws IOException {
@@ -147,9 +175,9 @@ public class DefaultXMLWriter implements XMLWriter {
 
     private void writeEntities(String rootName) throws IOException {
         writer.write("\n\n<!DOCTYPE " + rootName + " [\n");
-        for (Iterator it = entities.keySet().iterator(); it.hasNext();) {
-            String entityVal = (String) it.next();
-            String entity = (String) entities.get(entityVal);
+        for (Iterator<String> it = entities.keySet().iterator(); it.hasNext();) {
+            String entityVal = it.next();
+            String entity = entities.get(entityVal);
             entity = entity.substring(1, entity.length() - 1);
             writer.write("    <!ENTITY ");
             writer.write(entity);
