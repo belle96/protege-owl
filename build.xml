@@ -291,6 +291,9 @@
         <copy todir="${protege.home}/examples/pizza">
             <fileset dir="./examples" includes="pizza.*"/>
         </copy>
+        <copy todir="${protege.home}/examples/sqwrl">
+            <fileset dir="./examples" includes="SQWRLExamples.*"/>
+        </copy>
         <copy todir="${protege.home}/examples/travel">
             <fileset dir="./examples" includes="travel.*"/>
         </copy>
