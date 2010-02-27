@@ -971,6 +971,7 @@ public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
 	  return result;
 	} // processResultArgument
 	
+	// TODO: if the argument is a collection ID we do not compare collections, we just compare IDs
 	public boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, DataValueArgument resultArgument) throws BuiltInException
 	{
 	  boolean result = false;

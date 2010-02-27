@@ -24,19 +24,18 @@ public class SQWRLNames
   public static final String OrderBy = SQWRLNamespace + "orderBy";
   public static final String OrderByDescending = SQWRLNamespace + "orderByDescending";
   public static final String ColumnNames = SQWRLNamespace + "columnNames";
+  public static final String CountAggregateFunction = "count"; 
+  public static final String CountDistinctAggregateFunction = "countDistinct"; 
   public static final String Limit = SQWRLNamespace + "limit";
-  public static final String MinN = "minN"; 
-  public static final String MaxN = "maxN";
 
+  // Aggregation
   public static final String MinAggregateFunction = "min"; 
   public static final String MaxAggregateFunction = "max"; 
   public static final String SumAggregateFunction = "sum"; 
   public static final String AvgAggregateFunction = "avg"; 
   public static final String MedianAggregateFunction = "median"; 
-  public static final String CountAggregateFunction = "count"; 
-  public static final String CountDistinctAggregateFunction = "countDistinct"; 
 
-  // Collection operations
+  // Collection construction operations
   public static final String MakeSet = SQWRLNamespace + "makeSet";
   public static final String MakeBag = SQWRLNamespace + "makeBag";
   public static final String GroupBy = SQWRLNamespace + "groupBy";
@@ -47,9 +46,8 @@ public class SQWRLNames
   public static final String NotIsEmpty = SQWRLNamespace + "notIsEmpty";
   public static final String Contains = SQWRLNamespace + "contains";
   public static final String NotContains = SQWRLNamespace + "notContains";
-  public static final String Nth = SQWRLNamespace + "nth";
-  public static final String NotNth = SQWRLNamespace + "notNth";
-  
+      
+  // First and last
   public static final String Last = SQWRLNamespace + "last";
   public static final String NotLast = SQWRLNamespace + "notLast";
   public static final String LastN = SQWRLNamespace + "lastN";
@@ -59,6 +57,19 @@ public class SQWRLNames
   public static final String FirstN = SQWRLNamespace + "firstN";
   public static final String NotFirstN = SQWRLNamespace + "notFirstN";
   
+  // nth
+  public static final String Nth = SQWRLNamespace + "nth";
+  public static final String NotNth = SQWRLNamespace + "notNth";
+  public static final String NthLast = SQWRLNamespace + "nthLast";
+  public static final String NotNthLast = SQWRLNamespace + "notNthLast";
+
+  // Slicing
+  public static final String NthSlice = SQWRLNamespace + "nthSlice";
+  public static final String NotNthSlice = SQWRLNamespace + "notNthSlice";
+  public static final String NthLastSlice = SQWRLNamespace + "nthLastSlice";
+  public static final String NotNthLastSlice = SQWRLNamespace + "notNthLastSlice";
+
+  // Aliases for first and last operators
   public static final String Greatest = SQWRLNamespace + "greatest";
   public static final String NotGreatest = SQWRLNamespace + "notGreatest";
   public static final String GreatestN = SQWRLNamespace + "greatestN";
@@ -67,6 +78,10 @@ public class SQWRLNames
   public static final String NotLeast = SQWRLNamespace + "notLeast";
   public static final String LeastN = SQWRLNamespace + "leastN";
   public static final String NotLeastN = SQWRLNamespace + "notLeastN";
+  public static final String NthGreatest = SQWRLNamespace + "nthGreatest";
+  public static final String NotNthGreatest = SQWRLNamespace + "notNthGreatest";
+  public static final String NthGreatestSlice = SQWRLNamespace + "nthGreatestSlice";
+  public static final String NotNthGreatestSlice = SQWRLNamespace + "notNthGreatestSlice";
   
   // Multi-collection operations
   public static final String Intersection = SQWRLNamespace + "intersection";
@@ -77,20 +92,27 @@ public class SQWRLNames
   
   private static final String headSelectionBuiltInNamesArray[] = { Select, SelectDistinct, OrderBy, OrderByDescending, ColumnNames };
   private static final String headAggregationBuiltInNamesArray[] = { Count, CountDistinct, Avg, Min, Max, Sum };
-  private static final String headSlicingBuiltInNamesArray[] = { Limit, 
-                                                 	               Nth, NotNth,
-                                                 	 	             First, Last, NotFirst, NotLast, FirstN, NotFirstN, LastN, NotLastN,
-                                                 	 	             Least, Greatest, LeastN, NotLeastN, GreatestN, NotGreatestN};
+  
+  private static final String headSlicingBuiltInNamesArray[] = 
+  { Limit, 
+  	Nth, NthGreatest, NthLast,
+  	NthSlice, NthLastSlice, NthGreatestSlice, NotNthGreatestSlice, NotNthLastSlice, NotNthSlice,
+  	NotNth,  NotNthLast, NotNthGreatest, NotFirst, NotFirstN, NotLast, NotLastN, NotGreatestN, 
+  	NotGreatest, NotLeastN, NotLeast, LastN, FirstN, LeastN, GreatestN 
+  };
   
   private static final String collectionMakeBuiltInNamesArray[] = { MakeSet, MakeBag };
   private static final String collectionGroupBuiltInNamesArray[] = { GroupBy };
  
   private static final String singleCollectionOperationBuiltInNamesArray[] = 
-  { Size, IsEmpty, NotIsEmpty, Contains, NotContains, 
-  	Nth, NotNth,
-	  First, NotFirst, FirstN, NotFirstN, Last, NotLast, LastN, NotLastN,
-	  Least, NotLeast, LeastN, NotLeastN, Greatest, NotGreatest, GreatestN, NotGreatestN,
-    Min, Max, Sum, Avg, Median};
+  { Size, IsEmpty, NotIsEmpty, Contains, NotContains,
+  	First,  Last, Least, Greatest, 
+  	Min, Max, Sum, Avg, Median,
+  	Nth, NthGreatest, NthLast,
+  	NthSlice, NthLastSlice, NthGreatestSlice, NotNthGreatestSlice, NotNthLastSlice, NotNthSlice,
+  	NotNth,  NotNthLast, NotNthGreatest, NotFirst, NotFirstN, NotLast, NotLastN, NotGreatestN, 
+  	NotGreatest, NotLeastN, NotLeast, LastN, FirstN, LeastN, GreatestN
+  };
 
   private static final String multiCollectionOperationBuiltInNamesArray[] = { Intersection, Union, Difference, Intersects, NotIntersects };
   private static final String createCollectionOperationBuiltInNamesArray[] = { Intersection, Union, Difference };

@@ -18,7 +18,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.DataValueConversionException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLNames;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.ResultImpl;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.SQWRLResultImpl;
 
 /**
  * Class implementing a SWRL rule or SQWRL query. TODO: separate out SQWRL functionality.
@@ -29,7 +29,7 @@ public class SWRLRuleImpl implements SWRLRule
   private String ruleGroupName;
   private List<Atom> bodyAtoms, headAtoms;
   private Set<String> referencedVariableNames;
-  private ResultImpl sqwrlResult = null;
+  private SQWRLResultImpl sqwrlResult = null;
   private boolean hasSQWRLBuiltIns, hasSQWRLCollectionBuiltIns;
   private boolean enabled = true;
   
@@ -102,7 +102,7 @@ public class SWRLRuleImpl implements SWRLRule
     return result;
   } // getSQWRLPhase2BodyAtoms
 
-  public ResultImpl getSQWRLResult() { return sqwrlResult; }
+  public SQWRLResultImpl getSQWRLResult() { return sqwrlResult; }
 
   /**
    * Find all built-in atoms with unbound arguments and tell them which of their arguments are unbound.
@@ -206,7 +206,7 @@ public class SWRLRuleImpl implements SWRLRule
     Map<String, List<BuiltInArgument>> setGroupArgumentsMap = new HashMap<String, List<BuiltInArgument>>(); 
     Set<String> setNames = new HashSet<String>();
 
-    sqwrlResult = new ResultImpl();
+    sqwrlResult = new SQWRLResultImpl();
     
     preprocessSQWRLHeadBuiltIns();
     preprocessSQWRLCollectionMakeBuiltIns(setNames, setGroupArgumentsMap);

@@ -4,7 +4,7 @@ package edu.stanford.smi.protegex.owl.swrl.bridge;
 import java.util.List;
 import java.util.Set;
 
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.ResultImpl;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.SQWRLResultImpl;
 
 /**
  * Interface representing a SWRL rule
@@ -26,7 +26,7 @@ public interface SWRLRule extends OWLAxiom, OWLEntity
 
   boolean isSQWRL();
   boolean usesSQWRLCollections();
-  ResultImpl getSQWRLResult();
+  SQWRLResultImpl getSQWRLResult();
 
   List<Atom> getSQWRLPhase1BodyAtoms();
   List<Atom> getSQWRLPhase2BodyAtoms();

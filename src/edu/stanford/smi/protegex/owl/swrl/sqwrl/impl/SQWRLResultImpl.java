@@ -30,7 +30,7 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.ResultStateException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 
 /**
- * This class implements the interfaces SQWRLResult and ResultGenerator. It can be used to generate a result structure and populate it with
+ * This class implements the interfaces SQWRLResult and SQWRLResultGenerator. It can be used to generate a result structure and populate it with
  * data; it can also be used to retrieve those data from the result.<p>
  *
  * This class operates in three phases:<p>
@@ -51,7 +51,7 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
  *
  * An example configuration and data generation is:<p>
  *
- * ResultImpl result = new ResultImpl("TestResult");<p>
+ * SQWRLResultImpl result = new SQWRLResultImpl("TestResult");<p>
  *
  * result.addColumn("name");<p>
  * result.addAggregateColumn("average", SQWRLNames.AvgAggregateFunction);<p><p>
@@ -76,7 +76,7 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
  * result.prepared();<p><p>
  *
  * The result is now available for reading. The interface SQWRLResult defines the assessor methods. A row consists of a list of objects
- * defined by the interface ResultValue. There are four possible types of values (1) DataValue, representing literals; (2) ObjectValue,
+ * defined by the interface SQWRLResultValue. There are four possible types of values (1) DataValue, representing literals; (2) IndividualValue,
  * representing OWL individuals; (3) ClassValue, representing OWL classes; and (4) PropertyValue, representing OWL properties.<p><p>
  *
  * while (result.hasNext()) {<p>
@@ -88,10 +88,10 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
  *
  * A convenience method addColumns that takes a list of column names is also supplied.<p><p>
  *
- * There is also a convenience method addRow, which takes a list of ResultValues. This method automatically does a row open and close. It
+ * There is also a convenience method addRow, which takes a list of SQWRLResultValues. This method automatically does a row open and close. It
  * is expecting the exact same number of list elements as there are columns in the result.<p>
  */ 
-public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializable
+public class SQWRLResultImpl implements SQWRLResult, SQWRLResultGenerator, Serializable
 {
   private List<String> allColumnNames, columnDisplayNames;
   private List<Integer> selectedColumnIndexes, orderByColumnIndexes;
@@ -104,10 +104,10 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
   private int limit = -1, nth = -1, firstN = -1, lastN = -1;
   private boolean notNthSelection = false, firstSelection = false, lastSelection = false, notFirstSelection = false, notLastSelection = false;
 
-  public ResultImpl() 
+  public SQWRLResultImpl() 
   {
     initialize();
-  } // ResultImpl
+  } // SQWRLResultImpl
   
   // Configuration phase methods
 
@@ -118,26 +118,6 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
   public boolean isPrepared() { return isPrepared; }
   public boolean isOrdered() { return isOrdered; }
   public boolean isAscending() { return isAscending; }
-
-  public void initialize()
-  {
-    isConfigured = false;
-    isPrepared = false;
-    isRowOpen = false;
-    
-    // The following variables will not be externally valid until configured() is called. 
-    allColumnNames = new ArrayList<String>();
-    aggregateColumnIndexes = new HashMap<Integer, String>();
-    selectedColumnIndexes = new ArrayList<Integer>();
-    orderByColumnIndexes = new ArrayList<Integer>();
-    columnDisplayNames = new ArrayList<String>();
-
-    numberOfColumns = 0; isOrdered = isAscending = isDistinct = false;
-
-    // The following variables will not be externally valid until prepared() is called.
-    rowIndex = -1; // If there are no rows in the final result, it will remain at -1.
-    rows = new ArrayList<List<SQWRLResultValue>>();
-  } // prepare
 
   public void addColumns(List<String> columnNames) throws SQWRLException
   {
@@ -320,7 +300,7 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
     	if (lastN <= 0) rows.clear();
     	else if (lastN <= rows.size()) rows = rows.subList(rows.size() - lastN, rows.size());
     } else if (hasNotLastSelection()) {
-    	if (lastN > 0 && lastN <= rows.size()) rows = rows.subList(0, lastN);
+    	if (lastN > 0 && lastN <= rows.size()) rows = rows.subList(0, rows.size() - lastN);
     }
     
     prepareColumnVectors();
@@ -563,9 +543,29 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
       
     return result;
   } // toString      
-  
+
+  private void initialize()
+  {
+    isConfigured = false;
+    isPrepared = false;
+    isRowOpen = false;
+    
+    // The following variables will not be externally valid until configured() is called. 
+    allColumnNames = new ArrayList<String>();
+    aggregateColumnIndexes = new HashMap<Integer, String>();
+    selectedColumnIndexes = new ArrayList<Integer>();
+    orderByColumnIndexes = new ArrayList<Integer>();
+    columnDisplayNames = new ArrayList<String>();
+
+    numberOfColumns = 0; isOrdered = isAscending = isDistinct = false;
+
+    // The following variables will not be externally valid until prepared() is called.
+    rowIndex = -1; // If there are no rows in the final result, it will remain at -1.
+    rows = new ArrayList<List<SQWRLResultValue>>();
+  } // prepare
+
   // Phase verification exception throwing methods
-  
+
   private void throwExceptionIfNotConfigured() throws SQWRLException
   {
     if (!isConfigured()) throw new ResultStateException("attempt to add data to unconfigured result");
@@ -860,4 +860,4 @@ public class ResultImpl implements SQWRLResultGenerator, SQWRLResult, Serializab
     } // compare
   } // RowComparator
 
-} // ResultImpl
+} // SQWRLResultImpl

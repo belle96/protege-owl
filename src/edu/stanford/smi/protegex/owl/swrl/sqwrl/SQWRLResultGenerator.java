@@ -9,9 +9,7 @@ import java.util.List;
  * Interface to configure a result and add data to it. See the Result class for detailed comments.
  */
 public interface SQWRLResultGenerator
-{  
-  void initialize();
-  
+{   
   void addColumns(List<String> columnNames) throws ResultException;
   void addColumn(String columnName) throws ResultException;
 

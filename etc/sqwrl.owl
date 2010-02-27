@@ -15,27 +15,30 @@
   <swrl:Builtin rdf:ID="columnNames"/>
   <swrl:Builtin rdf:ID="orderBy"/>
   <swrl:Builtin rdf:ID="orderByDescending"/>
+  <swrl:Builtin rdf:ID="limit"/>
+
   <swrl:Builtin rdf:ID="min"/>
   <swrl:Builtin rdf:ID="max"/>
   <swrl:Builtin rdf:ID="avg"/>
   <swrl:Builtin rdf:ID="sum"/>
   <swrl:Builtin rdf:ID="median"/>
+
   <swrl:Builtin rdf:ID="makeSet"/>
   <swrl:Builtin rdf:ID="makeBag"/>
   <swrl:Builtin rdf:ID="groupBy"/>
+
   <swrl:Builtin rdf:ID="size"/>
   <swrl:Builtin rdf:ID="isEmpty"/>
   <swrl:Builtin rdf:ID="notEmpty"/>
   <swrl:Builtin rdf:ID="contains"/>
   <swrl:Builtin rdf:ID="notContains"/>
+
   <swrl:Builtin rdf:ID="intersection"/>
   <swrl:Builtin rdf:ID="difference"/>
   <swrl:Builtin rdf:ID="union"/>
   <swrl:Builtin rdf:ID="intersects"/>
   <swrl:Builtin rdf:ID="notIntersects"/>
-  <swrl:Builtin rdf:ID="nth"/>
-  <swrl:Builtin rdf:ID="limit"/>
-  <swrl:Builtin rdf:ID="notNth"/>
+
   <swrl:Builtin rdf:ID="last"/>
   <swrl:Builtin rdf:ID="notLast"/>
   <swrl:Builtin rdf:ID="lastN"/>
@@ -44,6 +47,17 @@
   <swrl:Builtin rdf:ID="notFirst"/>
   <swrl:Builtin rdf:ID="firstN"/>
   <swrl:Builtin rdf:ID="notFirstN"/>
+
+  <swrl:Builtin rdf:ID="nth"/>
+  <swrl:Builtin rdf:ID="notNth"/>
+  <swrl:Builtin rdf:ID="nthLast"/>
+  <swrl:Builtin rdf:ID="notNthLast"/>
+
+  <swrl:Builtin rdf:ID="nthSlice"/>
+  <swrl:Builtin rdf:ID="notNthSlice"/>
+  <swrl:Builtin rdf:ID="nthLastSlice"/>
+  <swrl:Builtin rdf:ID="notNthLastSlice"/>
+
   <swrl:Builtin rdf:ID="greatest"/>
   <swrl:Builtin rdf:ID="notGreatest"/>
   <swrl:Builtin rdf:ID="greatestN"/>
@@ -52,6 +66,11 @@
   <swrl:Builtin rdf:ID="notLeast"/>
   <swrl:Builtin rdf:ID="leastN"/>
   <swrl:Builtin rdf:ID="notLeastN"/>
+  <swrl:Builtin rdf:ID="nthGreatest"/>
+  <swrl:Builtin rdf:ID="notNthGreatest"/>
+  <swrl:Builtin rdf:ID="nthGreatestSlice"/>
+  <swrl:Builtin rdf:ID="notNthGreatestSlice"/>
+
 </rdf:RDF>
 
 <!-- Created with Protege (with OWL Plugin 3.4, Build 124)  http://protege.stanford.edu -->

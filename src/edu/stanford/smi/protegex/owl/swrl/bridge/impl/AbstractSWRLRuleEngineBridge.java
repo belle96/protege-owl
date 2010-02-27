@@ -47,7 +47,7 @@ import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParseException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResult;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.InvalidQueryNameException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.ResultImpl;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.SQWRLResultImpl;
 
 /**
  ** This class provides an implementation of some of the core functionality required by SWRL rule engine and built-in bridges. Detailed
@@ -333,7 +333,7 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
    */
   public SQWRLResult getSQWRLResult(String queryName) throws SQWRLException
   {
-    ResultImpl result;
+    SQWRLResultImpl result;
 
     if (!importedSWRLRules.containsKey(queryName)) throw new InvalidQueryNameException(queryName);
 
