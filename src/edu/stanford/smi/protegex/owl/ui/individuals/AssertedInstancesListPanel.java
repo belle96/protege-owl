@@ -388,10 +388,10 @@ public class AssertedInstancesListPanel extends SelectableContainer implements D
             Slot browserSlot = pattern != null && pattern.isSimple() ? pattern.getFirstSlot() : null;
             ArrayList<Slot> slots = new ArrayList<Slot>(cls.getVisibleTemplateSlots());
             slots.add(cls.getKnowledgeBase().getNameSlot());
-            Collections.sort(slots, new FrameComparator());
-            Iterator i = slots.iterator();
+            Collections.sort(slots, new FrameComparator<Slot>());
+            Iterator<Slot> i = slots.iterator();
             while (i.hasNext()) {
-                Slot slot = (Slot) i.next();
+                Slot slot = i.next();
                 JRadioButtonMenuItem item = new JRadioButtonMenuItem(createSetDisplaySlotAction(slot));
                 if (slot.equals(browserSlot)) {
                     item.setSelected(true);
