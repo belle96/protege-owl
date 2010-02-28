@@ -261,7 +261,7 @@ public class ClassTreeWithBrowserTextNode extends LazyTreeNode {
 		 }
 		 //TODO - add flag whether to sort?		 
 		 List<Cls> clsChildrenList = new ArrayList<Cls>(clsChildren);
-		 Collections.sort(clsChildrenList, new FrameComparator());
+		 Collections.sort(clsChildrenList, new FrameComparator<Cls>());
 		 List<FrameWithBrowserText> fbtList = new ArrayList<FrameWithBrowserText>();		 
 		 for (Cls child : clsChildrenList) {
 			 fbtList.add(new FrameWithBrowserText(child, child.getBrowserText(), child.getDirectTypes(),
@@ -341,7 +341,7 @@ public class ClassTreeWithBrowserTextNode extends LazyTreeNode {
 			 
 			 //TODO - add flag whether to sort?			 
 			 List<Cls> clsChildrenList = new ArrayList<Cls>(clsChildren);
-			 Collections.sort(clsChildrenList, new FrameComparator());			 
+			 Collections.sort(clsChildrenList, new FrameComparator<Cls>());			 
 			 List<FrameWithBrowserText> fbtList = new ArrayList<FrameWithBrowserText>();			 
 			 for (Cls child : clsChildrenList) {
 				 addRequestsToFrameCalculator(child);				 
