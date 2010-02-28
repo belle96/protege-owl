@@ -1,9 +1,11 @@
 package edu.stanford.smi.protegex.owl.writer.rdfxml.rdfwriter;
 
 import java.io.Writer;
+import java.util.Comparator;
 
 import edu.stanford.smi.protege.ui.FrameComparator;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
+import edu.stanford.smi.protegex.owl.model.RDFResource;
 import edu.stanford.smi.protegex.owl.model.triplestore.TripleStore;
 
 /**
@@ -24,7 +26,7 @@ public class OWLModelOrderedWriter extends OWLModelWriter {
 
     protected RDFXMLContentWriter getContentWriter(OWLModel model,
                                                    TripleStore tripleStore) {
-        return new OWLModelOrderedContentWriter(model, tripleStore, new FrameComparator());
+        return new OWLModelOrderedContentWriter(model, tripleStore, new FrameComparator<RDFResource>());
     }
 }
 
