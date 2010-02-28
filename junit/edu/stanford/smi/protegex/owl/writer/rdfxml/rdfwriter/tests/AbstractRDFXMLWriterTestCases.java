@@ -31,7 +31,6 @@ public abstract class AbstractRDFXMLWriterTestCases extends AbstractJenaTestCase
 
     protected void doCheck() {
         try {
-            log.setLevel(Level.FINER);
             OntModel ontModel1 = Protege2Jena.createOntModel(owlModel);
             if (log.isLoggable(Level.FINE)) {
                 log.fine("Jena writer ontModel1 ------------------------------------------------\n");
