@@ -99,7 +99,7 @@ public class OWLModelWriter {
 
 
     protected RDFXMLContentWriter getContentWriter(OWLModel model, TripleStore tripleStore) {
-        return new OWLModelContentWriter(model, tripleStore);
+        return new OWLModelOrderedContentWriter(model, tripleStore);
     }
 }
 
