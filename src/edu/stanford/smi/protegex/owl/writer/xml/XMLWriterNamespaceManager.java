@@ -16,16 +16,16 @@ import java.util.Map;
  */
 public class XMLWriterNamespaceManager {
 
-    private Map prefixNamespaceMap;
+    private Map<String, String> prefixNamespaceMap;
 
-    private Map namespacePrefixMap;
+    private Map<String, String> namespacePrefixMap;
 
     private String defaultNamespace;
 
 
     public XMLWriterNamespaceManager(String defaultNamespace) {
-        prefixNamespaceMap = new HashMap();
-        namespacePrefixMap = new HashMap();
+        prefixNamespaceMap = new HashMap<String, String>();
+        namespacePrefixMap = new HashMap<String, String>();
         this.defaultNamespace = defaultNamespace;
     }
 
@@ -37,7 +37,7 @@ public class XMLWriterNamespaceManager {
 
 
     public String getPrefixForNamespace(String namespace) {
-        return (String) namespacePrefixMap.get(namespace);
+        return namespacePrefixMap.get(namespace);
     }
 
 
@@ -62,13 +62,13 @@ public class XMLWriterNamespaceManager {
     }
 
 
-    public Collection getPrefixes() {
-        return new ArrayList(prefixNamespaceMap.keySet());
+    public Collection<String> getPrefixes() {
+        return new ArrayList<String>(prefixNamespaceMap.keySet());
     }
 
 
-    public Collection getNamespaces() {
-        return new ArrayList(namespacePrefixMap.keySet());
+    public Collection<String> getNamespaces() {
+        return new ArrayList<String>(namespacePrefixMap.keySet());
     }
 }
 
