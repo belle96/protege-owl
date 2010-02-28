@@ -55,17 +55,17 @@ public class DefaultXMLWriter implements XMLWriter {
     }
 
     private void setupEntities() {
-        ArrayList namespaces = new ArrayList(xmlWriterNamespaceManager.getNamespaces());
-        Collections.sort(namespaces, new Comparator() {
-            public int compare(Object o1,
-                               Object o2) {
+        ArrayList<String> namespaces = new ArrayList<String>(xmlWriterNamespaceManager.getNamespaces());
+        Collections.sort(namespaces, new Comparator<String>() {
+            public int compare(String o1,
+                               String o2) {
                 // Shortest string first
-                return ((String) o1).length() - ((String) o2).length();
+                return o1.length() - o2.length();
             }
         });
         entities = new LinkedHashMap<String, String>();
-        for (Iterator it = namespaces.iterator(); it.hasNext();) {
-            String curNamespace = (String) it.next();
+        for (Iterator<String> it = namespaces.iterator(); it.hasNext();) {
+            String curNamespace = it.next();
             String curPrefix = xmlWriterNamespaceManager.getPrefixForNamespace(curNamespace);
             entities.put(curNamespace, "&" + curPrefix + ";");
         }
