@@ -1,4 +1,4 @@
-; Fri Feb 26 17:13:13 PST 2010
+; Sat Feb 27 16:28:13 PST 2010
 ; 
 ;+ (version "3.4.3")
 ;+ (build "Build 572")
@@ -6,13 +6,13 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[SQWRLExamples_ProjectKB_Class10086]
-		[SQWRLExamples_ProjectKB_Class10087]
-		[SQWRLExamples_ProjectKB_Class10088]
-		[SQWRLExamples_ProjectKB_Class10089]
-		[SQWRLExamples_ProjectKB_Class10090]
-		[SQWRLExamples_ProjectKB_Class10091]
-		[SQWRLExamples_ProjectKB_Class10092]))
+		[SQWRLExamples_ProjectKB_Class10072]
+		[SQWRLExamples_ProjectKB_Class10073]
+		[SQWRLExamples_ProjectKB_Class10074]
+		[SQWRLExamples_ProjectKB_Class10075]
+		[SQWRLExamples_ProjectKB_Class10076]
+		[SQWRLExamples_ProjectKB_Class10077]
+		[SQWRLExamples_ProjectKB_Class10078]))
 
 ([CLSES_TAB] of  Widget
 
@@ -7124,9 +7124,6 @@
 	(name "owl_file_name")
 	(string_value "SQWRLExamples.owl"))
 
-([KB_432250_Class0] of  Map
-)
-
 ([KB_444675_Instance_0] of  String
 
 	(name "SwitchableClassDefinitionType")
@@ -7258,6 +7255,9 @@
 	(name "http://www.w3.org/2000/01/rdf-schema#Class")
 	(property_list [KB_183529_Class0])
 	(widget_class_name "edu.stanford.smi.protegex.owl.ui.widget.OWLFormWidget"))
+
+([KB_904864_Class0] of  Map
+)
 
 ([KB_938545_Instance_166] of  Widget
 
@@ -7952,37 +7952,37 @@
 ([SQWRLExamples_ProjectKB_Class10064] of  Property_List
 )
 
-([SQWRLExamples_ProjectKB_Class10086] of  String
+([SQWRLExamples_ProjectKB_Class10072] of  String
 
 	(name "http://www.w3.org/2002/07/owl#Class")
 	(string_value "http%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23label"))
 
-([SQWRLExamples_ProjectKB_Class10087] of  String
+([SQWRLExamples_ProjectKB_Class10073] of  String
 
 	(name "http://www.w3.org/2000/01/rdf-schema#Class")
 	(string_value "http%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23label"))
 
-([SQWRLExamples_ProjectKB_Class10088] of  String
+([SQWRLExamples_ProjectKB_Class10074] of  String
 
 	(name ":INSTANCE-ANNOTATION")
 	(string_value "%3AANNOTATION-TEXT"))
 
-([SQWRLExamples_ProjectKB_Class10089] of  String
+([SQWRLExamples_ProjectKB_Class10075] of  String
 
 	(name ":META-CLASS")
 	(string_value "%3ANAME"))
 
-([SQWRLExamples_ProjectKB_Class10090] of  String
+([SQWRLExamples_ProjectKB_Class10076] of  String
 
 	(name "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property")
 	(string_value "http%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23label"))
 
-([SQWRLExamples_ProjectKB_Class10091] of  String
+([SQWRLExamples_ProjectKB_Class10077] of  String
 
 	(name "http://www.w3.org/2002/07/owl#Thing")
 	(string_value "http%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23label"))
 
-([SQWRLExamples_ProjectKB_Class10092] of  String
+([SQWRLExamples_ProjectKB_Class10078] of  String
 
 	(name ":PAL-CONSTRAINT")
 	(string_value "%3APAL-NAME"))

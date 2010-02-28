@@ -518,22 +518,38 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   	else {
   		String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
       int n = getArgumentAsAPositiveInteger(2, arguments) - 1; // 1-offset for user, 0 for processing
-      Collection<BuiltInArgument> collection = getCollection(collectionID);
+      List<BuiltInArgument> sortedCollection = getSortedCollection(collectionID);
 
-      if (!collection.isEmpty()) {
-      	SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
-      	BuiltInArgument array[] = (BuiltInArgument[])sortedSet.toArray(new BuiltInArgument[sortedSet.size()]);
-      
-      	if (n >= 0 && n < array.length) {
-      		BuiltInArgument nth = array[n];
+      if (!sortedCollection.isEmpty()) {
+
+      	if (n >= 0 && n < sortedCollection.size()) {
+      		BuiltInArgument nth = sortedCollection.get(n);
       		result = processResultArgument(arguments, 0, nth);
       	} else result = false;
       } // if
   	} // if
 
     return result;
-  } // nth
+  } 
     
+  public boolean greatest(List<BuiltInArgument> arguments) throws BuiltInException 
+  { 
+    boolean result = false;
+  	
+  	if (getIsInConsequent()) result = true; // Already processed - ignore
+  	else {
+      String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
+      List<BuiltInArgument> sortedCollection = getSortedCollection(collectionID);
+    
+      if (!sortedCollection.isEmpty()) {
+        BuiltInArgument greatest = sortedCollection.get(sortedCollection.size() - 1);
+        result = processResultArgument(arguments, 0, greatest);
+      } // if
+  	} // if
+
+    return result;
+  } 
+
   public boolean nthGreatest(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
     boolean result = false;
@@ -551,7 +567,25 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   	} // if
 
     return result;
-  } // nthGreatest
+  } 
+
+  public boolean least(List<BuiltInArgument> arguments) throws BuiltInException 
+  { 
+    boolean result = false;
+  	
+  	if (getIsInConsequent()) result = true; // Already processed - ignore
+  	else {
+  	  String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
+  	  List<BuiltInArgument> sortedCollection = getSortedCollection(collectionID);
+    
+      if (!sortedCollection.isEmpty()) {
+        BuiltInArgument least = sortedCollection.get(0);
+        result = processResultArgument(arguments, 0, least);
+      } // if
+  	} // if
+
+    return result;
+  }
 
   public boolean notNthGreatest(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
@@ -560,13 +594,15 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   	if (getIsInConsequent()) result = true; // Already processed - ignore
   	else {
   		String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
-      List<BuiltInArgument> sortedCollection = getSortedCollection(collectionID);
+    	String resultCollectionID = getCollectionIDInSingleCollectionOperation(arguments, 0, 3);
       int n = getArgumentAsAPositiveInteger(2, arguments);
+      List<BuiltInArgument> sortedCollection = getSortedCollection(collectionID);
 
-      if (!sortedCollection.isEmpty() && n > 0 && n <= sortedCollection.size()) {
-      	sortedCollection.remove(sortedCollection.size() - n);
-      	result = processResultArgument(arguments, 0, sortedCollection);
-      } else result = false;
+      if (!sortedCollection.isEmpty() && n > 0 && n <= sortedCollection.size())	sortedCollection.remove(sortedCollection.size() - n);
+      	
+     	if (!collections.containsKey(resultCollectionID)) collections.put(resultCollectionID, sortedCollection);
+      	
+     	result = processResultArgument(arguments, 0, createDataValueArgument(resultCollectionID));
   	} // if
 
     return result;
@@ -579,21 +615,21 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   	if (getIsInConsequent()) result = true; // Already processed - ignore
   	else {
   		String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 4); // Does argument checking
-      List<BuiltInArgument> sortedCollection = getSortedCollection(collectionID);
+  		String resultCollectionID = getCollectionIDInSingleCollectionOperation(arguments, 0, 4);
       int n = getArgumentAsAPositiveInteger(2, arguments)  - 1; // 1-offset for user, 0 for processing
       int sliceSize = getArgumentAsAPositiveInteger(3, arguments);
+      List<BuiltInArgument> sortedCollection = getSortedCollection(collectionID);
+      List<BuiltInArgument> slice = new ArrayList<BuiltInArgument>();
 
-      if (!sortedCollection.isEmpty() && n >= 0 && n < sortedCollection.size()) {
-      	String resultCollectionID = getCollectionIDInSingleCollectionOperation(arguments, 0, 4);
-        List<BuiltInArgument> slice = new ArrayList<BuiltInArgument>();
+      if (!sortedCollection.isEmpty() && n >= 0) {      
     		int startIndex = n;
     		int finishIndex = n + sliceSize - 1;
       	for (int index = startIndex; index <= finishIndex && index < sortedCollection.size(); index++) slice.add(sortedCollection.get(index));
+      } // if
       	 
-      	if (!collections.containsKey(resultCollectionID)) collections.put(resultCollectionID, slice);
+      if (!collections.containsKey(resultCollectionID)) collections.put(resultCollectionID, slice);
       	
-        result = processResultArgument(arguments, 0, createDataValueArgument(resultCollectionID));
-      } else result = false;
+      result = processResultArgument(arguments, 0, createDataValueArgument(resultCollectionID));
   	} // if
 
     return result;
@@ -606,18 +642,22 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   	if (getIsInConsequent()) result = true; // Already processed - ignore
   	else {
   		String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 4); // Does argument checking
-      List<BuiltInArgument> sortedCollection = getSortedCollection(collectionID);
+  		String resultCollectionID = getCollectionIDInSingleCollectionOperation(arguments, 0, 4);
       int n = getArgumentAsAPositiveInteger(2, arguments) - 1; // 1-offset for user, 0 for processing
       int sliceSize = getArgumentAsAPositiveInteger(3, arguments);
+      List<BuiltInArgument> sortedCollection = getSortedCollection(collectionID);
+      List<BuiltInArgument> notSlice = new ArrayList<BuiltInArgument>();
 
       if (!sortedCollection.isEmpty() && n >= 0 && n < sortedCollection.size()) {
-      	List<BuiltInArgument> notSlice = new ArrayList<BuiltInArgument>();
     		int startIndex = n;
     		int finishIndex = n + sliceSize - 1;
-      	for (int index = 0; index <= sortedCollection.size(); index++) 
+      	for (int index = 0; index < sortedCollection.size(); index++) 
       	  if (index < startIndex || index > finishIndex) notSlice.add(sortedCollection.get(index));
-      	result = processResultArgument(arguments, 0, notSlice);
-      } else result = false;
+      } // if
+      	
+     if (!collections.containsKey(resultCollectionID)) collections.put(resultCollectionID, notSlice);
+      	
+     result = processResultArgument(arguments, 0, createDataValueArgument(resultCollectionID));
   	} // if
 
     return result;
@@ -630,18 +670,22 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   	if (getIsInConsequent()) result = true; // Already processed - ignore
   	else {
   		String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 4); // Does argument checking
-      List<BuiltInArgument> sortedCollection = getSortedCollection(collectionID);
+  		String resultCollectionID = getCollectionIDInSingleCollectionOperation(arguments, 0, 4);
       int n = getArgumentAsAPositiveInteger(2, arguments);
       int sliceSize = getArgumentAsAPositiveInteger(3, arguments);
-
-      if (!sortedCollection.isEmpty() && n > 0 && n <= sortedCollection.size()) {
-    		List<BuiltInArgument> slice = new ArrayList<BuiltInArgument>();
-    		int startIndex = sortedCollection.size() - n;
+      List<BuiltInArgument> sortedCollection = getSortedCollection(collectionID);
+      List<BuiltInArgument> slice = new ArrayList<BuiltInArgument>();
+      
+      if (!sortedCollection.isEmpty() && n > 0) {
+      	int startIndex = sortedCollection.size() - n;
     		int finishIndex = startIndex + sliceSize - 1;
+    		if (startIndex < 0) startIndex = 0;
     		for (int index = startIndex; index <= finishIndex && index < sortedCollection.size(); index++) slice.add(sortedCollection.get(index));
-   
-    		result = processResultArgument(arguments, 0, slice);
-      } else result = false;
+      } // if
+    	   
+      if (!collections.containsKey(resultCollectionID)) collections.put(resultCollectionID, slice);
+      	
+      result = processResultArgument(arguments, 0, createDataValueArgument(resultCollectionID));
   	} // if
 
     return result;
@@ -654,22 +698,26 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   	if (getIsInConsequent()) result = true; // Already processed - ignore
   	else {
   		String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 4); // Does argument checking
+  		String resultCollectionID = getCollectionIDInSingleCollectionOperation(arguments, 0, 4);
       List<BuiltInArgument> sortedCollection = getSortedCollection(collectionID);
       int n = getArgumentAsAPositiveInteger(2, arguments);
       int sliceSize = getArgumentAsAPositiveInteger(3, arguments);
+      List<BuiltInArgument> slice = new ArrayList<BuiltInArgument>();
 
       if (!sortedCollection.isEmpty() && n > 0 && n <= sortedCollection.size()) {
-    		List<BuiltInArgument> slice = new ArrayList<BuiltInArgument>();
     		int startIndex = sortedCollection.size() - n;
     		int finishIndex = startIndex + sliceSize - 1;
     		for (int index = 0; index < sortedCollection.size(); index++) 
     			if (index < startIndex || index > finishIndex) slice.add(sortedCollection.get(index));
-    		result = processResultArgument(arguments, 0, slice);
-      } else result = false;
+      } // if
+    	   
+      if (!collections.containsKey(resultCollectionID)) collections.put(resultCollectionID, slice);
+      	
+      result = processResultArgument(arguments, 0, createDataValueArgument(resultCollectionID));
   	} // if
-
+  	
     return result;
-  } // notNthGreatestSlice
+  } 
 
   public boolean notNth(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
@@ -678,43 +726,20 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   	if (getIsInConsequent()) result = true; // Already processed - ignore
   	else {
       String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
+      String resultCollectionID = getCollectionIDInSingleCollectionOperation(arguments, 0, 3);
       int n = getArgumentAsAPositiveInteger(2, arguments) - 1;  // 1-offset for user, 0 for processing
-      Collection<BuiltInArgument> collection = getCollection(collectionID);
+      List<BuiltInArgument> sortedCollection = getSortedCollection(collectionID);
     
-      if (!collection.isEmpty()) {
-        SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
-        BuiltInArgument array[] = (BuiltInArgument[])sortedSet.toArray(new BuiltInArgument[sortedSet.size()]);
+      if (!sortedCollection.isEmpty() && n >= 0 && n < sortedCollection.size()) sortedCollection.remove(n);
 
-        if (n >= 0 && n < array.length) {
-          BuiltInArgument nth = array[n];
-          sortedSet.remove(nth);
-          result = processResultArgument(arguments, 0, sortedSet);
-        } else result = false;
-      } // if
+      if (!collections.containsKey(resultCollectionID)) collections.put(resultCollectionID, sortedCollection);
+        	
+      result = processResultArgument(arguments, 0, createDataValueArgument(resultCollectionID));
   	} // if
 
     return result;
   } // notNth
   
-  public boolean greatest(List<BuiltInArgument> arguments) throws BuiltInException 
-  { 
-    boolean result = false;
-  	
-  	if (getIsInConsequent()) result = true; // Already processed - ignore
-  	else {
-      String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
-      Collection<BuiltInArgument> collection = getCollection(collectionID);
-    
-      if (!collection.isEmpty()) {
-        SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
-        BuiltInArgument greatest = sortedSet.last();
-        result = processResultArgument(arguments, 0, greatest);
-      } // if
-  	} // if
-
-    return result;
-  } // greatest
-
   public boolean notGreatest(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
     boolean result = false;
@@ -722,14 +747,14 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   	if (getIsInConsequent()) result = true; // Already processed - ignore
   	else {
   		String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
-      Collection<BuiltInArgument> collection = getCollection(collectionID);
+  		String resultCollectionID = getCollectionIDInSingleCollectionOperation(arguments, 0, 2);
+      List<BuiltInArgument> sortedCollection = getSortedCollection(collectionID);
     
-      if (!collection.isEmpty()) {
-        SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
-        BuiltInArgument greatest = sortedSet.last();
-        sortedSet.remove(greatest);
-        result = processResultArgument(arguments, 0, sortedSet);
-      } // if
+      if (!sortedCollection.isEmpty()) sortedCollection.remove(sortedCollection.size() - 1);
+
+      if (!collections.containsKey(resultCollectionID)) collections.put(resultCollectionID, sortedCollection);
+      	
+    	result = processResultArgument(arguments, 0, createDataValueArgument(resultCollectionID));
   	} // if
 
     return result;
@@ -742,22 +767,21 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   	if (getIsInConsequent()) result = true; // Already processed - ignore
   	else {
   		String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
+  		String resultCollectionID = getCollectionIDInSingleCollectionOperation(arguments, 0, 3);
   	  int n = getArgumentAsAPositiveInteger(2, arguments);
-      Collection<BuiltInArgument> collection = getCollection(collectionID);
+  	  List<BuiltInArgument> sortedCollection = getSortedCollection(collectionID);
+  	  List<BuiltInArgument> greatestN = new ArrayList<BuiltInArgument>();
     
-      if (!collection.isEmpty()) {
-        SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
-        BuiltInArgument array[] = (BuiltInArgument[])sortedSet.toArray(new BuiltInArgument[sortedSet.size()]);
-        Set<BuiltInArgument> greatestNSet = new HashSet<BuiltInArgument>();
+  	  if (!sortedCollection.isEmpty() && n > 0) 
+        for (int i = sortedCollection.size() - n; i < sortedCollection.size(); i++) greatestN.add(sortedCollection.get(i));
 
-        for (int i = collection.size() - 1; i >= collection.size() - n && i >= 0; i--) greatestNSet.add(array[i]);
-
-        result = processResultArgument(arguments, 0, greatestNSet);
-      } // if
+      if (!collections.containsKey(resultCollectionID)) collections.put(resultCollectionID, greatestN);
+      	
+      result = processResultArgument(arguments, 0, createDataValueArgument(resultCollectionID));
   	} // if
 
     return result;
-  } // greatestN
+  }
  
   public boolean notGreatestN(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
@@ -766,42 +790,21 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   	if (getIsInConsequent()) result = true; // Already processed - ignore
   	else {
       String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
+    	String resultCollectionID = getCollectionIDInSingleCollectionOperation(arguments, 0, 3);
       int n = getArgumentAsAPositiveInteger(2, arguments);
-      Collection<BuiltInArgument> collection = getCollection(collectionID);
+      List<BuiltInArgument> sortedCollection = getSortedCollection(collectionID);
+      List<BuiltInArgument> notGreatestN = new ArrayList<BuiltInArgument>();
+      
+      if (!sortedCollection.isEmpty() && n > 0)
+        for (int i = 0; i < sortedCollection.size() - n; i++) notGreatestN.add(sortedCollection.get(i));
 
-      if (!collection.isEmpty()) {
-        SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
-        BuiltInArgument array[] = (BuiltInArgument[])sortedSet.toArray(new BuiltInArgument[sortedSet.size()]);
-        Set<BuiltInArgument> notGreatestNSet = new HashSet<BuiltInArgument>();
-
-        for (int i = 0; i < collection.size() - n; i++) notGreatestNSet.add(array[i]);
-
-        result = processResultArgument(arguments, 0, notGreatestNSet);
-      } // if
+      if (!collections.containsKey(resultCollectionID)) collections.put(resultCollectionID, notGreatestN);
+      	
+      result = processResultArgument(arguments, 0, createDataValueArgument(resultCollectionID));
   	} // if
 
     return result;
-  } // notGreatestN
-
-  public boolean least(List<BuiltInArgument> arguments) throws BuiltInException 
-  { 
-    boolean result = false;
-  	
-  	if (getIsInConsequent()) result = true; // Already processed - ignore
-  	else {
-  	  String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
-      Collection<BuiltInArgument> collection = getCollection(collectionID);
-    
-      if (!collection.isEmpty()) {
-        SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
-        BuiltInArgument least = sortedSet.first();
-
-        result = processResultArgument(arguments, 0, least);
-      } // if
-  	} // if
-
-    return result;
-  } // least
+  }
 
   public boolean notLeast(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
@@ -810,15 +813,14 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   	if (getIsInConsequent()) result = true; // Already processed - ignore
   	else {
       String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 2); // Does argument checking
-      Collection<BuiltInArgument> collection = getCollection(collectionID);
+    	String resultCollectionID = getCollectionIDInSingleCollectionOperation(arguments, 0, 2);
+      List<BuiltInArgument> sortedCollection = getSortedCollection(collectionID);
     
-      if (!collection.isEmpty()) {
-        SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
-        BuiltInArgument least = sortedSet.first();
-        sortedSet.remove(least);
+      if (!sortedCollection.isEmpty()) sortedCollection.remove(0);
 
-        result = processResultArgument(arguments, 0, sortedSet);
-      } // if
+      if (!collections.containsKey(resultCollectionID)) collections.put(resultCollectionID, sortedCollection);
+      	
+    	result = processResultArgument(arguments, 0, createDataValueArgument(resultCollectionID));
   	} // if
 
     return result;
@@ -831,22 +833,20 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   	if (getIsInConsequent()) result = true; // Already processed - ignore
   	else {
       String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
+      String resultCollectionID = getCollectionIDInSingleCollectionOperation(arguments, 0, 3);
       int n = getArgumentAsAPositiveInteger(2, arguments);
-      Collection<BuiltInArgument> collection = getCollection(collectionID);
-    
-      if (!collection.isEmpty()) {
-        SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
-        BuiltInArgument array[] = (BuiltInArgument[])sortedSet.toArray(new BuiltInArgument[sortedSet.size()]);
-        Set<BuiltInArgument> leastNSet = new HashSet<BuiltInArgument>();
-
-        for (int i = 0; i < n && i < collection.size(); i++) leastNSet.add(array[i]);
+      List<BuiltInArgument> sortedCollection = getSortedCollection(collectionID);
+      List<BuiltInArgument> leastN = new ArrayList<BuiltInArgument>();
+ 
+      for (int i = 0; i < n && i < sortedCollection.size(); i++) leastN.add(sortedCollection.get(i));
       
-        result = processResultArgument(arguments, 0, leastNSet);
-      } // if
+      if (!collections.containsKey(resultCollectionID)) collections.put(resultCollectionID, leastN);
+      	
+     	result = processResultArgument(arguments, 0, createDataValueArgument(resultCollectionID));
   	} // if
 
     return result;
-  } // leastN
+  } 
 
   public boolean notLeastN(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
@@ -855,22 +855,20 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   	if (getIsInConsequent()) result = true; // Already processed - ignore
   	else {
       String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, 3); // Does argument checking
+    	String resultCollectionID = getCollectionIDInSingleCollectionOperation(arguments, 0, 3);
       int n = getArgumentAsAPositiveInteger(2, arguments);
-      Collection<BuiltInArgument> collection = getCollection(collectionID);
+      List<BuiltInArgument> sortedCollection = getSortedCollection(collectionID);
+      List<BuiltInArgument> notLeastN = new ArrayList<BuiltInArgument>();
 
-      if (!collection.isEmpty()) {
-        SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
-        BuiltInArgument array[] = (BuiltInArgument[])sortedSet.toArray(new BuiltInArgument[sortedSet.size()]);
-        Set<BuiltInArgument> notLeastNSet = new HashSet<BuiltInArgument>();
-
-        for (int i = n - 1; i < collection.size(); i++) notLeastNSet.add(array[i]);
+      for (int i = n; i < sortedCollection.size(); i++) notLeastN.add(sortedCollection.get(i));
       
-        result = processResultArgument(arguments, 0, notLeastNSet);
-      } // if
+      if (!collections.containsKey(resultCollectionID)) collections.put(resultCollectionID, notLeastN);
+      	
+      result = processResultArgument(arguments, 0, createDataValueArgument(resultCollectionID));
   	} // if
 
     return result;
-  } // leastN
+  } 
 
   // Internal methods
 
