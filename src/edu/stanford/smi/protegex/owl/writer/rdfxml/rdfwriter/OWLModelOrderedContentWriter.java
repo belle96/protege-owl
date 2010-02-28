@@ -17,6 +17,7 @@ import edu.stanford.smi.protegex.owl.model.RDFResource;
 import edu.stanford.smi.protegex.owl.model.triplestore.TripleStore;
 import edu.stanford.smi.protegex.owl.writer.rdfxml.renderer.RDFAxiomRenderer;
 import edu.stanford.smi.protegex.owl.writer.rdfxml.renderer.RDFResourceRenderer;
+import edu.stanford.smi.protegex.owl.writer.rdfxml.util.Util;
 import edu.stanford.smi.protegex.owl.writer.xml.XMLWriter;
 
 /**
@@ -28,6 +29,8 @@ import edu.stanford.smi.protegex.owl.writer.xml.XMLWriter;
  * matthew.horridge@cs.man.ac.uk<br>
  * www.cs.man.ac.uk/~horridgm<br><br>
  */
+
+// TODO Why are there two versions of this class?
 public class OWLModelOrderedContentWriter implements RDFXMLContentWriter {
 
 
@@ -35,9 +38,13 @@ public class OWLModelOrderedContentWriter implements RDFXMLContentWriter {
 
     private TripleStore tripleStore;
 
-    private Comparator comparator;
+    private Comparator<RDFResource> comparator;
 
-
+    public OWLModelOrderedContentWriter(OWLModel model,
+                                        TripleStore tripleStore) {
+        this(model, tripleStore, null);
+    }
+    
     /**
      * Constructs an OWLModel RDF/XML rdfwriter to render the specified <code>OWLModel</code>.
      *
@@ -46,21 +53,26 @@ public class OWLModelOrderedContentWriter implements RDFXMLContentWriter {
      */
     public OWLModelOrderedContentWriter(OWLModel model,
                                         TripleStore tripleStore,
-                                        Comparator comparator) {
+                                        Comparator<RDFResource> comparator) {
         this.model = model;
         this.tripleStore = tripleStore;
         this.comparator = comparator;
     }
 
 
-    @SuppressWarnings({ "deprecation", "unchecked" })
-	protected Collection getResources() {
-        TreeSet resources = new TreeSet(comparator);
+    @SuppressWarnings({ "deprecation" })
+	protected Collection<RDFResource> getResources() {
+        Collection<RDFResource> resources;
+        if (comparator != null) {
+            resources = new TreeSet<RDFResource>(comparator);
+        }
+        else {
+            resources = new HashSet<RDFResource>();
+        }
         // Resources that have this triplestore as their home triplestore
-        for (Iterator it = tripleStore.listHomeResources(); it.hasNext();) {
-            RDFResource curRes = (RDFResource) it.next();
-            if (curRes.isSystem() == false &&
-                    curRes.isAnonymous() == false) {
+        for (Iterator<RDFResource> it = tripleStore.listHomeResources(); it.hasNext();) {
+            RDFResource curRes = it.next();
+            if (!Util.isExcludedResource(curRes)) {
                 resources.add(curRes);
             }
         }
@@ -68,12 +80,11 @@ public class OWLModelOrderedContentWriter implements RDFXMLContentWriter {
         // Render the resources that there are statements about in this triple store
         for (Iterator it = model.getRDFProperties().iterator(); it.hasNext();) {
             RDFProperty curProp = (RDFProperty) it.next();
-            for (Iterator subjIt = tripleStore.listSubjects(curProp); subjIt.hasNext();) {
+            for (Iterator<RDFResource> subjIt = tripleStore.listSubjects(curProp); subjIt.hasNext();) {
                 Object subj = subjIt.next();
                 if (subj instanceof RDFResource) {
                     RDFResource curSubj = (RDFResource) subj;
-                    if (curSubj.isAnonymous() == false &&
-                            curSubj.isSystem() == false &&
+                    if (!Util.isExcludedResource(curSubj) &&
                             resources.contains(curSubj) == false) {
                         resources.add(curSubj);
                     }
