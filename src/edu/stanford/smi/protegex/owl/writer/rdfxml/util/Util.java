@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import edu.stanford.smi.protege.model.SimpleInstance;
 import edu.stanford.smi.protegex.owl.model.NamespaceManager;
 import edu.stanford.smi.protegex.owl.model.NamespaceUtil;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
@@ -40,7 +41,7 @@ import edu.stanford.smi.protegex.owl.writer.xml.XMLWriterNamespaceManager;
  */
 public class Util {
 
-    private static Set<String> excludedPropertyNames;
+     private static Set<String> excludedPropertyNames;
 
 
     static {
@@ -95,10 +96,18 @@ public class Util {
         // Handle domain in a special way to filter out owl:Thing
         excludedPropertyNames.add(RDFSNames.Slot.DOMAIN);
     }
-
-
-    public static boolean isExcludedProperty(RDFProperty property) {
-        return excludedPropertyNames.contains(property.getName());
+    
+    
+    @SuppressWarnings("deprecation")
+    public static boolean isExcludedResource(RDFResource resource) {
+        if (resource.isSystem() || resource.isAnonymous()) {
+            return true;
+        }
+        OWLModel model = resource.getOWLModel();
+        if (resource.hasDirectType(model.getSystemFrames().getOwlOntologyPointerClass())) {
+            return true;
+        }
+        return false;
     }
 
 
