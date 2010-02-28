@@ -7,12 +7,13 @@ import edu.stanford.smi.protege.ui.FrameComparator;
 import edu.stanford.smi.protegex.owl.model.OWLClass;
 import edu.stanford.smi.protegex.owl.model.OWLIndividual;
 import edu.stanford.smi.protegex.owl.model.OWLProperty;
+import edu.stanford.smi.protegex.owl.model.RDFResource;
 
-public class NativeWriterComparator extends FrameComparator implements
-        Comparator<Frame> {
+public class NativeWriterComparator extends FrameComparator<RDFResource> implements
+        Comparator<RDFResource> {
     
     @Override
-    public int compare(Frame f1, Frame f2) {
+    public int compare(RDFResource f1, RDFResource f2) {
         int type1 = getType(f1);
         int type2 = getType(f2);
         if (type1 > type2) {
