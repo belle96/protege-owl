@@ -50,6 +50,7 @@ public class BuiltInAtomImpl extends AtomImpl implements BuiltInAtom
   public Set<String> getDependsOnVariableNames() { return dependsOnVariableNames; }
 
   public boolean usesSQWRLCollectionResults() { return sqwrlCollectionResultsUsed; } 
+  public boolean isSQWRLBuiltIn() { return SQWRLNames.isSQWRLBuiltIn(builtInURI); }
   public boolean isSQWRLMakeCollection() { return SQWRLNames.isSQWRLCollectionMakeBuiltIn(builtInURI); }
   public boolean isSQWRLGroupCollection() { return SQWRLNames.isSQWRLCollectionGroupByBuiltIn(builtInURI); }
   public boolean isSQWRLCollectionOperation() { return SQWRLNames.isSQWRLCollectionOperationBuiltIn(builtInURI); } 
@@ -130,7 +131,7 @@ public class BuiltInAtomImpl extends AtomImpl implements BuiltInAtom
 
   public void setDependsOnVariableNames(Set<String> variableNames)
   {
-	dependsOnVariableNames = variableNames;
+	  dependsOnVariableNames = variableNames;
   } // setDependsOnVariableNames
   
   private void checkArgumentNumber(int argumentNumber) throws BuiltInException

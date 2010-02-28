@@ -354,7 +354,7 @@ public class SWRLRuleImpl implements SWRLRule
     throws SQWRLException, BuiltInException
   {
     for (BuiltInAtom builtInAtom : getBuiltInAtomsFromBody(SQWRLNames.getCollectionGroupByBuiltInNames())) {
-      String collectionName = builtInAtom.getArgumentVariableName(0); // First argument is the collection name
+      String collectionName = builtInAtom.getArgumentVariableName(0); // The first argument is the collection name.
       List<BuiltInArgument> builtInArguments = builtInAtom.getArguments();
       List<BuiltInArgument> groupArguments = builtInArguments.subList(1, builtInArguments.size());
 
@@ -365,9 +365,26 @@ public class SWRLRuleImpl implements SWRLRule
       if (collectionGroupArgumentsMap.containsKey(collectionName)) throw new SQWRLException("groupBy specified more than once for same collection ?" + collectionName);
       if (hasUnboundArgument(groupArguments)) throw new SQWRLException("unbound group argument passed to groupBy for collection ?" + collectionName);
         
-      collectionGroupArgumentsMap.put(collectionName, groupArguments); // Store group arguments          
+      collectionGroupArgumentsMap.put(collectionName, groupArguments); // Store group arguments.          
     } // for
-  } // processSQWRLCollectionGroupByBuiltIns
+  }
+
+  // Append the group arguments to built-ins for each of its collection arguments; also append group arguments
+  // to collections created by operation built-ins.
+  private void processSQWRLGroupByArguments(Set<String> collectionNames, Map<String, List<BuiltInArgument>> collectionGroupArgumentsMap) 
+    throws SQWRLException, BuiltInException
+  {
+    for (BuiltInAtom builtInAtom : getBuiltInAtomsFromBody(SQWRLNames.getSQWRLBuiltInNames())) {
+    	if (builtInAtom.isSQWRLGroupCollection()) continue;
+        
+      for (String variableName : builtInAtom.getArgumentsVariableNames()) {
+      	if (collectionNames.contains(variableName) && collectionGroupArgumentsMap.containsKey(variableName)) { // The variable refers to a grouped collection.
+      		List<BuiltInArgument> collectionGroupArguments = collectionGroupArgumentsMap.get(variableName); // Get the grouping arguments.
+      		builtInAtom.addArguments(collectionGroupArguments); // Append each collections's group arguments to built-in
+      	} // if
+      } // for
+    } // for
+  } 
 
   private void processSQWRLCollectionOperationBuiltIns(Set<String> collectionNames, Map<String, List<BuiltInArgument>> collectionGroupArgumentsMap,
   																										Set<String> cascadedUnboundVariableNames) 
@@ -381,16 +398,13 @@ public class SWRLRuleImpl implements SWRLRule
   			cascadedUnboundVariableNames.addAll(unboundVariableNames);
   		} // if
   	} // for
-  } // processSQWRLCollectionOperationBuiltIns
+  }
 
   private void processBuiltInsThatUseSQWRLCollectionOperationResults(Set<String> cascadedUnboundVariableNames) 
     throws SQWRLException, BuiltInException
   {
     for (BuiltInAtom builtInAtom : getBuiltInAtomsFromBody()) {
-      String builtInName = builtInAtom.getBuiltInURI();
-      if (!SQWRLNames.isSQWRLBuiltIn(builtInName)) {
-
-        // Mark later non SQWRL built-insbuilt-ins that (directly or indirectly) use variables bound by collection operation built-ins.
+      if (!builtInAtom.isSQWRLBuiltIn()) { // Mark later non SQWRL built-ins that (directly or indirectly) use variables bound by collection operation built-ins.
       	if (builtInAtom.usesAtLeastOneVariableOf(cascadedUnboundVariableNames)) {
       		builtInAtom.setUsesSQWRLCollectionResults(); // Mark this built-in as dependent on collection built-in bindings.
       		if (builtInAtom.hasUnboundArguments())  // Cascade the dependency from this built-in to others using its arguments.
@@ -399,25 +413,6 @@ public class SWRLRuleImpl implements SWRLRule
       } // if
     } // for
   }
-
-  // Append the group arguments to built-ins for each of its collection arguments; also append group arguments
-  // to collections created by operation built-ins.
-  private void processSQWRLGroupByArguments(Set<String> collectionNames, Map<String, List<BuiltInArgument>> collectionGroupArgumentsMap) 
-    throws SQWRLException, BuiltInException
-  {
-    for (BuiltInAtom builtInAtom : getBuiltInAtomsFromBody()) {
-      Set<String> argumentsVariableNames = builtInAtom.getArgumentsVariableNames();
-
-      if (builtInAtom.isSQWRLGroupCollection()) continue;
-        
-      for (String variableName : argumentsVariableNames) {
-      	if (collectionNames.contains(variableName) && collectionGroupArgumentsMap.containsKey(variableName)) { // Variable refers to a grouped collection.
-      		List<BuiltInArgument> collectionGroupArguments = collectionGroupArgumentsMap.get(variableName); // Get the grouping arguments.
-      		builtInAtom.addArguments(collectionGroupArguments); // Append each collections's group arguments to built-in
-      	} // if
-      } // for
-    } // for
-  } 
   
   private boolean hasUnboundArgument(List<BuiltInArgument> arguments)
   {
