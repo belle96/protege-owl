@@ -13,20 +13,20 @@ import java.util.*;
  */
 public class FindUsage {
 
-    public static Collection getItems(RDFResource searchInstance) {
+    public static Collection<FindUsageTableItem> getItems(RDFResource searchInstance) {
         OWLModel owlModel = searchInstance.getOWLModel();
-        Set ignoreProperties = getIgnoreProperties(owlModel);
+        Set<RDFProperty> ignoreProperties = getIgnoreProperties(owlModel);
         Collection anons = searchInstance.getReferringAnonymousClasses();
-        Collection items = new ArrayList();
+        Collection<FindUsageTableItem> items = new ArrayList<FindUsageTableItem>();
         Slot superClsesSlot = ((KnowledgeBase) owlModel).getSlot(Model.Slot.DIRECT_SUPERCLASSES);
         RDFProperty disjointWithProperty = owlModel.getRDFProperty(OWLNames.Slot.DISJOINT_WITH);
         Slot rangeSlot = ((KnowledgeBase) owlModel).getSlot(Model.Slot.VALUE_TYPE);
         if (!owlModel.getOWLThingClass().equals(searchInstance)) {
-            for (Iterator it = ((KnowledgeBase) owlModel).getReferences(searchInstance, 10000).iterator(); it.hasNext();) {
-                Reference ref = (Reference) it.next();
+            for (Iterator<Reference> it = ((KnowledgeBase) owlModel).getReferences(searchInstance, 10000).iterator(); it.hasNext();) {
+                Reference ref = it.next();
                 if (disjointWithProperty.equals(ref.getSlot())) {
                     items.add(new FindUsageTableItem(FindUsageTableItem.DISJOINT_CLASS,
-                            (RDFResource) ref.getFrame(), searchInstance));
+                                                     (RDFResource) ref.getFrame(), searchInstance));
                 }
                 else if (rangeSlot.equals(ref.getSlot())) {
                     items.add(new FindUsageTableItem(FindUsageTableItem.RANGE,
@@ -34,9 +34,9 @@ public class FindUsage {
                 }
             }
         }
-        Set used = new HashSet();
-        for (Iterator it = anons.iterator(); it.hasNext();) {
-            OWLAnonymousClass cls = (OWLAnonymousClass) it.next();
+        Set<OWLAnonymousClass> used = new HashSet<OWLAnonymousClass>();
+        for (Iterator<OWLAnonymousClass> it = anons.iterator(); it.hasNext();) {
+            OWLAnonymousClass cls = it.next();
             OWLAnonymousClass rootCls = cls.getExpressionRoot();
             if (searchInstance instanceof OWLNamedClass && ((OWLNamedClass) searchInstance).getEquivalentClasses().contains(rootCls)) {
                 continue;
@@ -45,9 +45,9 @@ public class FindUsage {
                 continue;
             }
             used.add(rootCls);
-            Collection refs = ((KnowledgeBase) owlModel).getReferences(rootCls, 100000);
-            for (Iterator rit = refs.iterator(); rit.hasNext();) {
-                Reference reference = (Reference) rit.next();
+            Collection<Reference> refs = ((KnowledgeBase) owlModel).getReferences(rootCls, 100000);
+            for (Iterator<Reference> rit = refs.iterator(); rit.hasNext();) {
+                Reference reference = rit.next();
                 if (reference.getFrame() instanceof RDFResource) {
                     RDFResource host = (RDFResource) reference.getFrame();
                     if (superClsesSlot.equals(reference.getSlot())) {
@@ -72,16 +72,16 @@ public class FindUsage {
             }
         }
 
-        Collection refs = ((KnowledgeBase) owlModel).getReferences(searchInstance, 1000);
-        for (Iterator it = refs.iterator(); it.hasNext();) {
-            Reference ref = (Reference) it.next();
+        Collection<Reference> refs = ((KnowledgeBase) owlModel).getReferences(searchInstance, 1000);
+        for (Iterator<Reference> it = refs.iterator(); it.hasNext();) {
+            Reference ref = it.next();
             if (ref.getSlot() instanceof RDFProperty && ref.getFrame() instanceof RDFResource) {
                 RDFProperty property = (RDFProperty) ref.getSlot();
                 if (!ignoreProperties.contains(property)) {
                     RDFResource host = (RDFResource) ref.getFrame();
                     if (!host.isAnonymous()) {
                         items.add(new FindUsageTableItem(FindUsageTableItem.VALUE,
-                                host, property));
+                                                         host, property));
                    }
                 }
             }
@@ -91,8 +91,8 @@ public class FindUsage {
     }
 
 
-    private static Set getIgnoreProperties(OWLModel owlModel) {
-        Set result = new HashSet();
+    private static Set<RDFProperty> getIgnoreProperties(OWLModel owlModel) {
+        Set<RDFProperty> result = new HashSet<RDFProperty>();
         result.add(owlModel.getRDFTypeProperty());
         result.add(owlModel.getRDFSRangeProperty());
         //result.add(owlModel.getRDFSDomainProperty());
