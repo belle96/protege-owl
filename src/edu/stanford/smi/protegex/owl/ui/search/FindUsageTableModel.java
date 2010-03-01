@@ -21,8 +21,9 @@ import java.util.*;
  */
 public class FindUsageTableModel extends AbstractTableModel
         implements Disposable, FindUsageTableModelColumns {
+    private static final long serialVersionUID = 6478475132021195153L;
 
-    private List items;
+    private List<FindUsageTableItem> items;
 
     private OWLModel owlModel;
 
@@ -45,8 +46,8 @@ public class FindUsageTableModel extends AbstractTableModel
     private int sortColumn = COL_HOST;
 
 
-    public FindUsageTableModel(OWLModel owlModel, Collection items) {
-        this.items = new ArrayList(items);
+    public FindUsageTableModel(OWLModel owlModel, Collection<FindUsageTableItem> items) {
+        this.items = new ArrayList<FindUsageTableItem>(items);
         this.owlModel = owlModel;
         sort();
         owlModel.addModelListener(listener);
@@ -112,7 +113,7 @@ public class FindUsageTableModel extends AbstractTableModel
 
 
     private FindUsageTableItem getItem(int row) {
-        return (FindUsageTableItem) items.get(row);
+        return items.get(row);
     }
 
 
@@ -140,8 +141,8 @@ public class FindUsageTableModel extends AbstractTableModel
     }
 
 
-    public void setItems(Collection items) {
-        this.items = new ArrayList(items);
+    public void setItems(Collection<FindUsageTableItem> items) {
+        this.items = new ArrayList<FindUsageTableItem>(items);
         fireTableDataChanged();
     }
 
@@ -154,10 +155,8 @@ public class FindUsageTableModel extends AbstractTableModel
 
 
     private void sort() {
-        Collections.sort(items, new Comparator() {
-            public int compare(Object o1, Object o2) {
-                FindUsageTableItem item1 = (FindUsageTableItem) o1;
-                FindUsageTableItem item2 = (FindUsageTableItem) o2;
+        Collections.sort(items, new Comparator<FindUsageTableItem>() {
+            public int compare(FindUsageTableItem item1, FindUsageTableItem item2) {
                 if (sortColumn == COL_HOST) {
                     return item1.host.getBrowserText().compareTo(item2.host.getBrowserText());
                 }
