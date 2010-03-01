@@ -6,7 +6,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 /**
  * Interface representing an argument to a built-in
  */
-public interface BuiltInArgument extends Argument
+public interface BuiltInArgument extends Argument, Comparable<BuiltInArgument>
 {
   void setBuiltInResult(BuiltInArgument builtInResult) throws BuiltInException;
   BuiltInArgument getBuiltInResult();

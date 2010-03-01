@@ -6,13 +6,12 @@ package edu.stanford.smi.protegex.owl.swrl.bridge.builtins.sqwrl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.Argument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
@@ -393,8 +392,6 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     String collectionID2 = getCollectionIDInMultiCollectionOperation(arguments, 1, numberOfArguments, collection1NumberOfGroupElements, collection2NumberOfGroupElements); // Does argument checking
     Collection<BuiltInArgument> collection1 = getCollection(collectionID1);
     Collection<BuiltInArgument> collection2 = getCollection(collectionID2);
-    
-    checkThatInAntecedent();
 
     for (BuiltInArgument element : collection1) if (collection2.contains(element)) return true;
 
@@ -420,8 +417,6 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 	  Collection<BuiltInArgument> collection1 = getCollection(collectionID1);
 	  Collection<BuiltInArgument> collection2 = getCollection(collectionID2);
 	  Collection<BuiltInArgument> intersection = new HashSet<BuiltInArgument>(collection1);
-	    
-	  checkThatInAntecedent();
 	    
 	  intersection.retainAll(collection2);
 
@@ -974,8 +969,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   private List<BuiltInArgument> getSortedCollection(String collectionID) throws BuiltInException
   {
     Collection<BuiltInArgument> collection = getCollection(collectionID);
-    SortedSet<BuiltInArgument> sortedSet = new TreeSet<BuiltInArgument>(collection);
-  	List<BuiltInArgument> result = new ArrayList<BuiltInArgument>(sortedSet);
+    List<BuiltInArgument> result = new ArrayList<BuiltInArgument>(collection);
+    Collections.sort(result);
   	
   	return result;
   }    

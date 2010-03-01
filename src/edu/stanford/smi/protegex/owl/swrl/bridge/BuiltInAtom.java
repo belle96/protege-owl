@@ -34,6 +34,7 @@ public interface BuiltInAtom  extends Atom
   boolean isSQWRLMakeCollection();
   boolean isSQWRLGroupCollection();
   boolean isSQWRLCollectionOperation();
+  boolean isSQWRLCollectionCreateOperation();
   
   void setUsesSQWRLCollectionResults();
   void setDependsOnVariableNames(Set<String> variableNames);

@@ -1,6 +1,7 @@
 
 package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
 
+import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.IndividualArgument;
 
 public class IndividualArgumentImpl extends BuiltInArgumentImpl implements IndividualArgument
@@ -13,9 +14,9 @@ public class IndividualArgumentImpl extends BuiltInArgumentImpl implements Indiv
   
   public String toString() { return getURI(); }
   
-  public int compareTo(IndividualArgument o)
+  public int compareTo(BuiltInArgument o)
   {
-    return individualURI.compareTo(o.getURI());
+  	return individualURI.compareTo(((IndividualArgument)o).getURI());
   } // compareTo
 
   public boolean equals(Object obj)

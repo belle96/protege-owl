@@ -53,7 +53,8 @@ public class BuiltInAtomImpl extends AtomImpl implements BuiltInAtom
   public boolean isSQWRLBuiltIn() { return SQWRLNames.isSQWRLBuiltIn(builtInURI); }
   public boolean isSQWRLMakeCollection() { return SQWRLNames.isSQWRLCollectionMakeBuiltIn(builtInURI); }
   public boolean isSQWRLGroupCollection() { return SQWRLNames.isSQWRLCollectionGroupByBuiltIn(builtInURI); }
-  public boolean isSQWRLCollectionOperation() { return SQWRLNames.isSQWRLCollectionOperationBuiltIn(builtInURI); } 
+  public boolean isSQWRLCollectionOperation() { return SQWRLNames.isSQWRLCollectionOperationBuiltIn(builtInURI); }
+  public boolean isSQWRLCollectionCreateOperation() { return SQWRLNames.isSQWRLCollectionCreateOperationBuiltIn(builtInURI); }
 
   public void setUsesSQWRLCollectionResults() { sqwrlCollectionResultsUsed = true; }
   

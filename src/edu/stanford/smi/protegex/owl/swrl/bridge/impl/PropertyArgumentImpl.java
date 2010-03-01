@@ -1,6 +1,7 @@
 
 package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
 
+import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.PropertyArgument;
 
 public class PropertyArgumentImpl extends BuiltInArgumentImpl implements PropertyArgument
@@ -13,9 +14,9 @@ public class PropertyArgumentImpl extends BuiltInArgumentImpl implements Propert
   
   public String toString() { return getURI(); }
   
-  public int compareTo(PropertyArgument o)
+  public int compareTo(BuiltInArgument o)
   {
-    return propertyURI.compareTo(o.getURI());
+  	return propertyURI.compareTo(((PropertyArgument)o).getURI());
   } // compareTo
 
   public boolean equals(Object obj)

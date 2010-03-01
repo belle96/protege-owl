@@ -6,7 +6,7 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
 /**
  * Interface representing OWL data value argument to atoms and built-ins
  */
-public interface DataValueArgument extends BuiltInArgument, AtomArgument, Comparable<DataValueArgument>
+public interface DataValueArgument extends BuiltInArgument, AtomArgument
 {
 	DataValue getDataValue();
 } // DataValueArgument

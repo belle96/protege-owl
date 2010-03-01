@@ -1,6 +1,7 @@
 
 package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
 
+import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.ClassArgument;
 
 public class ClassArgumentImpl extends BuiltInArgumentImpl implements ClassArgument
@@ -15,9 +16,9 @@ public class ClassArgumentImpl extends BuiltInArgumentImpl implements ClassArgum
   
   public String toString() { return getURI(); }
   
-  public int compareTo(ClassArgument o)
+  public int compareTo(BuiltInArgument o)
   {
-    return classURI.compareTo(o.getURI());
+  	return classURI.compareTo(((ClassArgument)o).getURI());
   } // compareTo
 
   public boolean equals(Object obj)

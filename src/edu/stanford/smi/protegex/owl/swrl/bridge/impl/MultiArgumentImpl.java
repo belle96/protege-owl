@@ -41,4 +41,10 @@ public class MultiArgumentImpl extends BuiltInArgumentImpl implements MultiArgum
   public List<BuiltInArgument> getArguments() { return arguments; }
   public int getNumberOfArguments() { return arguments.size(); }
   public boolean hasNoArguments() { return arguments.size() == 0; }
+  
+  public int compareTo(BuiltInArgument argument)
+  {
+  	return getVariableName().compareTo(argument.getVariableName());
+  }
+      
 } // MultiArgumentImpl

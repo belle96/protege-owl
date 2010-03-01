@@ -116,7 +116,7 @@ public class SQWRLNames
   	NotGreatest, NotLeastN, NotLeast, LastN, FirstN, LeastN, GreatestN };
 
   private static final String multiCollectionOperationWithoutCollectionCreateBuiltInNamesArray[] = 
-  { Intersection, Union, Difference };
+  { Intersects, NotIntersects };
   
   private static final String multiCollectionOperationWithCollectionCreateBuiltInNamesArray[] = 
   { Intersection, Union, Difference };
@@ -127,7 +127,7 @@ public class SQWRLNames
   private static Set<String> sqwrlBuiltInNames;
   private static Set<String> headBuiltInNames, headSelectionBuiltInNames, headAggregationBuiltInNames, headSlicingBuiltInNames;
   private static Set<String> collectionMakeBuiltInNames, collectionGroupByBuiltInNames;
-  private static Set<String> collectionCreateBuiltInNames, collectionOperationBuiltInNames, 
+  private static Set<String> collectionCreateOperationBuiltInNames, collectionOperationBuiltInNames, 
   	singleCollectionOperationWithCollectionCreateBuiltInNames, singleCollectionOperationWithoutCollectionCreateBuiltInNames,
   	multiCollectionOperationWithCollectionCreateBuiltInNames, multiCollectionOperationWithoutCollectionCreateBuiltInNames;
   	                          
@@ -142,7 +142,7 @@ public class SQWRLNames
     collectionMakeBuiltInNames = new HashSet<String>();
     collectionGroupByBuiltInNames = new HashSet<String>();
     
-    collectionCreateBuiltInNames = new HashSet<String>();
+    collectionCreateOperationBuiltInNames = new HashSet<String>();
     collectionOperationBuiltInNames = new HashSet<String>();
     singleCollectionOperationWithCollectionCreateBuiltInNames = new HashSet<String>();
     singleCollectionOperationWithoutCollectionCreateBuiltInNames = new HashSet<String>();
@@ -158,7 +158,7 @@ public class SQWRLNames
     sqwrlBuiltInNames.addAll(headBuiltInNames);
     
     for (String builtInName : collectionMakeBuiltInNamesArray) collectionMakeBuiltInNames.add(builtInName);
-    collectionCreateBuiltInNames.addAll(collectionMakeBuiltInNames);
+    collectionCreateOperationBuiltInNames.addAll(collectionMakeBuiltInNames);
     sqwrlBuiltInNames.addAll(collectionMakeBuiltInNames);
     
     for (String builtInName : collectionGroupByBuiltInNamesArray) collectionGroupByBuiltInNames.add(builtInName);
@@ -166,7 +166,7 @@ public class SQWRLNames
     
     for (String builtInName : singleCollectionOperationWithCollectionCreateBuiltInNamesArray) 
     	singleCollectionOperationWithCollectionCreateBuiltInNames.add(builtInName);
-    collectionCreateBuiltInNames.addAll(singleCollectionOperationWithCollectionCreateBuiltInNames);
+    collectionCreateOperationBuiltInNames.addAll(singleCollectionOperationWithCollectionCreateBuiltInNames);
     collectionOperationBuiltInNames.addAll(singleCollectionOperationWithCollectionCreateBuiltInNames);
     sqwrlBuiltInNames.addAll(singleCollectionOperationWithCollectionCreateBuiltInNames);
 
@@ -177,7 +177,7 @@ public class SQWRLNames
 
     for (String builtInName : multiCollectionOperationWithCollectionCreateBuiltInNamesArray) 
     	multiCollectionOperationWithCollectionCreateBuiltInNames.add(builtInName);
-    collectionCreateBuiltInNames.addAll(multiCollectionOperationWithCollectionCreateBuiltInNames);
+    collectionCreateOperationBuiltInNames.addAll(multiCollectionOperationWithCollectionCreateBuiltInNames);
     collectionOperationBuiltInNames.addAll(multiCollectionOperationWithCollectionCreateBuiltInNames);
     sqwrlBuiltInNames.addAll(multiCollectionOperationWithCollectionCreateBuiltInNames);
 
@@ -193,7 +193,7 @@ public class SQWRLNames
   public static Set<String> getHeadSelectionBuiltInNames() { return headSelectionBuiltInNames; }
   public static Set<String> getCollectionMakeBuiltInNames() { return collectionMakeBuiltInNames; }
   public static Set<String> getCollectionGroupByBuiltInNames() { return collectionGroupByBuiltInNames; }
-  public static Set<String> getCollectionCreateBuiltInNames() { return collectionCreateBuiltInNames; }
+  public static Set<String> getCollectionCreateBuiltInNames() { return collectionCreateOperationBuiltInNames; }
   public static Set<String> getCollectionOperationBuiltInNames() { return collectionOperationBuiltInNames; }
 
   public static boolean isSQWRLBuiltIn(String builtInName) { return sqwrlBuiltInNames.contains(builtInName); }
@@ -203,7 +203,7 @@ public class SQWRLNames
   public static boolean isSQWRLHeadSlicingBuiltIn(String builtInName) { return headSlicingBuiltInNames.contains(builtInName); }
   public static boolean isSQWRLCollectionMakeBuiltIn(String builtInName) { return collectionMakeBuiltInNames.contains(builtInName); }
   public static boolean isSQWRLCollectionGroupByBuiltIn(String builtInName) { return collectionGroupByBuiltInNames.contains(builtInName); }
-  public static boolean isSQWRLCollectionCreateBuiltIn(String builtInName) { return collectionCreateBuiltInNames.contains(builtInName); }
+  public static boolean isSQWRLCollectionCreateOperationBuiltIn(String builtInName) { return collectionCreateOperationBuiltInNames.contains(builtInName); }
   public static boolean isSQWRLCollectionOperationBuiltIn(String builtInName) { return collectionOperationBuiltInNames.contains(builtInName); }
 
   public static void checkAggregateFunctionName(String aggregateFunctionName) throws InvalidAggregateFunctionNameException

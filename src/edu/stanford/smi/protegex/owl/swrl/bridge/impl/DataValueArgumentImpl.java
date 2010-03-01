@@ -1,6 +1,7 @@
 
 package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
 
+import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.DataValueArgument;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
 
@@ -17,7 +18,7 @@ public class DataValueArgumentImpl extends BuiltInArgumentImpl implements DataVa
 	
 	public String toString() { return dataValue.toString(); }
 	
-	public int compareTo(DataValueArgument argument) { return dataValue.compareTo(argument.getDataValue()); }
+	public int compareTo(BuiltInArgument argument) { return dataValue.compareTo(((DataValueArgument)argument).getDataValue()); }
 	
 	public boolean equals(Object obj)
   {
@@ -34,4 +35,4 @@ public class DataValueArgumentImpl extends BuiltInArgumentImpl implements DataVa
     return hash;
   } // hashCode
 
-} // DataValueArgumentImpl
+} 
