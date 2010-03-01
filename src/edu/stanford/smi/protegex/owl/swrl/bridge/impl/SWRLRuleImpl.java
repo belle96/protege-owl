@@ -293,22 +293,40 @@ public class SWRLRuleImpl implements SWRLRule
       		 if (!builtInAtom.getArguments().isEmpty()) throw new SQWRLException("not greatest or last do not accept arguments");
       		 sqwrlResult.setNotLast();
       	 } else {
-      		 if (builtInAtom.getArguments().size() != 1) throw new SQWRLException("slicing operator " + builtInName + " expecting an integer");
-        		 
-      		 BuiltInArgument argument = builtInAtom.getArguments().get(0);
-        	 if (argument instanceof DataValueArgument && ((DataValueArgument)argument).getDataValue().isLong()) {
-             int n = (int)((DataValueArgument)argument).getDataValue().getLong();
-             if (n < 1) throw new SQWRLException("argument to slicing operator " + builtInName + " must be a positive integer");
-        		 
-        		 if (builtInName.equalsIgnoreCase(SQWRLNames.Limit)) sqwrlResult.setLimit(n);
-             else if (builtInName.equalsIgnoreCase(SQWRLNames.Nth)) sqwrlResult.setNth(n);
-             else if (builtInName.equalsIgnoreCase(SQWRLNames.NotNth)) sqwrlResult.setNotNth(n);
-             else if (builtInName.equalsIgnoreCase(SQWRLNames.FirstN) || builtInName.equalsIgnoreCase(SQWRLNames.LeastN)) sqwrlResult.setFirst(n);
-             else if (builtInName.equalsIgnoreCase(SQWRLNames.LastN) || builtInName.equalsIgnoreCase(SQWRLNames.GreatestN)) sqwrlResult.setLast(n);
-             else if (builtInName.equalsIgnoreCase(SQWRLNames.NotLastN) || builtInName.equalsIgnoreCase(SQWRLNames.NotGreatestN)) sqwrlResult.setNotLast(n);
-             else if (builtInName.equalsIgnoreCase(SQWRLNames.NotFirstN) || builtInName.equalsIgnoreCase(SQWRLNames.NotLeastN)) sqwrlResult.setNotFirst(n);
-             else throw new SQWRLException("unknown slicing operator " + builtInName);
-        	 } // if	
+      		 BuiltInArgument nArgument = builtInAtom.getArguments().get(0);
+      		 int n;
+      		 
+        	 if (nArgument instanceof DataValueArgument && ((DataValueArgument)nArgument).getDataValue().isLong()) {
+             n = (int)((DataValueArgument)nArgument).getDataValue().getLong();
+             if (n < 1) throw new SQWRLException("nth argument to slicing operator " + builtInName + " must be a positive integer");
+        	 } else throw new SQWRLException("expecing integer to slicing operator " + builtInName);
+
+      		 if (builtInAtom.getArguments().size() == 1) {
+	        		 if (builtInName.equalsIgnoreCase(SQWRLNames.Limit)) sqwrlResult.setLimit(n);
+	             else if (builtInName.equalsIgnoreCase(SQWRLNames.Nth)) sqwrlResult.setNth(n);
+	             else if (builtInName.equalsIgnoreCase(SQWRLNames.NotNth)) sqwrlResult.setNotNth(n);
+	             else if (builtInName.equalsIgnoreCase(SQWRLNames.FirstN) || builtInName.equalsIgnoreCase(SQWRLNames.LeastN)) sqwrlResult.setFirst(n);
+	             else if (builtInName.equalsIgnoreCase(SQWRLNames.LastN) || builtInName.equalsIgnoreCase(SQWRLNames.GreatestN)) sqwrlResult.setLast(n);
+	             else if (builtInName.equalsIgnoreCase(SQWRLNames.NotLastN) || builtInName.equalsIgnoreCase(SQWRLNames.NotGreatestN)) sqwrlResult.setNotLast(n);
+	             else if (builtInName.equalsIgnoreCase(SQWRLNames.NotFirstN) || builtInName.equalsIgnoreCase(SQWRLNames.NotLeastN)) sqwrlResult.setNotFirst(n);
+	             else throw new SQWRLException("unknown slicing operator " + builtInName);
+      	 } else if (builtInAtom.getArguments().size() == 2) {
+	      		 BuiltInArgument sliceArgument = builtInAtom.getArguments().get(1);
+	      		 int sliceSize;
+	      		 
+	        	 if (sliceArgument instanceof DataValueArgument && ((DataValueArgument)sliceArgument).getDataValue().isLong()) {
+	             sliceSize = (int)((DataValueArgument)sliceArgument).getDataValue().getLong();
+	             if (sliceSize < 1) throw new SQWRLException("slice size argument to slicing operator " + builtInName + " must be a positive integer");
+	        	 } else throw new SQWRLException("expecing integer to slicing operator " + builtInName);
+	        	 
+	        	 if (builtInName.equalsIgnoreCase(SQWRLNames.NthSlice)) sqwrlResult.setNthSlice(n, sliceSize);
+	        	 else if (builtInName.equalsIgnoreCase(SQWRLNames.NotNthSlice)) sqwrlResult.setNotNthSlice(n, sliceSize);
+	        	 else if (builtInName.equalsIgnoreCase(SQWRLNames.NthLastSlice) ||
+     			 		  builtInName.equalsIgnoreCase(SQWRLNames.NthGreatestSlice)) sqwrlResult.setNthLastSlice(n, sliceSize);
+	        	 else if (builtInName.equalsIgnoreCase(SQWRLNames.NotNthLastSlice) ||
+     			 		  builtInName.equalsIgnoreCase(SQWRLNames.NotNthGreatestSlice)) sqwrlResult.setNotNthLastSlice(n, sliceSize);
+	        	 else throw new SQWRLException("unknown slicing operator " + builtInName);    			
+      	 } else throw new SQWRLException("unknown slicing operator " + builtInName);
       	 } // if
        } // if
      } // for       

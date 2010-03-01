@@ -101,8 +101,9 @@ public class SQWRLResultImpl implements SQWRLResult, SQWRLResultGenerator, Seria
   private Map<String, List<SQWRLResultValue>> columnVectorMap; // Maps column names to a vector of ResultValue objects for that column
   private int numberOfColumns, rowIndex, rowDataColumnIndex;
   private boolean isConfigured, isPrepared, isRowOpen, isOrdered, isAscending, isDistinct, hasAggregates;
-  private int limit = -1, nth = -1, firstN = -1, lastN = -1;
-  private boolean notNthSelection = false, firstSelection = false, lastSelection = false, notFirstSelection = false, notLastSelection = false;
+  private int limit = -1, nth = -1, firstN = -1, lastN = -1, sliceSize = -1;
+  private boolean notNthSelection = false, firstSelection = false, lastSelection = false, notFirstSelection = false, notLastSelection = false,
+  		            nthSliceSelection = false , notNthSliceSelection = false, nthLastSliceSelection = false, notNthLastSliceSelection = false; 
 
   public SQWRLResultImpl() 
   {
@@ -285,26 +286,105 @@ public class SQWRLResultImpl implements SQWRLResult, SQWRLResultGenerator, Seria
 
     if (isOrdered) rows = orderBy(rows, allColumnNames, orderByColumnIndexes, isAscending);
     
-    if (hasLimit()) rows = rows.subList(0, limit);
-    else if (hasNth()) {
-    	if (nth <= 0 || nth > rows.size()) rows.clear();
-    	else rows = rows.subList(nth - 1, nth);
-    } else if (hasNotNth()) {
-    	if (nth > 0 || nth <= rows.size()) rows.remove(nth - 1);
-    } else if (hasFirstSelection()) {
-    	if (firstN <= 0) rows.clear();
-    	else rows = rows.subList(0, firstN);
-    } else if (hasNotFirstSelection()) {
-    	if (firstN > 0 && firstN <= rows.size()) rows = rows.subList(firstN, rows.size());
-    } else if (hasLastSelection()) {
-    	if (lastN <= 0) rows.clear();
-    	else if (lastN <= rows.size()) rows = rows.subList(rows.size() - lastN, rows.size());
-    } else if (hasNotLastSelection()) {
-    	if (lastN > 0 && lastN <= rows.size()) rows = rows.subList(0, rows.size() - lastN);
-    }
+    rows = processSelectionOperators(rows);
     
     prepareColumnVectors();
   } // prepared
+
+  // nth, firstN, etc. are 1-indexed
+  private List<List<SQWRLResultValue>> processSelectionOperators(List<List<SQWRLResultValue>> rows) throws SQWRLException
+  {
+  	List<List<SQWRLResultValue>> processedRows = new ArrayList<List<SQWRLResultValue>>();
+  	boolean hasSelection = false;
+    
+    if (hasLimit()) {
+    	int localLimit = limit > rows.size() ? rows.size() : limit;
+      if (limit < 0) limit = 0;
+    	processedRows.addAll(rows.subList(0, localLimit));
+    	hasSelection = true;
+    } else {
+    	if (hasNth()) {
+    		if (nth < 1) nth = 1;
+    		if (nth <= rows.size()) processedRows.add(rows.get(nth - 1)); 
+    		hasSelection = true; 
+    	}
+    	
+    	if (hasNotNth()) {
+    		if (nth < 1) nth = 1;
+    		if (nth <= rows.size()) {
+    			List<List<SQWRLResultValue>> localRows = new ArrayList<List<SQWRLResultValue>>(rows);
+    			localRows.remove(nth - 1);
+    			processedRows.addAll(localRows);
+    		} else processedRows.addAll(rows); // Add everything
+    		hasSelection = true;
+      } // if
+    	
+    	if (hasFirstSelection()) {
+        if (firstN < 1) firstN = 1;
+    	  if (firstN <= rows.size()) processedRows.addAll(rows.subList(0, firstN));
+    	  hasSelection = true;
+    	} 
+    	
+    	if (hasNotFirstSelection()) {
+        if (firstN < 1) firstN = 1;
+    	  if (firstN <= rows.size()) processedRows.addAll(rows.subList(firstN, rows.size()));
+    	  else processedRows.addAll(rows); // Add everything
+    	  hasSelection = true;
+    	} // if
+    	
+    	if (hasLastSelection()) {
+        if (lastN < 1) lastN = 1;
+    	  if (lastN <= rows.size()) processedRows.addAll(rows.subList(rows.size() - lastN, rows.size()));
+    	  hasSelection = true;
+      } 
+    	
+    	if (hasNotLastSelection()) {
+        if (lastN < 1) lastN = 1;
+    	  if (lastN <= rows.size()) processedRows.addAll(rows.subList(0, rows.size() - lastN));
+    	  else processedRows.addAll(rows); // Add everything
+    	  hasSelection = true;
+      } 
+    	
+    	if (hasNthSliceSelection()) {
+    		if (firstN < 1) firstN = 1;
+    	  if (firstN <= rows.size()) {
+    	  	int finish = (firstN + sliceSize > rows.size()) ? rows.size() : firstN + sliceSize - 1;
+    	  	processedRows.addAll(rows.subList(firstN - 1, finish));
+    	  } // if
+    	  hasSelection = true;
+    	} // if
+
+    	if (hasNotNthSliceSelection()) {
+    		if (firstN < 1) firstN = 1;
+    	  if (firstN <= rows.size()) {
+    	  	int finish = (firstN + sliceSize > rows.size()) ? rows.size() : firstN + sliceSize - 1;
+    	  	processedRows.addAll(rows.subList(0, firstN - 1));
+    	  	if (finish <= rows.size()) processedRows.addAll(rows.subList(finish, rows.size()));
+    	  } else processedRows.addAll(rows); // Add everything
+    	  hasSelection = true;
+    	} // if
+
+    	if (hasNthLastSliceSelection()) {
+    		if (lastN < 1) lastN = 1;
+    		int finish = (lastN + sliceSize > rows.size()) ? rows.size() : lastN + sliceSize;
+    	  if (lastN <= rows.size()) {	processedRows.addAll(rows.subList(lastN, finish)); }
+    	  hasSelection = true;
+    	} // if
+
+    	if (hasNotNthLastSliceSelection()) {
+    	  if (lastN <= rows.size()) {
+    	  	if (lastN < 1) lastN = 1;
+    	  	int finish = (lastN + sliceSize > rows.size()) ? rows.size() : lastN + sliceSize;
+    	  	processedRows.addAll(rows.subList(0, lastN));
+    	  	if (finish <= rows.size()) processedRows.addAll(rows.subList(finish, rows.size()));
+    	  } else processedRows.addAll(rows); // Add everything
+    	  hasSelection = true;
+    	} // if 	
+    } // if
+    	
+    if (hasSelection) return processedRows;
+    else return rows;
+  }
   
   // nth, firstN, etc. are 1-indexed
   public void setLimit(int limit) { this.limit = limit; }
@@ -318,6 +398,10 @@ public class SQWRLResultImpl implements SQWRLResult, SQWRLResultGenerator, Seria
   public void setNotFirst(int n) { notFirstSelection = true; firstN = n; }
   public void setNotLast() { notLastSelection = true; lastN = 1;}
   public void setNotLast(int n) { notLastSelection = true; lastN = n; }
+  public void setNthSlice(int n, int sliceSize) { nthSliceSelection = true; firstN = n; this.sliceSize = sliceSize; }
+  public void setNotNthSlice(int n, int sliceSize) { notNthSliceSelection = true; firstN = n; this.sliceSize = sliceSize; }
+  public void setNthLastSlice(int n, int sliceSize) { nthLastSliceSelection = true; lastN = n; this.sliceSize = sliceSize; }
+  public void setNotNthLastSlice(int n, int sliceSize) { notNthLastSliceSelection = true; lastN = n; this.sliceSize = sliceSize; }
   
   private boolean hasLimit() { return limit != -1; }
   private boolean hasNth() { return !hasNotNth() && nth != -1; }
@@ -326,6 +410,10 @@ public class SQWRLResultImpl implements SQWRLResult, SQWRLResultGenerator, Seria
   private boolean hasLastSelection() { return lastSelection; }
   private boolean hasNotFirstSelection() { return notFirstSelection; }
   private boolean hasNotLastSelection() { return notLastSelection; }
+  private boolean hasNthSliceSelection() { return nthSliceSelection; }
+  private boolean hasNotNthSliceSelection() { return notNthSliceSelection; }
+  private boolean hasNthLastSliceSelection() { return nthLastSliceSelection; }
+  private boolean hasNotNthLastSliceSelection() { return notNthLastSliceSelection; }
 
   private void prepareColumnVectors() throws SQWRLException
   {
