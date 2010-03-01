@@ -221,8 +221,10 @@ public class ResourceDisplay extends InstanceDisplay implements ResourcePanel {
 
     private void addDefaultToolBarButtons() {
         southToolBar.addSeparator(new Dimension(7, 0));
-        ComponentFactory.addToolBarButton(southToolBar, findUsageAction);
-        southToolBar.addSeparator();
+        if (defaultType != ResourcePanel.DEFAULT_TYPE_PROPERTY) {
+            ComponentFactory.addToolBarButton(southToolBar, findUsageAction);
+            southToolBar.addSeparator();
+        }
         ComponentFactory.addToolBarButton(southToolBar, findRulesAction);
         southToolBar.addSeparator();
         ComponentFactory.addToolBarButton(southToolBar, testInstanceAction);
