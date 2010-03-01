@@ -46,9 +46,7 @@ public class SWRLTextArea extends SymbolTextArea
   
   public static String reformatText(String text) 
   {
-    text = text.replaceAll("" + SWRLParser.AND_CHAR + " ", "" + SWRLParser.AND_CHAR + "\n");
-    text = text.replaceAll("" + SWRLParser.IMP_CHAR, "\n" + SWRLParser.IMP_CHAR);
-    text = text.replaceAll("" + SWRLParser.RING_CHAR, SWRLParser.RING_CHAR + "\n");
+    // text = text.replaceAll("" + SWRLParser.IMP_CHAR, "\n" + SWRLParser.IMP_CHAR + " ");
     
     return text;
   } // reformatText

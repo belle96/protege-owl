@@ -33,40 +33,70 @@ public class DefaultSWRLAtomList extends DefaultRDFList implements SWRLAtomList
   
   public String getBrowserText() 
   {
-    String s = "";
+    String s = "", atomText;
     boolean atomProcessed = false;
     boolean setBuildEncountered = false;
     boolean setOperationEncountered = false;
-
+    int currentColumn = 0, atomTextWidth;
+    final int maxColumnWidth = 80;
+    
+    if (isInHead) s += "\n";
+    
     if (getValues() != null) {
       Iterator iterator = getValues().iterator();
       while (iterator.hasNext()) {
     	  Instance instance = (Instance)iterator.next();
+  			atomText = SWRLUtil.getSWRLBrowserText((RDFObject)instance, "ATOM");
+  			atomTextWidth = atomText.length();
+
         if (instance instanceof SWRLBuiltinAtom) {
         	SWRLBuiltin builtIn = ((SWRLBuiltinAtom)instance).getBuiltin();
-        	if (builtIn == null) {
-        		if (atomProcessed) s += "  " + SWRLParser.AND_CHAR + "  ";
-            s += SWRLUtil.getSWRLBrowserText((RDFObject)instance, "BUILTIN ATOM");
-        	} else {
-        		String builtInName = builtIn.getName();
-        		if (!isInHead && (SQWRLNames.isSQWRLCollectionMakeBuiltIn(builtInName) || SQWRLNames.isSQWRLCollectionGroupByBuiltIn(builtInName)) && !setBuildEncountered) {
-        			setBuildEncountered = true;
-        			s += "  " + SWRLParser.RING_CHAR + "  " + SWRLUtil.getSWRLBrowserText((RDFObject)instance, "ATOM");
-        		} else if (!isInHead && SQWRLNames.getCollectionOperationBuiltInNames().contains(builtInName) && !setOperationEncountered && atomProcessed) {
-        			setOperationEncountered = true;
-        			s += "  " + SWRLParser.RING_CHAR + "  " + SWRLUtil.getSWRLBrowserText((RDFObject)instance, "ATOM");
-        		} else {
-        			if(atomProcessed) s += "  " + SWRLParser.AND_CHAR + "  ";
-        			s += SWRLUtil.getSWRLBrowserText((RDFObject)instance, "BUILTIN ATOM");
-        		} // if
+        
+        	if (builtIn == null) { 
+        		s += "\n<DELETED_BUILTIN>\n"; currentColumn = 0;  
+        	} else {	
+	        	String builtInName = builtIn.getName();
+	    		
+	    			if (!isInHead && (SQWRLNames.isSQWRLCollectionMakeBuiltIn(builtInName) || SQWRLNames.isSQWRLCollectionGroupByBuiltIn(builtInName)) && !setBuildEncountered) {
+	    				setBuildEncountered = true;
+	    				if (currentColumn + 2 >= maxColumnWidth) { s += "\n" + SWRLParser.RING_CHAR + "  "; currentColumn = 2; }
+	    				else { s += " " + SWRLParser.RING_CHAR + " \n"; currentColumn = 0; }
+	        			
+	    				if ((currentColumn + atomTextWidth) >= maxColumnWidth) { s += "\n"; currentColumn = atomTextWidth; }
+	    				else currentColumn += atomTextWidth;
+	    				s += atomText;
+	    			} else if (!isInHead && SQWRLNames.getCollectionOperationBuiltInNames().contains(builtInName) && !setOperationEncountered && atomProcessed) {
+	    				setOperationEncountered = true;
+	    				if (currentColumn + 2 >= maxColumnWidth) { s += "\n" + SWRLParser.RING_CHAR + "  "; currentColumn = 3; }
+	    				else { s += " " + SWRLParser.RING_CHAR + " \n"; currentColumn = 0; }
+	        			
+	    				if ((currentColumn + atomTextWidth) >= maxColumnWidth) { s += "\n"; currentColumn = atomTextWidth; }
+	    				else currentColumn += atomTextWidth;
+	    				s += atomText;
+	    			} else { // Non SQWRL make/group/operation built-in
+	    				if (atomProcessed) {
+	    				  if (currentColumn + 2 >= maxColumnWidth) { s += "\n" + SWRLParser.AND_CHAR + "  "; currentColumn = 2; }
+	    				  else { s += " " + SWRLParser.AND_CHAR + " "; currentColumn += 3; }
+	    				} // if
+	        			
+	    				if ((currentColumn + atomTextWidth) >= maxColumnWidth) { s += "\n"; currentColumn = atomTextWidth; }
+	    				else currentColumn += atomTextWidth;
+	    				s += atomText;
+	    			} // if
         	} // if
-        } else {
-        	if (atomProcessed) s += "  " + SWRLParser.AND_CHAR + "  ";
-            s += SWRLUtil.getSWRLBrowserText((RDFObject)instance, "ATOM");
+        } else { // Not a built-in atom
+        	if (atomProcessed) { 
+      			if (currentColumn + 2 >= maxColumnWidth) { s += "\n" + SWRLParser.AND_CHAR + "  "; currentColumn = 2; }
+      			else { s += " " + SWRLParser.AND_CHAR + " "; currentColumn += 3; }
+        	} // if
+
+  				if ((currentColumn + atomTextWidth) >= maxColumnWidth) { s += "\n"; currentColumn = atomTextWidth; }
+  				else currentColumn += atomTextWidth;
+  				s += atomText;
         } // if
         atomProcessed = true;
       } // while
-  } else s += "<DELETED_ATOM_LIST>";
+    } else s += "<DELETED_ATOM_LIST>";
     
     return s;
   } // getBrowserText
