@@ -87,6 +87,7 @@ public class SQWRLNames
   public static final String Intersection = SQWRLNamespace + "intersection";
   public static final String Union = SQWRLNamespace + "union";
   public static final String Difference = SQWRLNamespace + "difference";
+  public static final String Append = SQWRLNamespace + "append";
   public static final String Intersects = SQWRLNamespace + "intersects";
   public static final String NotIntersects = SQWRLNamespace + "notIntersects";
   
@@ -119,7 +120,7 @@ public class SQWRLNames
   { Intersects, NotIntersects };
   
   private static final String multiCollectionOperationWithCollectionCreateBuiltInNamesArray[] = 
-  { Intersection, Union, Difference };
+  { Intersection, Union, Difference, Append };
   
   public static  final String aggregateFunctionNames[] = { MinAggregateFunction, MaxAggregateFunction, SumAggregateFunction,
                                                            AvgAggregateFunction, MedianAggregateFunction,

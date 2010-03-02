@@ -33,11 +33,13 @@
   <swrl:Builtin rdf:ID="contains"/>
   <swrl:Builtin rdf:ID="notContains"/>
 
-  <swrl:Builtin rdf:ID="intersection"/>
-  <swrl:Builtin rdf:ID="difference"/>
-  <swrl:Builtin rdf:ID="union"/>
   <swrl:Builtin rdf:ID="intersects"/>
   <swrl:Builtin rdf:ID="notIntersects"/>
+
+  <swrl:Builtin rdf:ID="difference"/>
+  <swrl:Builtin rdf:ID="union"/>
+  <swrl:Builtin rdf:ID="intersection"/>
+  <swrl:Builtin rdf:ID="append"/>
 
   <swrl:Builtin rdf:ID="last"/>
   <swrl:Builtin rdf:ID="notLast"/>
