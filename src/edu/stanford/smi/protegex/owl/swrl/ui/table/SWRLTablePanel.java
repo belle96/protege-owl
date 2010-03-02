@@ -30,14 +30,12 @@ public class SWRLTablePanel extends JPanel implements Disposable
   private SWRLTable table;
   private SWRLTableModel tableModel;
 
-  // Called when the table panel is in a results panel.
-  public SWRLTablePanel(OWLModel owlModel, RDFResource resource) 
+  public SWRLTablePanel(OWLModel owlModel, RDFResource resource)   // Called when the table panel is in a results panel. 
   {
     initialize(owlModel, resource);
-  } // SWRLTablePanel
+  }
 
-  // Called when the table panel is within the SWRLTab.
-  public SWRLTablePanel(OWLModel owlModel, RDFResource resource, SWRLTab swrlTab) 
+  public SWRLTablePanel(OWLModel owlModel, RDFResource resource, SWRLTab swrlTab) // Called when the table panel is within the SWRLTab. 
   {
     LabeledComponent lc = initialize(owlModel, resource);
 
@@ -47,7 +45,7 @@ public class SWRLTablePanel extends JPanel implements Disposable
                                               registration.getIcon(), swrlTab, owlModel));
       add(BorderLayout.CENTER, lc);
     } // for
-  } // SWRLTablePanel
+  }
 
   public void dispose() { table.dispose(); }
 
@@ -85,5 +83,5 @@ public class SWRLTablePanel extends JPanel implements Disposable
     add(BorderLayout.CENTER, lc);
     
     return lc;
-  } // initialize
-} // SWRLTablePanel
+  } 
+} 

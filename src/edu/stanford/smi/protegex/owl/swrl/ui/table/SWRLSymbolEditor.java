@@ -19,35 +19,30 @@ import java.awt.*;
  * matthew.horridge@cs.man.ac.uk<br>
  * www.cs.man.ac.uk/~horridgm<br><br>
  */
-public class SWRLSymbolEditor extends SymbolEditorComponent {
+public class SWRLSymbolEditor extends SymbolEditorComponent 
+{
+	private SWRLTextField textField;
 
-    private SWRLTextField textField;
+	public SWRLSymbolEditor(OWLModel model, SymbolErrorDisplay errorDisplay) 
+	{
+		super(model, errorDisplay, false);
+		textField = new SWRLTextField(model, errorDisplay);
+		setLayout(new BorderLayout());
+		add(textField);
+	}
 
+	public JTextComponent getTextComponent() { return textField; }
 
-    public SWRLSymbolEditor(OWLModel model, SymbolErrorDisplay errorDisplay) {
-        super(model, errorDisplay, false);
-        textField = new SWRLTextField(model, errorDisplay);
-        setLayout(new BorderLayout());
-        add(textField);
-    }
+	protected void parseExpression() throws Exception 
+	{
+    SWRLParser parser = new SWRLParser(getModel());
+    parser.parse(textField.getText());
+  }
 
-
-    public JTextComponent getTextComponent() {
-        return textField;
-    }
-
-
-    protected void parseExpression()
-            throws Exception {
-        SWRLParser parser = new SWRLParser(getModel());
-        parser.parse(textField.getText());
-    }
-
-
-    public void setSymbolEditorHandler(SymbolEditorHandler symbolEditorHandler) {
-        super.setSymbolEditorHandler(symbolEditorHandler);
-        textField.setSymbolEditorHandler(symbolEditorHandler);
-    }
-
+   public void setSymbolEditorHandler(SymbolEditorHandler symbolEditorHandler) 
+   {
+  	 super.setSymbolEditorHandler(symbolEditorHandler);
+  	 textField.setSymbolEditorHandler(symbolEditorHandler);
+   }
 }
 

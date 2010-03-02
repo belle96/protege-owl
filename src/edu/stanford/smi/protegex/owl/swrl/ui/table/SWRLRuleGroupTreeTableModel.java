@@ -116,7 +116,7 @@ public class SWRLRuleGroupTreeTableModel extends DefaultTreeTableModel
 		if (node instanceof DefaultMutableTreeTableNode) {
 			DefaultMutableTreeTableNode defNode = (DefaultMutableTreeTableNode)node;
 			if (defNode.getUserObject() instanceof SWRLRule) {
-				SWRLRule rule = (SWRLRule)defNode.getUserObject();
+				//SWRLRule rule = (SWRLRule)defNode.getUserObject();
 				switch (column) {
 				case IsEnabledColumn:
 				case RuleNameColumn:
@@ -124,10 +124,10 @@ public class SWRLRuleGroupTreeTableModel extends DefaultTreeTableModel
 					result = true; break;
 				} // switch
 			} else if (defNode.getUserObject() instanceof SWRLRuleGroup) {
-				SWRLRuleGroup ruleGroup = (SWRLRuleGroup)defNode.getUserObject();
+				//SWRLRuleGroup ruleGroup = (SWRLRuleGroup)defNode.getUserObject();
 				switch (column) {
 				case RuleGroupColumn:
-					result = true; break;
+					result = false; break;
 				case IsEnabledColumn:
 					result = true; break;
 				} // switch
@@ -151,23 +151,28 @@ public class SWRLRuleGroupTreeTableModel extends DefaultTreeTableModel
 				switch (column) {
 				case IsEnabledColumn:
 					System.err.println("rule enable toggled");
-					rule.setEnabled((Boolean)value); break;
+					rule.setEnabled((Boolean)value); 
+					break;
 				case RuleNameColumn:
 					System.err.println("rule name changed: " + value);
-					rule.setURI(value.toString()); break;
+					rule.setURI(value.toString()); 
+					break;
 				case RuleTextColumn:
 					System.err.println("rule text changed: " + value);
-					rule.setRuleText(value.toString()); break;
+					rule.setRuleText(value.toString()); 
+					break;
 				} // switch
 			} else if (defNode.getUserObject() instanceof SWRLRuleGroup) {
 				SWRLRuleGroup ruleGroup = (SWRLRuleGroup)defNode.getUserObject();
 				switch (column) {
 				case RuleGroupColumn:
 					System.err.println("rule group name changed: " + value);
-					ruleGroup.setGroupName(value.toString()); break;
+					ruleGroup.setGroupName(value.toString()); 
+					break;
 				case IsEnabledColumn:
 					System.err.println("rule group enable toggled");
-					ruleGroup.setIsEnabled((Boolean)value); break;
+					ruleGroup.setIsEnabled((Boolean)value); 
+					break;
 				} // switch
 			} // if
 		} // if

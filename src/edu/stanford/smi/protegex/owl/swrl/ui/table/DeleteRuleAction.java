@@ -12,30 +12,25 @@ import java.awt.event.ActionEvent;
 /**
  * @author Holger Knublauch  <holger@knublauch.com>
  */
-public class DeleteRuleAction extends AbstractAction {
+public class DeleteRuleAction extends AbstractAction 
+{
+	private SWRLTable table;
 
-    private SWRLTable table;
+	public DeleteRuleAction(SWRLTable table) 
+	{
+		super("Delete selected rule", OWLIcons.getDeleteIcon(SWRLIcons.IMP, SWRLIcons.class));
+		this.table = table;
+		table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) { updateEnabled(); }
+		});
+		updateEnabled();
+	}
 
+	public void actionPerformed(ActionEvent e) 
+	{
+		SWRLImp imp = table.getSelectedImp();
+		imp.deleteImp();
+	}
 
-    public DeleteRuleAction(SWRLTable table) {
-        super("Delete selected rule", OWLIcons.getDeleteIcon(SWRLIcons.IMP, SWRLIcons.class));
-        this.table = table;
-        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                updateEnabled();
-            }
-        });
-        updateEnabled();
-    }
-
-
-    public void actionPerformed(ActionEvent e) {
-        SWRLImp imp = table.getSelectedImp();
-        imp.deleteImp();
-    }
-
-
-    private void updateEnabled() {
-        setEnabled(table.getSelectedRowCount() == 1);
-    }
+  private void updateEnabled() { setEnabled(table.getSelectedRowCount() == 1); }
 }

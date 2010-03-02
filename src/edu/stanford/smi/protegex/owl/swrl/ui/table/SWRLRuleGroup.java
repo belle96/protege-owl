@@ -1,6 +1,6 @@
 package edu.stanford.smi.protegex.owl.swrl.ui.table;
 
-public class SWRLRuleGroup 
+public class SWRLRuleGroup implements Comparable<SWRLRuleGroup>
 {
   private String groupName = "";
   private Boolean isEnabled = false;
@@ -43,8 +43,7 @@ public class SWRLRuleGroup
   public int compareTo(SWRLRuleGroup otherObject) {
 	  int res = 0;
 	  res = otherObject.getGroupName().compareTo(getGroupName());
-	  if (0 == res) { res = otherObject.getIsEnabled().compareTo(getIsEnabled()); }
 	  return res;
-  } // compareTo
+  } 
   
-} // SWRLRuleGroup
+}

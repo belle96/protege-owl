@@ -34,7 +34,6 @@ import edu.stanford.smi.protegex.owl.ui.owltable.SymbolTableModel;
  */
 public class SWRLTableModel extends AbstractTableModel implements Disposable, SymbolTableModel 
 {
-    
   public final static int COL_ENABLED = 0;
   public final static int COL_NAME = 1;
   public final static int COL_EXPRESSION = 2;
@@ -50,12 +49,12 @@ public class SWRLTableModel extends AbstractTableModel implements Disposable, Sy
   {
     this.owlModel = owlModel;
     factory = new SWRLFactory(owlModel);
-    for (Object o : factory.getImps()) {
-        if (o instanceof  SWRLImp)  imps.add((SWRLImp) o);
-    }
+  
+    for (Object o : factory.getImps()) if (o instanceof  SWRLImp) imps.add((SWRLImp)o);
+    
     sortImps();
     initListeners();
-  } // SWRLTableModel
+  }
 
   public SWRLTableModel(RDFResource resource) 
   {
@@ -65,8 +64,7 @@ public class SWRLTableModel extends AbstractTableModel implements Disposable, Sy
     addReferencingImps(resource);
     sortImps();
     initListeners();
-  } // SWRLTableModel
-  
+  }   
 
   public int getColumnCount() { return COL_COUNT; }
   public Icon getIcon(RDFResource resource) { return ProtegeUI.getIcon(resource);  }
@@ -83,8 +81,7 @@ public class SWRLTableModel extends AbstractTableModel implements Disposable, Sy
       owlModel.getRDFSNamedClass(SWRLNames.Cls.IMP).removeClassListener(clsListener); 
       ((KnowledgeBase) owlModel).removeKnowledgeBaseListener(kbListener);
   }
-  
-  
+   
   public Class<?> getColumnClass(int column) 
   {
     if (column == COL_ENABLED) return Boolean.class;
@@ -140,7 +137,7 @@ public class SWRLTableModel extends AbstractTableModel implements Disposable, Sy
             ProtegeUI.getModalDialogFactory().showErrorMessageDialog(owlModel, "The name " + newName + " is already used in this ontology.");
           }
         } else {
-            imp = (SWRLImp) imp.rename(newName);
+            imp = (SWRLImp)imp.rename(newName);
             setImp(rowIndex, imp);
         }
       }
@@ -159,23 +156,22 @@ public class SWRLTableModel extends AbstractTableModel implements Disposable, Sy
     fireTableRowsDeleted(oldIndex, oldIndex);
     imps.add(index, imp);
     fireTableRowsInserted(index, index);
-  } // setRowOf
+  }
 
   public void enableAll() 
   { 
 	  for (SWRLImp imp :imps) imp.enable();
 
     fireTableRowsUpdated(0, getRowCount());
-  } // enableAll
+  }
 
   public void disableAll() 
   { 
     for (SWRLImp imp :imps) imp.disable();
  
     fireTableRowsUpdated(0, getRowCount());
-  } // disableAll
-
-
+  } 
+  
   private void addReferencingImps(RDFResource rdfResource) 
   {
     for (SWRLImp imp : factory.getImps()) 
@@ -223,7 +219,6 @@ public class SWRLTableModel extends AbstractTableModel implements Disposable, Sy
     }
   }
   
-
   private void sortImps() {
     Collections.sort(imps, new Comparator<SWRLImp>() {
         public int compare(SWRLImp a, SWRLImp b) {
@@ -256,4 +251,4 @@ public class SWRLTableModel extends AbstractTableModel implements Disposable, Sy
       };
     };
 
-} // SWRLTableModel
+} 

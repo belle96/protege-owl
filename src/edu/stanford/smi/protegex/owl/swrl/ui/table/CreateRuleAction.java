@@ -13,8 +13,8 @@ import java.awt.event.ActionEvent;
 /**
  * @author Holger Knublauch  <holger@knublauch.com>
  */
-public class CreateRuleAction extends AbstractAction {
-
+public class CreateRuleAction extends AbstractAction 
+{
   private OWLModel owlModel;
   private SWRLTable table;
   private SWRLFactory factory;
@@ -31,13 +31,8 @@ public class CreateRuleAction extends AbstractAction {
     final SWRLImp newImp = factory.createImp();
     if (SWRLTextAreaPanel.showEditDialog(table, owlModel, newImp)) {
       SwingUtilities.invokeLater(new Runnable() {
-          public void run() {
-            table.setSelectedRow(newImp);
-          }
-        });
-    }
-    else {
-      newImp.delete();
-    }
+          public void run() { table.setSelectedRow(newImp); }
+      });
+    } else newImp.delete();
   }
 }

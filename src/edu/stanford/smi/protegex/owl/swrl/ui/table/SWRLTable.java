@@ -31,95 +31,89 @@ import edu.stanford.smi.protegex.owl.ui.owltable.SymbolTable;
  */
 public class SWRLTable extends SymbolTable implements Disposable {
 
-  public SWRLTable(SWRLTableModel tableModel, OWLModel owlModel) {
+  public SWRLTable(SWRLTableModel tableModel, OWLModel owlModel) 
+  {
     super(tableModel, owlModel, true, new SWRLSymbolPanel(owlModel, true, true));
+
     TableColumn enabledColumn = getColumnModel().getColumn(SWRLTableModel.COL_ENABLED);
     TableColumn nameColumn = getColumnModel().getColumn(SWRLTableModel.COL_NAME);
     TableColumn expressionColumn = getColumnModel().getColumn(SWRLTableModel.COL_EXPRESSION);
+    
     enabledColumn.setMaxWidth(60);
     nameColumn.setPreferredWidth(100);
     expressionColumn.setPreferredWidth(700);
   }
 
-  protected SymbolEditorComponent createSymbolEditorComponent(OWLModel model, SymbolErrorDisplay errorDisplay) 
-  {
+  protected SymbolEditorComponent createSymbolEditorComponent(OWLModel model, SymbolErrorDisplay errorDisplay) {
     return new SWRLSymbolEditor(model, errorDisplay);
-    }
-    public void dispose() {
-        SWRLTableModel tableModel = (SWRLTableModel) getSymbolTableModel();
-        tableModel.dispose();
-    }
+  }
+  
+  public void dispose() 
+  {
+  	SWRLTableModel tableModel = (SWRLTableModel) getSymbolTableModel();
+  	tableModel.dispose();
+  }
 
-    protected String editMultiLine(RDFResource input) {
-        return null;  // TODO
-    }
+  protected String editMultiLine(RDFResource input) { return null; } // TODO
+  protected Icon getDefaultCellEditorIcon(RDFResource RDFResource) { return SWRLIcons.getImpIcon();  }
 
-    protected Icon getDefaultCellEditorIcon(RDFResource RDFResource) {
-        return SWRLIcons.getImpIcon();
-    }
-
-
-    protected Collection<RDFResource> getNavigationMenuItems(RDFResource rdfResource) {
-        SWRLImp imp = (SWRLImp)rdfResource;
-        Set<RDFResource> set = imp.getReferencedInstances();
-        Collection<RDFResource> result = new ArrayList<RDFResource>();
-        for (RDFResource resource : set) 
-          if (!(resource instanceof SWRLIndividual)) result.add(resource);
+  protected Collection<RDFResource> getNavigationMenuItems(RDFResource rdfResource) 
+  {
+  	SWRLImp imp = (SWRLImp)rdfResource;
+  	Set<RDFResource> set = imp.getReferencedInstances();
+  	Collection<RDFResource> result = new ArrayList<RDFResource>();
+  	for (RDFResource resource : set) 
+  		if (!(resource instanceof SWRLIndividual)) result.add(resource);
         
-        return result;
-    }
+  	return result;
+  }
 
+  public SWRLImp getSelectedImp() 
+  {
+  	int row = getSelectedRow();
+  	if (row >= 0 && row < getModel().getRowCount()) {
+  		return (SWRLImp) getSymbolTableModel().getRDFResource(row);
+  	} else return null;
+  }
 
-    public SWRLImp getSelectedImp() {
-        int row = getSelectedRow();
-        if (row >= 0 && row < getModel().getRowCount()) {
-            return (SWRLImp) getSymbolTableModel().getRDFResource(row);
-        }
-        else {
-            return null;
-        }
-    }
+  protected String getToolTipText(RDFResource rdfResource) 
+  {
+  	if (rdfResource instanceof SWRLImp) {
+  		RDFProperty commentSlot = getOWLModel().getRDFSCommentProperty();
+  		Object value = rdfResource.getPropertyValue(commentSlot);
+  		// A comment is stored as a String if no language is specified, as an RDFSLiteral otherwise.
+  		if (value instanceof String) return (String)value;
+  		else if (value instanceof RDFSLiteral) return ((RDFSLiteral)value).toString();
+  		else return null; // Should not happen
+  	} else return null;
+  }
 
+  public void valueChanged(ListSelectionEvent e)
+  {
+  	int selectedRow = getSelectedRow();
+  	SWRLTableModel tableModel = (SWRLTableModel)getSymbolTableModel();
+  	
+  	super.valueChanged(e);
 
-    protected String getToolTipText(RDFResource rdfResource) {
-        if (rdfResource instanceof SWRLImp) {
-            RDFProperty commentSlot = getOWLModel().getRDFSCommentProperty();
-	    Object value = rdfResource.getPropertyValue(commentSlot);
-	    // A comment is stored as a String if no language is specified, as an RDFSLiteral otherwise.
-	    if (value instanceof String) return (String)value;
-	    else if (value instanceof RDFSLiteral) return ((RDFSLiteral)value).toString();
-	    else return null; // Should not happen
-        }
-        else {
-            return null;
-        }
-    }
+  	if (selectedRow != -1) {
+  		String selectedRuleName = (String)tableModel.getValueAt(selectedRow, SWRLTableModel.COL_NAME);
+  		BridgePluginManager.setSelectedRuleName(selectedRuleName);
+  	} // if
+  } 
 
-    public void valueChanged(ListSelectionEvent e)
-    {
-      int selectedRow = getSelectedRow();
-      SWRLTableModel tableModel = (SWRLTableModel)getSymbolTableModel();
+  public void replaceImp(SWRLImp oldImp, SWRLImp newImp) 
+  {
+  	SWRLTableModel tableModel = (SWRLTableModel) getSymbolTableModel();
+  	int index = tableModel.indexOf(oldImp);
+  	if (tableModel.indexOf(newImp) >= 0) {
+  		tableModel.setRowOf(newImp, index);
+  		setSelectedRow(index);
+  	}
+  	oldImp.deleteImp();
+  }
 
-      super.valueChanged(e);
-
-      if (selectedRow != -1) {
-        String selectedRuleName = (String)tableModel.getValueAt(selectedRow, SWRLTableModel.COL_NAME);
-        BridgePluginManager.setSelectedRuleName(selectedRuleName);
-      } // if
-
-    } // valueChanged
-
-      public void replaceImp(SWRLImp oldImp, SWRLImp newImp) {
-        SWRLTableModel tableModel = (SWRLTableModel) getSymbolTableModel();
-        int index = tableModel.indexOf(oldImp);
-        if (tableModel.indexOf(newImp) >= 0) {
-            tableModel.setRowOf(newImp, index);
-            setSelectedRow(index);
-        }
-        oldImp.deleteImp();
-    }
-
-  public void setSelectedRow(RDFResource RDFResource) {
+  public void setSelectedRow(RDFResource RDFResource) 
+  {
     SWRLTableModel tableModel = (SWRLTableModel) getSymbolTableModel();
     int index = tableModel.indexOf((SWRLImp) RDFResource);
     setSelectedRow(index);
@@ -134,7 +128,7 @@ public class SWRLTable extends SymbolTable implements Disposable {
     popup.add(new DisableAllRulesAction());
 
     return popup;
-  } // createPopupMenu
+  }
 
   private class EnableAllRulesAction extends AbstractAction
   {
@@ -143,8 +137,8 @@ public class SWRLTable extends SymbolTable implements Disposable {
     public void actionPerformed(ActionEvent e)
     {
       ((SWRLTableModel)getSymbolTableModel()).enableAll();
-    } // actionPerformed
-  } // EnableAllRulesAction
+    } 
+  } 
 
   private class DisableAllRulesAction extends AbstractAction
   {
@@ -153,7 +147,7 @@ public class SWRLTable extends SymbolTable implements Disposable {
     public void actionPerformed(ActionEvent e)
     {
       ((SWRLTableModel)getSymbolTableModel()).disableAll();
-    } // actionPerformed
-  } // DisableAllRulesAction
+    }
+  } 
 
-} // SWRLTable
+} 

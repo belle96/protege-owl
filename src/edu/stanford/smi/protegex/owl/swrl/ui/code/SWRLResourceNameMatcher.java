@@ -13,47 +13,33 @@ import edu.stanford.smi.protegex.owl.ui.code.OWLResourceNameMatcher;
 
 public class SWRLResourceNameMatcher extends OWLResourceNameMatcher
 {
-
   public String getInsertString(RDFResource resource) 
   {
-    if (resource instanceof SWRLVariable) return "?" + resource.getPrefixedName();
-    else return super.getInsertString(resource);
-  } // getInsertString
+  	if (resource instanceof SWRLVariable) return "?" + resource.getPrefixedName();
+  	else return super.getInsertString(resource);
+  } 
 
   public Set<RDFResource> getMatchingResources(String prefix, String leftString, OWLModel owlModel) 
   {
-      if (leftString.endsWith("?")) {
-          Set<RDFResource> resources = new HashSet<RDFResource>();
-          for (Iterator it = owlModel.getOWLNamedClass(SWRLNames.Cls.VARIABLE).getInstances(true).iterator(); it.hasNext();) {
-              SWRLVariable var = (SWRLVariable)it.next();
-              if (var.getName().startsWith(prefix)) resources.add(var);
-          } // for
-          return resources;
-      } else {
-          return super.getMatchingResources(prefix, leftString, owlModel);
-      }
-
-  } // getMatchingResources
+  	if (leftString.endsWith("?")) {
+  		Set<RDFResource> resources = new HashSet<RDFResource>();
+  		for (Iterator it = owlModel.getOWLNamedClass(SWRLNames.Cls.VARIABLE).getInstances(true).iterator(); it.hasNext();) {
+  			SWRLVariable var = (SWRLVariable)it.next();
+  			if (var.getName().startsWith(prefix)) resources.add(var);
+  		} // for
+  		return resources;
+  	} else return super.getMatchingResources(prefix, leftString, owlModel);
+  } 
   
   @Override
-    protected boolean couldBeClass(OWLModel owlModel, String prefix) {
-      return true;
-    }
+  protected boolean couldBeClass(OWLModel owlModel, String prefix) { return true; }
   
   @Override
-    protected boolean couldBeProperty(OWLModel owlModel, String prefix) {
-      return true;
-    }
+  protected boolean couldBeProperty(OWLModel owlModel, String prefix) { return true; }
   
-    @Override
-    protected boolean couldBeIndividual(OWLModel owlModel, String prefix) {
-        return true;
-    }
+  @Override
+  protected boolean couldBeIndividual(OWLModel owlModel, String prefix) { return true; }
     
-    @Override
-   protected boolean couldBeDatatype(OWLModel owlModel, String prefix) {
-     return true;
-   }
-
-
-} // SWRLResourceNameMatcher
+  @Override
+  protected boolean couldBeDatatype(OWLModel owlModel, String prefix) { return true; }
+} 

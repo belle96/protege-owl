@@ -31,23 +31,24 @@ public class SWRLTab extends AbstractTabWidget
 {
   private SWRLTablePanel panel = null;
 
-  public void initialize() {
-	    setLabel("SWRL Rules");
-	    setIcon(SWRLIcons.getImpsIcon());
+  public void initialize() 
+  {
+  	setLabel("SWRL Rules");
+  	setIcon(SWRLIcons.getImpsIcon());
 
-	  	activateSWRL();
-	    panel = new SWRLTablePanel((OWLModel) getKnowledgeBase(), null, this);
+  	activateSWRL();
+  	panel = new SWRLTablePanel((OWLModel) getKnowledgeBase(), null, this);
 	    	
-	    add(panel);
-  } // initialize
+  	add(panel);
+  } 
 
   private void activateSWRL()
   {
     OWLModel owlModel = (OWLModel) getKnowledgeBase();
+  
     try {
-      if (owlModel.getProject().isMultiUserClient()) {
-          return;
-      }
+      if (owlModel.getProject().isMultiUserClient()) return;
+      
       owlModel.getNamespaceManager().setPrefix(new URI(SWRLNames.SWRLA_NAMESPACE), SWRLNames.SWRLA_PREFIX);
       owlModel.getNamespaceManager().setPrefix(new URI(SWRLNames.SQWRL_NAMESPACE), SWRLNames.SQWRL_PREFIX);
 
@@ -69,9 +70,7 @@ public class SWRLTab extends AbstractTabWidget
 
       if (importsAdded)  {
     	  ProjectView prjView = ProjectManager.getProjectManager().getCurrentProjectView();
-    	  if (prjView != null) {
-    		  prjView.reloadAllTabsExcept(this);
-    	  }
+    	  if (prjView != null) prjView.reloadAllTabsExcept(this);
       }
 
     } catch (Exception ex) {
@@ -79,14 +78,15 @@ public class SWRLTab extends AbstractTabWidget
                                                                "\n. Your project might be in an inconsistent state now.");
       Log.getLogger().log(Level.SEVERE, "Exception caught", ex);
     } // try
-  } // activateSWRL
+  } 
 
-  private boolean addImport(OWLModel owlModel, String importUri, ImportHelper importHelper) throws URISyntaxException {
-      if  (owlModel.getTripleStoreModel().getTripleStore(importUri) == null) {
-          importHelper.addImport(new URI(importUri));
-          return true;
-      }
-      return false;
+  private boolean addImport(OWLModel owlModel, String importUri, ImportHelper importHelper) throws URISyntaxException 
+  {
+  	if  (owlModel.getTripleStoreModel().getTripleStore(importUri) == null) {
+  		importHelper.addImport(new URI(importUri));
+  		return true;
+   }
+  	return false;
   }
 
   public void reconfigure()

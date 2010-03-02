@@ -16,36 +16,30 @@ import java.awt.event.ActionEvent;
  */
 public class ViewRuleAction extends AbstractAction {
 
-    private SWRLTable table;
+	private SWRLTable table;
 
+	public ViewRuleAction(SWRLTable table) 
+	{
+		super("Edit selected rule in multi-line editor...", OWLIcons.getViewIcon(SWRLIcons.IMP, SWRLIcons.class));
+		this.table = table;
+		table.addSelectionListener(new SelectionListener() {
+			public void selectionChanged(SelectionEvent event) { updateEnabled();}
+		});
+		updateEnabled();
+	}
 
-    public ViewRuleAction(SWRLTable table) {
-        super("Edit selected rule in multi-line editor...", OWLIcons.getViewIcon(SWRLIcons.IMP, SWRLIcons.class));
-        this.table = table;
-        table.addSelectionListener(new SelectionListener() {
-            public void selectionChanged(SelectionEvent event) {
-                updateEnabled();
-            }
-        });
-        updateEnabled();
-    }
+	public void actionPerformed(ActionEvent e) 
+	{
+		final SWRLImp imp = table.getSelectedImp();
+		OWLModel owlModel = imp.getOWLModel();
+		if (SWRLTextAreaPanel.showEditDialog(table, owlModel, imp)) {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					table.setSelectedRow(imp);
+				}
+			});
+		}
+	}
 
-
-    public void actionPerformed(ActionEvent e) {
-        final SWRLImp imp = table.getSelectedImp();
-        OWLModel owlModel = imp.getOWLModel();
-        if (SWRLTextAreaPanel.showEditDialog(table, owlModel, imp)) {
-            SwingUtilities.invokeLater(new Runnable() {
-                public void run() {
-                    table.setSelectedRow(imp);
-                }
-            });
-        }
-    }
-
-
-    private void updateEnabled() {
-        setEnabled(table.getSelectedImp() != null &&
-                table.getSelectedImp().isEditable());
-    }
+	private void updateEnabled() { setEnabled(table.getSelectedImp() != null && table.getSelectedImp().isEditable()); }
 }

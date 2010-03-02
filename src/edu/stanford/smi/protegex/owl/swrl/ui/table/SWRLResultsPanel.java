@@ -14,62 +14,41 @@ import java.awt.*;
 /**
  * @author Holger Knublauch  <holger@knublauch.com>
  */
-public class SWRLResultsPanel extends ResultsPanel {
+public class SWRLResultsPanel extends ResultsPanel 
+{
+	private RDFResource instance;
+	private SWRLTablePanel tablePanel;
+	
+	private ModelListener listener = new ModelAdapter() 
+	{
+		public void classDeleted(RDFSClass cls) { if (instance.equals(cls)) { closeSoon(); } }
+		public void individualDeleted(RDFResource resource) { if (instance.equals(resource)) { closeSoon(); } }
+		public void propertyDeleted(RDFProperty property) { if (instance.equals(property)) { closeSoon(); } }
+	};
 
-    private RDFResource instance;
+  public SWRLResultsPanel(RDFResource resource) 
+  {
+  	super(resource.getOWLModel());
+  	this.instance = resource;
+  	OWLModel owlModel = resource.getOWLModel();
+  	owlModel.addModelListener(listener);
+  	tablePanel = new SWRLTablePanel(owlModel, resource);
+  	add(BorderLayout.CENTER, tablePanel);
+  }
 
-    private ModelListener listener = new ModelAdapter() {
-        public void classDeleted(RDFSClass cls) {
-            if (instance.equals(cls)) {
-                closeSoon();
-            }
-        }
+  private void closeSoon() 
+  {
+  	SwingUtilities.invokeLater(new Runnable() {
+  		public void run() { close(); }
+  	});
+  }
 
+  public void dispose() 
+  {
+  	tablePanel.dispose();
+  	OWLModel owlModel = instance.getOWLModel();
+  	owlModel.removeModelListener(listener);
+  }
 
-        public void individualDeleted(RDFResource resource) {
-            if (instance.equals(resource)) {
-                closeSoon();
-            }
-        }
-
-
-        public void propertyDeleted(RDFProperty property) {
-            if (instance.equals(property)) {
-                closeSoon();
-            }
-        }
-    };
-
-    private SWRLTablePanel tablePanel;
-
-
-    public SWRLResultsPanel(RDFResource resource) {
-        super(resource.getOWLModel());
-        this.instance = resource;
-        OWLModel owlModel = resource.getOWLModel();
-        owlModel.addModelListener(listener);
-        tablePanel = new SWRLTablePanel(owlModel, resource);
-        add(BorderLayout.CENTER, tablePanel);
-    }
-
-
-    private void closeSoon() {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                close();
-            }
-        });
-    }
-
-
-    public void dispose() {
-        tablePanel.dispose();
-        OWLModel owlModel = instance.getOWLModel();
-        owlModel.removeModelListener(listener);
-    }
-
-
-    public String getTabName() {
-        return "SWRL Rules about " + instance.getBrowserText();
-    } // getTabName
+  public String getTabName() { return "SWRL Rules about " + instance.getBrowserText(); }
 }
