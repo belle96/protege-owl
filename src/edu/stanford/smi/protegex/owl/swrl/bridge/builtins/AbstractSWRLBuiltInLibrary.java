@@ -919,19 +919,19 @@ public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
 	  int argumentNumber = 0;
 	
 	  for (BuiltInArgument argument : arguments) {
-	    if (argument.isUnbound())  throw new BuiltInException("built-in '" + builtInName + "' in rule '" + ruleName + "' " +
+	    if (argument.isUnbound())  throw new BuiltInException("built-in " + builtInName + " in rule " + ruleName + " " +
 	                                                          "returned with unbound argument ?" + argument.getVariableName());
 	    else if (argument instanceof MultiArgument && ((MultiArgument)argument).hasNoArguments())
-	      throw new BuiltInException("built-in '" + builtInName + "' in rule '" + ruleName + "' " +
+	      throw new BuiltInException("built-in " + builtInName + " in rule " + ruleName + " " +
 	                                 "returned with empty multi-argument ?" + argument.getVariableName());
 	    argumentNumber++;
 	  } // for
-	} // checkForUnboundArguments
+	} 
 	
 	public List<BuiltInArgument> copyArguments(List<BuiltInArgument> arguments) throws BuiltInException
 	{
 	  return new ArrayList<BuiltInArgument>(arguments);
-	} // copyArguments
+	} 
 	
 	public boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, Collection<BuiltInArgument> resultArguments) 
 	  throws BuiltInException
@@ -951,7 +951,7 @@ public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
 	  } //if
 	  
 	  return result;
-	} // processResultArgument
+	} 
 	
 	public boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, BuiltInArgument resultArgument) 
 	  throws BuiltInException
@@ -969,9 +969,8 @@ public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
 	  } //if
 	  
 	  return result;
-	} // processResultArgument
+	} 
 	
-	// TODO: if the argument is a collection ID we do not compare collections, we just compare IDs
 	public boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, DataValueArgument resultArgument) throws BuiltInException
 	{
 	  boolean result = false;
@@ -987,49 +986,49 @@ public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
 	  } //if
 	  
 	  return result;
-	} // processResultArgument
+	} 
 	
 	public boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, short resultArgument) 
 	  throws BuiltInException
 	{
 	  return processResultArgument(arguments, argumentNumber, argumentFactory.createDataValueArgument(resultArgument));
-	} // processResultArgument
+	} 
 	
 	public boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, 
 	                                     int resultArgument) throws BuiltInException
 	{
 	  return processResultArgument(arguments, argumentNumber, argumentFactory.createDataValueArgument(resultArgument));
-	} // processResultArgument
+	} 
 	
 	public boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, 
 	                                     long resultArgument) throws BuiltInException
 	{
 	  return processResultArgument(arguments, argumentNumber, argumentFactory.createDataValueArgument(resultArgument));
-	} // processResultArgument
+	} 
 	
 	public boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, 
 	                                     float resultArgument) throws BuiltInException
 	{
 	  return processResultArgument(arguments, argumentNumber, argumentFactory.createDataValueArgument(resultArgument));
-	} // processResultArgument
+	} 
 	
 	public boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, 
 	                                     double resultArgument) throws BuiltInException
 	{
 	  return processResultArgument(arguments, argumentNumber, argumentFactory.createDataValueArgument(resultArgument));
-	} // processResultArgument
+	}
 	
 	public boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, 
 	                                     byte resultArgument) throws BuiltInException
 	{
 	  return processResultArgument(arguments, argumentNumber, argumentFactory.createDataValueArgument(resultArgument));
-	} // processResultArgument
+	} 
 	
 	public boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, 
 	                                     String resultArgument) throws BuiltInException
 	{
 	  return processResultArgument(arguments, argumentNumber, argumentFactory.createDataValueArgument(resultArgument));
-	} // processResultArgument
+	}
 
 	public ClassArgument createClassArgument(String classURI) { return argumentFactory.createClassArgument(classURI); }
 	public IndividualArgument createIndividualArgument(String individualURI) { return argumentFactory.createIndividualArgument(individualURI); }
@@ -1051,4 +1050,4 @@ public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
 	public MultiArgument createMultiArgument(String variableName) { return argumentFactory.createMultiArgument(variableName); }
 	public MultiArgument createMultiArgument(String variableName, List<BuiltInArgument> arguments) { return argumentFactory.createMultiArgument(variableName, arguments); }
 
-} // AbstractSWRLBuiltInLibrary
+}

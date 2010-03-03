@@ -35,6 +35,8 @@
 
   <swrl:Builtin rdf:ID="intersects"/>
   <swrl:Builtin rdf:ID="notIntersects"/>
+  <swrl:Builtin rdf:ID="equal"/>
+  <swrl:Builtin rdf:ID="notEqual"/>
 
   <swrl:Builtin rdf:ID="difference"/>
   <swrl:Builtin rdf:ID="union"/>

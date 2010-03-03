@@ -57,7 +57,6 @@ public class SWRLRuleImpl implements SWRLRule
   public void setRuleGroupName(String ruleGroupName) { this.ruleGroupName = ruleGroupName; }
   public boolean isEnabled() { return enabled; }
   public void setEnabled(Boolean enable) { this.enabled = enable; }
-  public String getRuleText() { return toString(); }
   
   public List<BuiltInAtom> getBuiltInAtomsFromHead() { return getBuiltInAtoms(headAtoms); }
   public List<BuiltInAtom> getBuiltInAtomsFromHead(Set<String> builtInNames) { return getBuiltInAtoms(headAtoms, builtInNames); }
@@ -405,7 +404,7 @@ public class SWRLRuleImpl implements SWRLRule
   {
   	for (BuiltInAtom builtInAtom : getBuiltInAtomsFromBody(SQWRLNames.getCollectionOperationBuiltInNames())) {
   		List<BuiltInArgument> allOperandCollectionGroupArguments = new ArrayList<BuiltInArgument>(); // The group arguments from the operand collections
-  		Set<String> variableNames;
+  		List<String> variableNames;
   		
   		builtInAtom.setUsesSQWRLCollectionResults();
 
@@ -458,7 +457,7 @@ public class SWRLRuleImpl implements SWRLRule
   	return false;
   }
 
-  public String toString()
+  public String getRuleText()
   {
     String result = "";
     boolean isFirst = true;
@@ -479,6 +478,11 @@ public class SWRLRuleImpl implements SWRLRule
     } // for
 
     return result;
-  } // toString
+  }
+  
+  public String toString()
+  {
+  	return ruleURI;
+  }
 
 } // SWRLRuleImpl

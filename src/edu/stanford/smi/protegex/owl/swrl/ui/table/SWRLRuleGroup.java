@@ -12,7 +12,7 @@ public class SWRLRuleGroup implements Comparable<SWRLRuleGroup>
 	  super();
 	  this.groupName = groupName;
 	  this.isEnabled = isEnabled;
-  } // SWRLRuleGroup
+  } 
 		    
   public String getGroupName() { return groupName; }
   public void setGroupName(String groupName) { this.groupName = groupName; }
@@ -46,4 +46,5 @@ public class SWRLRuleGroup implements Comparable<SWRLRuleGroup>
 	  return res;
   } 
   
+  public String toString() { return groupName; }
 }

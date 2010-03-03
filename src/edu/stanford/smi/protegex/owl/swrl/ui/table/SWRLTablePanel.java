@@ -30,12 +30,12 @@ public class SWRLTablePanel extends JPanel implements Disposable
   private SWRLTable table;
   private SWRLTableModel tableModel;
 
-  public SWRLTablePanel(OWLModel owlModel, RDFResource resource)   // Called when the table panel is in a results panel. 
+  public SWRLTablePanel(OWLModel owlModel, RDFResource resource)  
   {
     initialize(owlModel, resource);
   }
 
-  public SWRLTablePanel(OWLModel owlModel, RDFResource resource, SWRLTab swrlTab) // Called when the table panel is within the SWRLTab. 
+  public SWRLTablePanel(OWLModel owlModel, RDFResource resource, SWRLTab swrlTab) 
   {
     LabeledComponent lc = initialize(owlModel, resource);
 
@@ -47,7 +47,7 @@ public class SWRLTablePanel extends JPanel implements Disposable
     } // for
   }
 
-  public void dispose() { table.dispose(); }
+  public void dispose() { if (table != null) table.dispose(); }
 
   private LabeledComponent initialize(OWLModel owlModel, RDFResource RDFResource) 
   {
@@ -63,7 +63,7 @@ public class SWRLTablePanel extends JPanel implements Disposable
   	} catch (OWLFactoryException e) {
   		ProtegeUI.getModalDialogFactory().showErrorMessageDialog(owlModel, "Could not activate SWRLTab: " + e +
   															     "\n. Your project might be in an inconsistent state now.");
-        Log.getLogger().log(Level.SEVERE, "Exception caught", e);
+      Log.getLogger().log(Level.SEVERE, "Exception caught", e);
   	}
   	
   	SWRLRuleGroupTreeTable table = new SWRLRuleGroupTreeTable(model);

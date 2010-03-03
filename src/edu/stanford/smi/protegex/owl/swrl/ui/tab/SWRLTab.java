@@ -25,7 +25,7 @@ import edu.stanford.smi.protegex.owl.ui.ProtegeUI;
  * A tab widget that holds the <a href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLEditorFAQ">SWRL Editor</a> and other plugins that work
  * with SWRL rules. This tab serves as the entry point to all of the GUI-based software components that work with SWRL in Protege-OWL. <p>
  *
- * Full documentation is available <a href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLTab">here</a>.
+ * Documentation is available at <a href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLTab">here</a>.
  */
 public class SWRLTab extends AbstractTabWidget
 {
@@ -37,7 +37,7 @@ public class SWRLTab extends AbstractTabWidget
   	setIcon(SWRLIcons.getImpsIcon());
 
   	activateSWRL();
-  	panel = new SWRLTablePanel((OWLModel) getKnowledgeBase(), null, this);
+  	panel = new SWRLTablePanel((OWLModel)getKnowledgeBase(), null, this);
 	    	
   	add(panel);
   } 
@@ -96,8 +96,7 @@ public class SWRLTab extends AbstractTabWidget
       setLayout(new BorderLayout());
       add(panel);
     } // if
-  } // reconfigure
-
+  } 
 
   public static boolean isSuitable(Project p, Collection errors)
   {
@@ -107,5 +106,5 @@ public class SWRLTab extends AbstractTabWidget
       errors.add("This tab can only be used with OWL projects.");
       return false;
     } // if
-  } // isSuitable
+  } 
 } // SWRLTab

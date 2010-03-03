@@ -24,8 +24,8 @@ public interface BuiltInAtom  extends Atom
   boolean hasUnboundArguments();
   Set<String> getUnboundArgumentVariableNames() throws BuiltInException;
   String getArgumentVariableName(int argumentNumber) throws BuiltInException;
-  Set<String> getArgumentsVariableNames() throws BuiltInException;
-  Set<String> getArgumentsVariableNamesExceptFirst() throws BuiltInException;
+  List<String> getArgumentsVariableNames() throws BuiltInException;
+  List<String> getArgumentsVariableNamesExceptFirst() throws BuiltInException;
   Set<String> getDependsOnVariableNames(); // Indicates variables that this built-in depends on (directly  or indirectly)
   void addArguments(List<BuiltInArgument> additionalArguments);
 

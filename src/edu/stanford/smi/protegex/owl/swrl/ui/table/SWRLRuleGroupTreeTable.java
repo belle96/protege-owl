@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.JPopupMenu;
+import javax.swing.table.TableColumn;
 import javax.swing.tree.TreePath;
 
 import org.jdesktop.swingx.JXTreeTable;
@@ -25,6 +26,10 @@ public class SWRLRuleGroupTreeTable extends JXTreeTable
 		setEditable(true);
 		//treeTable.setLeaf, setClosed, setOpen icons
 		createPopupMenu();
+
+		getColumnModel().getColumn(SWRLRuleGroupTreeTableModel.RuleGroupColumn).setPreferredWidth(100);
+		getColumnModel().getColumn(SWRLRuleGroupTreeTableModel.IsEnabledColumn).setMaxWidth(60);
+    getColumnModel().getColumn(SWRLRuleGroupTreeTableModel.RuleTextColumn).setPreferredWidth(700);
    } 
 
 	private void createPopupMenu() 

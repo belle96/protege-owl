@@ -40,7 +40,7 @@ public class SQWRLNames
   public static final String MakeBag = SQWRLNamespace + "makeBag";
   public static final String GroupBy = SQWRLNamespace + "groupBy";
   
-  // Single collection operations
+  // Collection operations
   public static final String Size = SQWRLNamespace + "size";
   public static final String IsEmpty = SQWRLNamespace + "isEmpty";
   public static final String NotIsEmpty = SQWRLNamespace + "notIsEmpty";
@@ -83,13 +83,17 @@ public class SQWRLNames
   public static final String NthGreatestSlice = SQWRLNamespace + "nthGreatestSlice";
   public static final String NotNthGreatestSlice = SQWRLNamespace + "notNthGreatestSlice";
   
-  // Multi-collection operations
+  // Multi-collection operations with collection results
   public static final String Intersection = SQWRLNamespace + "intersection";
   public static final String Union = SQWRLNamespace + "union";
   public static final String Difference = SQWRLNamespace + "difference";
   public static final String Append = SQWRLNamespace + "append";
+
+  // Multi-collection operations with non-collection results
   public static final String Intersects = SQWRLNamespace + "intersects";
   public static final String NotIntersects = SQWRLNamespace + "notIntersects";
+  public static final String Equal = SQWRLNamespace + "equal";
+  public static final String NotEqual = SQWRLNamespace + "notEqual";
   
   private static final String headSelectionBuiltInNamesArray[] = { Select, SelectDistinct, OrderBy, OrderByDescending, ColumnNames };
   private static final String headAggregationBuiltInNamesArray[] = { Count, CountDistinct, Avg, Min, Max, Sum };
@@ -117,7 +121,7 @@ public class SQWRLNames
   	NotGreatest, NotLeastN, NotLeast, LastN, FirstN, LeastN, GreatestN };
 
   private static final String multiCollectionOperationWithoutCollectionCreateBuiltInNamesArray[] = 
-  { Intersects, NotIntersects };
+  { Intersects, NotIntersects, Equal, NotEqual };
   
   private static final String multiCollectionOperationWithCollectionCreateBuiltInNamesArray[] = 
   { Intersection, Union, Difference, Append };

@@ -104,20 +104,20 @@ public class BuiltInAtomImpl extends AtomImpl implements BuiltInAtom
       throw new BuiltInException("expecting a variable for (0-offset) argument #" + argumentNumber);
     
     return arguments.get(argumentNumber).getVariableName();
-  } // getArgumentVariableName
+  } // 
 
-  public Set<String> getArgumentsVariableNames() throws BuiltInException
+  public List<String> getArgumentsVariableNames() throws BuiltInException
   {
-    Set<String> result = new HashSet<String>();
+    List<String> result = new ArrayList<String>();
 
     for (BuiltInArgument argument : arguments) if (argument.isVariable()) result.add(argument.getVariableName());
 
     return result;
-  } // getArgumentsVariableNames
+  } 
 
-  public Set<String> getArgumentsVariableNamesExceptFirst() throws BuiltInException
+  public List<String> getArgumentsVariableNamesExceptFirst() throws BuiltInException
   {
-    Set<String> result = new HashSet<String>();
+    List<String> result = new ArrayList<String>();
     int argumentCount = 0;
 
     for (BuiltInArgument argument : arguments) if (argument.isVariable() && argumentCount++ != 0) result.add(argument.getVariableName());
