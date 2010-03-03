@@ -10,6 +10,7 @@ public interface OWLProperty extends OWLEntity
 {
   Set<OWLClass> getDomainClasses();
   Set<OWLClass> getRangeClasses();
+  Set<OWLProperty> getTypes();
   Set<OWLProperty> getSuperProperties();
   Set<OWLProperty> getSubProperties();
   Set<OWLProperty> getEquivalentProperties();

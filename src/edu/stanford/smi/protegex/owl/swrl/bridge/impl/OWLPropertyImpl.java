@@ -17,12 +17,11 @@ public abstract class OWLPropertyImpl implements OWLProperty
   private Set<OWLClass> domainClasses, rangeClasses;
   private Set<OWLProperty> superProperties, subProperties, equivalentProperties;
   
-  // Constructor used when creating a OWLPropertyImpl object to pass as a built-in argument
   public OWLPropertyImpl(String propertyURI) 
   {
     this.propertyURI = propertyURI;
     initialize();
-  } // OWLPropertyImpl
+  } 
 
   public void addDomainClass(OWLClass domainClass) { this.domainClasses.add(domainClass); }
   public void addRangeClass(OWLClass rangeClass) { this.rangeClasses.add(rangeClass); }
@@ -36,6 +35,15 @@ public abstract class OWLPropertyImpl implements OWLProperty
   public Set<OWLProperty> getSuperProperties() { return superProperties; }
   public Set<OWLProperty> getSubProperties() { return subProperties; }
   public Set<OWLProperty> getEquivalentProperties() { return equivalentProperties; }
+  
+  public Set<OWLProperty> getTypes() 
+  { 
+  	Set<OWLProperty> types = new HashSet<OWLProperty>(superProperties);
+  	types.add(this);
+  	
+  	return types;
+  }
+
 
   public String toString() { return getURI(); }
 

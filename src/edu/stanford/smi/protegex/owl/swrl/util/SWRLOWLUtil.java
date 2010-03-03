@@ -1768,12 +1768,25 @@ public class SWRLOWLUtil
     } // if
 
     return result;
-  } // rdfResources2OWLNamedClassURIs
+  } 
+
+  public static Set<String> rdfResources2OWLPropertyURIs(Collection resources) 
+  {
+    Set<String> result = new HashSet<String>();
+    
+    Iterator iterator = resources.iterator();
+    while (iterator.hasNext()) {
+      Object o = iterator.next();
+      if (o instanceof OWLProperty) result.add(((OWLProperty)o).getURI());
+    } // if
+
+    return result;
+  } 
 
   public static boolean hasInconsistentClasses(OWLModel owlModel) 
   {
     return !owlModel.getInconsistentClasses().isEmpty();
-  } // hasInconsistentClasses
+  } 
 
   public static String createNewResourceName(OWLModel owlModel, String localNamePrefix) 
   {

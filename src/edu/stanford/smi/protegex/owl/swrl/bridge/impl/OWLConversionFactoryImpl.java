@@ -182,7 +182,6 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
       classes.put(classURI, owlClassImpl);
             
       if (!classURI.equals(OWLNames.Cls.THING)) {
-      	
       	 for (String superClassURI : SWRLOWLUtil.rdfResources2OWLNamedClassURIs(owlNamedClass.getNamedSuperclasses(false)))
       	   owlClassImpl.addSuperClass(getOWLClass(superClassURI));
       	 for (String subClassURI : SWRLOWLUtil.rdfResources2OWLNamedClassURIs(owlNamedClass.getNamedSubclasses(false)))
@@ -243,7 +242,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
   	} // if
 
     return owlDataProperty;
-  } // getOWLDataProperty
+  } 
 
   public void putOWLClass(OWLClass owlClass) throws OWLConversionFactoryException
   {
@@ -962,16 +961,16 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
   	  owlPropertyImpl.addDomainClass(getOWLClass(domainClassURI));
   	 for (String rangeClassURI : SWRLOWLUtil.rdfResources2OWLNamedClassURIs(property.getUnionRangeClasses()))
   	   owlPropertyImpl.addRangeClass(getOWLClass(rangeClassURI));
-  	 for (String superPropertyURI : SWRLOWLUtil.rdfResources2OWLNamedClassURIs(property.getSuperproperties(false)))
+  	 for (String superPropertyURI : SWRLOWLUtil.rdfResources2OWLPropertyURIs(property.getSuperproperties(false)))
   	   if (property.isObjectProperty()) owlPropertyImpl.addSuperProperty(getOWLObjectProperty(superPropertyURI));
   	   else owlPropertyImpl.addSuperProperty(getOWLDataProperty(superPropertyURI));
-  	 for (String subPropertyURI : SWRLOWLUtil.rdfResources2OWLNamedClassURIs(property.getSubproperties(false)))
-  	   if (property.isObjectProperty()) owlPropertyImpl.addSuperProperty(getOWLObjectProperty(subPropertyURI));
-  	   else owlPropertyImpl.addSuperProperty(getOWLDataProperty(subPropertyURI));
-  	 for (String equivalentPropertyURI : SWRLOWLUtil.rdfResources2OWLNamedClassURIs(property.getEquivalentProperties()))
-  	   if (property.isObjectProperty()) owlPropertyImpl.addSuperProperty(getOWLObjectProperty(equivalentPropertyURI));
-  	   else owlPropertyImpl.addSuperProperty(getOWLDataProperty(equivalentPropertyURI));
-  } // initializeProperty
+  	 for (String subPropertyURI : SWRLOWLUtil.rdfResources2OWLPropertyURIs(property.getSubproperties(false)))
+  	   if (property.isObjectProperty()) owlPropertyImpl.addSubProperty(getOWLObjectProperty(subPropertyURI));
+  	   else owlPropertyImpl.addSubProperty(getOWLDataProperty(subPropertyURI));
+  	 for (String equivalentPropertyURI : SWRLOWLUtil.rdfResources2OWLPropertyURIs(property.getEquivalentProperties()))
+  	   if (property.isObjectProperty()) owlPropertyImpl.addEquivalentProperty(getOWLObjectProperty(equivalentPropertyURI));
+  	   else owlPropertyImpl.addEquivalentProperty(getOWLDataProperty(equivalentPropertyURI));
+  }
 
   private void buildDefiningClasses(OWLIndividualImpl owlIndividualImpl, edu.stanford.smi.protegex.owl.model.OWLIndividual individual) 
     throws OWLConversionFactoryException
@@ -983,7 +982,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
         owlIndividualImpl.addType(getOWLClass(classURI));
       } // if
     } // for
-  } // buildDefiningClasses
+  }
 
   private void buildSameAsIndividuals(OWLIndividualImpl owlIndividualImpl, edu.stanford.smi.protegex.owl.model.OWLIndividual individual) 
     throws OWLConversionFactoryException

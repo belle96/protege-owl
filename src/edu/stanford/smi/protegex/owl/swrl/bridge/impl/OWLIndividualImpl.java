@@ -8,7 +8,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.OWLClass;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLIndividual;
 
 /**
- ** Class representing an OWL individual. 
+ * Class representing an OWL individual. 
  */
 public class OWLIndividualImpl implements OWLIndividual
 {
