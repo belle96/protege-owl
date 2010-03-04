@@ -38,7 +38,7 @@ import edu.stanford.smi.protegex.owl.model.triplestore.TripleStore;
 import edu.stanford.smi.protegex.owl.model.triplestore.TripleStoreModel;
 
 class TriplePostProcessor extends AbstractStatefulTripleProcessor {
-    private static final transient Logger log = Log.getLogger(TriplePostProcessor.class);
+    public static final transient Logger log = Log.getLogger(TriplePostProcessor.class);
     static {
         try {
             initLogger();
