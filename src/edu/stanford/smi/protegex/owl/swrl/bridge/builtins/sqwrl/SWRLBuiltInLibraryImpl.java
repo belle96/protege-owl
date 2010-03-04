@@ -394,24 +394,44 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     for (BuiltInArgument element : collection1) if (collection2.contains(element)) return true;
 
     return false;
-  } // intersects
-  
+  } 
+
   public boolean notIntersects(List<BuiltInArgument> arguments) throws BuiltInException
   { 
 	  return !intersects(arguments);
-  } // notIntersects
-  
+  }
+
   public boolean contains(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-  	final int resultArgumentNumber = 1, sourceArgumentNumber = 0, numberOfArguments = 2;
+  	String collectionName1 = getCollectionName(arguments, 0); 
+    String collectionName2 = getCollectionName(arguments, 1);
+    int collection1NumberOfGroupElements = getNumberOfGroupElements(collectionName1);
+    int collection2NumberOfGroupElements = getNumberOfGroupElements(collectionName2);
+    final int numberOfArguments = 2;
+    String collectionID1 = getCollectionIDInMultiCollectionOperation(arguments, 0, numberOfArguments, 0, collection1NumberOfGroupElements); // Does argument checking
+    String collectionID2 = getCollectionIDInMultiCollectionOperation(arguments, 1, numberOfArguments, collection1NumberOfGroupElements, collection2NumberOfGroupElements); // Does argument checking
+    Collection<BuiltInArgument> collection1 = getCollection(collectionID1);
+    Collection<BuiltInArgument> collection2 = getCollection(collectionID2);
+
+    return collection1.containsAll(collection2);
+  }
+
+  public boolean notContains(List<BuiltInArgument> arguments) throws BuiltInException
+  { 
+	  return !contains(arguments);
+  }
+  
+  public boolean element(List<BuiltInArgument> arguments) throws BuiltInException 
+  { 
+  	final int resultArgumentNumber = 0, sourceArgumentNumber = 1, numberOfArguments = 2;
     Collection<BuiltInArgument> collection = getCollectionInSingleCollectionOperation(arguments, sourceArgumentNumber, numberOfArguments); 
     
     return processResultArgument(arguments, resultArgumentNumber, collection);
   }
 
-  public boolean notContains(List<BuiltInArgument> arguments) throws BuiltInException 
+  public boolean notElement(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-    return !contains(arguments);
+    return !element(arguments);
   } 
 
   public boolean equal(List<BuiltInArgument> arguments) throws BuiltInException 
@@ -428,7 +448,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   	if (collectionID1.equals(collectionID2)) result = true; // The same collection was passed
 	  else { // Different collection - compare them
 	  	Collection<BuiltInArgument> collection1 = getCollection(collectionID1);
-	  	Collection<BuiltInArgument> collection2 = getCollection(collectionID1);
+	  	Collection<BuiltInArgument> collection2 = getCollection(collectionID2);
       result = collection1.equals(collection2); // Remember, sets and lists will not be equal
 	  } // if
   	

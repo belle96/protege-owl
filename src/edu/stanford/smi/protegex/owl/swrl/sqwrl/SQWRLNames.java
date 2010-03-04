@@ -44,8 +44,8 @@ public class SQWRLNames
   public static final String Size = SQWRLNamespace + "size";
   public static final String IsEmpty = SQWRLNamespace + "isEmpty";
   public static final String NotIsEmpty = SQWRLNamespace + "notIsEmpty";
-  public static final String Contains = SQWRLNamespace + "contains";
-  public static final String NotContains = SQWRLNamespace + "notContains";
+  public static final String Element = SQWRLNamespace + "element";
+  public static final String NotElement = SQWRLNamespace + "notElement";
       
   // First and last
   public static final String Last = SQWRLNamespace + "last";
@@ -68,7 +68,21 @@ public class SQWRLNames
   public static final String NotNthSlice = SQWRLNamespace + "notNthSlice";
   public static final String NthLastSlice = SQWRLNamespace + "nthLastSlice";
   public static final String NotNthLastSlice = SQWRLNamespace + "notNthLastSlice";
+  
+  // Multi-collection operations with collection results
+  public static final String Intersection = SQWRLNamespace + "intersection";
+  public static final String Union = SQWRLNamespace + "union";
+  public static final String Difference = SQWRLNamespace + "difference";
+  public static final String Append = SQWRLNamespace + "append";
 
+  // Multi-collection operations with non-collection results
+  public static final String Intersects = SQWRLNamespace + "intersects";
+  public static final String NotIntersects = SQWRLNamespace + "notIntersects";
+  public static final String Equal = SQWRLNamespace + "equal";
+  public static final String NotEqual = SQWRLNamespace + "notEqual";
+  public static final String Contains = SQWRLNamespace + "contains";
+  public static final String NotContains = SQWRLNamespace + "notContains";
+  
   // Aliases for first and last operators
   public static final String Greatest = SQWRLNamespace + "greatest";
   public static final String NotGreatest = SQWRLNamespace + "notGreatest";
@@ -82,19 +96,7 @@ public class SQWRLNames
   public static final String NotNthGreatest = SQWRLNamespace + "notNthGreatest";
   public static final String NthGreatestSlice = SQWRLNamespace + "nthGreatestSlice";
   public static final String NotNthGreatestSlice = SQWRLNamespace + "notNthGreatestSlice";
-  
-  // Multi-collection operations with collection results
-  public static final String Intersection = SQWRLNamespace + "intersection";
-  public static final String Union = SQWRLNamespace + "union";
-  public static final String Difference = SQWRLNamespace + "difference";
-  public static final String Append = SQWRLNamespace + "append";
 
-  // Multi-collection operations with non-collection results
-  public static final String Intersects = SQWRLNamespace + "intersects";
-  public static final String NotIntersects = SQWRLNamespace + "notIntersects";
-  public static final String Equal = SQWRLNamespace + "equal";
-  public static final String NotEqual = SQWRLNamespace + "notEqual";
-  
   private static final String headSelectionBuiltInNamesArray[] = { Select, SelectDistinct, OrderBy, OrderByDescending, ColumnNames };
   private static final String headAggregationBuiltInNamesArray[] = { Count, CountDistinct, Avg, Min, Max, Sum };
   
@@ -110,7 +112,7 @@ public class SQWRLNames
   private static final String collectionGroupByBuiltInNamesArray[] = { GroupBy };
  
   private static final String singleCollectionOperationWithoutCollectionCreateBuiltInNamesArray[] = 
-  { Size, IsEmpty, NotIsEmpty, Contains, NotContains,
+  { Size, IsEmpty, NotIsEmpty, Element, NotElement,
   	First,  Last, Least, Greatest, 
   	Min, Max, Sum, Avg, Median,
   	Nth, NthGreatest, NthLast };
@@ -121,7 +123,7 @@ public class SQWRLNames
   	NotGreatest, NotLeastN, NotLeast, LastN, FirstN, LeastN, GreatestN };
 
   private static final String multiCollectionOperationWithoutCollectionCreateBuiltInNamesArray[] = 
-  { Intersects, NotIntersects, Equal, NotEqual };
+  { Intersects, NotIntersects, Equal, NotEqual, Contains, NotContains };
   
   private static final String multiCollectionOperationWithCollectionCreateBuiltInNamesArray[] = 
   { Intersection, Union, Difference, Append };

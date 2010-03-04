@@ -30,13 +30,15 @@
   <swrl:Builtin rdf:ID="size"/>
   <swrl:Builtin rdf:ID="isEmpty"/>
   <swrl:Builtin rdf:ID="notEmpty"/>
-  <swrl:Builtin rdf:ID="contains"/>
-  <swrl:Builtin rdf:ID="notContains"/>
+  <swrl:Builtin rdf:ID="element"/>
+  <swrl:Builtin rdf:ID="notElement"/>
 
   <swrl:Builtin rdf:ID="intersects"/>
   <swrl:Builtin rdf:ID="notIntersects"/>
   <swrl:Builtin rdf:ID="equal"/>
   <swrl:Builtin rdf:ID="notEqual"/>
+  <swrl:Builtin rdf:ID="contains"/>
+  <swrl:Builtin rdf:ID="notContains"/>
 
   <swrl:Builtin rdf:ID="difference"/>
   <swrl:Builtin rdf:ID="union"/>
