@@ -63,28 +63,19 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.DataValueConversionException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.InvalidPropertyNameException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLConversionFactoryException;
-import edu.stanford.smi.protegex.owl.swrl.bridge.sqwrl.impl.DataValueImpl;
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDAnyURI;
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDDate;
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDDateTime;
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDDuration;
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDTime;
-import edu.stanford.smi.protegex.owl.swrl.model.SWRLAtom;
-import edu.stanford.smi.protegex.owl.swrl.model.SWRLBuiltinAtom;
-import edu.stanford.smi.protegex.owl.swrl.model.SWRLClassAtom;
-import edu.stanford.smi.protegex.owl.swrl.model.SWRLDataRangeAtom;
-import edu.stanford.smi.protegex.owl.swrl.model.SWRLDatavaluedPropertyAtom;
-import edu.stanford.smi.protegex.owl.swrl.model.SWRLDifferentIndividualsAtom;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
-import edu.stanford.smi.protegex.owl.swrl.model.SWRLImp;
-import edu.stanford.smi.protegex.owl.swrl.model.SWRLIndividualPropertyAtom;
-import edu.stanford.smi.protegex.owl.swrl.model.SWRLSameIndividualAtom;
 import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParseException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.DataValueImpl;
 import edu.stanford.smi.protegex.owl.swrl.util.SWRLOWLUtil;
 
 /**
- * Class to insert and get OWLAPI-like entities into and from a Protege-OWL model.
+ * Class to convert between OWLAPI-like entities and Protege-OWL entities.
  */
 public class OWLConversionFactoryImpl implements OWLConversionFactory
 {
@@ -108,7 +99,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
     objectProperties = new HashMap<String, OWLObjectProperty>();
     dataProperties = new HashMap<String, OWLDataProperty>();
     individuals = new HashMap<String, OWLIndividual>();
-  } // OWLConversionFactoryImpl
+  }
   
   public boolean containsClassReference(String classURI) { return SWRLOWLUtil.isOWLClass(owlModel, classURI); }
   public boolean isOWLProperty(String propertyURI) { return SWRLOWLUtil.isProperty(owlModel, propertyURI); }
@@ -121,10 +112,10 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
   
   public Set<SWRLRule> getRules() throws OWLConversionFactoryException, SQWRLException, BuiltInException
   {
-    Collection<SWRLImp> imps = swrlFactory.getImps();
+    Collection<edu.stanford.smi.protegex.owl.swrl.model.SWRLImp> imps = swrlFactory.getImps();
     Set<SWRLRule> result = new HashSet<SWRLRule>();
     
-    for (SWRLImp imp : imps) {
+    for (edu.stanford.smi.protegex.owl.swrl.model.SWRLImp imp : imps) {
       if (imp.isEnabled()) {
         SWRLRule rule = getSWRLRule(imp.getName());
         result.add(rule);
@@ -139,37 +130,37 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
   {
   	swrlFactory.createImp(ruleName, ruleText);
   	return getSWRLRule(ruleName);
-  } // createSWRLRule
+  } 
   
   public SWRLRule getSWRLRule(String ruleName) throws OWLConversionFactoryException, SQWRLException, BuiltInException
   {
     List<Atom> bodyAtoms = new ArrayList<Atom>();
     List<Atom> headAtoms = new ArrayList<Atom>();
-    SWRLImp imp = swrlFactory.getImp(ruleName);
+    edu.stanford.smi.protegex.owl.swrl.model.SWRLImp imp = swrlFactory.getImp(ruleName);
 
-    if (imp == null) throw new OWLConversionFactoryException("invalid rule name: " + ruleName + "");
+    if (imp == null) throw new OWLConversionFactoryException("invalid rule name: " + ruleName);
 
     Iterator iterator = imp.getBody().getValues().iterator();
     while (iterator.hasNext()) {
-      SWRLAtom swrlAtom = (SWRLAtom)iterator.next();
+    	edu.stanford.smi.protegex.owl.swrl.model.SWRLAtom swrlAtom = (edu.stanford.smi.protegex.owl.swrl.model.SWRLAtom)iterator.next();
       bodyAtoms.add(convertSWRLAtom(swrlAtom));
     } // while 
 
     iterator = imp.getHead().getValues().iterator();
     while (iterator.hasNext()) {
-      SWRLAtom swrlAtom = (SWRLAtom)iterator.next();
+    	edu.stanford.smi.protegex.owl.swrl.model.SWRLAtom swrlAtom = (edu.stanford.smi.protegex.owl.swrl.model.SWRLAtom)iterator.next();
       headAtoms.add(convertSWRLAtom(swrlAtom));
     } // while 
 
     return new SWRLRuleImpl(imp.getPrefixedName(), bodyAtoms, headAtoms);
-  } // getSWRLRule
+  } 
 
   public OWLClass getOWLClass() 
   { 
     String anonymousURI = SWRLOWLUtil.getNextAnonymousResourceName(owlModel);
 
     return new OWLClassImpl(anonymousURI);
-  } // getOWLClass
+  }
 
   public OWLClass getOWLClass(String classURI) throws OWLConversionFactoryException
   { 
@@ -210,7 +201,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
       buildDifferentFromIndividuals(owlIndividual, individual);
   	} // if
     return owlIndividual; 
-  } // getOWLIndividual
+  }
 
   public OWLObjectProperty getOWLObjectProperty(String propertyURI) throws OWLConversionFactoryException
   {
@@ -226,7 +217,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
   	} // if
   	
     return owlObjectProperty;
-  } // getOWLObjectProperty
+  }
 
   public OWLDataProperty getOWLDataProperty(String propertyURI) throws OWLConversionFactoryException
   { 
@@ -259,7 +250,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
       
       if (!cls.isSubclassOf(superclass)) cls.addSuperclass(superclass);
     } // for
-  } // putOWLClass
+  }
 
   public void putOWLIndividual(OWLIndividual owlIndividual) throws OWLConversionFactoryException
   {
@@ -277,7 +268,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
         else individual.addRDFType(cls);
       } // if
     } // for
-  } // putOWLIndividual
+  }
 
   public void putOWLAxiom(OWLAxiom axiom) throws OWLConversionFactoryException
   {
@@ -294,7 +285,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
   public boolean isValidURI(String uri)
   {
     return SWRLOWLUtil.isValidURI(uri); 
-  } // isValidURI
+  }
 
   public Set<OWLIndividual> getAllOWLIndividualsOfClass(String classURI) throws OWLConversionFactoryException
   {
@@ -320,21 +311,21 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
 	 RDFResource resource= SWRLOWLUtil.getRDFResource(owlModel, classURI);
 	 
 	 return (resource == null || resource instanceof OWLNamedClass);
-  } // couldBeOWLNamedClass
+  }
   
   public String uri2PrefixedName(String uri)
   {
   	 String result = NamespaceUtil.getPrefixedName(owlModel, uri);
   	 
   	 return result;
-  } // uri2PrefixedName
+  } 
   
   public String prefixedName2URI(String prefixedName)
   {
   	String result = NamespaceUtil.getFullName(owlModel, prefixedName);
   	
   	return result;
-  } // prefixedName2URI
+  } 
   
   public static DataValueArgument convertRDFSLiteral2DataValueArgument(OWLModel owlModel, edu.stanford.smi.protegex.owl.model.RDFSLiteral literal) 
     throws OWLConversionFactoryException 
@@ -377,7 +368,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
     } // try
 
     return dataValueArgument;
-  } // convertRDFSLiteral2DataValueArgument
+  }
 
   public static OWLDataValue convertRDFSLiteral2OWLDataValue(OWLModel owlModel, edu.stanford.smi.protegex.owl.model.RDFSLiteral literal) 
     throws OWLConversionFactoryException 
@@ -785,29 +776,29 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
     throw new OWLConversionFactoryException("SWRL data range atoms not implemented.");
   } // convertDataRangeAtom
 
-  private Atom convertSWRLAtom(SWRLAtom swrlAtom) throws OWLConversionFactoryException
+  private Atom convertSWRLAtom(edu.stanford.smi.protegex.owl.swrl.model.SWRLAtom swrlAtom) throws OWLConversionFactoryException
   {
     Atom atom;
     
-    if (swrlAtom instanceof SWRLClassAtom) {
-      atom = convertClassAtom((SWRLClassAtom)swrlAtom);
-    } else if (swrlAtom instanceof SWRLDatavaluedPropertyAtom) {
-      atom = convertDatavaluedPropertyAtom((SWRLDatavaluedPropertyAtom)swrlAtom);
-    } else if (swrlAtom instanceof SWRLIndividualPropertyAtom) {
-      atom = convertIndividualPropertyAtom((SWRLIndividualPropertyAtom)swrlAtom);
-    } else if (swrlAtom instanceof SWRLSameIndividualAtom) {
-      atom = convertSameIndividualAtom((SWRLSameIndividualAtom)swrlAtom);
-    } else if (swrlAtom instanceof SWRLDifferentIndividualsAtom) {
-      atom = convertDifferentIndividualsAtom((SWRLDifferentIndividualsAtom)swrlAtom);
-    } else if (swrlAtom instanceof SWRLBuiltinAtom) {
-      atom = convertBuiltInAtom((SWRLBuiltinAtom)swrlAtom);
-    } else if (swrlAtom instanceof SWRLDataRangeAtom) 
-      atom = convertDataRangeAtom((SWRLDataRangeAtom)swrlAtom);
+    if (swrlAtom instanceof edu.stanford.smi.protegex.owl.swrl.model.SWRLClassAtom) {
+      atom = convertClassAtom((edu.stanford.smi.protegex.owl.swrl.model.SWRLClassAtom)swrlAtom);
+    } else if (swrlAtom instanceof edu.stanford.smi.protegex.owl.swrl.model.SWRLDatavaluedPropertyAtom) {
+      atom = convertDatavaluedPropertyAtom((edu.stanford.smi.protegex.owl.swrl.model.SWRLDatavaluedPropertyAtom)swrlAtom);
+    } else if (swrlAtom instanceof edu.stanford.smi.protegex.owl.swrl.model.SWRLIndividualPropertyAtom) {
+      atom = convertIndividualPropertyAtom((edu.stanford.smi.protegex.owl.swrl.model.SWRLIndividualPropertyAtom)swrlAtom);
+    } else if (swrlAtom instanceof edu.stanford.smi.protegex.owl.swrl.model.SWRLSameIndividualAtom) {
+      atom = convertSameIndividualAtom((edu.stanford.smi.protegex.owl.swrl.model.SWRLSameIndividualAtom)swrlAtom);
+    } else if (swrlAtom instanceof edu.stanford.smi.protegex.owl.swrl.model.SWRLDifferentIndividualsAtom) {
+      atom = convertDifferentIndividualsAtom((edu.stanford.smi.protegex.owl.swrl.model.SWRLDifferentIndividualsAtom)swrlAtom);
+    } else if (swrlAtom instanceof edu.stanford.smi.protegex.owl.swrl.model.SWRLBuiltinAtom) {
+      atom = convertBuiltInAtom((edu.stanford.smi.protegex.owl.swrl.model.SWRLBuiltinAtom)swrlAtom);
+    } else if (swrlAtom instanceof edu.stanford.smi.protegex.owl.swrl.model.SWRLDataRangeAtom) 
+      atom = convertDataRangeAtom((edu.stanford.smi.protegex.owl.swrl.model.SWRLDataRangeAtom)swrlAtom);
     else throw new OWLConversionFactoryException("invalid SWRL atom: " + swrlAtom.getBrowserText());
 
     return atom;
-  } // convertSWRLAtom
-
+  } 
+  
   // Utility method to create a collection of OWL property assertion axioms for every subject/predicate combination for a particular OWL
   // property.  TODO: This is incredibly inefficient.
 

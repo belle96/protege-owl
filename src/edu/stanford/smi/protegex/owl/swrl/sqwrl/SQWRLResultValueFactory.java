@@ -1,10 +1,10 @@
 package edu.stanford.smi.protegex.owl.swrl.sqwrl;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.DataValueConversionException;
-import edu.stanford.smi.protegex.owl.swrl.bridge.sqwrl.impl.DataValueImpl;
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDType;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.ClassValueImpl;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.DataPropertyValueImpl;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.DataValueImpl;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.IndividualValueImpl;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.ObjectPropertyValueImpl;
 

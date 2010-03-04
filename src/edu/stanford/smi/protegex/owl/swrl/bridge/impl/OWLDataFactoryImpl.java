@@ -55,7 +55,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory
   { 
     this.owlModel = owlModel; 
     conversionFactory = new OWLConversionFactoryImpl(owlModel, this);
-  } // OWLFactoryImpl
+  }
 
   public Set<SWRLRule> getSWRLRules() throws OWLFactoryException
   {
@@ -74,7 +74,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory
     } // if
 
     return result;
-  } // getSWRLRules
+  }
 
   public SWRLRule getSWRLRule(String ruleName) throws OWLFactoryException
   {

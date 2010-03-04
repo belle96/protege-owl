@@ -11,8 +11,6 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.SQWRLResultImpl;
  */
 public interface SWRLRule extends OWLAxiom, OWLEntity
 {
-  void setURI(String uri);
-  
   List<Atom> getHeadAtoms();
   List<Atom> getBodyAtoms();
   
@@ -22,6 +20,7 @@ public interface SWRLRule extends OWLAxiom, OWLEntity
   List<BuiltInAtom> getBuiltInAtomsFromBody();
   List<BuiltInAtom> getBuiltInAtomsFromBody(Set<String> builtInNames);
 
+  void setBodyAtoms(List<Atom> atom);
   void appendAtomsToBody(List<Atom> atom);
 
   boolean isSQWRL();
@@ -37,5 +36,4 @@ public interface SWRLRule extends OWLAxiom, OWLEntity
   void setRuleGroupName(String ruleGroupName);
   boolean isEnabled();
   void setEnabled(Boolean enable);
-  
-} // SWRLRule
+}

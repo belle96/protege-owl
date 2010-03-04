@@ -13,9 +13,9 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.MultiArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.ObjectPropertyArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.VariableBuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.DataValueConversionException;
-import edu.stanford.smi.protegex.owl.swrl.bridge.sqwrl.impl.DataValueImpl;
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDType;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.DataValueImpl;
 
 public class ArgumentFactoryImpl extends ArgumentFactory
 {

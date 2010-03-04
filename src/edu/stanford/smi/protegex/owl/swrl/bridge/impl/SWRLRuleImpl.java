@@ -21,13 +21,14 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.SQWRLResultImpl;
 
 /**
- * Class implementing a SWRL rule or SQWRL query. TODO: separate out SQWRL functionality.
+ * Class implementing a SWRL rule
  */
 public class SWRLRuleImpl implements SWRLRule
 {
   private String ruleURI;
-  private String ruleGroupName;
   private List<Atom> bodyAtoms, headAtoms;
+  private String ruleGroupName;
+  
   private Set<String> referencedVariableNames;
   private SQWRLResultImpl sqwrlResult = null;
   private boolean hasSQWRLBuiltIns, hasSQWRLCollectionBuiltIns;
@@ -51,6 +52,7 @@ public class SWRLRuleImpl implements SWRLRule
   public void setRuleText(String text) {}
   public List<Atom> getHeadAtoms() { return headAtoms; }
   public List<Atom> getBodyAtoms() { return bodyAtoms; }
+  
   public boolean isSQWRL() { return hasSQWRLBuiltIns || hasSQWRLCollectionBuiltIns; }
   public boolean usesSQWRLCollections() { return hasSQWRLCollectionBuiltIns; }
   public String getRuleGroupName() { return ruleGroupName; }
@@ -67,7 +69,12 @@ public class SWRLRuleImpl implements SWRLRule
   public void appendAtomsToBody(List<Atom> atoms)
   {
     bodyAtoms.addAll(atoms);
-  } // appendAtomToBody
+  }
+
+  public void setBodyAtoms(List<Atom> atoms)
+  {
+    bodyAtoms = atoms;
+  }
 
   public List<Atom> getSQWRLPhase1BodyAtoms()
   {
@@ -147,7 +154,7 @@ public class SWRLRuleImpl implements SWRLRule
     // expect variables used as parameters to functions to have been defined before their use in a left to right fashion.
     bodyAtoms = processBodyNonBuiltInAtoms(bodyNonBuiltInAtoms);
     bodyAtoms.addAll(bodyBuiltInAtoms);
-  } // processUnboundArguments
+  }
 
   /**
    * Build up a list of body class atoms and non class, non built-in atoms. 

@@ -1,5 +1,5 @@
 
-package edu.stanford.smi.protegex.owl.swrl.bridge.sqwrl.impl;
+package edu.stanford.smi.protegex.owl.swrl.sqwrl.impl;
 
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -167,7 +167,7 @@ public class DataValueImpl  implements DataValue {
   
   public String toQuotedString() 
   { 
-    return "\"" + value.toString().replaceAll("\"", "\\\\\"") + "\"";
+  	return "\"" + value.toString().replaceAll("[~\\\\]\"", "\\\\\"") + "\""; // Escape non-escaped double quote characters; for humans: [^\\]" -> \\"
   } // toString
 
   public Object getValue() { return value; }

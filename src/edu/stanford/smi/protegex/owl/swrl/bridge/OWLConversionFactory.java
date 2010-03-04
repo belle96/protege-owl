@@ -10,7 +10,7 @@ import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParseException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 
 /**
- * Interface to insert and get OWLAPI-like entities into and from a Protege-OWL model.
+ * Interface to insert and get OWLAPI-like entities into and from a Protege-OWL model
  */
 public interface OWLConversionFactory
 {
@@ -20,12 +20,10 @@ public interface OWLConversionFactory
   OWLObjectProperty getOWLObjectProperty(String propertyURI) throws OWLConversionFactoryException;
   OWLDataProperty getOWLDataProperty(String propertyURI) throws OWLConversionFactoryException;
   SWRLRule getSWRLRule(String ruleName) throws OWLConversionFactoryException, SQWRLException, BuiltInException;
-  SWRLRule createSWRLRule(String ruleName, String ruleText) throws OWLConversionFactoryException, SQWRLException, SWRLParseException, BuiltInException;
   Set<OWLIndividual> getAllOWLIndividualsOfClass(String classURI) throws OWLConversionFactoryException;
   
   Set<OWLPropertyAssertionAxiom> getOWLPropertyAssertionAxioms(String individualURI, String propertyURI) throws OWLConversionFactoryException, DataValueConversionException;
   Set<OWLPropertyAssertionAxiom> getOWLPropertyAssertionAxioms(String propertyURI) throws OWLConversionFactoryException, DataValueConversionException;
-  
   Set<OWLDifferentIndividualsAxiom> getOWLDifferentIndividualsAxioms() throws OWLConversionFactoryException;
 
   Set<SWRLRule> getRules() throws OWLConversionFactoryException, SQWRLException, BuiltInException;
@@ -38,13 +36,16 @@ public interface OWLConversionFactory
   
   boolean isSWRLBuiltIn(String builtInURI);
   boolean couldBeOWLNamedClass(String classURI);
-  String createNewResourceName(String prefix);
   boolean isValidURI(String uri);
+    
+  String uri2PrefixedName(String uri); 
+  String prefixedName2URI(String prefixedName);
+  
+  // Creation methods
+  String createNewResourceName(String prefix);
+  SWRLRule createSWRLRule(String ruleName, String ruleText) throws OWLConversionFactoryException, SQWRLException, SWRLParseException, BuiltInException;
   void putOWLClass(OWLClass owlClass) throws OWLConversionFactoryException;
   void putOWLIndividual(OWLIndividual owlIndividual) throws OWLConversionFactoryException;
   void putOWLAxiom(OWLAxiom axiom) throws OWLConversionFactoryException;
-  
-  String uri2PrefixedName(String uri); 
-  String prefixedName2URI(String prefixedName);
- } // OWLConversionFactory
+ }
   

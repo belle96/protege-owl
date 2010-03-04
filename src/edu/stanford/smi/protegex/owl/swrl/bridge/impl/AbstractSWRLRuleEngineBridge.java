@@ -31,6 +31,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.OWLProperty;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLSameIndividualAxiom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLSubClassAxiom;
+import edu.stanford.smi.protegex.owl.swrl.bridge.RuleAndQueryProcessor;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLBuiltInBridge;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRule;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRuleEngineBridge;
@@ -87,6 +88,8 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
   // URIs of classes, properties and individuals explicitly referred to in SWRL rules. These are filled in as the SWRL rules are imported
   // and are used to determine the relevant OWL knowledge to import.
   private Set<String> referencedOWLClassURIs, referencedOWLPropertyURIs, referencedOWLIndividualURIs;
+  
+  private RuleAndQueryProcessor ruleAndQueryProcessor;
 
   protected AbstractSWRLRuleEngineBridge(OWLModel owlModel) throws SWRLRuleEngineBridgeException
   {
@@ -95,9 +98,10 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
     injectedOWLFactory = new OWLDataFactoryImpl();
     conversionFactory = new OWLConversionFactoryImpl(owlModel, activeOWLFactory);
     owlDataValueFactory = OWLDataValueFactory.create();
+    ruleAndQueryProcessor = new RuleAndQueryProcessorImpl();
     initialize();
     BuiltInLibraryManager.invokeAllBuiltInLibrariesResetMethod(this);
-  } // AbstractSWRLRuleEngineBridge
+  }
 
   /**
    ** Load rules and knowledge from OWL into bridge. All existing bridge rules and knowledge will first be cleared and the associated rule
@@ -162,13 +166,11 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
   private void importSWRLRules(boolean allowSQWRLQueries) throws SWRLRuleEngineBridgeException
   {
     try {
-      for (SWRLRule rule : activeOWLFactory.getSWRLRules()) importSWRLRule(rule); 
-      //if (allowSQWRLQueries || !rule.isSQWRL()) importSWRLRule(rule);
-    	  
+      for (SWRLRule rule : activeOWLFactory.getSWRLRules()) importSWRLRule(rule);    	  
     } catch (OWLFactoryException e) {
       throw new SWRLRuleEngineBridgeException("factory error importing rules: " + e.getMessage());
     } // try
-  } // importSWRLRules
+  }
 
   private void importSQWRLQuery(String queryName) throws SWRLRuleEngineBridgeException
   {
@@ -176,7 +178,7 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
       SWRLRule rule = activeOWLFactory.getSWRLRule(queryName);
       if (rule.isSQWRL()) importSWRLRule(rule);
     } catch (OWLFactoryException e) {
-       throw new SWRLRuleEngineBridgeException("factory error importing SQWRL query '" + queryName + "': " + e.getMessage());
+       throw new SWRLRuleEngineBridgeException("factory error importing SQWRL query " + queryName + ": " + e.getMessage());
     } // try
   } // importSWRLRules
 
@@ -331,24 +333,24 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
   /**
    *  Get the results from a SQWRL query.
    */
-  public SQWRLResult getSQWRLResult(String queryName) throws SQWRLException
+  public SQWRLResult getSQWRLResult(String queryURI) throws SQWRLException
   {
     SQWRLResultImpl result;
 
-    if (!importedSWRLRules.containsKey(queryName)) throw new InvalidQueryNameException(queryName);
+    if (!importedSWRLRules.containsKey(queryURI)) throw new InvalidQueryNameException(queryURI);
 
-    result = importedSWRLRules.get(queryName).getSQWRLResult();
+    result = importedSWRLRules.get(queryURI).getSQWRLResult();
 
     if (!result.isPrepared()) result.prepared();
 
     return result;
   } // getSQWRLResult
 
-  public SWRLRule getSWRLRule(String ruleName) throws SWRLBuiltInBridgeException
+  public SWRLRule getSWRLRule(String ruleURI) throws SWRLBuiltInBridgeException
   {
-    if (!importedSWRLRules.containsKey(ruleName)) throw new SWRLBuiltInBridgeException("invalid rule name: " + ruleName);
+    if (!importedSWRLRules.containsKey(ruleURI)) throw new SWRLBuiltInBridgeException("invalid rule name: " + ruleURI);
 
-    return importedSWRLRules.get(ruleName);
+    return importedSWRLRules.get(ruleURI);
   } // getRule
 
   public OWLDataFactory getOWLDataFactory() { return activeOWLFactory; }
