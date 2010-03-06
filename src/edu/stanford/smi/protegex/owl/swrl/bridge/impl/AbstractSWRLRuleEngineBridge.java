@@ -110,7 +110,7 @@ public abstract class AbstractSWRLRuleEngineBridge implements SWRLRuleEngineBrid
   public void importSWRLRulesAndOWLKnowledge() throws SWRLRuleEngineBridgeException
   {
     importSWRLRulesAndOWLKnowledge(new HashSet<String>());
-  } // importSWRLRulesAndOWLKnowledge
+  } 
 
   /**
    * Load rules from a particular rule group and associated knowledge from OWL into bridge. All existing bridge rules and knowledge will
