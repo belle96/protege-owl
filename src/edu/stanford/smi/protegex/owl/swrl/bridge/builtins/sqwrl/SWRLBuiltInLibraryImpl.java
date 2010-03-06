@@ -818,8 +818,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   	  int n = getArgumentAsAPositiveInteger(2, arguments);
   	  List<BuiltInArgument> greatestN = new ArrayList<BuiltInArgument>();
     
-  	  if (!sortedList.isEmpty() && n > 0) 
-        for (int i = sortedList.size() - n; i < sortedList.size(); i++) greatestN.add(sortedList.get(i));
+  	  if (!sortedList.isEmpty() && n > 0) {
+  	  	int startIndex = sortedList.size() - n;
+  	  	if (startIndex < 0) startIndex = 0;
+        for (int i = startIndex; i < sortedList.size(); i++) greatestN.add(sortedList.get(i));
+  	  } // if
 	
   	  result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceArgumentNumber, numberOfArguments, greatestN);
   	} // if
@@ -838,8 +841,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       int n = getArgumentAsAPositiveInteger(2, arguments);
       List<BuiltInArgument> notGreatestN = new ArrayList<BuiltInArgument>();
       
-      if (!sortedList.isEmpty() && n > 0)
-        for (int i = 0; i < sortedList.size() - n; i++) notGreatestN.add(sortedList.get(i));
+      if (!sortedList.isEmpty() && n > 0) {
+  	  	int startIndex = sortedList.size() - n;
+	  	  if (startIndex < 0) startIndex = 0;
+        for (int i = 0; i < startIndex; i++) notGreatestN.add(sortedList.get(i));
+      } // if
 	
       result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceArgumentNumber, numberOfArguments, notGreatestN);
   	} // if
@@ -894,7 +900,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       int n = getArgumentAsAPositiveInteger(2, arguments);
       List<BuiltInArgument> notLeastN = new ArrayList<BuiltInArgument>();
 
-      for (int i = n; i < sortedList.size(); i++) notLeastN.add(sortedList.get(i));
+      for (int i = n; i >= 0 && i < sortedList.size(); i++) notLeastN.add(sortedList.get(i));
       	
       result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceArgumentNumber, numberOfArguments, notLeastN);
   	} // if
