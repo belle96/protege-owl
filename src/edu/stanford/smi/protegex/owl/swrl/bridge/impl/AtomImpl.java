@@ -22,7 +22,7 @@ public class AtomImpl implements Atom
     referencedPropertyURIs = new HashSet<String>();
     referencedIndividualURIs = new HashSet<String>();
     referencedVariableNames = new HashSet<String>();
-  } // AtomImpl
+  }
 
   public boolean hasReferencedClasses() { return referencedClassURIs.size() != 0; }
   public Set<String> getReferencedClassURIs() { return referencedClassURIs; }
@@ -31,26 +31,26 @@ public class AtomImpl implements Atom
   public boolean hasReferencedIndividuals() { return referencedIndividualURIs.size() != 0; }
   public Set<String> getReferencedIndividualURIs() { return referencedIndividualURIs; }
   public boolean hasReferencedVariables() { return referencedVariableNames.size() != 0; }
-  public Set<String> getReferencedVariableURIs() { return referencedVariableNames; }
+  public Set<String> getReferencedVariableNames() { return referencedVariableNames; }
   
   public void addReferencedClassURI(String classURI) 
   { 
     if (!referencedClassURIs.contains(classURI)) referencedClassURIs.add(classURI); 
-  } // addReferencedClassURI
+  }
 
   public void addReferencedPropertyURI(String propertyURI) 
   { 
     if (!referencedPropertyURIs.contains(propertyURI)) referencedPropertyURIs.add(propertyURI); 
-  } // addReferencedPropertyURI
+  }
 
   public void addReferencedIndividualURI(String individualURI) 
   { 
     if (!referencedIndividualURIs.contains(individualURI)) referencedIndividualURIs.add(individualURI); 
-  } // addReferencedIndividualURI
+  }
   
   public void addReferencedVariableName(String variableName) 
   { 
     if (!referencedVariableNames.contains(variableName)) referencedVariableNames.add(variableName); 
-  } // addReferencedVariableName
+  }
 
-} // AtomImpl
+}

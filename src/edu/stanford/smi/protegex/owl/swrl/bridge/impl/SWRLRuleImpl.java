@@ -2,6 +2,7 @@
 package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -43,9 +44,10 @@ public class SWRLRuleImpl implements SWRLRule
     hasSQWRLCollectionBuiltIns = false;
     ruleGroupName = "";
     buildReferencedVariableNames();
-    processUnboundArguments();
+    processUnboundBuiltInArguments();
+    processBuiltInArgumentDependencies(); 
     processSQWRLBuiltIns();
-  } // SWRLRuleImpl
+  } 
   
   public String getURI() { return ruleURI; }
   public void setURI(String ruleURI) { this.ruleURI = ruleURI; }
@@ -89,7 +91,7 @@ public class SWRLRuleImpl implements SWRLRule
     } // for
 
     return result;
-  } // getSQWRLPhase1BodyAtoms
+  } 
 
   public List<Atom> getSQWRLPhase2BodyAtoms()
   {
@@ -104,7 +106,7 @@ public class SWRLRuleImpl implements SWRLRule
     } // for
 
     return result;
-  } // getSQWRLPhase2BodyAtoms
+  } 
 
   public SQWRLResultImpl getSQWRLResult() { return sqwrlResult; }
 
@@ -112,28 +114,23 @@ public class SWRLRuleImpl implements SWRLRule
    * Find all built-in atoms with unbound arguments and tell them which of their arguments are unbound.
    * See <a href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLBuiltInBridge#nid88T">here</a> for a discussion of the role of this method.
    */
-  private void processUnboundArguments() throws SQWRLException, BuiltInException
+  private void processUnboundBuiltInArguments()
   {
     List<BuiltInAtom> bodyBuiltInAtoms = new ArrayList<BuiltInAtom>();
     List<Atom> bodyNonBuiltInAtoms = new ArrayList<Atom>();
     Set<String> variableNamesUsedByNonBuiltInBodyAtoms = new HashSet<String>(); // By definition, these will always be bound.
     Set<String> variableNamesBoundByBuiltIns = new HashSet<String>(); // Names of variables bound by built-ins in this rule
- 
+   
     // Process the body atoms and build up list of (1) built-in body atoms, and (2) the variables used by non-built body in atoms.
     for (Atom atom : getBodyAtoms()) {
       if (atom instanceof BuiltInAtom) bodyBuiltInAtoms.add((BuiltInAtom)atom);
       else {
-        bodyNonBuiltInAtoms.add(atom); variableNamesUsedByNonBuiltInBodyAtoms.addAll(atom.getReferencedVariableURIs());
+        bodyNonBuiltInAtoms.add(atom); variableNamesUsedByNonBuiltInBodyAtoms.addAll(atom.getReferencedVariableNames());
       } // if
     } // for
 
     // Process the body built-in atoms and determine if they bind any of their arguments.
-    for (BuiltInAtom builtInAtom : bodyBuiltInAtoms) { // Read through built-in arguments and determine which are unbound.
-    	Set<String> dependsOnVariableNames = new HashSet<String>(variableNamesUsedByNonBuiltInBodyAtoms); // TODO: Need to work this out properly.
-    	dependsOnVariableNames.removeAll(builtInAtom.getArgumentsVariableNames());
-      
-    	builtInAtom.setDependsOnVariableNames(dependsOnVariableNames);
-    	
+    for (BuiltInAtom builtInAtom : bodyBuiltInAtoms) { // Read through built-in arguments and determine which are unbound.   	
     	for (BuiltInArgument argument : builtInAtom.getArguments()) {
         if (argument.isVariable()) {
           String argumentVariableName = argument.getVariableName();
@@ -149,11 +146,42 @@ public class SWRLRuleImpl implements SWRLRule
         } // if
       } // for
     } // for
-
     // If we have built-in atoms, construct a new body with built-in atoms moved to the end of the list. Some rule engines (e.g., Jess)
     // expect variables used as parameters to functions to have been defined before their use in a left to right fashion.
     bodyAtoms = processBodyNonBuiltInAtoms(bodyNonBuiltInAtoms);
     bodyAtoms.addAll(bodyBuiltInAtoms);
+  } 
+  
+  // For every built-in, record the variables it depends on right-to-left (directly and indirectly). Should be called after processBuiltInArguments.
+  private void processBuiltInArgumentDependencies() 
+  {
+  	List<Atom> atomsToDate = new ArrayList<Atom>();
+  	
+    for (Atom atom : getBodyAtoms()) { 
+    	if (atom instanceof BuiltInAtom) {
+    		BuiltInAtom builtInAtom = (BuiltInAtom)atom;
+    		
+    		if (builtInAtom.isSQWRLGroupCollection()) continue;
+    		if (builtInAtom.isSQWRLCollectionOperation()) break;
+    		
+    		if (builtInAtom.hasReferencedVariables()) {
+        	Set<String> thisAtomReferencedVariableNames = new HashSet<String>(atom.getReferencedVariableNames());
+        	Set<String> dependsOnVariableNames = new HashSet<String>(thisAtomReferencedVariableNames);
+      
+    			for (int atomIndex = atomsToDate.size() - 1; atomIndex >= 0; atomIndex--) { // Go backwards
+    				Atom previousAtom = atomsToDate.get(atomIndex);
+    				Set<String> previousAtomReferencedVariableNames = previousAtom.getReferencedVariableNames();
+    		
+    				if (!Collections.disjoint(dependsOnVariableNames, previousAtomReferencedVariableNames))
+    					dependsOnVariableNames.addAll(previousAtomReferencedVariableNames);
+    			} // for
+        	dependsOnVariableNames.removeAll(thisAtomReferencedVariableNames); // Remove our own variables
+        	if (!dependsOnVariableNames.isEmpty())
+        		builtInAtom.setDependsOnVariableNames(dependsOnVariableNames);
+    		} // if
+    	} // if
+    	if (!(atom instanceof ClassAtom)) atomsToDate.add(atom);
+    } // for
   }
 
   /**
@@ -170,11 +198,11 @@ public class SWRLRuleImpl implements SWRLRule
       else bodyNonClassNonBuiltInAtoms.add(atom);
     } // for
     
-    result.addAll(bodyNonClassNonBuiltInAtoms);
     result.addAll(bodyClassAtoms);
-
+    result.addAll(bodyNonClassNonBuiltInAtoms);
+    
     return result;
-  } // processBodyNonBuiltInAtoms
+  } 
 
   private List<BuiltInAtom> getBuiltInAtoms(List<Atom> atoms, Set<String> builtInNames) 
   {
@@ -187,7 +215,7 @@ public class SWRLRuleImpl implements SWRLRule
         } // if
     } // for
     return result;
-  } // getBuiltInAtoms
+  } 
 
   private List<BuiltInAtom> getBuiltInAtoms(List<Atom> atoms) 
   {
@@ -202,7 +230,7 @@ public class SWRLRuleImpl implements SWRLRule
   {
     referencedVariableNames = new HashSet<String>();
     
-    for (Atom atom : getBodyAtoms()) referencedVariableNames.addAll(atom.getReferencedVariableURIs());
+    for (Atom atom : getBodyAtoms()) referencedVariableNames.addAll(atom.getReferencedVariableNames());
   } // buildReferencedVariableNames
 
   /**

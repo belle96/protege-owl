@@ -54,7 +54,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   {
     collections = new HashMap<String, Collection<BuiltInArgument>>();
     collectionGroupElementNumbersMap = new HashMap<String, Integer>(); 
-  } // reset
+  }
   
   public boolean select(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -91,7 +91,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } // for
     
     return false;
-  } // select
+  }
 
   // Preprocessed to signal that duplicates should be removed from result
   public boolean selectDistinct(List<BuiltInArgument> arguments) throws BuiltInException
@@ -99,7 +99,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   	checkThatInConsequent();
   	
     return select(arguments);
-  } // selectDistinct
+  }
   
   public boolean count(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -134,20 +134,20 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } else throw new InvalidBuiltInArgumentException(0, "unknown type " + argument.getClass());
     
     return false;
-  } // count
+  }
   
-  // Preprocessed to signal that duplicates should be removed from count
+  // Preprocessed so nothing to do
   public boolean countDistinct(List<BuiltInArgument> arguments) throws BuiltInException
   {
 	  checkThatInConsequent();
     return count(arguments);
-  } // countDistinct
+  }
 
-  // These built-ins handled at initial processing.  
-  public boolean columnNames(List<BuiltInArgument> arguments) throws BuiltInException { return true; } 
-  public boolean orderBy(List<BuiltInArgument> arguments) throws BuiltInException { return true; } 
-  public boolean orderByDescending(List<BuiltInArgument> arguments) throws BuiltInException { return true; }
-  public boolean limit(List<BuiltInArgument> arguments) throws BuiltInException { return true; }
+  // These built-ins are preprocessed so nothing to do
+  public boolean columnNames(List<BuiltInArgument> arguments) throws BuiltInException { checkThatInConsequent(); return true; } 
+  public boolean orderBy(List<BuiltInArgument> arguments) throws BuiltInException { checkThatInConsequent(); return true; } 
+  public boolean orderByDescending(List<BuiltInArgument> arguments) throws BuiltInException { checkThatInConsequent(); return true; }
+  public boolean limit(List<BuiltInArgument> arguments) throws BuiltInException { checkThatInConsequent(); return true; }
 
   public boolean makeSet(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -163,12 +163,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } // if
 
     set.add(element);
-    //System.err.println("adding element " + element + " to set " + collectionID);
 
     if (isUnboundArgument(0, arguments)) arguments.get(0).setBuiltInResult(createDataValueArgument(collectionID));
 
     return true;
-  } // makeSet
+  }
 
   public boolean makeBag(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -188,37 +187,36 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (isUnboundArgument(0, arguments)) arguments.get(0).setBuiltInResult(createDataValueArgument(collectionID));
 
     return true;
-  } // makeBag
+  }
 
-  // Preprocesed
+  // Preprocesed so nothing to do
   public boolean groupBy(List<BuiltInArgument> arguments) throws BuiltInException
   {
 	  checkThatInAntecedent();
 	
 	  return true;
-  } // groupBy
+  }
 
   public boolean isEmpty(List<BuiltInArgument> arguments) throws BuiltInException
   {
-  	final int sourceArgumentNumber = 0, numberOfArguments = 1;
-  	Collection<BuiltInArgument> collection = getCollectionInSingleCollectionOperation(arguments, sourceArgumentNumber, numberOfArguments);
+  	final int sourceCollectionArgumentNumber = 0, numberOfArguments = 1;
+  	Collection<BuiltInArgument> collection = getCollectionInSingleCollectionOperation(arguments, sourceCollectionArgumentNumber, numberOfArguments);
 
     return collection.size() == 0;    
-   } // isEmpty
+   }
 
   public boolean notEmpty(List<BuiltInArgument> arguments) throws BuiltInException
   {
     return !isEmpty(arguments);
-  } // notEmpty
+  }
 
   public boolean size(List<BuiltInArgument> arguments) throws BuiltInException
   {
-  	final int resultArgumentNumber = 0, sourceArgumentNumber = 1, numberOfArguments = 2;
-  	Collection<BuiltInArgument> collection = getCollectionInSingleCollectionOperation(arguments, sourceArgumentNumber, numberOfArguments);
-    int size = collection.size();
+  	final int resultArgumentNumber = 0, sourceCollectionArgumentNumber = 1, numberOfArguments = 2;
+  	Collection<BuiltInArgument> collection = getCollectionInSingleCollectionOperation(arguments, sourceCollectionArgumentNumber, numberOfArguments);
     
-    return processResultArgument(arguments, resultArgumentNumber, size);
-  } // size
+    return processResultArgument(arguments, resultArgumentNumber, collection.size());
+  }
 
   public boolean min(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -242,7 +240,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } else result = least(arguments); // Redirect to SQWRL collection operator
     
     return result;
-  } // min
+  } 
 
   public boolean max(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -266,11 +264,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } else result = greatest(arguments); // Redirect to SQWRL collection operator
      
     return result;
-  } // max
+  } 
 
   public boolean sum(List<BuiltInArgument> arguments) throws BuiltInException
   {
-  	final int resultArgumentNumber = 0, sourceArgumentNumber = 1, numberOfArguments = 2;
+  	final int resultArgumentNumber = 0, sourceCollectionArgumentNumber = 1, numberOfArguments = 2;
     boolean result = false;
 
     if (getIsInConsequent()) { // Simple SQWRL aggregation operator
@@ -289,7 +287,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       
       result = true;
     } else { // SQWRL collection operator
-    	Collection<BuiltInArgument> collection = getCollectionInSingleCollectionOperation(arguments, sourceArgumentNumber, numberOfArguments);
+    	Collection<BuiltInArgument> collection = getCollectionInSingleCollectionOperation(arguments, sourceCollectionArgumentNumber, numberOfArguments);
 
       if (collection.isEmpty()) result = false;
       else {
@@ -305,11 +303,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } // if
 
     return result;
-  } // sum
+  }
 
   public boolean avg(List<BuiltInArgument> arguments) throws BuiltInException
   {
-  	final int resultArgumentNumber = 0, sourceArgumentNumber = 1, numberOfArguments = 2;
+  	final int resultArgumentNumber = 0, sourceCollectionArgumentNumber = 1, numberOfArguments = 2;
     boolean result = false;
 
     if (getIsInConsequent()) { // Simple SQWRL aggregation operator
@@ -326,7 +324,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       	resultImpl.addRowData(dataValue);
       } else throw new InvalidBuiltInArgumentException(resultArgumentNumber, "expecting numeric literal, got: " + argument);
     } else { // SQWRL collection operator
-     	Collection<BuiltInArgument> collection = getCollectionInSingleCollectionOperation(arguments, sourceArgumentNumber, numberOfArguments);
+     	Collection<BuiltInArgument> collection = getCollectionInSingleCollectionOperation(arguments, sourceCollectionArgumentNumber, numberOfArguments);
      	
       if (collection.isEmpty()) result = false;
       else {
@@ -347,13 +345,13 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean median(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-  	final int resultArgumentNumber = 0, sourceArgumentNumber = 1, numberOfArguments = 2;
+  	final int resultArgumentNumber = 0, sourceCollectionArgumentNumber = 1, numberOfArguments = 2;
     boolean result = false;;
 
     if (getIsInConsequent()) { // Simple SQWRL aggregation operator
       throw new BuiltInException("not implemented");
     } else { // SQWRL collection operator
-     	Collection<BuiltInArgument> collection = getCollectionInSingleCollectionOperation(arguments, sourceArgumentNumber, numberOfArguments);
+     	Collection<BuiltInArgument> collection = getCollectionInSingleCollectionOperation(arguments, sourceCollectionArgumentNumber, numberOfArguments);
      	
       if (collection.isEmpty()) result = false;
       else {
@@ -377,7 +375,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } // if
 
     return result;
-  } // median
+  }
 
   public boolean intersects(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
@@ -391,9 +389,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     Collection<BuiltInArgument> collection1 = getCollection(collectionID1);
     Collection<BuiltInArgument> collection2 = getCollection(collectionID2);
 
-    for (BuiltInArgument element : collection1) if (collection2.contains(element)) return true;
-
-    return false;
+    return !Collections.disjoint(collection1, collection2);
   } 
 
   public boolean notIntersects(List<BuiltInArgument> arguments) throws BuiltInException
@@ -403,11 +399,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean contains(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
+    final int numberOfArguments = 2;
   	String collectionName1 = getCollectionName(arguments, 0); 
     String collectionName2 = getCollectionName(arguments, 1);
     int collection1NumberOfGroupElements = getNumberOfGroupElements(collectionName1);
     int collection2NumberOfGroupElements = getNumberOfGroupElements(collectionName2);
-    final int numberOfArguments = 2;
     String collectionID1 = getCollectionIDInMultiCollectionOperation(arguments, 0, numberOfArguments, 0, collection1NumberOfGroupElements); // Does argument checking
     String collectionID2 = getCollectionIDInMultiCollectionOperation(arguments, 1, numberOfArguments, collection1NumberOfGroupElements, collection2NumberOfGroupElements); // Does argument checking
     Collection<BuiltInArgument> collection1 = getCollection(collectionID1);
@@ -423,8 +419,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   
   public boolean element(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-  	final int resultArgumentNumber = 0, sourceArgumentNumber = 1, numberOfArguments = 2;
-    Collection<BuiltInArgument> collection = getCollectionInSingleCollectionOperation(arguments, sourceArgumentNumber, numberOfArguments); 
+  	final int resultArgumentNumber = 0, sourceCollectionArgumentNumber = 1, numberOfArguments = 2;
+    Collection<BuiltInArgument> collection = getCollectionInSingleCollectionOperation(arguments, sourceCollectionArgumentNumber, numberOfArguments); 
     
     return processResultArgument(arguments, resultArgumentNumber, collection);
   }
@@ -476,20 +472,19 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean nth(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-  	final int numberOfArguments = 3;
+  	final int resultArgumentNumber = 0, sourceCollectionArgumentNumber = 1, nArgumentNumber = 2, numberOfArguments = 3;
     boolean result = false;
   	
   	if (getIsInConsequent()) result = true; // Post processed - ignore
   	else {
-  		String collectionID = getCollectionIDInSingleCollectionOperation(arguments, 1, numberOfArguments); // Does argument checking
-      int n = getArgumentAsAPositiveInteger(2, arguments) - 1; // 1-offset for user, 0 for processing
-      List<BuiltInArgument> sortedList = getSortedList(collectionID);
+  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceCollectionArgumentNumber, numberOfArguments);
+      int n = getArgumentAsAPositiveInteger(nArgumentNumber, arguments) - 1; // 1-offset for user, 0 for processing
 
       if (!sortedList.isEmpty()) {
 
       	if (n >= 0 && n < sortedList.size()) {
       		BuiltInArgument nth = sortedList.get(n);
-      		result = processResultArgument(arguments, 0, nth);
+      		result = processResultArgument(arguments, resultArgumentNumber, nth);
       	} else result = false;
       } // if
   	} // if
@@ -499,13 +494,12 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     
   public boolean greatest(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-  	final int resultArgumentNumber = 0, sourceArgumentNumber = 1, numberOfArguments = 2;
+  	final int resultArgumentNumber = 0, sourceCollectionArgumentNumber = 1, numberOfArguments = 2;
     boolean result = false;
   	
   	if (getIsInConsequent()) result = true; // Post processed - ignore
   	else {
-      String collectionID = getCollectionIDInSingleCollectionOperation(arguments, sourceArgumentNumber, numberOfArguments); // Does argument checking
-      List<BuiltInArgument> sortedList = getSortedList(collectionID);
+  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceCollectionArgumentNumber, numberOfArguments);
     
       if (!sortedList.isEmpty()) {
         BuiltInArgument greatest = sortedList.get(sortedList.size() - 1);
@@ -518,13 +512,12 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean nthGreatest(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-  	final int resultArgumentNumber = 0, sourceArgumentNumber = 1, numberOfArguments = 3;
+  	final int resultArgumentNumber = 0, sourceCollectionArgumentNumber = 1, numberOfArguments = 3;
     boolean result = false;
   	
   	if (getIsInConsequent()) result = true; // Post processed - ignore
   	else {
-  		String collectionID = getCollectionIDInSingleCollectionOperation(arguments, sourceArgumentNumber, numberOfArguments); // Does argument checking
-      List<BuiltInArgument> sortedList = getSortedList(collectionID);
+  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceCollectionArgumentNumber, numberOfArguments);
       int n = getArgumentAsAPositiveInteger(2, arguments);
 
       if (!sortedList.isEmpty() && n > 0 && n <= sortedList.size()) {
@@ -538,13 +531,12 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean least(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-  	final int resultArgumentNumber = 0, sourceArgumentNumber = 1, numberOfArguments = 2;
+  	final int resultArgumentNumber = 0, sourceCollectionArgumentNumber = 1, numberOfArguments = 2;
     boolean result = false;
   	
   	if (getIsInConsequent()) result = true; // Post processed - ignore
   	else {
-  	  String collectionID = getCollectionIDInSingleCollectionOperation(arguments, sourceArgumentNumber, numberOfArguments); // Does argument checking
-  	  List<BuiltInArgument> sortedList = getSortedList(collectionID);
+  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceCollectionArgumentNumber, numberOfArguments);
     
       if (!sortedList.isEmpty()) {
         BuiltInArgument least = sortedList.get(0);
@@ -657,17 +649,17 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   
   public boolean notNthGreatest(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-  	final int resultArgumentNumber = 0, sourceArgumentNumber = 1, numberOfArguments = 3;
+  	final int resultArgumentNumber = 0, sourceCollectionArgumentNumber = 1, numberOfArguments = 3;
     boolean result = false;
   	
   	if (getIsInConsequent()) result = true; // Post processed - ignore
   	else {
-  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceArgumentNumber, numberOfArguments);
+  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceCollectionArgumentNumber, numberOfArguments);
       int n = getArgumentAsAPositiveInteger(2, arguments);
 
       if (!sortedList.isEmpty() && n > 0 && n <= sortedList.size())	sortedList.remove(sortedList.size() - n);
       	
-      result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceArgumentNumber, numberOfArguments, sortedList); 
+      result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceCollectionArgumentNumber, numberOfArguments, sortedList); 
   	} // if
 
     return result;
@@ -675,12 +667,12 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean nthSlice(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-  	final int resultArgumentNumber = 0, sourceArgumentNumber = 1, numberOfArguments = 4;
+  	final int resultArgumentNumber = 0, sourceCollectionArgumentNumber = 1, numberOfArguments = 4;
     boolean result = false;
   	
   	if (getIsInConsequent()) result = true; // Post processed - ignore
   	else {
-  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceArgumentNumber, numberOfArguments);
+  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceCollectionArgumentNumber, numberOfArguments);
       int n = getArgumentAsAPositiveInteger(2, arguments)  - 1; // 1-offset for user, 0 for processing
       int sliceSize = getArgumentAsAPositiveInteger(3, arguments);
       List<BuiltInArgument> slice = new ArrayList<BuiltInArgument>();
@@ -691,7 +683,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       	for (int index = startIndex; index <= finishIndex && index < sortedList.size(); index++) slice.add(sortedList.get(index));
       } // if
       	 
-      result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceArgumentNumber, numberOfArguments, slice);
+      result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceCollectionArgumentNumber, numberOfArguments, slice);
   	} // if
 
     return result;
@@ -699,12 +691,12 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   
   public boolean notNthSlice(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-  	final int resultArgumentNumber = 0, sourceArgumentNumber = 1, numberOfArguments = 4;
+  	final int resultArgumentNumber = 0, sourceCollectionArgumentNumber = 1, numberOfArguments = 4;
     boolean result = false;
   	
   	if (getIsInConsequent()) result = true; // Post processed - ignore
   	else {
-  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceArgumentNumber, numberOfArguments);
+  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceCollectionArgumentNumber, numberOfArguments);
       int n = getArgumentAsAPositiveInteger(2, arguments) - 1; // 1-offset for user, 0 for processing
       int sliceSize = getArgumentAsAPositiveInteger(3, arguments);
       List<BuiltInArgument> notSlice = new ArrayList<BuiltInArgument>();
@@ -716,22 +708,22 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       	  if (index < startIndex || index > finishIndex) notSlice.add(sortedList.get(index));
       } // if
       	     	
-      result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceArgumentNumber, numberOfArguments, notSlice);
+      result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceCollectionArgumentNumber, numberOfArguments, notSlice);
   	} // if
 
     return result;
-  } // notNthSlice
+  }
 
   public boolean nthGreatestSlice(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-  	final int resultArgumentNumber = 0, sourceArgumentNumber = 1, numberOfArguments = 4;
+  	final int resultArgumentNumber = 0, sourceCollectionArgumentNumber = 1, numberOfArguments = 4;
     boolean result = false;
   	
   	if (getIsInConsequent()) result = true; // Post processed - ignore
   	else {
-  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceArgumentNumber, numberOfArguments);
-  		List<BuiltInArgument> slice = new ArrayList<BuiltInArgument>();
+  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceCollectionArgumentNumber, numberOfArguments);
       int n = getArgumentAsAPositiveInteger(2, arguments);
+      List<BuiltInArgument> slice = new ArrayList<BuiltInArgument>();
       int sliceSize = getArgumentAsAPositiveInteger(3, arguments);
       
       if (!sortedList.isEmpty() && n > 0) {
@@ -741,7 +733,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     		for (int index = startIndex; index <= finishIndex && index < sortedList.size(); index++) slice.add(sortedList.get(index));
       } // if
       	
-      result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceArgumentNumber, numberOfArguments, slice);
+      result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceCollectionArgumentNumber, numberOfArguments, slice);
   	} // if
 
     return result;
@@ -749,12 +741,12 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean notNthGreatestSlice(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-  	final int resultArgumentNumber = 0, sourceArgumentNumber = 1, numberOfArguments = 4;
+  	final int resultArgumentNumber = 0, sourceCollectionArgumentNumber = 1, numberOfArguments = 4;
     boolean result = false;
   	
   	if (getIsInConsequent()) result = true; // Post processed - ignore
   	else {
-  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceArgumentNumber, numberOfArguments);
+  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceCollectionArgumentNumber, numberOfArguments);
       int n = getArgumentAsAPositiveInteger(2, arguments);
       int sliceSize = getArgumentAsAPositiveInteger(3, arguments);
       List<BuiltInArgument> slice = new ArrayList<BuiltInArgument>();
@@ -766,7 +758,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     			if (index < startIndex || index > finishIndex) slice.add(sortedList.get(index));
       } // if
     	   
-      result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceArgumentNumber, numberOfArguments, slice);
+      result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceCollectionArgumentNumber, numberOfArguments, slice);
   	} // if
   	
     return result;
@@ -774,17 +766,17 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean notNth(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-  	final int resultArgumentNumber = 0, sourceArgumentNumber = 1, numberOfArguments = 3;
+  	final int resultArgumentNumber = 0, sourceCollectionArgumentNumber = 1, numberOfArguments = 3;
     boolean result = false;
   	
   	if (getIsInConsequent()) result = true; // Post processed - ignore
   	else {
-  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceArgumentNumber, numberOfArguments);
+  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceCollectionArgumentNumber, numberOfArguments);
       int n = getArgumentAsAPositiveInteger(2, arguments) - 1;  // 1-offset for user, 0 for processing
     
       if (!sortedList.isEmpty() && n >= 0 && n < sortedList.size()) sortedList.remove(n);
 
-      result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceArgumentNumber, numberOfArguments, sortedList);
+      result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceCollectionArgumentNumber, numberOfArguments, sortedList);
   	} // if
 
     return result;
@@ -792,16 +784,16 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   
   public boolean notGreatest(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-  	final int resultArgumentNumber = 0, sourceArgumentNumber = 1, numberOfArguments = 2;
+  	final int resultArgumentNumber = 0, sourceCollectionArgumentNumber = 1, numberOfArguments = 2;
     boolean result = false;
   	
   	if (getIsInConsequent()) result = true; // Post processed - ignore
   	else {
-  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceArgumentNumber, numberOfArguments);
+  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceCollectionArgumentNumber, numberOfArguments);
     
       if (!sortedList.isEmpty()) sortedList.remove(sortedList.size() - 1);
 
-      result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceArgumentNumber, numberOfArguments, sortedList);
+      result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceCollectionArgumentNumber, numberOfArguments, sortedList);
   	} // if
 
     return result;
@@ -809,12 +801,12 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean greatestN(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-  	final int resultArgumentNumber = 0, sourceArgumentNumber = 1, numberOfArguments = 3;
+  	final int resultArgumentNumber = 0, sourceCollectionArgumentNumber = 1, numberOfArguments = 3;
     boolean result = false;
   	
   	if (getIsInConsequent()) result = true; // Post processed - ignore
   	else {
-  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceArgumentNumber, numberOfArguments);
+  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceCollectionArgumentNumber, numberOfArguments);
   	  int n = getArgumentAsAPositiveInteger(2, arguments);
   	  List<BuiltInArgument> greatestN = new ArrayList<BuiltInArgument>();
     
@@ -824,7 +816,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
         for (int i = startIndex; i < sortedList.size(); i++) greatestN.add(sortedList.get(i));
   	  } // if
 	
-  	  result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceArgumentNumber, numberOfArguments, greatestN);
+  	  result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceCollectionArgumentNumber, numberOfArguments, greatestN);
   	} // if
 
     return result;
@@ -832,12 +824,12 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
  
   public boolean notGreatestN(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-  	final int resultArgumentNumber = 0, sourceArgumentNumber = 1, numberOfArguments = 3;
+  	final int resultArgumentNumber = 0, sourceCollectionArgumentNumber = 1, numberOfArguments = 3;
     boolean result = false;
   	
   	if (getIsInConsequent()) result = true; // Post processed - ignore
   	else {
-  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceArgumentNumber, numberOfArguments);
+  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceCollectionArgumentNumber, numberOfArguments);
       int n = getArgumentAsAPositiveInteger(2, arguments);
       List<BuiltInArgument> notGreatestN = new ArrayList<BuiltInArgument>();
       
@@ -847,7 +839,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
         for (int i = 0; i < startIndex; i++) notGreatestN.add(sortedList.get(i));
       } // if
 	
-      result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceArgumentNumber, numberOfArguments, notGreatestN);
+      result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceCollectionArgumentNumber, numberOfArguments, notGreatestN);
   	} // if
 
     return result;
@@ -855,16 +847,16 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean notLeast(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-  	final int resultArgumentNumber = 0, sourceArgumentNumber = 1, numberOfArguments = 2;
+  	final int resultArgumentNumber = 0, sourceCollectionArgumentNumber = 1, numberOfArguments = 2;
     boolean result = false;
   	
   	if (getIsInConsequent()) result = true; // Post processed - ignore
   	else {
-  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceArgumentNumber, numberOfArguments);
+  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceCollectionArgumentNumber, numberOfArguments);
     
       if (!sortedList.isEmpty()) sortedList.remove(0);
 	
-      result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceArgumentNumber, numberOfArguments, sortedList);
+      result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceCollectionArgumentNumber, numberOfArguments, sortedList);
   	} // if
 
     return result;
@@ -872,18 +864,18 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean leastN(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-  	final int resultArgumentNumber = 0, sourceArgumentNumber = 1, numberOfArguments = 3;
+  	final int resultArgumentNumber = 0, sourceCollectionArgumentNumber = 1, numberOfArguments = 3;
     boolean result = false;
   	
   	if (getIsInConsequent()) result = true; // Post processed - ignore
   	else {
-  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceArgumentNumber, numberOfArguments);
-      int n = getArgumentAsAPositiveInteger(2, arguments);
+  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceCollectionArgumentNumber, numberOfArguments);
+      int n = getArgumentAsAPositiveInteger(2, arguments) - 1;
       List<BuiltInArgument> leastN = new ArrayList<BuiltInArgument>();
  
-      for (int i = 0; i < n && i < sortedList.size(); i++) leastN.add(sortedList.get(i));
+      for (int i = 0; i <= n && i < sortedList.size(); i++) leastN.add(sortedList.get(i));
       	
-      result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceArgumentNumber, numberOfArguments, leastN);
+      result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceCollectionArgumentNumber, numberOfArguments, leastN);
   	} // if
 
     return result;
@@ -891,18 +883,18 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   public boolean notLeastN(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
-  	final int resultArgumentNumber = 0, sourceArgumentNumber = 1, numberOfArguments = 3;
+  	final int resultArgumentNumber = 0, sourceCollectionArgumentNumber = 1, numberOfArguments = 3;
     boolean result = false;
   	
   	if (getIsInConsequent()) result = true; // Post processed - ignore
   	else {
-  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceArgumentNumber, numberOfArguments);
+  		List<BuiltInArgument> sortedList = getSortedListInSingleCollectionOperation(arguments, sourceCollectionArgumentNumber, numberOfArguments);
       int n = getArgumentAsAPositiveInteger(2, arguments);
       List<BuiltInArgument> notLeastN = new ArrayList<BuiltInArgument>();
 
       for (int i = n; i >= 0 && i < sortedList.size(); i++) notLeastN.add(sortedList.get(i));
       	
-      result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceArgumentNumber, numberOfArguments, notLeastN);
+      result = processSingleCollectionOperationListResult(arguments, resultArgumentNumber, sourceCollectionArgumentNumber, numberOfArguments, notLeastN);
   	} // if
 
     return result;
@@ -937,6 +929,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     boolean hasGroupPattern  = numberOfGroupArguments != 0;
     String groupPattern = !hasGroupPattern ? "" : createInvocationPattern(getInvokingBridge(), queryName, 0, false,
                                                                           arguments.subList(2, arguments.size()));
+    String collectionID;
     
     if (isBoundArgument(0, arguments) && !collectionGroupElementNumbersMap.containsKey(collectionName)) // Collection variable already used in non collection context  
     	throw new BuiltInException("collection variable ?" + arguments.get(0).getVariableName() + " already used in non collection context");
@@ -946,31 +939,35 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     	else if (collectionGroupElementNumbersMap.get(collectionName) != numberOfGroupArguments) {
     		throw new BuiltInException("internal error: inconsistent number of group elements for collection " + collectionName);
     	} //if
+    	collectionID = collectionName + ":" + groupPattern;
     } else {
     	if (collectionGroupElementNumbersMap.containsKey(collectionName)) {
     		if (collectionGroupElementNumbersMap.get(collectionName) != 0) {
         		throw new BuiltInException("internal error: inconsistent number of group elements for collection " + collectionName);
     		}
     	} else collectionGroupElementNumbersMap.put(collectionName, 0);
+    	collectionID = collectionName;
     } // if
 	                           
-    return collectionName + ":" + groupPattern;
+    return collectionID;
   }
 
   private String getCollectionIDInSingleCollectionOperation(List<BuiltInArgument> arguments, int collectionArgumentNumber, int coreArgumentNumber) 
     throws BuiltInException
   {
     String queryName = getInvokingRuleName();
-    String collectionName = queryName + ":" + getVariableName(collectionArgumentNumber, arguments);
+    String collectionName = getCollectionName(arguments, collectionArgumentNumber);
     boolean hasGroupPattern  = (arguments.size() > coreArgumentNumber);
-    String groupPattern = "";
+    String collectionID;
 
     checkThatInAntecedent();
     
     if (hasGroupPattern)
-    	groupPattern = createInvocationPattern(getInvokingBridge(), queryName, 0, false, arguments.subList(coreArgumentNumber, arguments.size()));
+    	collectionID = collectionName + ":" + createInvocationPattern(getInvokingBridge(), queryName, 0, false, arguments.subList(coreArgumentNumber, arguments.size()));
+    else
+    	collectionID = collectionName;
 
-    return collectionName + ":" + groupPattern;
+    return collectionID;
   }
 
   private String getCollectionIDInMultiCollectionOperation(List<BuiltInArgument> arguments, int collectionArgumentNumber, 
@@ -980,25 +977,27 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     String queryName = getInvokingRuleName();
     String collectionName = getCollectionName(arguments, collectionArgumentNumber);
     boolean hasGroupPattern  = numberOfRelevantGroupArguments != 0;
-    String groupPattern = "";
+    String collectionID;
     
     checkThatInAntecedent();
     
     if (!collectionGroupElementNumbersMap.containsKey(collectionName)) collectionGroupElementNumbersMap.put(collectionName, numberOfRelevantGroupArguments);
     
     if (hasGroupPattern)
-      groupPattern = createInvocationPattern(getInvokingBridge(), queryName, 0, false, 
-                                             arguments.subList(coreArgumentNumber + groupArgumentOffset, 
-                                             coreArgumentNumber + groupArgumentOffset + numberOfRelevantGroupArguments)); 
-    return collectionName + ":" + groupPattern;
+      collectionID = collectionName + ":" + createInvocationPattern(getInvokingBridge(), queryName, 0, false, 
+      				                                                      arguments.subList(coreArgumentNumber + groupArgumentOffset, 
+      				                                                      coreArgumentNumber + groupArgumentOffset + numberOfRelevantGroupArguments));
+    else collectionID = collectionName;
+    
+    return collectionID;
   }
   
   private boolean processSingleCollectionOperationListResult(List<BuiltInArgument> arguments, 
-  																													 int resultArgumentNumber, int sourceArgumentNumber, int numberOfArguments,
+  																													 int resultArgumentNumber, int sourceCollectionArgumentNumber, int numberOfArguments,
   			                                                     List<BuiltInArgument> resultList)
     throws BuiltInException
   {
-  	String sourceCollectionName = getCollectionName(arguments, sourceArgumentNumber);
+  	String sourceCollectionName = getCollectionName(arguments, sourceCollectionArgumentNumber);
   	String resultListName = getCollectionName(arguments, resultArgumentNumber);
   	String resultListID = getCollectionIDInSingleCollectionOperation(arguments, resultArgumentNumber, numberOfArguments);
   	
@@ -1044,10 +1043,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       throw new BuiltInException("may only be applied to collections with comparable elements");
   }
   
-  private Collection<BuiltInArgument> getCollectionInSingleCollectionOperation(List<BuiltInArgument> arguments, int sourceArgumentNumber, int numberOfArguments)
+  private Collection<BuiltInArgument> getCollectionInSingleCollectionOperation(List<BuiltInArgument> arguments, int sourceCollectionArgumentNumber, int numberOfArguments)
     throws BuiltInException
   {
-  	String collectionID = getCollectionIDInSingleCollectionOperation(arguments, sourceArgumentNumber, numberOfArguments);
+  	String collectionID = getCollectionIDInSingleCollectionOperation(arguments, sourceCollectionArgumentNumber, numberOfArguments);
 
   	return getCollection(collectionID);	
   }
@@ -1056,15 +1055,16 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   {
   	DataValue dataValue = getArgumentAsADataValue(argument);
 	
-  	if (!dataValue.isString()) throw new BuiltInException("non collection argument");
+  	if (!dataValue.isString()) throw new BuiltInException("non collection argument: " + argument);
 	
   	return dataValue.getString();	
   }	
 
-  private List<BuiltInArgument> getSortedListInSingleCollectionOperation(List<BuiltInArgument> arguments, int sourceArgumentNumber, int numberOfArguments)
-  throws BuiltInException
+  private List<BuiltInArgument> getSortedListInSingleCollectionOperation(List<BuiltInArgument> arguments, int sourceCollectionArgumentNumber, 
+  								                                                       int numberOfArguments)
+    throws BuiltInException
   {
-  	String collectionID = getCollectionIDInSingleCollectionOperation(arguments, sourceArgumentNumber, numberOfArguments);
+  	String collectionID = getCollectionIDInSingleCollectionOperation(arguments, sourceCollectionArgumentNumber, numberOfArguments);
 	
   	return getSortedList(collectionID);
   }
@@ -1082,9 +1082,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   
   private Collection<BuiltInArgument> getCollection(String collectionID) throws BuiltInException
   {
-    if (!isCollection(collectionID)) throw new BuiltInException("argument " + collectionID + " does not refer to a collection");
+    if (!isCollection(collectionID)) 
+    	throw new BuiltInException("argument " + collectionID + " does not refer to a collection");
     return collections.get(collectionID);
   } 
-
-
 }

@@ -15,5 +15,5 @@ public interface Atom
   Set<String> getReferencedClassURIs();
   Set<String> getReferencedPropertyURIs();
   Set<String> getReferencedIndividualURIs();
-  Set<String> getReferencedVariableURIs();
-} // Atom
+  Set<String> getReferencedVariableNames();
+}

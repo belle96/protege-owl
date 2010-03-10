@@ -117,7 +117,7 @@ public class RuleAndQueryProcessorImpl implements RuleAndQueryProcessor
     for (Atom atom : ruleOrQuery.getBodyAtoms()) {
       if (atom instanceof BuiltInAtom) bodyBuiltInAtoms.add((BuiltInAtom)atom);
       else {
-        bodyNonBuiltInAtoms.add(atom); variableNamesUsedByNonBuiltInBodyAtoms.addAll(atom.getReferencedVariableURIs());
+        bodyNonBuiltInAtoms.add(atom); variableNamesUsedByNonBuiltInBodyAtoms.addAll(atom.getReferencedVariableNames());
       } // if
     } // for
 
