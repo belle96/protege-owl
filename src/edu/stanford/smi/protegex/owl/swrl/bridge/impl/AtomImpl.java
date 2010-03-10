@@ -1,7 +1,9 @@
 
 package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.Atom;
@@ -9,19 +11,19 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.Atom;
 /**
  * Base class representing information about atoms in a SWRL rule
  */
-public class AtomImpl implements Atom
+public abstract class AtomImpl implements Atom
 {
   private Set<String> referencedClassURIs;
   private Set<String> referencedPropertyURIs;
   private Set<String> referencedIndividualURIs;
-  private Set<String> referencedVariableNames;
+  private List<String> referencedVariableNames; // We need to know ordering of variables
 
   public AtomImpl() 
   { 
     referencedClassURIs = new HashSet<String>();
     referencedPropertyURIs = new HashSet<String>();
     referencedIndividualURIs = new HashSet<String>();
-    referencedVariableNames = new HashSet<String>();
+    referencedVariableNames = new ArrayList<String>();
   }
 
   public boolean hasReferencedClasses() { return referencedClassURIs.size() != 0; }
@@ -31,7 +33,7 @@ public class AtomImpl implements Atom
   public boolean hasReferencedIndividuals() { return referencedIndividualURIs.size() != 0; }
   public Set<String> getReferencedIndividualURIs() { return referencedIndividualURIs; }
   public boolean hasReferencedVariables() { return referencedVariableNames.size() != 0; }
-  public Set<String> getReferencedVariableNames() { return referencedVariableNames; }
+  public List<String> getReferencedVariableNames() { return referencedVariableNames; }
   
   public void addReferencedClassURI(String classURI) 
   { 

@@ -38,7 +38,7 @@ public class DefaultSWRLAtomList extends DefaultRDFList implements SWRLAtomList
     boolean setBuildEncountered = false;
     boolean setOperationEncountered = false;
     int currentColumn = 0, atomTextWidth;
-    final int maxColumnWidth = 80;
+    final int maxColumnWidth = 120;
     
     if (isInHead) s += "\n";
     

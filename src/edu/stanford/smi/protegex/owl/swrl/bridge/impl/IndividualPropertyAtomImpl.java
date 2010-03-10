@@ -17,14 +17,16 @@ public class IndividualPropertyAtomImpl extends AtomImpl implements IndividualPr
     this.propertyURI = propertyURI;
     this.argument1 = argument1;
     this.argument2 = argument2;
-  } // IndividualPropertyAtomImpl
+  }
 
   public IndividualPropertyAtomImpl(String propertyURI)
   {
     this.propertyURI = propertyURI;
     this.argument1 = null;
     this.argument2 = null;
-  } // IndividualPropertyAtomImpl
+  }
+  
+  public int getNumberOfArguments() { return 2; }
     
   public void setArgument1(AtomArgument argument1) { this.argument1 = argument1; }
   public void setArgument2(AtomArgument argument2) { this.argument2 = argument2; }
@@ -34,4 +36,4 @@ public class IndividualPropertyAtomImpl extends AtomImpl implements IndividualPr
   public AtomArgument getArgument2() { return argument2; }  
 
   public String toString() { return getPropertyURI() + "(" + getArgument1() + ", " + getArgument2() + ")"; }
-} // IndividualPropertyAtomImpl
+}

@@ -23,6 +23,8 @@ public class ClassAtomImpl extends AtomImpl implements ClassAtom
     this.argument1 = null;
   } // ClassAtomImpl
 
+  public int getNumberOfArguments() { return 1; }
+  
   public void setArgument1(AtomArgument argument1) { this.argument1 = argument1; }
     
   public String getClassURI() { return classURI; }

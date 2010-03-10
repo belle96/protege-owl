@@ -993,40 +993,37 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   }
   
   private boolean processSingleCollectionOperationListResult(List<BuiltInArgument> arguments, 
-  																													 int resultArgumentNumber, int sourceCollectionArgumentNumber, int numberOfArguments,
-  			                                                     List<BuiltInArgument> resultList)
+  																													 int resultCollectionArgumentNumber, int sourceCollectionArgumentNumber, 
+  																													 int numberOfArguments, List<BuiltInArgument> resultList)
     throws BuiltInException
   {
   	String sourceCollectionName = getCollectionName(arguments, sourceCollectionArgumentNumber);
-  	String resultListName = getCollectionName(arguments, resultArgumentNumber);
-  	String resultListID = getCollectionIDInSingleCollectionOperation(arguments, resultArgumentNumber, numberOfArguments);
+  	String resultListName = getCollectionName(arguments, resultCollectionArgumentNumber);
+  	String resultListID = getCollectionIDInSingleCollectionOperation(arguments, resultCollectionArgumentNumber, numberOfArguments);
   	
-	  if (!collections.containsKey(resultListID)) collections.put(resultListID, resultList);
+	  if (!collections.containsKey(resultListID)) 
+	  	collections.put(resultListID, resultList);
 	  
-	  if (!collectionGroupElementNumbersMap.containsKey(resultListName))
-	  		collectionGroupElementNumbersMap.put(resultListName, getNumberOfGroupElements(sourceCollectionName));
+	  if (!collectionGroupElementNumbersMap.containsKey(resultListName)) // Give it the same number of group elements as the source collection
+	  	collectionGroupElementNumbersMap.put(resultListName, getNumberOfGroupElements(sourceCollectionName));
 	
-	  return processListResultArgument(arguments, resultArgumentNumber, resultListID, resultList);
+	  return processListResultArgument(arguments, resultCollectionArgumentNumber, resultListID, resultList);
   }
 
-	public boolean processListResultArgument(List<BuiltInArgument> arguments, int argumentNumber, 
-											                     String resultCollectionID, List<BuiltInArgument> resultList) 
+	public boolean processListResultArgument(List<BuiltInArgument> arguments, int resultArgumentNumber, 
+											                     String resultListID, List<BuiltInArgument> resultList) 
 	  throws BuiltInException
 	{
 	  boolean result = false;
 	
-	  checkArgumentNumber(argumentNumber, arguments);
+	  checkArgumentNumber(resultArgumentNumber, arguments);
 	
-	  if (isUnboundArgument(argumentNumber, arguments)) {
-	    arguments.get(argumentNumber).setBuiltInResult(createDataValueArgument(resultCollectionID));
+	  if (isUnboundArgument(resultArgumentNumber, arguments)) {
+	    arguments.get(resultArgumentNumber).setBuiltInResult(createDataValueArgument(resultListID));
 	    result = true;
 	  } else {
-	  	String collectionID = getCollectionID(arguments.get(argumentNumber));
-	  	if (collectionID.equals(resultCollectionID)) result = true; // The same collection was passed
-	  	else { // Different collection - compare them
-	      Collection<BuiltInArgument> collection = getCollection(collectionID);
-	      result = collection.equals(resultList); // Remember, sets and lists will not be equal 
-	  	} // if
+	  	Collection<BuiltInArgument> collection = getCollection(resultListID);
+	  	result = collection.equals(resultList); // Remember, sets and lists will not be equal 
 	  } //if
 	  
 	  return result;

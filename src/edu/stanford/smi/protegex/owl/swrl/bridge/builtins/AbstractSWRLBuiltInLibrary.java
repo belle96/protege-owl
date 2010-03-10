@@ -933,101 +933,99 @@ public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
 	  return new ArrayList<BuiltInArgument>(arguments);
 	} 
 	
-	public boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, Collection<BuiltInArgument> resultArguments) 
+	public boolean processResultArgument(List<BuiltInArgument> arguments, int resultArgumentNumber, Collection<BuiltInArgument> resultArguments) 
 	  throws BuiltInException
 	{
 	  boolean result = false;
 	
-	  checkArgumentNumber(argumentNumber, arguments);
+	  checkArgumentNumber(resultArgumentNumber, arguments);
 	
-	  if (isUnboundArgument(argumentNumber, arguments)) {
-	    MultiArgument multiArgument = argumentFactory.createMultiArgument(getVariableName(argumentNumber, arguments));
+	  if (isUnboundArgument(resultArgumentNumber, arguments)) {
+	    MultiArgument multiArgument = argumentFactory.createMultiArgument(getVariableName(resultArgumentNumber, arguments));
 	    for (BuiltInArgument argument : resultArguments) multiArgument.addArgument(argument);
-	    arguments.get(argumentNumber).setBuiltInResult(multiArgument);
+	    arguments.get(resultArgumentNumber).setBuiltInResult(multiArgument);
 	    result = !multiArgument.hasNoArguments();
 	  } else {
-	    BuiltInArgument argument = arguments.get(argumentNumber);
+	    BuiltInArgument argument = arguments.get(resultArgumentNumber);
 	    result = resultArguments.contains(argument);
 	  } //if
 	  
 	  return result;
 	} 
 	
-	public boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, BuiltInArgument resultArgument) 
+	public boolean processResultArgument(List<BuiltInArgument> arguments, int resultArgumentNumber, BuiltInArgument resultArgument) 
 	  throws BuiltInException
 	{
 	  boolean result = false;
 	
-	  checkArgumentNumber(argumentNumber, arguments);
+	  checkArgumentNumber(resultArgumentNumber, arguments);
 	
-	  if (isUnboundArgument(argumentNumber, arguments)) {
-	    arguments.get(argumentNumber).setBuiltInResult(resultArgument); 
+	  if (isUnboundArgument(resultArgumentNumber, arguments)) {
+	    arguments.get(resultArgumentNumber).setBuiltInResult(resultArgument); 
 	    result = true;
 	  } else {
-	    BuiltInArgument argument = arguments.get(argumentNumber);
+	    BuiltInArgument argument = arguments.get(resultArgumentNumber);
 	    result = argument.equals(resultArgument);
 	  } //if
 	  
 	  return result;
 	} 
 	
-	public boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, DataValueArgument resultArgument) throws BuiltInException
+	public boolean processResultArgument(List<BuiltInArgument> arguments, int resultArgumentNumber, DataValueArgument resultArgument) throws BuiltInException
 	{
 	  boolean result = false;
 	
-	  checkArgumentNumber(argumentNumber, arguments);
+	  checkArgumentNumber(resultArgumentNumber, arguments);
 	
-	  if (isUnboundArgument(argumentNumber, arguments)) {
-	    arguments.get(argumentNumber).setBuiltInResult(resultArgument);
+	  if (isUnboundArgument(resultArgumentNumber, arguments)) {
+	    arguments.get(resultArgumentNumber).setBuiltInResult(resultArgument);
 	    result = true;
 	  } else {
-	    DataValue dataValue = getArgumentAsADataValue(argumentNumber, arguments);
+	    DataValue dataValue = getArgumentAsADataValue(resultArgumentNumber, arguments);
 	    result = dataValue.equals(resultArgument.getDataValue());
 	  } //if
 	  
 	  return result;
 	} 
 	
-	public boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, short resultArgument) 
+	public boolean processResultArgument(List<BuiltInArgument> arguments, int resultArgumentNumber, short resultArgument) 
 	  throws BuiltInException
 	{
-	  return processResultArgument(arguments, argumentNumber, argumentFactory.createDataValueArgument(resultArgument));
+	  return processResultArgument(arguments, resultArgumentNumber, argumentFactory.createDataValueArgument(resultArgument));
 	} 
 	
-	public boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, 
+	public boolean processResultArgument(List<BuiltInArgument> arguments, int resultArgumentNumber, 
 	                                     int resultArgument) throws BuiltInException
 	{
-	  return processResultArgument(arguments, argumentNumber, argumentFactory.createDataValueArgument(resultArgument));
+	  return processResultArgument(arguments, resultArgumentNumber, argumentFactory.createDataValueArgument(resultArgument));
 	} 
 	
-	public boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, 
-	                                     long resultArgument) throws BuiltInException
+	public boolean processResultArgument(List<BuiltInArgument> arguments, int resultArgumentNumber, long resultArgument) throws BuiltInException
 	{
-	  return processResultArgument(arguments, argumentNumber, argumentFactory.createDataValueArgument(resultArgument));
+	  return processResultArgument(arguments, resultArgumentNumber, argumentFactory.createDataValueArgument(resultArgument));
 	} 
 	
-	public boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, 
-	                                     float resultArgument) throws BuiltInException
+	public boolean processResultArgument(List<BuiltInArgument> arguments, int resultArgumentNumber, float resultArgument) throws BuiltInException
 	{
-	  return processResultArgument(arguments, argumentNumber, argumentFactory.createDataValueArgument(resultArgument));
+	  return processResultArgument(arguments, resultArgumentNumber, argumentFactory.createDataValueArgument(resultArgument));
 	} 
 	
-	public boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, 
+	public boolean processResultArgument(List<BuiltInArgument> arguments, int resultArgumentNumber, 
 	                                     double resultArgument) throws BuiltInException
 	{
-	  return processResultArgument(arguments, argumentNumber, argumentFactory.createDataValueArgument(resultArgument));
+	  return processResultArgument(arguments, resultArgumentNumber, argumentFactory.createDataValueArgument(resultArgument));
 	}
 	
-	public boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, 
+	public boolean processResultArgument(List<BuiltInArgument> arguments, int resultArgumentNumber, 
 	                                     byte resultArgument) throws BuiltInException
 	{
-	  return processResultArgument(arguments, argumentNumber, argumentFactory.createDataValueArgument(resultArgument));
+	  return processResultArgument(arguments, resultArgumentNumber, argumentFactory.createDataValueArgument(resultArgument));
 	} 
 	
-	public boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, 
+	public boolean processResultArgument(List<BuiltInArgument> arguments, int resultArgumentNumber, 
 	                                     String resultArgument) throws BuiltInException
 	{
-	  return processResultArgument(arguments, argumentNumber, argumentFactory.createDataValueArgument(resultArgument));
+	  return processResultArgument(arguments, resultArgumentNumber, argumentFactory.createDataValueArgument(resultArgument));
 	}
 
 	public ClassArgument createClassArgument(String classURI) { return argumentFactory.createClassArgument(classURI); }

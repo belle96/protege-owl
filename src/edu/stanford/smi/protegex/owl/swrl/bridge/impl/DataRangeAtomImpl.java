@@ -6,9 +6,9 @@ import java.util.Set;
 import edu.stanford.smi.protegex.owl.swrl.bridge.DataRangeAtom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValue;
 
-/*
-** Class representing a SWRL data range atom
-*/
+/**
+ * Class representing a SWRL data range atom
+ */
 public class DataRangeAtomImpl extends AtomImpl implements DataRangeAtom
 {
   private Set<OWLDataValue> values;
@@ -16,6 +16,7 @@ public class DataRangeAtomImpl extends AtomImpl implements DataRangeAtom
   public DataRangeAtomImpl(Set<OWLDataValue> values) 
   {
     this.values = values;
-  } // DataRangeAtomImpl
-
-} // DataRangeAtomImpl
+  }
+  
+  public int getNumberOfArguments() { return values.size(); }
+}

@@ -19,14 +19,16 @@ public class DatavaluedPropertyAtomImpl extends AtomImpl implements DatavaluedPr
     this.propertyURI = propertyURI;
     this.argument1 = argument1;
     this.argument2 = argument2;
-  } // DatavaluedPropertyAtomImpl
+  }
 
   public DatavaluedPropertyAtomImpl(String propertyURI)
   {
     this.propertyURI = propertyURI;
     this.argument1 = null;
     this.argument2 = null;
-  } // DatavaluedPropertyAtomImpl
+  }
+  
+  public int getNumberOfArguments() { return 2; }
 
   public void setArgument1(AtomArgument argument1) { this.argument1 = argument1; }
   public void setArgument2(AtomArgument argument2) { this.argument2 = argument2; }
@@ -49,5 +51,5 @@ public class DatavaluedPropertyAtomImpl extends AtomImpl implements DatavaluedPr
     result += ")"; 
 
     return result;
-  } // toString
-} // DatavaluedPropertyAtomImpl
+  } 
+} 

@@ -192,25 +192,25 @@ public interface SWRLBuiltInLibrary
 	Object getArgumentAsAPropertyValue(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException;
 	
 	// Result argument handling
-	boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber,
+	boolean processResultArgument(List<BuiltInArgument> arguments, int resultArgumentNumber,
                                 Collection<BuiltInArgument> resultArguments) throws BuiltInException; 
-	boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber,
+	boolean processResultArgument(List<BuiltInArgument> arguments, int resultArgumentNumber,
                                 BuiltInArgument resultArgument) throws BuiltInException; 
-	boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber,
+	boolean processResultArgument(List<BuiltInArgument> arguments, int resultArgumentNumber,
                                 DataValueArgument resultArgument) throws BuiltInException; 
-	boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber,
+	boolean processResultArgument(List<BuiltInArgument> arguments, int resultArgumentNumber,
                                 short resultArgument) throws BuiltInException; 
-	boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, 
+	boolean processResultArgument(List<BuiltInArgument> arguments, int resultArgumentNumber, 
                                 int resultArgument) throws BuiltInException; 
-	boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, 
+	boolean processResultArgument(List<BuiltInArgument> arguments, int resultArgumentNumber, 
                                 long resultArgument) throws BuiltInException; 
-	boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, 
+	boolean processResultArgument(List<BuiltInArgument> arguments, int resultArgumentNumber, 
                                 float resultArgument) throws BuiltInException; 
-	boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, 
+	boolean processResultArgument(List<BuiltInArgument> arguments, int resultArgumentNumber, 
                                 double resultArgument) throws BuiltInException; 
-	boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, 
+	boolean processResultArgument(List<BuiltInArgument> arguments, int resultArgumentNumber, 
                                 byte resultArgument) throws BuiltInException; 
-	boolean processResultArgument(List<BuiltInArgument> arguments, int argumentNumber, 
+	boolean processResultArgument(List<BuiltInArgument> arguments, int resultArgumentNumber, 
                                 String resultArgument) throws BuiltInException;
 	
 	// Argument creation handling

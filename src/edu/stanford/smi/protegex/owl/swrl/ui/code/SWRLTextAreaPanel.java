@@ -163,7 +163,7 @@ public class SWRLTextAreaPanel extends JPanel implements ModalDialogFactory.Clos
     
     frame.getContentPane().add(display, BorderLayout.CENTER);        
     
-    frame.setPreferredSize(new Dimension(500, 500));
+    frame.setPreferredSize(new Dimension(800, 500));
     frame.setTitle(SWRL_RULE_PANEL_TITLE);        
     
     ComponentUtilities.pack(frame);

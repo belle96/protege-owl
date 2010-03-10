@@ -49,7 +49,7 @@ public class DefaultSWRLImp extends AbstractSWRLIndividual implements SWRLImp
   public DefaultSWRLImp(KnowledgeBase kb, FrameID id) 
   {
     super(kb, id);
-  } // DefaultSWRLImp
+  }
 
   public DefaultSWRLImp() 
   {
@@ -75,7 +75,7 @@ public class DefaultSWRLImp extends AbstractSWRLIndividual implements SWRLImp
       log.log(Level.SEVERE, "Shouldn't Happen ", ex);
       return null;  // Should not happen
     } // try
-  } // createClone
+  }
 
   private boolean getIsRuleEnabledAnnotation()
   {
@@ -86,7 +86,7 @@ public class DefaultSWRLImp extends AbstractSWRLIndividual implements SWRLImp
       if (!(value instanceof Boolean)) return true; // Should not happen
 
       return ((Boolean)value).booleanValue();
-  } // getIsRuleEnabledAnnotation
+  }
 
   @SuppressWarnings("unchecked")
   private Map<String, Boolean> getRuleGroupAnnotations()
@@ -110,7 +110,7 @@ public class DefaultSWRLImp extends AbstractSWRLIndividual implements SWRLImp
       } // if
     
     return result;
-  } // getRuleGroupNamesAnnotation
+  }
 
   private void deleteHeadAndBody() {
     Slot directInstancesSlot = getKnowledgeBase().getSlot(Model.Slot.DIRECT_INSTANCES);
@@ -153,10 +153,10 @@ public class DefaultSWRLImp extends AbstractSWRLIndividual implements SWRLImp
       atomList = (SWRLAtomList)getOWLModel().getFrame(((RDFList)propertyValue).getName());
     } 
 
-if (atomList != null) atomList.setInHead(true);
+    if (atomList != null) atomList.setInHead(true);
     
     return atomList;
-  } // getHead
+  }
 
   public SWRLAtomList getBody() 
   { 
@@ -172,13 +172,13 @@ if (atomList != null) atomList.setInHead(true);
     if (atomList != null) atomList.setInHead(false);
     
     return atomList;
-  } // getBody
+  }
 
   public void setBody(SWRLAtomList swrlAtomList) { setPropertyValue(getOWLModel().getRDFProperty(SWRLNames.Slot.BODY), swrlAtomList); } 
   public void setHead(SWRLAtomList swrlAtomList) { setPropertyValue(getOWLModel().getRDFProperty(SWRLNames.Slot.HEAD), swrlAtomList); }
 
   @Override
-public Icon getIcon() {
+  public Icon getIcon() {
     return isEditable() ? SWRLIcons.getImpIcon() :
                 OWLIcons.getReadOnlyIcon(SWRLIcons.getImpIcon(), "RoundedBoxFrame");
   }
@@ -206,7 +206,7 @@ public Icon getIcon() {
   }
   
   @Override
-public String getBrowserText() 
+  public String getBrowserText() 
   {
     SWRLAtomList body = getBody();
     SWRLAtomList head = getHead();
@@ -221,7 +221,7 @@ public String getBrowserText()
     } // if
 
     return s;
-  } // toString
+  } 
 
   public void setExpression(String parsableText) throws SWRLParseException 
   {
@@ -236,7 +236,7 @@ public String getBrowserText()
   { 
       checkCacheInitialized();
       return isRuleEnabled;
-  } // isEnabled
+  } 
 
   public void enable() { enable(new HashSet<String>()); }
 
@@ -245,7 +245,7 @@ public String getBrowserText()
     Set<String> ruleGroupNames = new HashSet<String>();
     ruleGroupNames.add(ruleGroupName);
     enable(ruleGroupNames);
-  } // enable
+  } 
 
   public void enable(Set<String> ruleGroupNames) 
   {
@@ -266,7 +266,7 @@ public String getBrowserText()
               ruleGroups.put(ruleGroupName, Boolean.TRUE);
           } // for
       } // if  
-  } // enable
+  }
 
   public void disable() { disable(new HashSet<String>()); }
 
@@ -275,7 +275,7 @@ public String getBrowserText()
     Set<String> ruleGroupNames = new HashSet<String>();
     ruleGroupNames.add(ruleGroupName);
     disable(ruleGroupNames);
-  } // disable
+  } 
 
   public void disable(Set<String> ruleGroupNames) 
   { 
@@ -296,7 +296,7 @@ public String getBrowserText()
               ruleGroups.put(ruleGroupName, Boolean.FALSE);
           } // for
       } // if  
-  } // disable
+  } 
 
   public Set<String> getRuleGroupNames() { 
       checkCacheInitialized();
@@ -313,7 +313,7 @@ public String getBrowserText()
       checkCacheInitialized();
       for (String name : names) if (ruleGroups.containsKey(name)) return true;
       return false;
-  }  // isInRuleGroups
+  }
 
   /**
    ** Add a rule group name to a rule. Returns true on success. The name must the name of an OWL individual of class RuleGroup defined in
@@ -343,7 +343,7 @@ public String getBrowserText()
       } // if
 
     return result;
-  } // addRuleGroupName
+  }
 
   /**
    ** Remove a rule group name from a rule. Returns true on success. 
@@ -369,7 +369,7 @@ public String getBrowserText()
       } // if
 
       return result;
-  } // removeRuleGroupName
+  } 
   
   
   private OWLDatatypeProperty getRuleEnabledProperty() {
@@ -388,4 +388,4 @@ public String getBrowserText()
       return getOWLModel().getOWLNamedClass(SWRLNames.Annotations.RULE_GROUP);
   }
 
-} // DefaultSWRLImp
+} 
