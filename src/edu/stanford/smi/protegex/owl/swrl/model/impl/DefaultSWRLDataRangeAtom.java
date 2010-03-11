@@ -5,6 +5,7 @@ import java.util.Set;
 import edu.stanford.smi.protege.model.FrameID;
 import edu.stanford.smi.protege.model.Instance;
 import edu.stanford.smi.protege.model.KnowledgeBase;
+import edu.stanford.smi.protegex.owl.model.OWLDataRange;
 import edu.stanford.smi.protegex.owl.model.RDFObject;
 import edu.stanford.smi.protegex.owl.model.RDFResource;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLDataRangeAtom;
@@ -15,12 +16,10 @@ public class DefaultSWRLDataRangeAtom extends DefaultSWRLAtom implements SWRLDat
 
     public DefaultSWRLDataRangeAtom(KnowledgeBase kb, FrameID id) {
         super(kb, id);
-    } // DefaultSWRLDataRangeAtom
-
+    } 
 
     public DefaultSWRLDataRangeAtom() {
     }
-
 
     public void getReferencedInstances(Set<RDFResource> set) {
         RDFObject argument1 = getArgument1();
@@ -32,7 +31,6 @@ public class DefaultSWRLDataRangeAtom extends DefaultSWRLAtom implements SWRLDat
             set.add((RDFResource)dataRange);
         }
     }
-
 
     /**
      * This argument is either an RDFList of RDFSLiterals, or
@@ -46,8 +44,7 @@ public class DefaultSWRLDataRangeAtom extends DefaultSWRLAtom implements SWRLDat
         else {
             return getPropertyValueLiteral(getOWLModel().getRDFProperty(SWRLNames.Slot.ARGUMENT1));
         }
-    } // getArgument1
-
+    } 
 
     /**
      * This argument is either an RDFList of RDFSLiterals, or
@@ -55,22 +52,20 @@ public class DefaultSWRLDataRangeAtom extends DefaultSWRLAtom implements SWRLDat
      */
     public void setArgument1(RDFObject dObject) {
         setPropertyValue(getOWLModel().getRDFProperty(SWRLNames.Slot.ARGUMENT1), dObject);
-    } // setArgument1
+    }
 
-
-  public RDFResource getDataRange() 
+  public OWLDataRange getDataRange() 
   {
     Object propertyValue = getPropertyValue(getOWLModel().getRDFProperty(SWRLNames.Slot.DATA_RANGE));
 
-    if (propertyValue instanceof RDFResource) return (RDFResource)propertyValue;
+    if (propertyValue instanceof OWLDataRange) return (OWLDataRange)propertyValue;
     else return null;
-  } // getDataRange
+  } 
 
-  public void setDataRange(RDFResource instance) 
+  public void setDataRange(OWLDataRange dataRange) 
   {
-    setPropertyValue(getOWLModel().getRDFProperty(SWRLNames.Slot.DATA_RANGE), instance);
-  } // setDataRange
-
+    setPropertyValue(getOWLModel().getRDFProperty(SWRLNames.Slot.DATA_RANGE), dataRange);
+  } 
 
   public String getBrowserText() 
   {
@@ -84,8 +79,6 @@ public class DefaultSWRLDataRangeAtom extends DefaultSWRLAtom implements SWRLDat
     s += ")";
     
     return s;
-  } // getBrowserText
+  } 
   
-} // DefaultSWRLDataRangeAtom
-
-
+}

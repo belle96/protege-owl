@@ -49,16 +49,17 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   private static String HasFinishTimePropertyName = Namespace + "hasFinishTime";
 
   private Temporal temporal;
-    public SWRLBuiltInLibraryImpl() 
+  
+  public SWRLBuiltInLibraryImpl() 
   { 
     super(TemporalLibraryName); 
-  } // SWRLBuiltInLibraryImpl
+  } 
 
   public void reset()
   {
     XSDDatetimeStringProcessor d = new XSDDatetimeStringProcessor();
     temporal = new Temporal(d);
-  } // reset
+  }
 
   public boolean equals(List<BuiltInArgument> arguments) throws BuiltInException { return temporalOperation(TemporalEquals, arguments); }
   public boolean before(List<BuiltInArgument> arguments) throws BuiltInException { return temporalOperation(TemporalBefore, arguments); }
@@ -98,10 +99,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   public boolean notDurationGreaterThanOrEqualTo(List<BuiltInArgument> arguments) throws BuiltInException { return !durationGreaterThanOrEqualTo(arguments); }
 
   /**
-   ** Accepts either three or four arguments. Returns true if the first duration argument is equal to the difference between two timestamps
-   ** at the granularity specified by the final argument. The timestamps are specified as either a mixture of two ValidInstant or datetime
-   ** arguments or in single ValidPeriod argument. If the duration argument is unbound, it is assigned to the time difference between the
-   ** two timestamps.
+   * Accepts either three or four arguments. Returns true if the first duration argument is equal to the difference between two timestamps
+   * at the granularity specified by the final argument. The timestamps are specified as either a mixture of two ValidInstant or datetime
+   * arguments or in single ValidPeriod argument. If the duration argument is unbound, it is assigned to the time difference between the
+   * two timestamps.
    */
   public boolean duration(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -138,7 +139,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } // try
 
     return result;
-  } // duration
+  } 
 
   public boolean durationLessThan(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -154,7 +155,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     operationResult = getArgumentAsALong(0, newArguments);
 
     return argument1 < operationResult;
-  } // durationLessThan    
+  }     
 
   public boolean durationLessThanOrEqualTo(List<BuiltInArgument> arguments) throws BuiltInException
   {

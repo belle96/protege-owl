@@ -1,7 +1,7 @@
 package edu.stanford.smi.protegex.owl.swrl.model;
 
+import edu.stanford.smi.protegex.owl.model.OWLDataRange;
 import edu.stanford.smi.protegex.owl.model.RDFObject;
-import edu.stanford.smi.protegex.owl.model.RDFResource;
 
 /**
  * @author Martin O'Connor  <moconnor@smi.stanford.edu>
@@ -23,9 +23,8 @@ public interface SWRLDataRangeAtom extends SWRLAtom {
     void setArgument1(RDFObject dObject);
 
 
-    RDFResource getDataRange();
+    OWLDataRange getDataRange();
 
 
-    void setDataRange(RDFResource dataRange);
-
-} // SWRLDataRangeAtom
+    void setDataRange(OWLDataRange dataRange);
+}

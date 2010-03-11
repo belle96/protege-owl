@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import edu.stanford.smi.protegex.owl.model.OWLDataRange;
 import edu.stanford.smi.protegex.owl.model.OWLDatatypeProperty;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLObjectProperty;
@@ -128,9 +129,9 @@ public class SWRLFactory
     
   } // createClassAtom
 
-  public SWRLDataRangeAtom createDataRangeAtom(RDFResource dataRange, RDFObject dObject) 
+  public SWRLDataRangeAtom createDataRangeAtom(OWLDataRange dataRange, RDFObject dObject) 
   {
-    SWRLDataRangeAtom swrlDataRangeAtom = (SWRLDataRangeAtom) systemFrames.getDataRangeAtomCls().createAnonymousInstance();
+    SWRLDataRangeAtom swrlDataRangeAtom = (SWRLDataRangeAtom)systemFrames.getDataRangeAtomCls().createAnonymousInstance();
     
     swrlDataRangeAtom.setArgument1(dObject);
     swrlDataRangeAtom.setDataRange(dataRange);

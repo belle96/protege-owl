@@ -126,9 +126,6 @@ public class SWRLFactoryTest {
         dataRangeAtom = swrlFactory.createDataRangeAtom(dataRange, x);
         head.append(dataRangeAtom);
 
-        RDFSDatatype datatype = owlModel.getXSDdouble();
-        head.append(swrlFactory.createDataRangeAtom(datatype, x));
-
         imp = swrlFactory.createImp(head, body);
 
         System.out.println("Imp: " + imp.getBrowserText());

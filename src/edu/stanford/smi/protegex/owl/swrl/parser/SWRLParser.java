@@ -187,7 +187,6 @@ public class SWRLParser
     else if (isOWLObjectPropertyName(identifier)) atom = parseIndividualPropertyAtomParameters(identifier);
     else if (isOWLDatatypePropertyName(identifier)) atom = parseDatavaluedPropertyAtomParameters(identifier);
     else if (isBuiltinName(identifier)) atom = parseBuiltinParameters(identifier);
-    else if (isXSDDatatype(identifier)) atom = parseXSDDatatypeParameters(identifier);
     else throw new SWRLParseException("Invalid atom name " + identifier + ".");
     
     return atom;
@@ -355,24 +354,6 @@ public class SWRLParser
     return atom;
   } // parseBuiltinParameters
 
-  private SWRLAtom parseXSDDatatypeParameters(String identifier)
-    throws SWRLParseException {
-    RDFObject dObject;
-    SWRLAtom atom = null;
-    RDFSDatatype datatype;
-    
-    dObject = parseDObject();
-    
-    if (!parseOnly) {
-      datatype = owlModel.getRDFSDatatypeByName(NamespaceUtil.getFullName(owlModel, identifier));
-      atom = swrlFactory.createDataRangeAtom(datatype, dObject);
-    } // if
-    
-    checkAndSkipToken(")", "Expecting closing parenthesis after DataRangeAtom '" + identifier + "'.");
-    
-    return atom;
-  } // parseXSDDatatypeParameters
-
   private SWRLAtom parseEnumeratedListParameters(List<RDFObject> enumeratedList)
     throws SWRLParseException {
     RDFObject dObject;
@@ -497,7 +478,7 @@ public class SWRLParser
     if (tokenizer.hasMoreTokens()) {
       if (!inHead) variables.add(variableName);
       else if (!variables.contains(variableName))
-        throw new SWRLParseException("Variable '" + variableName + "' referred to in consequent is not present in antecedent.");
+        throw new SWRLParseException("Variable ?" + variableName + " referred to in consequent is not present in antecedent.");
     } // if      
     if (!parseOnly) parsedEntity = getSWRLVariable(variableName);
     return parsedEntity;
@@ -517,7 +498,7 @@ public class SWRLParser
       if (tokenizer.hasMoreTokens()) {
         if (parsedString.equalsIgnoreCase("true") || parsedString.equalsIgnoreCase("false")) {
           if (!parseOnly) parsedEntity = owlModel.createRDFSLiteral(parsedString, owlModel.getXSDboolean());
-        } else throw new SWRLParseException("Invalid literal '" + parsedString + "'.");
+        } else throw new SWRLParseException("Invalid literal " + parsedString + ".");
       } // if
     } else { // Is it an integer, float, long or double then?
       try {
@@ -529,7 +510,7 @@ public class SWRLParser
           if (!parseOnly) parsedEntity = owlModel.createRDFSLiteral(parsedString, owlModel.getXSDlong());
         } // if
       } catch (NumberFormatException e) {
-        String errorMessage = "Invalid literal '" + parsedString + "'.";
+        String errorMessage = "Invalid literal " + parsedString + ".";
         if (parseOnly) throw new SWRLIncompleteRuleException(errorMessage);
         else throw new SWRLParseException(errorMessage);
       } // try
@@ -555,7 +536,7 @@ public class SWRLParser
   
   private void checkThatIdentifierIsValid(String identifier) throws SWRLParseException
   {
-    if (!isValidIdentifier(identifier)) throw new SWRLParseException("Invalid identifier: '" + identifier + "'.");
+    if (!isValidIdentifier(identifier)) throw new SWRLParseException("Invalid identifier " + identifier + ".");
   } // checkThatIdentifierIsValid
 
   // Possible valid identifiers include 'http://swrl.stanford.edu/ontolgies/built-ins/3.3/swrlx.owl#createIndividual'.
@@ -582,8 +563,8 @@ public class SWRLParser
     resource = getRDFResource(variableName); 
 
     if ((resource != null) && !(resource instanceof SWRLVariable)) 
-	throw new SWRLParseException("Invalid variable name: '" + variableName + 
-                                     "'. Cannot use name of existing OWL class, property, or individual.");
+	throw new SWRLParseException("Invalid variable name " + variableName + 
+                               ". Cannot use name of existing OWL class, property, or individual.");
   } // checkThatVariableNameIsValid
  
   private boolean isOWLClassName(String identifier) throws SWRLParseException 
@@ -651,7 +632,7 @@ public class SWRLParser
   {
       OWLIndividual resource = ParserUtils.getOWLIndividualFromName(owlModel, name);
 
-    if (resource == null) throw new SWRLParseException("'" + name + "' is not a valid individual name");
+    if (resource == null) throw new SWRLParseException(name + " is not a valid individual name");
 
     return resource;
   } // getIndividual
@@ -660,7 +641,7 @@ public class SWRLParser
   {
       OWLNamedClass resource = ParserUtils.getOWLClassFromName(owlModel, name);
       
-      if (resource == null) throw new SWRLParseException("'" + name + "' is not a valid class name");
+      if (resource == null) throw new SWRLParseException(name + " is not a valid class name");
 
     return resource;
   } // getClass
@@ -669,7 +650,7 @@ public class SWRLParser
   {
       RDFProperty resource = ParserUtils.getRDFPropertyFromName(owlModel, name);
 
-      if (resource == null || !(resource instanceof OWLProperty)) throw new SWRLParseException("'" + name + "' is not a valid property name");
+      if (resource == null || !(resource instanceof OWLProperty)) throw new SWRLParseException(name + " is not a valid property name");
 
       return (OWLProperty) resource;
   } // getProperty
