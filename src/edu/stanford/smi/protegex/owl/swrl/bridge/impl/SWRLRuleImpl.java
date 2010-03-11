@@ -154,60 +154,17 @@ public class SWRLRuleImpl implements SWRLRule
     bodyAtoms.addAll(bodyBuiltInAtoms);
   } 
   
-  // TODO: refactor
   // For every built-in, record the variables it depends from preceding atoms (directly and indirectly). 
   // Should be called after processBuiltInArguments and processSQWRLArguments.
   private void processBuiltInArgumentDependencies() throws BuiltInException
   {
-  	List<Atom> atomsToDate = new ArrayList<Atom>();
   	Map<String, Set<Set<String>>> paths = new HashMap<String, Set<Set<String>>>();
   	Set<String> rootVariableNames = new HashSet<String>();
   	
     for (Atom atom : getBodyAtoms()) {
     	Set<String> thisAtomReferencedVariableNames = new HashSet<String>(atom.getReferencedVariableNames());
-			Set<Set<String>> matchingPaths;
 
-    	if (atom.getNumberOfArguments() == 1 && !thisAtomReferencedVariableNames.isEmpty()) { // Single argument atom with a variable
-    		String variableName = thisAtomReferencedVariableNames.iterator().next();
-    		if (getMatchingPaths(paths, variableName).isEmpty() && !rootVariableNames.contains(variableName)) {  	   
-    			rootVariableNames.add(variableName); // Make it a root if we have not yet encountered it
-    			paths.put(variableName, new HashSet<Set<String>>());
-    		} // if
-    	} else if (thisAtomReferencedVariableNames.size() > 1) {
-    		Set<String> knownRoots = new HashSet<String>(thisAtomReferencedVariableNames);
-    		knownRoots.retainAll(rootVariableNames);
-    		
-    		if (!knownRoots.isEmpty()) { // Has known roots
-    			for (String rootVariableName : knownRoots) {
-    				Set<String> dependentVariables = new HashSet<String>(thisAtomReferencedVariableNames);
-    				dependentVariables.remove(rootVariableName);
-    				
-      			matchingPaths = getMatchingPaths(paths, dependentVariables);
-      			if (!matchingPaths.isEmpty()) { // Found existing paths that use these variables - add them
-      				for (Set<String> path : matchingPaths)
-      					if (!Collections.disjoint(path, dependentVariables))
-      						path.addAll(dependentVariables);
-      			} else { // Did not find an existing path that use these variables - add dependent variables to root 
-      				paths.get(rootVariableName).add(dependentVariables);
-      			} //if
-    			} //for
-    	} else { // No known roots  
-    			matchingPaths = getMatchingPaths(paths, thisAtomReferencedVariableNames);
-    			if (!matchingPaths.isEmpty()) { // Found existing paths that use these variables - add them
-    				for (Set<String> path : matchingPaths)
-    					if (!Collections.disjoint(path, thisAtomReferencedVariableNames))
-    						path.addAll(thisAtomReferencedVariableNames);
-      		} else { // No existing match - everything becomes a root and depends on every other root variable
-      			for (String rootVariableName : thisAtomReferencedVariableNames) {
-      				Set<String> dependentVariables = new HashSet<String>(thisAtomReferencedVariableNames);
-      				dependentVariables.remove(rootVariableName);
-   
-      				rootVariableNames.add(rootVariableName);
-      				paths.put(rootVariableName, Collections.singleton(dependentVariables));
-      			} // for
-      		} // if
-    		} // if
-    	} // if
+    	buildPaths(atom, rootVariableNames, paths);
     	
     	if (atom instanceof BuiltInAtom) {
     		BuiltInAtom builtInAtom = (BuiltInAtom)atom;
@@ -236,7 +193,7 @@ public class SWRLRuleImpl implements SWRLRule
           			List<BuiltInArgument> groupArguments = collectionGroupArgumentsMap.get(collectionName);
           			Set<String> groupVariableNames = getVariableNames(groupArguments);
           			if (!groupVariableNames.isEmpty() && !dependsOnVariableNames.containsAll(groupVariableNames)) 
-          				throw new BuiltInException("all group arguments must have path to variables used in corresponding make");
+          				throw new BuiltInException("all group arguments must be on variable path for corresponding collection make");
           		} // if
           	} // if
           	 */
@@ -244,10 +201,58 @@ public class SWRLRuleImpl implements SWRLRule
         	} // if
     		} // if
     	} // if
-    	atomsToDate.add(atom);
     } // for
   }
 
+  // Incrementally build variable paths up to and including the current atom
+  private void	buildPaths(Atom atom, Set<String> rootVariableNames, Map<String, Set<Set<String>>> paths)
+  {
+  	Set<String> thisAtomReferencedVariableNames = new HashSet<String>(atom.getReferencedVariableNames());
+		Set<Set<String>> matchingPaths;
+	
+		if (atom.getNumberOfArguments() == 1 && !thisAtomReferencedVariableNames.isEmpty()) { // Single argument atom with a variable
+			String variableName = thisAtomReferencedVariableNames.iterator().next();
+			if (getMatchingPaths(paths, variableName).isEmpty() && !rootVariableNames.contains(variableName)) {  	   
+				rootVariableNames.add(variableName); // Make it a root if we have not yet encountered it
+				paths.put(variableName, new HashSet<Set<String>>());
+			} // if
+		} else if (thisAtomReferencedVariableNames.size() > 1) {
+			Set<String> knownRoots = new HashSet<String>(thisAtomReferencedVariableNames);
+			knownRoots.retainAll(rootVariableNames);
+			
+			if (!knownRoots.isEmpty()) { // Has known roots
+				for (String rootVariableName : knownRoots) {
+					Set<String> dependentVariables = new HashSet<String>(thisAtomReferencedVariableNames);
+					dependentVariables.remove(rootVariableName);
+					
+	  			matchingPaths = getMatchingPaths(paths, dependentVariables);
+	  			if (!matchingPaths.isEmpty()) { // Found existing paths that use these variables - add them
+	  				for (Set<String> path : matchingPaths)
+	  					if (!Collections.disjoint(path, dependentVariables))
+	  						path.addAll(dependentVariables);
+	  			} else { // Did not find an existing path that use these variables - add dependent variables to root 
+	  				paths.get(rootVariableName).add(dependentVariables);
+	  			} //if
+				} // for
+			} else { // No known roots  
+				matchingPaths = getMatchingPaths(paths, thisAtomReferencedVariableNames);
+				if (!matchingPaths.isEmpty()) { // Found existing paths that use these variables - add them
+					for (Set<String> path : matchingPaths)
+						if (!Collections.disjoint(path, thisAtomReferencedVariableNames))
+							path.addAll(thisAtomReferencedVariableNames);
+				} else { // No existing match - everything becomes a root and depends on every other root variable
+					for (String rootVariableName : thisAtomReferencedVariableNames) {
+						Set<String> dependentVariables = new HashSet<String>(thisAtomReferencedVariableNames);
+						dependentVariables.remove(rootVariableName);
+					
+						rootVariableNames.add(rootVariableName);
+						paths.put(rootVariableName, Collections.singleton(dependentVariables));
+					} // For
+				} // if
+			} // if
+		} // if
+  }
+		
   @SuppressWarnings("unused") // Used by commented-out group argument checking in processBuiltInArgumentDependencies
   private Set<String> getVariableNames(List<BuiltInArgument> arguments) 
   {
