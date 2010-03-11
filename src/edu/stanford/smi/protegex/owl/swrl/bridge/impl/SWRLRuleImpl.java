@@ -33,6 +33,7 @@ public class SWRLRuleImpl implements SWRLRule
   private Set<String> referencedVariableNames;
   private SQWRLResultImpl sqwrlResult = null;
   private boolean hasSQWRLBuiltIns, hasSQWRLCollectionBuiltIns;
+  private Map<String, List<BuiltInArgument>> collectionGroupArgumentsMap;
   private boolean enabled = true;
   
   public SWRLRuleImpl(String ruleURI, List<Atom> bodyAtoms, List<Atom> headAtoms) throws SQWRLException, BuiltInException
@@ -43,10 +44,11 @@ public class SWRLRuleImpl implements SWRLRule
     hasSQWRLBuiltIns = false;
     hasSQWRLCollectionBuiltIns = false;
     ruleGroupName = "";
+    collectionGroupArgumentsMap = new HashMap<String, List<BuiltInArgument>>();
     buildReferencedVariableNames();
-    processUnboundBuiltInArguments();
-    processBuiltInArgumentDependencies(); 
+    processUnboundBuiltInArguments(); 
     processSQWRLBuiltIns();
+    processBuiltInArgumentDependencies();
   } 
   
   public String getURI() { return ruleURI; }
@@ -152,8 +154,10 @@ public class SWRLRuleImpl implements SWRLRule
     bodyAtoms.addAll(bodyBuiltInAtoms);
   } 
   
-  // For every built-in, record the variables it depends from preceding atoms (directly and indirectly). Should be called after processBuiltInArguments.
-  private void processBuiltInArgumentDependencies() 
+  // TODO: refactor
+  // For every built-in, record the variables it depends from preceding atoms (directly and indirectly). 
+  // Should be called after processBuiltInArguments and processSQWRLArguments.
+  private void processBuiltInArgumentDependencies() throws BuiltInException
   {
   	List<Atom> atomsToDate = new ArrayList<Atom>();
   	Map<String, Set<Set<String>>> paths = new HashMap<String, Set<Set<String>>>();
@@ -223,14 +227,39 @@ public class SWRLRuleImpl implements SWRLRule
         		} // for
         	} // for
       
-        	if (!dependsOnVariableNames.isEmpty())
+        	if (!dependsOnVariableNames.isEmpty()) {
           	dependsOnVariableNames.removeAll(thisAtomReferencedVariableNames); // Remove our own variables
-        		builtInAtom.setDependsOnVariableNames(dependsOnVariableNames);
+          	/* TODO: Need to think about correct operation of this
+          	if (builtInAtom.isSQWRLMakeCollection()) {
+          		String collectionName = builtInAtom.getArgumentVariableName(0); // First argument is the collection name
+          		if (collectionGroupArgumentsMap.containsKey(collectionName)) {
+          			List<BuiltInArgument> groupArguments = collectionGroupArgumentsMap.get(collectionName);
+          			Set<String> groupVariableNames = getVariableNames(groupArguments);
+          			if (!groupVariableNames.isEmpty() && !dependsOnVariableNames.containsAll(groupVariableNames)) 
+          				throw new BuiltInException("all group arguments must have path to variables used in corresponding make");
+          		} // if
+          	} // if
+          	 */
+          	builtInAtom.setDependsOnVariableNames(dependsOnVariableNames);
+        	} // if
     		} // if
     	} // if
     	atomsToDate.add(atom);
     } // for
   }
+
+  @SuppressWarnings("unused") // Used by commented-out group argument checking in processBuiltInArgumentDependencies
+  private Set<String> getVariableNames(List<BuiltInArgument> arguments) 
+  {
+  	Set<String> variableNames = new HashSet<String>();
+  	
+  	for (BuiltInArgument argument : arguments)
+  		if (argument.isVariable())
+  			variableNames.add(argument.getVariableName());
+  	
+  	return variableNames;
+  }
+ 
 
   private Set<Set<String>> getMatchingPaths(Map<String, Set<Set<String>>> paths, String variableName)
   { 
@@ -432,8 +461,7 @@ public class SWRLRuleImpl implements SWRLRule
   } 
 
   private void processSQWRLBuiltIns() throws DataValueConversionException, SQWRLException, BuiltInException
-  {
-    Map<String, List<BuiltInArgument>> collectionGroupArgumentsMap = new HashMap<String, List<BuiltInArgument>>(); 
+  { 
     Set<String> collectionNames = new HashSet<String>();
     Set<String> cascadedUnboundVariableNames = new HashSet<String>();
 
