@@ -31,6 +31,7 @@ import edu.stanford.smi.protegex.owl.model.event.ModelListener;
 import edu.stanford.smi.protegex.owl.model.visitor.OWLModelVisitorAdapter;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLAtomList;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
+import edu.stanford.smi.protegex.owl.swrl.model.SWRLImp;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLIndividual;
 import edu.stanford.smi.protegex.owl.swrl.model.factory.SWRLJavaFactory;
 
@@ -150,7 +151,13 @@ public class ReasonerUtil implements Disposable{
         return namedClses;
     }
 
-    
+    public Collection<SWRLImp> getSWRLImps(OWLModel owlModel)
+    {
+    	SWRLFactory swrlFactory = new SWRLFactory(owlModel);
+    	
+    	return swrlFactory.getImps();
+    }
+        
     private Collection getFilteredNamedClasses(OWLModel owlModel) {
     	Collection allNamedClasses = owlModel.getUserDefinedOWLNamedClasses();
     	
