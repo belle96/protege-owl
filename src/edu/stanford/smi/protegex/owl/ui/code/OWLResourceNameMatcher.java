@@ -202,7 +202,7 @@ public class OWLResourceNameMatcher implements ResourceNameMatcher {
     }
     
     protected boolean isFilteredOutResource(RDFResource resource) {
-    	return resource.isAnonymous() || SWRLFactory.isSWRLResource(resource);
+    	return resource.isAnonymous() || SWRLFactory.isSWRLFilteredResource(resource);
     }
     
     

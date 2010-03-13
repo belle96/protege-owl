@@ -363,6 +363,15 @@ public class SWRLFactory
     enableStatusUpdate(ruleGroupNames, false); 
   } // enable
 
+  public static boolean isSWRLFilteredResource(RDFResource resource)
+  {
+    return  (resource instanceof SWRLAtomList) || (resource instanceof SWRLBuiltinAtom) || (resource instanceof SWRLClassAtom) || 
+            (resource instanceof SWRLDataRangeAtom) || (resource instanceof SWRLDatavaluedPropertyAtom) ||
+            (resource instanceof SWRLDifferentIndividualsAtom) || (resource instanceof SWRLImp) || 
+            (resource instanceof SWRLIndividualPropertyAtom) || (resource instanceof SWRLSameIndividualAtom) || 
+            (resource instanceof SWRLAtom) || (resource instanceof SWRLVariable);
+  } 
+
   public static boolean isSWRLResource(RDFResource resource)
   {
     return  (resource instanceof SWRLAtomList) || (resource instanceof SWRLBuiltinAtom) || (resource instanceof SWRLClassAtom) || 
@@ -370,7 +379,7 @@ public class SWRLFactory
             (resource instanceof SWRLDifferentIndividualsAtom) || (resource instanceof SWRLImp) || 
             (resource instanceof SWRLIndividualPropertyAtom) || (resource instanceof SWRLSameIndividualAtom) || 
             (resource instanceof SWRLBuiltin) || (resource instanceof SWRLAtom) || (resource instanceof SWRLVariable);
-  } // isSWRLResource
+  } 
 
   private void enableStatusUpdate(Set<String> ruleGroupNames, boolean enable)
   {

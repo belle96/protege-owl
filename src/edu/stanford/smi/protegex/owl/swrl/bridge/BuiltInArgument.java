@@ -13,4 +13,4 @@ public interface BuiltInArgument extends Argument, Comparable<BuiltInArgument>
   MultiArgument getBuiltInMultiArgumentResult() throws BuiltInException;
   boolean hasBuiltInResult(); 
   boolean hasBuiltInMultiArgumentResult();
-} // BuiltInArgument
+} 
