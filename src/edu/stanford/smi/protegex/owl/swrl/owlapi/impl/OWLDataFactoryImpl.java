@@ -13,7 +13,6 @@ import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInAtom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLConversionFactory;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValue;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLPropertyPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRule;
 import edu.stanford.smi.protegex.owl.swrl.bridge.VariableAtomArgument;
@@ -22,6 +21,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLConversionFactoryException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLFactoryException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.impl.BuiltInAtomImpl;
+import edu.stanford.smi.protegex.owl.swrl.bridge.impl.OWLDataValueImpl;
 import edu.stanford.smi.protegex.owl.swrl.bridge.impl.VariableAtomArgumentImpl;
 import edu.stanford.smi.protegex.owl.swrl.bridge.impl.VariableBuiltInArgumentImpl;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClass;
@@ -34,12 +34,14 @@ import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDeclarationAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDifferentIndividualsAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLEntity;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLIndividual;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLLiteral;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLObjectProperty;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLObjectPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLProperty;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLSameIndividualAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLSomeValuesFrom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLSubClassAxiom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLTypedLiteral;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 
 public class OWLDataFactoryImpl implements OWLDataFactory
@@ -182,18 +184,27 @@ public class OWLDataFactoryImpl implements OWLDataFactory
   } // getOWLDataProperty
 
   // OWL axioms
-  public OWLDataPropertyAssertionAxiom getOWLDataPropertyAssertionAxiom(OWLIndividual subject, OWLProperty property, OWLDataValue object) { return new OWLDatatypePropertyAssertionAxiomImpl(subject, property, object); }
-  public OWLObjectPropertyAssertionAxiom getOWLObjectPropertyAssertionAxiom(OWLIndividual subject, OWLProperty property, OWLIndividual object)  { return new OWLObjectPropertyAssertionAxiomImpl(subject, property, object); }
-  public OWLDifferentIndividualsAxiom getOWLDifferentIndividualsAxiom(OWLIndividual individual1, OWLIndividual individual2) { return new OWLDifferentIndividualsAxiomImpl(individual1, individual2); }
-  public OWLDifferentIndividualsAxiom getOWLDifferentIndividualsAxiom(Set<OWLIndividual> individuals) { return new OWLDifferentIndividualsAxiomImpl(individuals); }
-  public OWLSameIndividualAxiom getOWLSameIndividualAxiom(OWLIndividual individual1, OWLIndividual individual2) { return new OWLSameIndividualAxiomImpl(individual1, individual2); }
-  public OWLClassPropertyAssertionAxiom getOWLClassPropertyAssertionAxiom(OWLIndividual subject, OWLProperty property, OWLClass object)  { return new OWLClassPropertyAssertionAxiomImpl(subject, property, object); } // OWL Full
-  public OWLPropertyPropertyAssertionAxiom getOWLPropertyPropertyAssertionAxiom(OWLIndividual subject, OWLProperty property, OWLProperty object)  { return new OWLPropertyPropertyAssertionAxiomImpl(subject, property, object); } // OWL Full
-  public OWLClassAssertionAxiom getOWLClassAssertionAxiom(OWLIndividual individual, OWLClass description)  { return new OWLClassAssertionAxiomImpl(individual, description); } // TODO: should be OWLDescription
-  public OWLSubClassAxiom getOWLSubClassAxiom(OWLClass subClass, OWLClass superClass)  { return new OWLSubClassAxiomImpl(subClass, superClass); } // TODO: should be OWLDescription
-
+  public OWLDataPropertyAssertionAxiom getOWLDataPropertyAssertionAxiom(OWLIndividual subject, OWLProperty property, OWLLiteral object) 
+    { return new OWLDatatypePropertyAssertionAxiomImpl(subject, property, object); }
+  public OWLObjectPropertyAssertionAxiom getOWLObjectPropertyAssertionAxiom(OWLIndividual subject, OWLProperty property, OWLIndividual object)  
+    { return new OWLObjectPropertyAssertionAxiomImpl(subject, property, object); }
+  public OWLDifferentIndividualsAxiom getOWLDifferentIndividualsAxiom(OWLIndividual individual1, OWLIndividual individual2) 
+    { return new OWLDifferentIndividualsAxiomImpl(individual1, individual2); }
+  public OWLDifferentIndividualsAxiom getOWLDifferentIndividualsAxiom(Set<OWLIndividual> individuals) 
+    { return new OWLDifferentIndividualsAxiomImpl(individuals); }
+  public OWLSameIndividualAxiom getOWLSameIndividualAxiom(OWLIndividual individual1, OWLIndividual individual2) 
+    { return new OWLSameIndividualAxiomImpl(individual1, individual2); }
+  public OWLClassPropertyAssertionAxiom getOWLClassPropertyAssertionAxiom(OWLIndividual subject, OWLProperty property, OWLClass object)  
+    { return new OWLClassPropertyAssertionAxiomImpl(subject, property, object); } // OWL Full
+  public OWLPropertyPropertyAssertionAxiom getOWLPropertyPropertyAssertionAxiom(OWLIndividual subject, OWLProperty property, OWLProperty object)  
+    { return new OWLPropertyPropertyAssertionAxiomImpl(subject, property, object); } // OWL Full
+  public OWLClassAssertionAxiom getOWLClassAssertionAxiom(OWLIndividual individual, OWLClass description)  
+    { return new OWLClassAssertionAxiomImpl(individual, description); } // TODO: should be OWLDescription
+  public OWLSubClassAxiom getOWLSubClassAxiom(OWLClass subClass, OWLClass superClass)  
+    { return new OWLSubClassAxiomImpl(subClass, superClass); } // TODO: should be OWLDescription
   public OWLDeclarationAxiom getOWLDeclarationAxiom(OWLEntity owlEntity) { return new OWLDeclarationAxiomImpl(owlEntity); }
-  public OWLSomeValuesFrom getOWLSomeValuesFrom(OWLClass owlClass, OWLProperty onProperty, OWLClass someValuesFrom)  { return new OWLSomeValuesFromImpl(owlClass, onProperty, someValuesFrom); } // TODO: should be OWLDescription
+  public OWLSomeValuesFrom getOWLSomeValuesFrom(OWLClass owlClass, OWLProperty onProperty, OWLClass someValuesFrom)  
+    { return new OWLSomeValuesFromImpl(owlClass, onProperty, someValuesFrom); } // TODO: should be OWLDescription
 
   // Arguments to atoms and built-ins
   public VariableAtomArgument getSWRLVariableAtomArgument(String variableName) { return new VariableAtomArgumentImpl(variableName); }
@@ -203,8 +214,13 @@ public class OWLDataFactoryImpl implements OWLDataFactory
   public BuiltInAtom getSWRLBuiltInAtom(String builtInURI, String builtInPrefixedName, List<BuiltInArgument> arguments) 
   { 
     return new BuiltInAtomImpl(builtInURI, builtInPrefixedName, arguments); 
-  } // getSWRLBuiltInAtom
+  } 
+
+  public OWLTypedLiteral getOWLTypedLiteral(int value) { return new OWLDataValueImpl(value); }
+  public OWLTypedLiteral getOWLTypedLiteral(float value)  { return new OWLDataValueImpl(value); }
+  public OWLTypedLiteral getOWLTypedLiteral(double value)  { return new OWLDataValueImpl(value); }
+  public OWLTypedLiteral getOWLTypedLiteral(boolean value)  { return new OWLDataValueImpl(value); }
+  public OWLTypedLiteral getOWLTypedLiteral(String value)  { return new OWLDataValueImpl(value); }
 
   private boolean hasOWLModel() { return owlModel != null; }
-
-} // OWLDataFactoryImpl
+}

@@ -2,12 +2,14 @@
 package edu.stanford.smi.protegex.owl.swrl.bridge;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.DataValueConversionException;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLLiteral;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLPropertyValue;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLTypedLiteral;
 
 /**
  * Convenience wrapper around OWLAPI classes OWLLiteral and OWLDataType
  */
-public interface OWLDataValue extends OWLPropertyValue 
+public interface OWLDataValue extends OWLPropertyValue, OWLLiteral, OWLTypedLiteral 
 {
   // Java types
   boolean isString();
@@ -41,5 +43,4 @@ public interface OWLDataValue extends OWLPropertyValue
 
   String toString();
   String toQuotedString();
-
-} // OWLDataValue
+}

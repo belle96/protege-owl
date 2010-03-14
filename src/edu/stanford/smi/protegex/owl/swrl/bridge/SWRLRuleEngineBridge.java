@@ -30,7 +30,8 @@ public interface SWRLRuleEngineBridge extends SWRLRuleEngine, SQWRLQueryEngine
   boolean isOWLIndividual(String individualURI);
 
   OWLDataFactory getOWLDataFactory();
+  OWLDataValueFactory getOWLDataValueFactory();
   
   String uri2PrefixedName(String uri);
   String name2URI(String prefixedName);
-} // SWRLRuleEngineBridge
+}

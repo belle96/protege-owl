@@ -30,4 +30,4 @@ public interface DataValue extends SQWRLResultValue
   
   String toString();
   String toQuotedString();
-} // DataValue
+}

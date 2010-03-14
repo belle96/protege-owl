@@ -37,6 +37,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.IndividualArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.IndividualPropertyAtom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLConversionFactory;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValue;
+import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValueFactory;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLPropertyPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.ObjectPropertyArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.PropertyArgument;
@@ -71,6 +72,7 @@ import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDataProperty;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDataPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDifferentIndividualsAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLIndividual;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLLiteral;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLObjectProperty;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLObjectPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLProperty;
@@ -91,6 +93,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
   private OWLModel owlModel;
   private SWRLFactory swrlFactory;
   private OWLDataFactory owlFactory;
+  private OWLDataValueFactory owlDataValueFactory;
   private ArgumentFactory argumentFactory;
   private Map<String, OWLClass> classes;
   private Map<String, OWLObjectProperty> objectProperties;
@@ -379,7 +382,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
     return dataValueArgument;
   }
 
-  public static OWLDataValue convertRDFSLiteral2OWLDataValue(OWLModel owlModel, edu.stanford.smi.protegex.owl.model.RDFSLiteral literal) 
+  public static OWLLiteral convertRDFSLiteral2OWLLiteral(OWLModel owlModel, edu.stanford.smi.protegex.owl.model.RDFSLiteral literal) 
     throws OWLConversionFactoryException 
   { 
     edu.stanford.smi.protegex.owl.model.RDFSDatatype datatype = literal.getDatatype();
@@ -694,7 +697,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
 
     if (!subjectIndividual.hasPropertyValue(property, objectClass, false)) subjectIndividual.addPropertyValue(property, objectClass);
   } // write2OWLModel
-
+ 
   private void write2OWLModel(OWLDataPropertyAssertionAxiom axiom) throws OWLConversionFactoryException
   {
     edu.stanford.smi.protegex.owl.model.OWLIndividual subjectIndividual;
@@ -710,7 +713,8 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
     if (subjectIndividual == null) throw new OWLConversionFactoryException("invalid individual URI " + subjectIndividualURI);
 
     if (rangeDatatype == null) {
-      if (axiom.getObject().isString()) objectValue = axiom.getObject().toString();
+    	OWLDataValue dataValue = owlDataValueFactory.getOWLDataValue(axiom.getObject());
+      if (dataValue.isString()) objectValue = dataValue.toString();
       else objectValue = axiom.getObject().toString();
     } else objectValue = owlModel.createRDFSLiteral(axiom.getObject().toString(), rangeDatatype);   
 
@@ -864,9 +868,9 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
         } else { // DataProperty
           OWLIndividual subjectOWLIndividual = owlFactory.getOWLIndividual(subjectIndividual.getURI());
           RDFSLiteral rdfsLiteral = owlModel.asRDFSLiteral(object);
-          OWLDataValue dataValue = convertRDFSLiteral2OWLDataValue(owlModel, rdfsLiteral);
+          OWLLiteral literal = convertRDFSLiteral2OWLLiteral(owlModel, rdfsLiteral);
           OWLDataProperty dataProperty = owlFactory.getOWLDataProperty(propertyURI);
-          axiom = owlFactory.getOWLDataPropertyAssertionAxiom(subjectOWLIndividual, dataProperty, dataValue);
+          axiom = owlFactory.getOWLDataPropertyAssertionAxiom(subjectOWLIndividual, dataProperty, literal);
           propertyAssertions.add(axiom);
         } // if
       } // for

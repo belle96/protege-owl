@@ -8,7 +8,7 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.DataValueImpl;
 
 public class OWLDataValueImpl extends DataValueImpl implements OWLDataValue
 {  
-	public OWLDataValueImpl(String s) { super(s); } 
+	public OWLDataValueImpl(String s) { super(s); }
   public OWLDataValueImpl(boolean b) { super(b); }
   public OWLDataValueImpl(Boolean b) { super(b); }
   public OWLDataValueImpl(int i) { super(i); }
@@ -21,4 +21,6 @@ public class OWLDataValueImpl extends DataValueImpl implements OWLDataValue
 
   public OWLDataValueImpl(DataValue dataValue) { super(dataValue); }
   public OWLDataValueImpl(Object o) throws DataValueConversionException { super(o); }
+  
+  public boolean isOWLStringLiteral() { return isString(); }
 }

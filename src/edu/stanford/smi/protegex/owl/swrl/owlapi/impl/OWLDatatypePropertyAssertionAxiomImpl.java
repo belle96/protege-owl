@@ -4,19 +4,20 @@ package edu.stanford.smi.protegex.owl.swrl.owlapi.impl;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValue;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDataPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLIndividual;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLLiteral;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLProperty;
 
 public class OWLDatatypePropertyAssertionAxiomImpl extends OWLPropertyAssertionAxiomImpl implements OWLDataPropertyAssertionAxiom
 {
-  private OWLDataValue object;
+  private OWLLiteral object;
 
-  public OWLDatatypePropertyAssertionAxiomImpl(OWLIndividual subject, OWLProperty property, OWLDataValue object)
+  public OWLDatatypePropertyAssertionAxiomImpl(OWLIndividual subject, OWLProperty property, OWLLiteral object)
   {
     super(subject, property);
     this.object = object;
-  } // OWLDatatypePropertyAssertionAxiomImpl
+  }
 
-  public OWLDataValue getObject() { return object; }
+  public OWLLiteral getObject() { return object; }
 
   public boolean equals(Object obj)
   {
@@ -25,7 +26,7 @@ public class OWLDatatypePropertyAssertionAxiomImpl extends OWLPropertyAssertionA
     OWLDatatypePropertyAssertionAxiomImpl impl = (OWLDatatypePropertyAssertionAxiomImpl)obj;
     return (super.equals((OWLPropertyAssertionAxiomImpl)impl) &&
             (object != null && impl.object != null && object.equals(impl.object)));
-  } // equals
+  }
 
   public int hashCode()
   {
@@ -33,18 +34,17 @@ public class OWLDatatypePropertyAssertionAxiomImpl extends OWLPropertyAssertionA
     hash = hash + super.hashCode();
     hash = hash + (null == object ? 0 : object.hashCode());
     return hash;
-  } // hashCode
-
+  }
+  
   public String toString() 
   { 
     String result = "" + getProperty() + "(" + getSubject() + ", ";
 
-    if (object.isString() || object.isXSDType()) result += "\"" + object + "\"";
+    if (object.isOWLStringLiteral()) result += "\"" + object + "\"";
     else result += "" + object;
 
     result += ")"; 
 
     return result;
-  } // toString
-
-} // OWLDatatypePropertyAssertionAxiomImpl
+  }
+}

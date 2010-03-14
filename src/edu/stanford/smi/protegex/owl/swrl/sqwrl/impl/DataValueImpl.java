@@ -41,7 +41,7 @@ public class DataValueImpl  implements DataValue {
       throw new DataValueConversionException("cannot convert value of type " + o.getClass().getCanonicalName() + " to DataValue"); 
 
     value = o;
-  } // DataValueImpl
+  } 
 
   public boolean isString() { return value instanceof String; }
   public boolean isBoolean() { return value instanceof Boolean; }
@@ -68,14 +68,14 @@ public class DataValueImpl  implements DataValue {
     if (!isString()) 
       throw new DataValueConversionException("cannot convert value of type " + value.getClass().getCanonicalName() + " to String"); 
     return (String)value; 
-  } // getString
+  } 
 
   public Number getNumber() throws DataValueConversionException 
   { 
     if (!isNumeric()) 
       throw new DataValueConversionException("cannot convert value of type " + value.getClass().getCanonicalName() + " to Number"); 
     return (Number)value; 
-  } // getNumber
+  } 
 
   public XSDType getXSDType() throws DataValueConversionException 
   { 
@@ -163,12 +163,12 @@ public class DataValueImpl  implements DataValue {
   public String toString() 
   { 
     return "" + value;
-  } // toString
+  }
   
   public String toQuotedString() 
   { 
   	return "\"" + value.toString().replaceAll("[~\\\\]\"", "\\\\\"") + "\""; // Escape non-escaped double quote characters; for humans: [^\\]" -> \\"
-  } // toString
+  } 
 
   public Object getValue() { return value; }
   private void setValue(Object value) { this.value = value; }
