@@ -32,6 +32,6 @@ public abstract class ArgumentFactory
   public abstract DataValueArgument createDataValueArgument(Object o) throws DataValueConversionException;
 
   public abstract VariableBuiltInArgument createVariableBuiltInArgument(String variableName);
-  public abstract MultiArgument createMultiArgument(String variableName);
-  public abstract MultiArgument createMultiArgument(String variableName, List<BuiltInArgument> arguments);
-} // ArgumentFactory
+  public abstract MultiArgument createMultiArgument();
+  public abstract MultiArgument createMultiArgument(List<BuiltInArgument> arguments);
+}

@@ -12,4 +12,4 @@ public interface Argument
   String getVariableName();
   void setVariableName(String variableName);
   void setUnbound();
-} // Argument
+}

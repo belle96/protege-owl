@@ -21,9 +21,9 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
 
 /** 
  * A class that defines methods that must be implemented by a built-in library. See <a
- * href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLBuiltInBridge">here</a> for documentation.
+ * href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLBuiltInBridge">here</a> for documentation.<p>
  * 
- * Also includes an array of methods for processing built-in arguments.
+ * Also includes an array of methods for processing built-in arguments.<p>
  * 
  * The class AbstractSWRLBuiltInLibrary provides an implementation of this interface. 
  */
@@ -55,7 +55,8 @@ public interface SWRLBuiltInLibrary
 	void checkThatAllArgumentsAreBound(List<BuiltInArgument> arguments) throws BuiltInException; 
 	void checkThatArgumentIsBound(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException; 
 	boolean isUnboundArgument(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException; 
-	void checkForUnboundArguments(String ruleName, String builtInName, List<BuiltInArgument> arguments) throws BuiltInException; 
+	void checkForUnboundArguments(String ruleName, String builtInName, List<BuiltInArgument> arguments) throws BuiltInException;
+	
 	/**
 	 * Get 0-offset position of first unbound argument; return -1 if no unbound arguments are found.
 	 */
@@ -229,7 +230,6 @@ public interface SWRLBuiltInLibrary
   DataValueArgument createDataValueArgument(Byte b);
   DataValueArgument createDataValueArgument(XSDType xsd);
 
-  MultiArgument createMultiArgument(String variableName);
-  MultiArgument createMultiArgument(String variableName, List<BuiltInArgument> arguments);
-
-} // SWRLBuiltInLibrary
+  MultiArgument createMultiArgument();
+  MultiArgument createMultiArgument(List<BuiltInArgument> arguments);
+}

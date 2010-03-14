@@ -76,7 +76,7 @@ public abstract class BuiltInLibraryManager
     } // if
 
     return result;
-  } // invokeSWRLBuiltIn
+  }
 
   private static SWRLBuiltInLibrary loadBuiltInLibrary(SWRLBuiltInBridge bridge, String ruleName, String prefix, String implementationClassName)
     throws BuiltInLibraryException
@@ -91,7 +91,7 @@ public abstract class BuiltInLibraryManager
       invokeBuiltInLibraryResetMethod(bridge, library);
     } // if
     return library;
-  } // loadBuiltInLibrary
+  }
 
   private static String getPrefix(SWRLBuiltInBridge bridge, String builtInURI) 
   {
@@ -100,13 +100,13 @@ public abstract class BuiltInLibraryManager
     if (hashIndex != -1) {
       return bridge.getOWLModel().getPrefixForResourceName(builtInURI);
     } else return ""; // No prefix - try the base built-ins package. Ordinarily, built-ins should not be located here.
-  } // getPrefix
+  }
 
   private static String getBuiltInLibraryImplementationClassName(String prefix)
   {
     if (prefix.equals("")) return  BuiltInLibraryPackageBaseName + "SWRLBuiltInLibraryImpl";
     return BuiltInLibraryPackageBaseName + prefix + ".SWRLBuiltInLibraryImpl";
-  } // getBuiltInLibraryImplementationClassName
+  }
 
   private static String getBuiltInMethodName(String builtInURI)
   {
@@ -116,10 +116,10 @@ public abstract class BuiltInLibraryManager
     else builtInMethodName = builtInURI.substring(builtInURI.indexOf("#") + 1, builtInURI.length());
 
     return builtInMethodName;
-  } // getBuiltInMethodName
+  }
 
   /**
-   ** Invoke the reset() method for each registered built-in library.
+   * Invoke the reset() method for each registered built-in library.
    */
   private static void invokeBuiltInLibraryResetMethod(SWRLBuiltInBridge bridge, SWRLBuiltInLibrary library) throws BuiltInLibraryException
   {
@@ -128,18 +128,19 @@ public abstract class BuiltInLibraryManager
     } catch (Exception e) {
       throw new BuiltInLibraryException("error calling reset method in built-in library " + library.getClass());
     } // try
-  } // invokeBuiltInLibraryResetMethod
+  } 
   
   public static void invokeAllBuiltInLibrariesResetMethod(SWRLBuiltInBridge bridge) throws SWRLRuleEngineBridgeException
   {
     for (SWRLBuiltInLibrary library : builtInLibraries.values()) invokeBuiltInLibraryResetMethod(bridge, library);
-  } // invokeAllBuiltInLibrariesResetMethod
+  }
 
   /**
    * This method is called with a list of built-in arguments. Some argument positions may contain multi-arguments, indicating that there is more
    * than one pattern. If the result has more than one multi-argument, each multi-argument must have the same number of elements.
    */
-  public static Set<List<BuiltInArgument>> generateBuiltInArgumentBindings(String ruleName, String builtInURI, int builtInIndex, List<BuiltInArgument> arguments) throws BuiltInException
+  public static Set<List<BuiltInArgument>> generateBuiltInArgumentBindings(String ruleName, String builtInURI, int builtInIndex, List<BuiltInArgument> arguments) 
+    throws BuiltInException
   {
     List<Integer> multiArgumentIndexes = getMultiArgumentIndexes(arguments);
     Set<List<BuiltInArgument>> bindings = new HashSet<List<BuiltInArgument>>();
@@ -167,7 +168,7 @@ public abstract class BuiltInLibraryManager
     } // if
     
     return bindings;
-  } // generateBuiltInBindings
+  } 
 
   // Find indices of multi-arguments (if any) in a list of arguments.
   private static List<Integer> getMultiArgumentIndexes(List<BuiltInArgument> arguments)
@@ -178,8 +179,8 @@ public abstract class BuiltInLibraryManager
       if (arguments.get(i).hasBuiltInMultiArgumentResult()) result.add(Integer.valueOf(i));
 
     return result;
-  } // getMultiArgumentIndexes
-
+  }
+  
   private static List<BuiltInArgument> generateArgumentsPattern(List<BuiltInArgument> arguments, int multiArgumentArgumentIndex)
     throws BuiltInException
   {
@@ -193,7 +194,7 @@ public abstract class BuiltInLibraryManager
     } // for
 
     return result;
-  } // generateArgumentsPattern  
+  }   
 
   private static Method resolveBuiltInMethod(String ruleName, SWRLBuiltInLibrary library, String prefix, String builtInURI)
     throws UnresolvedBuiltInMethodException
@@ -207,7 +208,7 @@ public abstract class BuiltInLibraryManager
     } // try
 
     return method;
-  } // resolveBuiltInMethod
+  } 
 
   // TODO: need to get constructor of library to catch exceptions it may throw.
   private static SWRLBuiltInLibrary loadBuiltInLibraryImpl(String ruleName, String prefix, String className) 
@@ -237,7 +238,7 @@ public abstract class BuiltInLibraryManager
     } // try
 
     return swrlBuiltInLibrary;
-  } // loadBuiltInLibraryImpl
+  }
 
   private static void checkBuiltInMethodSignature(String ruleName, String prefix, String builtInURI, Method method) 
       throws IncompatibleBuiltInMethodException
@@ -262,21 +263,21 @@ public abstract class BuiltInLibraryManager
         (((ParameterizedType)parameterTypes[0]).getActualTypeArguments()[0] != BuiltInArgument.class))
       throw new IncompatibleBuiltInMethodException(ruleName, prefix, builtInURI, 
                                                    "Java method must accept a single List of BuiltInArgument objects");
-  } // checkBuiltInMethodSignature
+  }
 
   private static boolean hasUnboundArguments(List<BuiltInArgument> arguments)
   {
     for (BuiltInArgument argument : arguments) if (argument.isUnbound()) return true;
 
     return false;
-  } // hasUnboundArguments
+  }
 
   private static void checkBuiltInMethodsClassCompatibility(String ruleName, String prefix, Class<?> cls) 
     throws IncompatibleBuiltInClassException
   {
     if (!SWRLBuiltInLibrary.class.isAssignableFrom(cls)) 
       throw new IncompatibleBuiltInClassException(ruleName, prefix, cls.getName(), "Java class does not implement SWRLBuiltInLibrary");
-  } // checkBuiltInMethodsClassCompatibility
+  } 
 
-} // BuiltInLibraryManager
+}
 

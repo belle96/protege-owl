@@ -14,4 +14,4 @@ public interface MultiArgument extends BuiltInArgument
   List<BuiltInArgument> getArguments();
   int getNumberOfArguments(); 
   boolean hasNoArguments();
-} // MultiArgument
+}

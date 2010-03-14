@@ -133,7 +133,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       	arguments.get(0).setBuiltInResult(createIndividualArgument(individual.getURI()));
         result = true;
       } else {
-        MultiArgument multiArgument = createMultiArgument(getVariableName(0, arguments));
+        MultiArgument multiArgument = createMultiArgument();
         for (OWLIndividual xmlElement : owlElements) 
           multiArgument.addArgument(createIndividualArgument(xmlElement.getURI()));
         result = !multiArgument.hasNoArguments();
@@ -141,7 +141,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       } // if
     } // if
     return result;
-  } // element
+  }
 
   public boolean subElement(List<BuiltInArgument> arguments) throws BuiltInException 
   {
@@ -183,7 +183,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       	arguments.get(0).setBuiltInResult(createIndividualArgument(individual.getURI()));
         result = true;
       } else {
-        MultiArgument multiArgument = createMultiArgument(getVariableName(0, arguments));
+        MultiArgument multiArgument = createMultiArgument();
         for (OWLIndividual xmlElement : owlElements) 
           multiArgument.addArgument(createIndividualArgument(xmlElement.getURI()));
         arguments.get(0).setBuiltInResult(multiArgument);
@@ -191,8 +191,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       } // if
     } // if
     return result;
-  } // element
-
+  } 
 
   public boolean attributeValue(List<BuiltInArgument> arguments) throws BuiltInException 
   {
@@ -212,7 +211,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       } // if
     } // if
     return result;
-  } // attributeValue
+  } 
 
   private Document getArgumentAsADocument(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException
   {

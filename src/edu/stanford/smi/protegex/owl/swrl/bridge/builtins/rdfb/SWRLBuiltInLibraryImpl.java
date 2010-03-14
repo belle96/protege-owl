@@ -48,7 +48,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     language = hasLanguage ? getArgumentAsAString(2, arguments) : "";
     
     if (isUnboundArgument) {
-    	MultiArgument multiArgument = createMultiArgument(getVariableName(1, arguments));
+    	MultiArgument multiArgument = createMultiArgument();
     	for (String label : SWRLOWLUtil.getRDFSLabels(getInvokingBridge().getOWLModel(), resourceName, language))
     		multiArgument.addArgument(createDataValueArgument(label));
     	arguments.get(1).setBuiltInResult(multiArgument);
@@ -77,7 +77,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     resourceName = getArgumentAsAURI(0, arguments);
 
     if (isUnboundArgument) {
-     	MultiArgument multiArgument = createMultiArgument(getVariableName(1, arguments));
+     	MultiArgument multiArgument = createMultiArgument();
     	for (String language : SWRLOWLUtil.getRDFSLabelLanguages(getInvokingBridge().getOWLModel(), resourceName))
     		multiArgument.addArgument(createDataValueArgument(language));
     	arguments.get(1).setBuiltInResult(multiArgument);

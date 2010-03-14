@@ -891,10 +891,10 @@ public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
 	  } else throw new BuiltInException("argument " + argument + " of unknown type " + argument.getClass());
 	
 	  return result;
-	} // getArgumentAsAPropertyValue
+	}
 	
 	/**
-	 * Create a string that represents a unique invocation pattern for a built-in for a bridge/rule/built-in/arguments combination.  
+	 * Create a string that represents a key of a unique invocation pattern for a built-in for a bridge/rule/built-in/arguments combination.  
 	 */
 	public String createInvocationPattern(SWRLBuiltInBridge invokingBridge, String invokingRuleName, int invokingBuiltInIndex,
 	                                       boolean isInConsequent, List<BuiltInArgument> arguments) throws BuiltInException
@@ -912,7 +912,7 @@ public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
 	  }
 	
 	  return result;
-	} // createInvocationPattern
+	}
 	
 	public void checkForUnboundArguments(String ruleName, String builtInName, List<BuiltInArgument> arguments) throws BuiltInException
 	{
@@ -941,7 +941,7 @@ public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
 	  checkArgumentNumber(resultArgumentNumber, arguments);
 	
 	  if (isUnboundArgument(resultArgumentNumber, arguments)) {
-	    MultiArgument multiArgument = argumentFactory.createMultiArgument(getVariableName(resultArgumentNumber, arguments));
+	    MultiArgument multiArgument = argumentFactory.createMultiArgument();
 	    for (BuiltInArgument argument : resultArguments) multiArgument.addArgument(argument);
 	    arguments.get(resultArgumentNumber).setBuiltInResult(multiArgument);
 	    result = !multiArgument.hasNoArguments();
@@ -1045,7 +1045,7 @@ public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
 	public DataValueArgument createDataValueArgument(XSDType xsd) { return argumentFactory.createDataValueArgument(xsd); }
 	public DataValueArgument createDataValueArgument(Object o) throws DataValueConversionException { return argumentFactory.createDataValueArgument(o); }
 	
-	public MultiArgument createMultiArgument(String variableName) { return argumentFactory.createMultiArgument(variableName); }
-	public MultiArgument createMultiArgument(String variableName, List<BuiltInArgument> arguments) { return argumentFactory.createMultiArgument(variableName, arguments); }
+	public MultiArgument createMultiArgument() { return argumentFactory.createMultiArgument(); }
+	public MultiArgument createMultiArgument(List<BuiltInArgument> arguments) { return argumentFactory.createMultiArgument(arguments); }
 
 }

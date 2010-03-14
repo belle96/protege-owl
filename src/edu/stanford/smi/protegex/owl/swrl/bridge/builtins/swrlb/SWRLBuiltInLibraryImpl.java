@@ -621,7 +621,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
     tokenizer = new StringTokenizer(inputString.trim(), delimeters);
     
-    MultiArgument multiArgument = createMultiArgument(getVariableName(0, arguments));
+    MultiArgument multiArgument = createMultiArgument();
     while (tokenizer.hasMoreTokens()) {
       String token = tokenizer.nextToken();
       multiArgument.addArgument(createDataValueArgument(token));
@@ -631,7 +631,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     result = !multiArgument.hasNoArguments();
 
     return result;
-  } // tokenize
+  } 
 
   // Built-ins for date, time and duration.
 

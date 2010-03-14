@@ -82,7 +82,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     
     //if (!individuals.isEmpty()) getInvokingBridge().injectOWLIndividuals(individuals);
     if (isUnboundIndividualArgument) {
-      MultiArgument multiArgument = createMultiArgument(getVariableName(1, arguments));
+      MultiArgument multiArgument = createMultiArgument();
       for (OWLIndividual individual : individuals) {
       	IndividualArgument argument = createIndividualArgument(individual.getURI());
       	multiArgument.addArgument(argument);

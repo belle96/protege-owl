@@ -40,6 +40,6 @@ public class ArgumentFactoryImpl extends ArgumentFactory
   public DataValueArgument createDataValueArgument(Object o) throws DataValueConversionException { return new DataValueArgumentImpl(new DataValueImpl(o)); }
 
   public VariableBuiltInArgument createVariableBuiltInArgument(String variableName) { return new VariableBuiltInArgumentImpl(variableName); }
-  public MultiArgument createMultiArgument(String variableName) { return new MultiArgumentImpl(variableName); }
-  public MultiArgument createMultiArgument(String variableName, List<BuiltInArgument> arguments) { return new MultiArgumentImpl(variableName, arguments); }
-} // ArgumentFactory
+  public MultiArgument createMultiArgument() { return new MultiArgumentImpl(); }
+  public MultiArgument createMultiArgument(List<BuiltInArgument> arguments) { return new MultiArgumentImpl(arguments); }
+}

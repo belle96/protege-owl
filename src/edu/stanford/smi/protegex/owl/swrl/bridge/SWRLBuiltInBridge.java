@@ -53,5 +53,5 @@ public interface SWRLBuiltInBridge
 
   OWLDataFactory getOWLDataFactory();
   OWLDataValueFactory getOWLDataValueFactory();
-  OWLModel getOWLModel(); // TODO: Protege-OWL dependency - remove
-} // SWRLBuiltInBridge
+  OWLModel getOWLModel(); // TODO: Protege-OWL dependency - remove. Currently only needed by abox, rdfb, swrlxml and tbox built-in libraries.
+} 
