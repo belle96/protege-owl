@@ -2,6 +2,7 @@
 package edu.stanford.smi.protegex.owl.swrl.bridge;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.TargetSWRLRuleEngineException;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLAxiom;
 
 import java.util.List;
 

@@ -71,14 +71,14 @@ import java.util.Set;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.MultiArgument;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataFactory;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLProperty;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLSomeValuesFrom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.builtins.AbstractSWRLBuiltInLibrary;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInNotImplementedException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLConversionFactoryException;
 import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLOWLUtilException;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDataFactory;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLProperty;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLSomeValuesFrom;
 import edu.stanford.smi.protegex.owl.swrl.util.SWRLOWLUtil;
 
 /**

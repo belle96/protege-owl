@@ -3,6 +3,11 @@ package edu.stanford.smi.protegex.owl.swrl.bridge;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLBuiltInBridgeException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLRuleEngineBridgeException;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLAxiom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClass;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDataFactory;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLIndividual;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLPropertyAssertionAxiom;
 
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 

@@ -4,9 +4,9 @@ import java.util.Set;
 
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
 import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataFactory;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRule;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLFactoryException;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDataFactory;
 
 public class SWRLRuleGroupTreeTableModel extends DefaultTreeTableModel 
 {

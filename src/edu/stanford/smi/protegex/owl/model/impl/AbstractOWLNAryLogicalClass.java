@@ -7,7 +7,7 @@ import edu.stanford.smi.protege.util.LocalizeUtils;
 import edu.stanford.smi.protege.util.Log;
 import edu.stanford.smi.protege.util.ProtegeJob;
 import edu.stanford.smi.protegex.owl.model.*;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLNaryClassAxiom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLNaryClassAxiom;
 
 import java.util.*;
 import java.util.logging.Level;

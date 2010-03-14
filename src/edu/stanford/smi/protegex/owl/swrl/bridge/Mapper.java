@@ -4,6 +4,11 @@ package edu.stanford.smi.protegex.owl.swrl.bridge;
 import java.util.Set;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.MapperException;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClass;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDataPropertyAssertionAxiom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLIndividual;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLObjectPropertyAssertionAxiom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLProperty;
 
 public interface Mapper
 {

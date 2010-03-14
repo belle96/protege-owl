@@ -13,15 +13,15 @@ import org.jdom.Text;
 import org.jdom.filter.ContentFilter;
 import org.jdom.filter.Filter;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataFactory;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValueFactory;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLIndividual;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLProperty;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLBuiltInBridge;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLFactoryException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLBuiltInBridgeException;
-import edu.stanford.smi.protegex.owl.swrl.bridge.impl.OWLDataFactoryImpl;
 import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLOWLUtilException;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDataFactory;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLIndividual;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLProperty;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.impl.OWLDataFactoryImpl;
 import edu.stanford.smi.protegex.owl.swrl.util.SWRLOWLUtil;
 
 public class XMLBridgeMapper

@@ -15,12 +15,12 @@ import org.jdom.xpath.XPath;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.MultiArgument;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLClass;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLIndividual;
 import edu.stanford.smi.protegex.owl.swrl.bridge.builtins.AbstractSWRLBuiltInLibrary;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInLibraryException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.InvalidBuiltInArgumentException;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClass;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLIndividual;
 
 public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary 
 {

@@ -2,6 +2,7 @@
 package edu.stanford.smi.protegex.owl.swrl.bridge;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.DataValueConversionException;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLPropertyValue;
 
 /**
  * Convenience wrapper around OWLAPI classes OWLLiteral and OWLDataType

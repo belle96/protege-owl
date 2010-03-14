@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLClass;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLIndividual;
 import edu.stanford.smi.protegex.owl.swrl.bridge.builtins.AbstractSWRLBuiltInLibrary;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLRuleEngineBridgeException;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClass;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLIndividual;
 
 /**
  * Implementations library for SWRL Extensions built-in methods. See <a

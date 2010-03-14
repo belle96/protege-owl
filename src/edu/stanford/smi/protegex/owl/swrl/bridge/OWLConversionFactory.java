@@ -6,6 +6,14 @@ import java.util.Set;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.DataValueConversionException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLConversionFactoryException;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLAxiom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClass;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDataProperty;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDifferentIndividualsAxiom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLIndividual;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLObjectProperty;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLPropertyAssertionAxiom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLSameIndividualAxiom;
 import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParseException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 

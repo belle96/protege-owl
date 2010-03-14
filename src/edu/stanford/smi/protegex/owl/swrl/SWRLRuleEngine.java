@@ -1,11 +1,11 @@
 
 package edu.stanford.smi.protegex.owl.swrl;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLAxiom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRule;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLClass;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLIndividual;
 import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLRuleEngineException;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLAxiom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClass;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLIndividual;
 
 import java.util.Set;
 

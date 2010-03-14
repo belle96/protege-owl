@@ -2,8 +2,8 @@
 package edu.stanford.smi.protegex.owl.swrl.ddm.impl;
 
 import edu.stanford.smi.protegex.owl.swrl.ddm.*;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLProperty;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLProperty;
 
 public class OWLObjectPropertyMapImpl extends OWLPropertyMapImpl implements OWLObjectPropertyMap
 {

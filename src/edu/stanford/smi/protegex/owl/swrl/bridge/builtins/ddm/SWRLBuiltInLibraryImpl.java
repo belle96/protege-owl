@@ -10,18 +10,18 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.IndividualArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.Mapper;
 import edu.stanford.smi.protegex.owl.swrl.bridge.MultiArgument;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLAxiom;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLClass;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValue;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLIndividual;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLObjectPropertyAssertionAxiom;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLProperty;
 import edu.stanford.smi.protegex.owl.swrl.bridge.builtins.AbstractSWRLBuiltInLibrary;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.ddm.DDMFactory;
 import edu.stanford.smi.protegex.owl.swrl.ddm.Database;
 import edu.stanford.smi.protegex.owl.swrl.ddm.DatabaseConnection;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLAxiom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClass;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDataPropertyAssertionAxiom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLIndividual;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLObjectPropertyAssertionAxiom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLProperty;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
 
 /**
