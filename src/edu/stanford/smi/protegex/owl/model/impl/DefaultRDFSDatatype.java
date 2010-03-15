@@ -56,20 +56,6 @@ public class DefaultRDFSDatatype extends DefaultRDFIndividual implements RDFSDat
         }
     }
 
-//    private RDFSDatatype getBaseDatatypeXSD() {
-//        XSSimpleType simpleType = getXSSimpleType();
-//        if (simpleType != null) {
-//            XSTypeDefinition baseType = simpleType.getBaseType();
-//            if (baseType != null) {
-//                String name = baseType.getName();
-//                String namespace = baseType.getNamespace();
-//                String uri = namespace + "#" + name;
-//                return getOWLModel().getRDFSDatatypeByURI(uri);
-//            }
-//        }
-//        return null;
-//    }
-
 
     public String getBrowserText() {
         if (isAnonymous()) {
@@ -146,45 +132,6 @@ public class DefaultRDFSDatatype extends DefaultRDFIndividual implements RDFSDat
                 literal = "0";
             }
             return getOWLModel().createRDFSLiteral(literal, this);
-        }
-    }
-
-//    private Number getFacetValue(String facetName) {
-//        XSSimpleType simpleType = getXSSimpleType();
-//        if (simpleType != null) {
-//            XSObjectList list = simpleType.getFacets();
-//            int length = list.getLength();
-//            short kind = getFacetKind(facetName);
-//            for (int i = 0; i < length; i++) {
-//                XSObject object = list.item(i);
-//                if (object instanceof XSFacet) {
-//                    XSFacet facet = (XSFacet) object;
-//                    if (kind == facet.getFacetKind()) {
-//                        String value = facet.getLexicalFacetValue();
-//                        return Integer.valueOf(value);
-//                    }
-//                }
-//            }
-//        }
-//        return null;
-//    }
-
-
-    private short getFacetKind(String facetName) {
-        if (facetName.equals(XSDNames.Facet.MAX_EXCLUSIVE)) {
-            return XSSimpleTypeDefinition.FACET_MAXEXCLUSIVE;
-        }
-        else if (facetName.equals(XSDNames.Facet.MAX_INCLUSIVE)) {
-            return XSSimpleTypeDefinition.FACET_MAXINCLUSIVE;
-        }
-        else if (facetName.equals(XSDNames.Facet.MIN_EXCLUSIVE)) {
-            return XSSimpleTypeDefinition.FACET_MINEXCLUSIVE;
-        }
-        else if (facetName.equals(XSDNames.Facet.MIN_INCLUSIVE)) {
-            return XSSimpleTypeDefinition.FACET_MININCLUSIVE;
-        }
-        else {
-            return -1;
         }
     }
 
