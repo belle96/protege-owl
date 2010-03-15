@@ -3,7 +3,6 @@ package edu.stanford.smi.protegex.owl.swrl.bridge;
 
 import java.util.List;
 
-import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.SWRLRuleEngine;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLRuleEngineBridgeException;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLAxiom;
@@ -18,12 +17,20 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngine;
  */
 public interface SWRLRuleEngineBridge extends SWRLRuleEngine, SQWRLQueryEngine
 {
+  /**
+   * A bridge must be supplied with a target rule engine implementation when it is created.
+   */
 	void setTargetRuleEngine(TargetSWRLRuleEngine ruleEngine);
 	
-  // The infer method can be used by a target rule engines to assert axioms that they infer into the bridge.
+  /**
+   * The infer method can be used by a target rule engines to assert axioms that they infer into the bridge.
+   */
   void inferOWLAxiom(OWLAxiom axiom) throws SWRLRuleEngineBridgeException;
   
-  // Built-in invocation and argument binding - called by target rule engine
+  /**
+   * This method can be used by a target rule engines to invoke built-ins. If the invoked built-in generates an argument binding, the bridge will call the 
+   * defineBuiltInArgumentBinding method in the target rule engine for each unique binding pattern.
+   */
   boolean invokeSWRLBuiltIn(String ruleName, String builtInName, int builtInIndex, boolean isInConsequent, List<BuiltInArgument> arguments) 
     throws SWRLRuleEngineBridgeException;
 
@@ -37,6 +44,4 @@ public interface SWRLRuleEngineBridge extends SWRLRuleEngine, SQWRLQueryEngine
   
   String uri2PrefixedName(String uri);
   String name2URI(String prefixedName);
-  
-  OWLModel getOWLModel(); // TODO: P3 dependency - remove
 }
