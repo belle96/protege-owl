@@ -8,7 +8,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLRuleEngineBridge
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 
 /**
- ** Factory for creating SWRL rule engines
+ * Factory for creating SWRL rule engines
  */
 public class SWRLRuleEngineFactory
 {
@@ -23,7 +23,7 @@ public class SWRLRuleEngineFactory
     } // try
     
     return ruleEngine;
-  } // create
+  } 
 
   public static SWRLRuleEngine create(String ruleEngineName, OWLModel owlModel) throws SWRLRuleEngineException
   {
@@ -36,6 +36,5 @@ public class SWRLRuleEngineFactory
     } // try
     
     return ruleEngine;
-  } // create
-
-} // SWRLRuleEngineFactory
+  }
+}

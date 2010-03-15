@@ -3,11 +3,11 @@
 // TODO: A bit sloppy. GUI code should be refactored to ui subdirectory.
 
 /**
- ** This class provides mechanisms for SWRLTab plugins to register themselves and to get screen real estate under the SWRL editor in the
- ** SWRL tab. <p>
- **
- ** Documentation on using this class can be found <a
- ** href="http://protege.stanford.edu/download/prerelease_javadoc_owl/edu/stanford/smi/protegex/owl/swrl/bridge/BridgePluginManager.html">here</a>.
+ * This class provides mechanisms for SWRLTab plugins to register themselves and to get screen real estate under the SWRL editor in the
+ * SWRL tab. <p>
+ *
+ * Documentation on using this class can be found <a
+ * href="http://protege.stanford.edu/download/prerelease_javadoc_owl/edu/stanford/smi/protegex/owl/swrl/bridge/BridgePluginManager.html">here</a>.
  */
 package edu.stanford.smi.protegex.owl.swrl.bridge;
 
@@ -33,7 +33,7 @@ import edu.stanford.smi.protegex.owl.swrl.ui.tab.SWRLTab;
 
 public class BridgePluginManager
 {
-    private static transient final Logger log = Log.getLogger(BridgePluginManager.class);
+  private static transient final Logger log = Log.getLogger(BridgePluginManager.class);
 
   private static HashMap<String, PluginRegistration> registeredPlugins = new HashMap<String, PluginRegistration>();
   private static String visiblePluginName = "";
@@ -48,17 +48,17 @@ public class BridgePluginManager
       project.removeProjectListener(projectListener);
       visiblePluginName = "";
       selectedRuleName = "";
-    } // projectClosed
+    } 
   };
   
   static {
 
     try { // TODO:  Hack until we can do a proper class load with the manifest
       Class.forName("jess.Rete");
-      Class.forName("edu.stanford.smi.protegex.owl.swrl.bridge.jess.SWRLJessBridge");
+      Class.forName("edu.stanford.smi.protegex.owl.swrl.bridge.jess.JessSWRLRuleEngine");
       Class.forName("edu.stanford.smi.protegex.owl.swrl.bridge.jess.ui.SWRLJessTab");
     } catch (ClassNotFoundException e) {
-      log.info("SWRLJessBridge load failed: could not find jess.Rete - or an error occured on initialization");
+      log.info("Jess rule engine load failed: could not find jess.Rete - or an error occured on initialization");
       
     } // try
 
@@ -87,7 +87,7 @@ public class BridgePluginManager
     if (registeredPlugins.containsKey(pluginName)) registeredPlugins.remove(pluginName);
     registeredPlugins.put(pluginName, new PluginRegistration(pluginName, toolTip, icon, guiAdapter));
     log.info("Plugin '" + pluginName + "' registered with the SWRLTab plugin manager.");
-  } // registerPlugin
+  }
 
   public static void unregisterPlugin(String pluginName)
   {
@@ -95,7 +95,7 @@ public class BridgePluginManager
       if (isVisible(pluginName)) hidePlugin(pluginName, true);
       registeredPlugins.remove(pluginName);
     } // if
-  } // unregisterEngine
+  }
 
   public static void showPlugin(String pluginName, SWRLTab swrlTab, OWLModel owlModel)
   {
@@ -114,12 +114,12 @@ public class BridgePluginManager
             swrlTab.add(pluginGUI);
             swrlTab.setVisible(true);
             visiblePluginName = pluginName;
-          } else  makeTextPanel(swrlTab, "Unable to activate the " + pluginName + " plugin.");
+          } else makeTextPanel(swrlTab, "Unable to activate the " + pluginName + " plugin.");
         } // if
       } // if
     } // if
     owlModel.getProject().addProjectListener(projectListener);
-  } // showPlugin
+  }
 
   private static boolean hidePlugin(String pluginName, boolean force)
   {
@@ -143,7 +143,7 @@ public class BridgePluginManager
       } // if
     } // if
     return true;
-  } // hidePlugin
+  }
   
   public static class PluginRegistration
   {
@@ -160,7 +160,7 @@ public class BridgePluginManager
       this.guiAdapter = guiAdapter;
       this.icon = icon;
       owlModel = null; // An OWL model is supplied when a GUI associated with the plugin is activated.
-    } // PluginRegistration
+    }
 
     public void setOWLModel(OWLModel owlModel) { this.owlModel = owlModel; }
 
@@ -171,7 +171,7 @@ public class BridgePluginManager
     public OWLModel getOWLModel() { return owlModel; } 
     public boolean hasOWLModel() { return owlModel != null; }
       
-  } // PluginRegistration
+  } 
 
   private static void makeTextPanel(SWRLTab swrlTab, String text) 
   { 
@@ -182,6 +182,5 @@ public class BridgePluginManager
     panel.add(filler); 
 
     swrlTab.add(panel);
-  }  // makeTextPanel
-    
-} // BridgePluginManager
+  }   
+}

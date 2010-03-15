@@ -3,6 +3,7 @@ package edu.stanford.smi.protegex.owl.swrl.bridge;
 
 import java.util.List;
 
+import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.SWRLRuleEngine;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLRuleEngineBridgeException;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLAxiom;
@@ -17,6 +18,8 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngine;
  */
 public interface SWRLRuleEngineBridge extends SWRLRuleEngine, SQWRLQueryEngine
 {
+	void setTargetRuleEngine(TargetSWRLRuleEngine ruleEngine);
+	
   // The infer method can be used by a target rule engines to assert axioms that they infer into the bridge.
   void inferOWLAxiom(OWLAxiom axiom) throws SWRLRuleEngineBridgeException;
   
@@ -34,4 +37,6 @@ public interface SWRLRuleEngineBridge extends SWRLRuleEngine, SQWRLQueryEngine
   
   String uri2PrefixedName(String uri);
   String name2URI(String prefixedName);
+  
+  OWLModel getOWLModel(); // TODO: P3 dependency - remove
 }

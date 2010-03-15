@@ -8,7 +8,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLRuleEngineBridge
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 
 /**
- ** Factory for creating a SQWRL query engine
+ * Factory for creating a SQWRL query engine
  */
 public class SQWRLQueryEngineFactory
 {

@@ -1,6 +1,10 @@
 
 package edu.stanford.smi.protegex.owl.swrl.bridge;
 
+import java.util.List;
+import java.util.Set;
+
+import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLBuiltInBridgeException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLRuleEngineBridgeException;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLAxiom;
@@ -8,11 +12,6 @@ import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClass;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDataFactory;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLIndividual;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLPropertyAssertionAxiom;
-
-import edu.stanford.smi.protegex.owl.model.OWLModel;
-
-import java.util.Set;
-import java.util.List;
 
 /**
  * The SWRL Built-in Bridge defines the methods seen by built-in implementations at run time. Ideally, built-in implementations should only
