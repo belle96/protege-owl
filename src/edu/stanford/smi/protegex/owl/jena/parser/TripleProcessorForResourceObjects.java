@@ -392,7 +392,7 @@ class TripleProcessorForResourceObjects extends AbstractStatefulTripleProcessor 
 				FrameCreatorUtility.createSubclassOf((Cls)subjFrame, axiom, tripleStore);
 				FrameCreatorUtility.createSubclassOf(axiom, (Cls)subjFrame, tripleStore);
 				subjFrame = axiom;
-				globalParserCache.getGciAxioms().add(axiom); // need to name these later
+				globalParserCache.addGciAxiom(axiom); // need to name these later
 			}
 		}
 

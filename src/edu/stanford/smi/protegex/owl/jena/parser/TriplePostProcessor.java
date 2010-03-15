@@ -470,7 +470,7 @@ class TriplePostProcessor extends AbstractStatefulTripleProcessor {
 
     //this method will be refactored
     private void processGeneralizedConceptInclusions() {
-        Collection<RDFSClass> gciAxioms = globalParserCache.getGciAxioms();
+        Collection<RDFSClass> gciAxioms = new ArrayList<RDFSClass>(globalParserCache.getGciAxioms());
 
         log.info("Postprocess: Generalized Concept Inclusion (" + gciAxioms.size() + " axioms) ... ");
         long time0 = System.currentTimeMillis();
@@ -487,10 +487,10 @@ class TriplePostProcessor extends AbstractStatefulTripleProcessor {
         if (namespace != null) {
             for (RDFSClass gci : gciAxioms) {
                 try {
+                    globalParserCache.removeGciAxiom(gci);
                     while (getFrame(axiomPrefix + counter) != null) {
                         counter++;
                     }
-                    gci = owlModel.getOWLNamedClass(gci.getName());
                     gci.rename(axiomPrefix + counter);
                 } catch (Exception e) {
                     Log.getLogger().log(Level.WARNING, "Error at post-processing GCI: " + gci, e);

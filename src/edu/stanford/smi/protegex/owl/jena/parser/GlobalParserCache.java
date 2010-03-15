@@ -2,6 +2,7 @@ package edu.stanford.smi.protegex.owl.jena.parser;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -137,7 +138,15 @@ public class GlobalParserCache implements Disposable {
 	}
 
 	public Collection<RDFSClass> getGciAxioms() {
-		return gciAxioms;
+		return Collections.unmodifiableCollection(gciAxioms);
+	}
+	
+	public void addGciAxiom(RDFSClass axiom) {
+	    gciAxioms.add(axiom);
+	}
+	
+	public void removeGciAxiom(RDFSClass axiom) {
+	    gciAxioms.remove(axiom);
 	}
 
 	public Map<String, Cls> getObjectToNamedLogicalClassSurrogate() {
