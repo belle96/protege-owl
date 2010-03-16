@@ -89,7 +89,7 @@ public class SWRLSymbolPanel extends SymbolPanel
     insertCloseBracketsButton.setEnabled(isEnabled);
     insertSameAsButton.setEnabled(isEnabled);
     insertDifferentFromButton.setEnabled(isEnabled);
-    insertBuiltInButton.setEnabled(false);
+    insertBuiltInButton.setEnabled(isEnabled);
   }
 
   private Collection<String> getUsedVariableNames() {
