@@ -158,13 +158,13 @@ public class SWRLRuleImpl implements SWRLRule
   // Should be called after processBuiltInArguments and processSQWRLArguments.
   private void processBuiltInArgumentDependencies() throws BuiltInException
   {
-  	Map<String, Set<Set<String>>> paths = new HashMap<String, Set<Set<String>>>();
+  	Map<String, Set<Set<String>>> pathMap = new HashMap<String, Set<Set<String>>>();
   	Set<String> rootVariableNames = new HashSet<String>();
   	
     for (Atom atom : getBodyAtoms()) {
     	Set<String> thisAtomReferencedVariableNames = new HashSet<String>(atom.getReferencedVariableNames());
 
-    	buildPaths(atom, rootVariableNames, paths);
+    	buildPaths(atom, rootVariableNames, pathMap);
     	
     	if (atom instanceof BuiltInAtom) {
     		BuiltInAtom builtInAtom = (BuiltInAtom)atom;
@@ -175,8 +175,8 @@ public class SWRLRuleImpl implements SWRLRule
     		if (builtInAtom.hasReferencedVariables()) {
         	Set<String> dependsOnVariableNames = new HashSet<String>();
         	
-        	for (String rootVariableName : paths.keySet()) {
-        		for (Set<String> path : paths.get(rootVariableName)) {
+        	for (String rootVariableName : pathMap.keySet()) {
+        		for (Set<String> path : pathMap.get(rootVariableName)) {
         			if (!Collections.disjoint(path, thisAtomReferencedVariableNames)) { 
         			  dependsOnVariableNames.addAll(path);
         			  dependsOnVariableNames.add(rootVariableName);
@@ -208,18 +208,16 @@ public class SWRLRuleImpl implements SWRLRule
    * Incrementally build variable paths up to and including the current atom. 
    * 
    * Note: Sets of sets in Java require care because of hash code issues. The enclosed set should not be modified or the outer set may 
-   * return inconsistent results. 
-   * 
+   * return inconsistent results.  
    */
-  private void	buildPaths(Atom atom, Set<String> rootVariableNames, Map<String, Set<Set<String>>> pathMap)
+  private void buildPaths(Atom atom, Set<String> rootVariableNames, Map<String, Set<Set<String>>> pathMap)
   {
   	Set<String> currentAtomReferencedVariableNames = atom.getReferencedVariableNames();
 		Set<String> matchingRootVariableNames;
 	
-		if (atom.getNumberOfArguments() == 1 && !currentAtomReferencedVariableNames.isEmpty()) { // Single argument atom with a variable
+		if (currentAtomReferencedVariableNames.size() == 1) { // Make variable a root if we have not yet encountered it 
 			String variableName = currentAtomReferencedVariableNames.iterator().next();
 			if (getMatchingPaths(pathMap, variableName).isEmpty() && !rootVariableNames.contains(variableName)) {
-			  // Make it a root if we have not yet encountered it
 				Set<Set<String>> paths = new HashSet<Set<String>>();
 				pathMap.put(variableName, paths);
 				rootVariableNames.add(variableName); 
@@ -228,50 +226,54 @@ public class SWRLRuleImpl implements SWRLRule
 			Set<String> currentKnownAtomRootVariableNames = new HashSet<String>(currentAtomReferencedVariableNames);
 			currentKnownAtomRootVariableNames.retainAll(rootVariableNames);
 			
-			if (!currentKnownAtomRootVariableNames.isEmpty()) { // Atom variables reference already known root(s)
+			if (!currentKnownAtomRootVariableNames.isEmpty()) { // At least one of atom's variables reference already known root(s)
 				for (String rootVariableName : currentKnownAtomRootVariableNames) {
 					Set<String> dependentVariables = new HashSet<String>(currentAtomReferencedVariableNames);
 					dependentVariables.remove(rootVariableName);
 					
 	  			matchingRootVariableNames = getMatchingRootVariableNames(pathMap, dependentVariables);
-	  			if (!matchingRootVariableNames.isEmpty()) { // Found existing paths that use these variables - add them
+	  			if (!matchingRootVariableNames.isEmpty()) { // Found existing path(s) that use these variables - add them to existing path(s)
 	  				for (String matchingRootVariableName : matchingRootVariableNames) {
 	  					Set<Set<String>> paths = pathMap.get(matchingRootVariableName);
 	  					Set<Set<String>> matchedPaths = new HashSet<Set<String>>();
 	  					for (Set<String> path : paths)
 	  					  if (!Collections.disjoint(path, dependentVariables)) matchedPaths.add(path);
 	  				  for (Set<String> matchedPath : matchedPaths) {
-	  				  	matchedPaths.remove(matchedPath);
-	  				  	matchedPath.addAll(dependentVariables);
-	  				  	matchedPaths.add(Collections.unmodifiableSet(matchedPath));
+	  				  	Set<String> newPath = new HashSet<String>(matchedPath);   				  	
+	  				  	newPath.addAll(dependentVariables);
+	  				  	paths.remove(matchedPath); // Remove the original matched path for this root's path
+	  				  	paths.add(Collections.unmodifiableSet(newPath)); // Add the updated path
 	  				  } // for
 	  				} // for
-	  			} else { // Did not find an existing path with this root that use these variables - add dependent variables as new path 
+	  			} else { // Did not find an existing path for this root that uses these variables - add dependent variables as new path 
 	  				Set<Set<String>> paths = pathMap.get(rootVariableName);
 	  				paths.add(Collections.unmodifiableSet(dependentVariables));
 	  			} //if
 				} // for
-			} else { // No known roots referenced by the atom variables
+			} else { // No known roots referenced by any of the atom's variables
 				matchingRootVariableNames = getMatchingRootVariableNames(pathMap, currentAtomReferencedVariableNames);
-				if (!matchingRootVariableNames.isEmpty()) { // Found existing paths that use these variables - add them
+				if (!matchingRootVariableNames.isEmpty()) { 
+					// Found existing paths that use the atom's variables - add all the variables (none of which is a root) to each path
   				for (String matchingRootVariableName : matchingRootVariableNames) {
   					Set<Set<String>> paths = pathMap.get(matchingRootVariableName);
   					Set<Set<String>> matchedPaths = new HashSet<Set<String>>();
-  					for (Set<String> path : paths)
+
+  					for (Set<String> path : paths) 
   					  if (!Collections.disjoint(path, currentAtomReferencedVariableNames)) matchedPaths.add(path);
-  				  for (Set<String> matchedPath : matchedPaths) {
-  				  	Set<String> newPath = new HashSet<String>(matchedPath);
-  				  	newPath.addAll(currentAtomReferencedVariableNames);
-  				  	matchedPaths.remove(matchedPath);
-  				  	matchedPaths.add(Collections.unmodifiableSet(newPath));
+  				  for (Set<String> matchedPath : matchedPaths) {  // Add the new variables to the matched path and add it to this root's path
+  				  	Set<String> newPath = new HashSet<String>(matchedPath);   				  	
+  				  	newPath.addAll(currentAtomReferencedVariableNames); // Add all the non-root variable names to this path
+  				  	paths.remove(matchedPath); // Remove the original matched path
+  				  	paths.add(Collections.unmodifiableSet(newPath)); // Add the updated path
   				  } // for
   				} // for
-				} else { // No existing paths match - everything becomes a root and depends on every other root variable
+				} else { // No existing paths have variables from this atom - every variable becomes a root and depends on every other root variable
 					for (String rootVariableName : currentAtomReferencedVariableNames) {
 						Set<Set<String>> paths = new HashSet<Set<String>>();
 						Set<String> dependentVariables = new HashSet<String>(currentAtomReferencedVariableNames);
-						dependentVariables.remove(rootVariableName);
+						dependentVariables.remove(rootVariableName); // Remove the root from its own dependent variables
 						paths.add(Collections.unmodifiableSet(dependentVariables));
+						pathMap.put(rootVariableName, paths);
 						rootVariableNames.add(rootVariableName);
 					} // For
 				} // if
