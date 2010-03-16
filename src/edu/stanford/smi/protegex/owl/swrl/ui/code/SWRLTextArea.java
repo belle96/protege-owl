@@ -18,15 +18,24 @@ import edu.stanford.smi.protegex.owl.ui.code.SymbolTextField;
 public class SWRLTextArea extends SymbolTextArea 
 {
   private SWRLParser parser;
+  private SWRLSymbolPanel symbolPanel;
 
-  public SWRLTextArea(OWLModel owlModel, SymbolErrorDisplay errorDisplay) 
+  public SWRLTextArea(OWLModel owlModel, SWRLSymbolPanel errorDisplay) 
   {
     super(owlModel, errorDisplay, new SWRLResourceNameMatcher(), new SWRLSyntaxConverter(owlModel));
+    symbolPanel = errorDisplay;
     parser = new SWRLParser(owlModel);
     setFont(UIManager.getFont("TextArea.font"));
     SWRLTextField.initKeymap(this);
-  } // SWRLTextArea
-
+  }
+  
+  @Override
+  public void setEnabled(boolean isEnabled)
+  {
+  	super.setEnabled(isEnabled);
+  	symbolPanel.setEnabled(isEnabled);
+  }
+  
   protected void checkUniCodeExpression(String uniCodeText) throws Throwable 
   {
     try {
@@ -35,7 +44,7 @@ public class SWRLTextArea extends SymbolTextArea
       // Ignore incomplete rules on input checking. (Unlike SymbolTextField, SymbolTextArea only calls checkUniCodeExpression when it
       // is checking an expression for errors, not when it is determining if an expression can be saved.
     } // try
-  } // checkUniCodeExpression
+  }
 
   public void reformatText() 
   {
@@ -64,7 +73,5 @@ public class SWRLTextArea extends SymbolTextArea
     extendPartialName(prefix, ((Frame) getComboBox().getSelectedItem()).getBrowserText());
     updateErrorDisplay();
     closeComboBox();
-  } // acceptSelectedFrame
-    
-
-} // SWRLTextArea
+  }
+} 

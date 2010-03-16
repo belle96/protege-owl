@@ -37,7 +37,6 @@ public class SWRLTextAreaPanel extends JPanel implements ModalDialogFactory.Clos
 
   public SWRLTextAreaPanel(OWLModel owlModel) { this(owlModel, null); }
 
-
   public SWRLTextAreaPanel(OWLModel anOWLModel, SWRLImp imp) 
   {
     this.owlModel = anOWLModel;
@@ -49,8 +48,8 @@ public class SWRLTextAreaPanel extends JPanel implements ModalDialogFactory.Clos
       };
     if (imp != null && imp.getHead() != null) {
       String text = imp.getBrowserText();
-            textArea.setText(text);
-            textArea.reformatText();
+      textArea.setText(text);
+      textArea.reformatText();
     }	
     symbolPanel.setSymbolEditor(textArea);
   }
@@ -67,10 +66,10 @@ public class SWRLTextAreaPanel extends JPanel implements ModalDialogFactory.Clos
           parser.parse(uniCodeText);
           return true;
         }
-                catch (Exception ex) {
-                  symbolPanel.displayError(ex);
-                  return false;
-                }
+        catch (Exception ex) {
+        	symbolPanel.displayError(ex);
+        	return false;
+        }
       }
     }
     else return true;  
@@ -99,13 +98,13 @@ public class SWRLTextAreaPanel extends JPanel implements ModalDialogFactory.Clos
     InstanceDisplay instanceDisplay = new InstanceDisplay(owlModel.getProject(), false, false);
     instanceDisplay.setInstance(imp);
     
-    showFrame(instanceDisplay);
+    showFrame(instanceDisplay, imp.isEditable());
     
     //TT: what should we return?
     return true;
     }
   
-  private static JFrame showFrame(final InstanceDisplay display) 
+  private static JFrame showFrame(final InstanceDisplay display, boolean isEditable) 
   {
     final JFrame frame = ComponentFactory.createFrame();
     
@@ -160,6 +159,11 @@ public class SWRLTextAreaPanel extends JPanel implements ModalDialogFactory.Clos
     
     
     display.setResizeVertically(true);
+
+    ClsWidget clsWidget = display.getFirstClsWidget();
+    Slot swrlBodySlot = display.getCurrentInstance().getKnowledgeBase().getSlot(SWRLNames.Slot.BODY);   
+    SWRLRuleSlotWidget swrlWidget = (SWRLRuleSlotWidget) clsWidget.getSlotWidget(swrlBodySlot);
+    swrlWidget.getSWRLTextArea().setEnabled(isEditable);
     
     frame.getContentPane().add(display, BorderLayout.CENTER);        
     
@@ -172,5 +176,4 @@ public class SWRLTextAreaPanel extends JPanel implements ModalDialogFactory.Clos
     
     return frame;
   }
-
-} // SWRLTextAreaPanel
+}

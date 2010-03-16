@@ -30,6 +30,6 @@ public class EditRuleAction extends ResourceAction {
 
 
     public boolean isSuitable(Component component, RDFResource resource) {
-        return resource instanceof SWRLImp && resource.isEditable();
+        return resource instanceof SWRLImp;
     }
 }

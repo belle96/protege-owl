@@ -86,7 +86,7 @@ public class SWRLTableModel extends AbstractTableModel implements Disposable, Sy
   {
     if (column == COL_ENABLED) return Boolean.class;
     else return super.getColumnClass(column);
-  } // getColumnClass
+  } 
 
   public String getColumnName(int column) 
   {
@@ -102,15 +102,16 @@ public class SWRLTableModel extends AbstractTableModel implements Disposable, Sy
     else if (columnIndex == COL_NAME) return NamespaceUtil.getPrefixedName(owlModel, getImp(rowIndex).getName());
     else if (columnIndex == COL_ENABLED) return new Boolean(getImp(rowIndex).isEnabled());
     else return null;
-  } // getValueAt
+  } 
   
   public boolean isCellEditable(int rowIndex, int columnIndex) 
   {
-    if (columnIndex == COL_ENABLED || columnIndex == COL_NAME || columnIndex == COL_EXPRESSION) {
+    if (columnIndex == COL_ENABLED) return true;
+    else if (columnIndex == COL_NAME || columnIndex == COL_EXPRESSION) {
       SWRLImp imp = getImp(rowIndex);
       return imp.isEditable();
     } else return false;
-  } // isCellEditable
+  } 
   
   public void setValueAt(Object aValue, int rowIndex, int columnIndex) 
   {

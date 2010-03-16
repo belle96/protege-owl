@@ -46,7 +46,9 @@ public class SWRLSymbolPanel extends SymbolPanel
   private Action differentFromAction;
   private Action impAction;
   private Action insertVariableAction;
-  private JButton insertVariableButton;
+  private JButton insertVariableButton, createVariableButton, insertXMLSchemaButton, insertAndButton, insertImpButton,
+    insertOpenParenthesisButton, insertCloseParenthesisButton, insertOpenBracketsButton, insertCloseBracketsButton,
+    insertSameAsButton, insertDifferentFromButton, insertBuiltInButton;
   private Action openBracketsAction;
   private Action closeBracketsAction;
   private Action openParenthesisAction;
@@ -70,6 +72,24 @@ public class SWRLSymbolPanel extends SymbolPanel
   public Dimension getPreferredSize() {
     Dimension pref = super.getPreferredSize();
     return new Dimension(500, pref.height);
+  }
+  
+  @Override
+  public void setEnabled(boolean isEnabled)
+  {
+  	super.setEnabled(isEnabled);
+  	insertVariableButton.setEnabled(isEnabled); 
+  	createVariableButton.setEnabled(isEnabled); 
+  	insertXMLSchemaButton.setEnabled(isEnabled);
+  	insertAndButton.setEnabled(isEnabled);
+  	insertImpButton.setEnabled(isEnabled);
+    insertOpenParenthesisButton.setEnabled(isEnabled);
+    insertCloseParenthesisButton.setEnabled(isEnabled);
+    insertOpenBracketsButton.setEnabled(isEnabled);
+    insertCloseBracketsButton.setEnabled(isEnabled);
+    insertSameAsButton.setEnabled(isEnabled);
+    insertDifferentFromButton.setEnabled(isEnabled);
+    insertBuiltInButton.setEnabled(false);
   }
 
   private Collection<String> getUsedVariableNames() {
@@ -98,7 +118,7 @@ public class SWRLSymbolPanel extends SymbolPanel
   protected void initMiddleBar(JToolBar toolBar) 
   {
     datatypeAction = new InsertXMLSchemaDatatypeAction();
-    addButton(toolBar, datatypeAction);
+    insertXMLSchemaButton = addButton(toolBar, datatypeAction);
     
     andAction = new AbstractAction("Insert conjunction (" + SWRLParser.AND_CHAR + ")",
                                    SWRLIcons.getInsertAndIcon()) {
@@ -106,7 +126,7 @@ public class SWRLSymbolPanel extends SymbolPanel
           getSymbolEditor().insertText("  " + SWRLParser.AND_CHAR + "  ");
         }
       };
-    addButton(toolBar, andAction);
+    insertAndButton = addButton(toolBar, andAction);
     
     impAction = new AbstractAction("Insert implication (" + SWRLParser.IMP_CHAR + ")",
                                    SWRLIcons.getInsertImpIcon()) {
@@ -114,7 +134,7 @@ public class SWRLSymbolPanel extends SymbolPanel
           getSymbolEditor().insertText("  " + SWRLParser.IMP_CHAR + "  ");
         }
       };
-    addButton(toolBar, impAction);
+    insertImpButton = addButton(toolBar, impAction);
     
     toolBar.addSeparator();
     
@@ -124,7 +144,7 @@ public class SWRLSymbolPanel extends SymbolPanel
           getSymbolEditor().insertText("(", 1);
         }
       };
-    addButton(toolBar, openParenthesisAction);
+    insertOpenParenthesisButton = addButton(toolBar, openParenthesisAction);
     
         closeParenthesisAction = new AbstractAction("Insert close parenthesis: )",
                                                     SWRLIcons.getCloseParenthesis()) {
@@ -132,7 +152,7 @@ public class SWRLSymbolPanel extends SymbolPanel
               getSymbolEditor().insertText(")", 1);
             }
           };
-        addButton(toolBar, closeParenthesisAction);
+        insertCloseParenthesisButton = addButton(toolBar, closeParenthesisAction);
         
         toolBar.addSeparator();
 
@@ -142,7 +162,7 @@ public class SWRLSymbolPanel extends SymbolPanel
               getSymbolEditor().insertText("[", 1);
             }
           };
-        addButton(toolBar, openBracketsAction);
+        insertOpenBracketsButton = addButton(toolBar, openBracketsAction);
         
         closeBracketsAction = new AbstractAction("Insert close brackets: ]",
                                                  SWRLIcons.getCloseBrackets()) {
@@ -150,7 +170,7 @@ public class SWRLSymbolPanel extends SymbolPanel
                 getSymbolEditor().insertText("]", 1);
             }
           };
-        addButton(toolBar, closeBracketsAction);
+          insertCloseBracketsButton = addButton(toolBar, closeBracketsAction);
   }
   
   
@@ -161,14 +181,15 @@ public class SWRLSymbolPanel extends SymbolPanel
     individiualAction.activateComboBox(addButton(toolBar, individiualAction));
     toolBar.addSeparator();
     createVariableAction = new CreateVariableAction();
-    addButton(toolBar, createVariableAction);
+    createVariableButton = addButton(toolBar, createVariableAction);
     insertVariableAction = new InsertVariableAction();
     insertVariableButton = addButton(toolBar, insertVariableAction);
     
     toolBar.addSeparator();
     
     builtinAction = new InsertBuiltinAction();
-    builtinAction.activateComboBox(addButton(toolBar, builtinAction));
+    insertBuiltInButton = addButton(toolBar, builtinAction);
+    builtinAction.activateComboBox(insertBuiltInButton);
     
     differentFromAction = new AbstractAction("Insert differentFrom",
                                              SWRLIcons.getDifferentFromIcon()) {
@@ -176,14 +197,14 @@ public class SWRLSymbolPanel extends SymbolPanel
           getSymbolEditor().insertText("differentFrom(", 14);
         }
       };
-    addButton(toolBar, differentFromAction);
+    insertDifferentFromButton = addButton(toolBar, differentFromAction);
     sameAsAction = new AbstractAction("Insert sameAs",
                                       SWRLIcons.getSameAsIcon()) {
         public void actionPerformed(ActionEvent e) {
           getSymbolEditor().insertText("sameAs(", 7);
         }
       };
-    addButton(toolBar, sameAsAction);
+    insertSameAsButton = addButton(toolBar, sameAsAction);
     
     toolBar.addSeparator();
   }

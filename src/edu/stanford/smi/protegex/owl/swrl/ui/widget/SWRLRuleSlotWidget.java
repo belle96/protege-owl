@@ -180,6 +180,8 @@ public class SWRLRuleSlotWidget extends AbstractSlotWidget {
 		return swrlTextArea.getText();
 	}
 
+	public SWRLTextArea getSWRLTextArea() { return swrlTextArea; }
+
 	@Override
 	public void dispose() {
 		try {
