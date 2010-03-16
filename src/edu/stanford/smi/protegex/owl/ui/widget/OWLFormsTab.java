@@ -3,20 +3,15 @@ package edu.stanford.smi.protegex.owl.ui.widget;
 import java.awt.Component;
 import java.awt.Container;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 
-import edu.stanford.smi.protege.model.Cls;
 import edu.stanford.smi.protege.resource.Icons;
 import edu.stanford.smi.protege.ui.FormsPanel;
 import edu.stanford.smi.protege.util.LabeledComponent;
 import edu.stanford.smi.protege.util.SelectableTree;
 import edu.stanford.smi.protege.widget.FormsTab;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
-import edu.stanford.smi.protegex.owl.model.OWLNamedClass;
 import edu.stanford.smi.protegex.owl.model.RDFResource;
-import edu.stanford.smi.protegex.owl.model.RDFSClass;
 import edu.stanford.smi.protegex.owl.ui.results.HostResourceDisplay;
 import edu.stanford.smi.protegex.owl.ui.search.finder.DefaultClassFind;
 import edu.stanford.smi.protegex.owl.ui.search.finder.Find;
@@ -70,22 +65,4 @@ public class OWLFormsTab extends FormsTab implements HostResourceDisplay {
        return OWLUI.setSelectedNodeInTree(theTree, resource);
     }
 
-    private java.util.List getPathToRoot(RDFSClass cls, LinkedList list) {
-        list.add(0, cls);
-        Cls rootCls = cls.getOWLModel().getOWLThingClass();
-        //@@TODO this is currently only implemented for the asserted superclasses
-        Collection superclasses = cls.getSuperclasses(false);
-        for (Iterator it = superclasses.iterator(); it.hasNext();) {
-            Cls superclass = (Cls) it.next();
-            if (superclass.equals(rootCls)) {
-                list.add(0, superclass);
-                return list;
-            }
-            else if (cls.isVisible() && superclass instanceof OWLNamedClass) {
-                getPathToRoot((OWLNamedClass) superclass, list);
-                break;
-            }
-        }
-        return list;
-    }
 }
