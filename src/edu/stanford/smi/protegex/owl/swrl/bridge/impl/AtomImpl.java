@@ -1,9 +1,7 @@
 
 package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.Atom;
@@ -16,14 +14,14 @@ public abstract class AtomImpl implements Atom
   private Set<String> referencedClassURIs;
   private Set<String> referencedPropertyURIs;
   private Set<String> referencedIndividualURIs;
-  private List<String> referencedVariableNames; // We need to know ordering of variables
+  private Set<String> referencedVariableNames; // We need to know ordering of variables
 
   public AtomImpl() 
   { 
     referencedClassURIs = new HashSet<String>();
     referencedPropertyURIs = new HashSet<String>();
     referencedIndividualURIs = new HashSet<String>();
-    referencedVariableNames = new ArrayList<String>();
+    referencedVariableNames = new HashSet<String>();
   }
 
   public boolean hasReferencedClasses() { return referencedClassURIs.size() != 0; }
@@ -33,7 +31,7 @@ public abstract class AtomImpl implements Atom
   public boolean hasReferencedIndividuals() { return referencedIndividualURIs.size() != 0; }
   public Set<String> getReferencedIndividualURIs() { return referencedIndividualURIs; }
   public boolean hasReferencedVariables() { return referencedVariableNames.size() != 0; }
-  public List<String> getReferencedVariableNames() { return referencedVariableNames; }
+  public Set<String> getReferencedVariableNames() { return referencedVariableNames; }
   
   public void addReferencedClassURI(String classURI) 
   { 

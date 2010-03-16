@@ -16,7 +16,7 @@ import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLPropertyAssertionAxiom;
 /**
  * The SWRL Built-in Bridge defines the methods seen by built-in implementations at run time. Ideally, built-in implementations should only
  * use this interface to operate on the active ontology. However, some specialized libraries (e.g., abox and tbox) require direct access to
- * the active ontology so will use the provided getOWLModel method.
+ * the active ontology so will use the provided getOWLModel method. It will be removed shortly.
  *
  * Detailed documentation for the SWRl rule engine bridge mechanism can be found <a
  * href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLRuleEngineBridgeFAQ">here</a>.

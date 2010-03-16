@@ -1,7 +1,6 @@
 
 package edu.stanford.smi.protegex.owl.swrl.bridge;
 
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -17,5 +16,5 @@ public interface Atom
   Set<String> getReferencedClassURIs();
   Set<String> getReferencedPropertyURIs();
   Set<String> getReferencedIndividualURIs();
-  List<String> getReferencedVariableNames();
+  Set<String> getReferencedVariableNames();
 }

@@ -43,8 +43,10 @@ import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLProperty;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLSameIndividualAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLSubClassAxiom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.PrefixManager;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.impl.OWLConversionFactoryImpl;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.impl.OWLDataFactoryImpl;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.impl.PrefixManagerImpl;
 import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParseException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResult;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.InvalidQueryNameException;
@@ -60,6 +62,7 @@ public class DefaultSWRLRuleEngineBridge implements SWRLRuleEngineBridge, SWRLBu
   protected OWLDataFactory activeOWLFactory, injectedOWLFactory;
   protected OWLDataValueFactory owlDataValueFactory;
   protected OWLConversionFactory conversionFactory;
+  protected PrefixManager prefixManager;
   protected OWLModel owlModel; 
 
   private HashMap<String, SWRLRule> importedSWRLRules; 
@@ -100,9 +103,11 @@ public class DefaultSWRLRuleEngineBridge implements SWRLRuleEngineBridge, SWRLBu
     injectedOWLFactory = new OWLDataFactoryImpl();
     conversionFactory = new OWLConversionFactoryImpl(owlModel, activeOWLFactory);
     owlDataValueFactory = OWLDataValueFactory.create();
+    prefixManager = new PrefixManagerImpl(owlModel);
     //ruleAndQueryProcessor = new RuleAndQueryProcessorImpl();
     initialize();
     BuiltInLibraryManager.invokeAllBuiltInLibrariesResetMethod(this);
+    ruleEngine = null;
   }
 
   public void setTargetRuleEngine(TargetSWRLRuleEngine ruleEngine) { this.ruleEngine = ruleEngine; }
@@ -142,6 +147,8 @@ public class DefaultSWRLRuleEngineBridge implements SWRLRuleEngineBridge, SWRLBu
     } // try
 
   }
+  
+  public PrefixManager getPrefixManager() { return prefixManager; }
   
   public String uri2PrefixedName(String uri)
   {
@@ -223,7 +230,7 @@ public class DefaultSWRLRuleEngineBridge implements SWRLRuleEngineBridge, SWRLBu
     */
   public void run() throws SWRLRuleEngineBridgeException
   {
-    ruleEngine.runRuleEngine();
+    getRuleEngine().runRuleEngine();
   } 
 
   /**
@@ -249,7 +256,7 @@ public class DefaultSWRLRuleEngineBridge implements SWRLRuleEngineBridge, SWRLBu
    */
   public void reset() throws SWRLRuleEngineBridgeException
   {
-    ruleEngine.resetRuleEngine(); // Reset the underlying rule engine
+    getRuleEngine().resetRuleEngine(); // Reset the underlying rule engine
 
     BuiltInLibraryManager.invokeAllBuiltInLibrariesResetMethod(this);
 
@@ -827,7 +834,8 @@ public class DefaultSWRLRuleEngineBridge implements SWRLRuleEngineBridge, SWRLBu
   
   private void exportSWRLRules() throws SWRLRuleEngineBridgeException
   {
-    for (SWRLRule rule : importedSWRLRules.values()) ruleEngine.defineOWLAxiom(rule);
+    for (SWRLRule rule : importedSWRLRules.values()) 
+    	getRuleEngine().defineOWLAxiom(rule);
   }
 
   private void exportClasses() throws SWRLRuleEngineBridgeException
@@ -881,7 +889,7 @@ public class DefaultSWRLRuleEngineBridge implements SWRLRuleEngineBridge, SWRLBu
   
   private void initialize()
   {
-    importedSWRLRules = new HashMap<String, SWRLRule>();
+  	importedSWRLRules = new HashMap<String, SWRLRule>();
 
     referencedOWLClassURIs = new HashSet<String>();
     referencedOWLIndividualURIs = new HashSet<String>();
@@ -906,7 +914,14 @@ public class DefaultSWRLRuleEngineBridge implements SWRLRuleEngineBridge, SWRLBu
 
     allOWLPropertyAssertionAxioms = new HashMap<String, Map<String, Set<OWLPropertyAssertionAxiom>>>();
     allOWLIndividuals = new HashMap<String, OWLIndividual>();
-  }   
+  }
+  
+  private TargetSWRLRuleEngine getRuleEngine() throws SWRLRuleEngineBridgeException
+  {
+  	if (ruleEngine == null) throw new SWRLRuleEngineBridgeException("bridge has no rule engine");
+  	
+  	return ruleEngine;
+  }
 
   private void checkOWLClassURI(String classURI) throws SWRLBuiltInBridgeException
   {
@@ -964,7 +979,7 @@ public class DefaultSWRLRuleEngineBridge implements SWRLRuleEngineBridge, SWRLBu
   private void exportOWLAxiom(OWLAxiom owlAxiom) throws SWRLBuiltInBridgeException
   {
     try {
-      ruleEngine.defineOWLAxiom(owlAxiom);
+      getRuleEngine().defineOWLAxiom(owlAxiom);
     } catch (SWRLRuleEngineBridgeException e) {
       throw new SWRLBuiltInBridgeException("error exporting OWL axiom " + owlAxiom + ": " + e.getMessage());
     } // try

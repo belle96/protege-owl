@@ -7,6 +7,7 @@ import edu.stanford.smi.protegex.owl.swrl.SWRLRuleEngine;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLRuleEngineBridgeException;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDataFactory;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.PrefixManager;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngine;
 
 /**
@@ -41,6 +42,7 @@ public interface SWRLRuleEngineBridge extends SWRLRuleEngine, SQWRLQueryEngine
 
   OWLDataFactory getOWLDataFactory();
   OWLDataValueFactory getOWLDataValueFactory();
+  PrefixManager getPrefixManager();
   
   String uri2PrefixedName(String uri);
   String name2URI(String prefixedName);
