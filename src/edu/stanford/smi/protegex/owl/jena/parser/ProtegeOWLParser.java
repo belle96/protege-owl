@@ -349,6 +349,7 @@ public class ProtegeOWLParser {
 			if (owlModel instanceof JenaOWLModel)  {
 				long t0 = System.currentTimeMillis();
 				((JenaOWLModel) owlModel).copyFacetValuesIntoNamedClses();
+				((JenaOWLModel) owlModel).copyFacetValuesIntoProperties();
 				log.info("Updating underlying frames model in " + (System.currentTimeMillis() - t0) + " ms");
 			}
 
