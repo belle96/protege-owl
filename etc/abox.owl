@@ -10,21 +10,16 @@
   xml:base="http://swrl.stanford.edu/ontologies/built-ins/3.3/abox.owl">
   <owl:Ontology rdf:about=""/>
   <swrl:Builtin rdf:ID="hasValue"/>
-  <swrl:Builtin rdf:ID="hasProperty"/>
+  <swrl:Builtin rdf:ID="hasOWLProperty"/>
   <swrl:Builtin rdf:ID="hasURI"/>
   <swrl:Builtin rdf:ID="isNumeric"/>
   <swrl:Builtin rdf:ID="notNumeric"/>
-  <swrl:Builtin rdf:ID="isIndividual"/>
-  <swrl:Builtin rdf:ID="isConstant"/>
+  <swrl:Builtin rdf:ID="isOWLIndividual"/>
+  <swrl:Builtin rdf:ID="isOWLLiteral"/>
+  <swrl:Builtin rdf:ID="notOWLLiteral"/>
   <swrl:Builtin rdf:ID="hasNumberOfPropertyValues"/>
-  <swrl:Builtin rdf:ID="hasClass"/>
-  <swrl:Builtin rdf:ID="hasIndividual">
-    <swrlb:args rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >1</swrlb:args>
-    <swrlb:minArgs rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >1</swrlb:minArgs>
-    <swrlb:maxArgs rdf:datatype="http://www.w3.org/2001/XMLSchema#int"
-    >1</swrlb:maxArgs>
+  <swrl:Builtin rdf:ID="hasOWLClass"/>
+  <swrl:Builtin rdf:ID="hasOWLIndividual">
   </swrl:Builtin>
 </rdf:RDF>
 

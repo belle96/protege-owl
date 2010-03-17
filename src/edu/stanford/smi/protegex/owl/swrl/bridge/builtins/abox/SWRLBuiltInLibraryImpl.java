@@ -44,7 +44,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   /**
    * Determine if a single argument is an OWL individual. If the argument is unbound, bind it to all OWL individuals in an ontology.
    */
-  public boolean isIndividual(List<BuiltInArgument> arguments) throws BuiltInException
+  public boolean isOWLIndividual(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(1, arguments.size());
     boolean isUnboundArgument = isUnboundArgument(0, arguments);   
@@ -155,7 +155,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
    * Returns true if the individual named by the first argument has a property specified by the second argument. If the second argument in
    * unbound, bind it to all the properties that currently have a value for this individual.
    */
-  public boolean hasProperty(List<BuiltInArgument> arguments) throws BuiltInException
+  public boolean hasOWLProperty(List<BuiltInArgument> arguments) throws BuiltInException
   {
     String individualURI, propertyURI = null;
     boolean hasUnboundPropertyArgument = isUnboundArgument(1, arguments);
@@ -181,13 +181,13 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } // try
 
     return result;
-  } // hasProperty
+  } 
 
   /**
    * Returns true if the class named by the first argument has an individual identified by the second argument. If the second argument is
    * unbound, bind it to all individuals of the class.
    */
-  public boolean hasIndividual(List<BuiltInArgument> arguments) throws BuiltInException
+  public boolean hasOWLIndividual(List<BuiltInArgument> arguments) throws BuiltInException
   {
     boolean isUnboundArgument = isUnboundArgument(1, arguments);   
     String classURI;
@@ -213,7 +213,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       throw new BuiltInException(e.getMessage());
     } // try
     return result;
-  } // hasIndividual
+  } 
 
   /**
    * Returns true if the OWL class, property, or individual named by the first argument has a URI identified by the second
@@ -243,13 +243,13 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       throw new BuiltInException(e.getMessage());
     } // try
     return result;
-  } // hasURI
+  } 
 
   /**
    * Returns true if the individual named by the first argument is an instance of the class identified by the second argument. If the
    * second argument is unbound, bind it to all defining classes of the individual.
    */
-  public boolean hasClass(List<BuiltInArgument> arguments) throws BuiltInException
+  public boolean hasOWLClass(List<BuiltInArgument> arguments) throws BuiltInException
   {
     boolean isUnboundArgument = isUnboundArgument(1, arguments);   
     String individualURI;
@@ -293,11 +293,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } // try
 
     return result;
-  } // hasClass
+  }
 
   /**
-   ** Returns true if the individual named by the second argument has the number of values specified by the first argument of the property
-   ** specified by the third argument.
+   * Returns true if the individual named by the second argument has the number of values specified by the first argument of the property
+   * specified by the third argument.
    */
   public boolean hasNumberOfPropertyValues(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -324,32 +324,31 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } // try
 
     return result;
-  } // hasNumberOfPropertyValues
+  }
 
-  public boolean isConstant(List<BuiltInArgument> arguments) throws BuiltInException
+  public boolean isOWLLiteral(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(1, arguments.size());
 
     return isArgumentADataValue(0, arguments);
-  } // isConstant
+  }
 
-  public boolean notConstant(List<BuiltInArgument> arguments) throws BuiltInException
+  public boolean notOWLLiteral(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(1, arguments.size());
 
     return !isArgumentADataValue(0, arguments);
-  } // notConstant
+  }
 
   public boolean isNumeric(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(1, arguments.size());
 
     return isArgumentNumeric(0, arguments);
-  } // isNumeric
+  } 
 
   public boolean notNumeric(List<BuiltInArgument> arguments) throws BuiltInException
   {
     return !isNumeric(arguments);
-  } // notNumeric
-
-} // SWRLBuiltInLibraryImpl
+  }
+}
