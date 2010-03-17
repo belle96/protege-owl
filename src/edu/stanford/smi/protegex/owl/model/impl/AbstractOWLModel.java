@@ -106,6 +106,7 @@ import edu.stanford.smi.protegex.owl.model.factory.OWLJavaFactory;
 import edu.stanford.smi.protegex.owl.model.framestore.FacetUpdateFrameStore;
 import edu.stanford.smi.protegex.owl.model.framestore.OWLFrameStore;
 import edu.stanford.smi.protegex.owl.model.framestore.OWLFrameStoreManager;
+import edu.stanford.smi.protegex.owl.model.framestore.TypeUpdateFrameStore;
 import edu.stanford.smi.protegex.owl.model.project.DefaultOWLProject;
 import edu.stanford.smi.protegex.owl.model.project.OWLProject;
 import edu.stanford.smi.protegex.owl.model.project.SettingsMap;
@@ -171,7 +172,7 @@ public abstract class AbstractOWLModel extends DefaultKnowledgeBase
     public static final String[] DEFAULT_USED_LANGUAGES = {"de", "en", "es", "fr", "it", "nl", "pt", "ru" };
 
     public static final String ANONYMOUS_BASE = "@";
-    
+
     public static final String UNIQUE_SESSION_ID = UUID.randomUUID().toString().replace("-", "_");
 
     public static final String DEFAULT_ANNOTATION_PROPERTY_NAME = "annotationProperty";
@@ -239,7 +240,7 @@ public abstract class AbstractOWLModel extends DefaultKnowledgeBase
     private Slot protegeSubclassesDisjointProperty;
 
     private TripleStoreModel tripleStoreModel;
-    
+
     private String defaultLanguage;
     //just for optimization purpose
     private boolean defaultLanguageInitialized = false;
@@ -559,6 +560,13 @@ public abstract class AbstractOWLModel extends DefaultKnowledgeBase
       if (FrameStoreManager.isEnabled(facetUpdateFrameStore)) {
           facetUpdateFrameStore.copyFacetValuesIntoNamedClses();
       }
+    }
+
+    public void copyFacetValuesIntoProperties() {
+        TypeUpdateFrameStore typeUpdateFrameStore = getFrameStoreManager().getTypeUpdateFrameStore();
+        if (FrameStoreManager.isEnabled(typeUpdateFrameStore)) {
+            typeUpdateFrameStore.updateFacetValues(this);
+        }
     }
 
 
@@ -1091,13 +1099,13 @@ public abstract class AbstractOWLModel extends DefaultKnowledgeBase
     	Collection<Cls> metaClses = new ArrayList<Cls>(superProperty.getProtegeTypes());
     	Cls firstMetaCls = CollectionUtilities.getFirstItem(metaClses);
         String fullName = OWLUtil.getInternalFullName(this, name);
-        Slot slot = createSlot(fullName, firstMetaCls, Collections.singleton(superProperty), true);        	
+        Slot slot = createSlot(fullName, firstMetaCls, Collections.singleton(superProperty), true);
         metaClses.remove(firstMetaCls);
-        for (Iterator iterator = metaClses.iterator(); iterator.hasNext();) {
-			Cls metacls = (Cls) iterator.next();
+        for (Object element : metaClses) {
+			Cls metacls = (Cls) element;
 			slot.addDirectType(metacls);
 		}
-        return (RDFProperty)slot; 
+        return (RDFProperty)slot;
     }
 
 
@@ -1229,10 +1237,10 @@ public abstract class AbstractOWLModel extends DefaultKnowledgeBase
     	if (getProject() == null) {
 			return getName(instance);
 		}
-    	
-    	Cls directType = (instance instanceof RDFResource) ? 
+
+    	Cls directType = (instance instanceof RDFResource) ?
     			OWLUI.getOneNamedDirectTypeWithBrowserPattern((RDFResource) instance) : instance.getDirectType();
-    	    	
+
        	if (directType == null) {
         	return getMissingTypeString(instance);
        	}
@@ -1264,7 +1272,7 @@ public abstract class AbstractOWLModel extends DefaultKnowledgeBase
 
          return value;
 	}
-     
+
 
     @Override
 	protected String getDisplaySlotPatternValueNotSetString(Instance instance, BrowserSlotPattern slotPattern) {
@@ -1383,7 +1391,7 @@ public abstract class AbstractOWLModel extends DefaultKnowledgeBase
         defaultLanguageInitialized = true;
         return defaultLanguage;
     }
-    
+
     public RDFProperty getDefaultLanguageProperty() {
         return getRDFProperty(ProtegeNames.getDefaultLanguageSlotName());
     }
@@ -1409,7 +1417,7 @@ public abstract class AbstractOWLModel extends DefaultKnowledgeBase
         defaultLanguageListener = createDefaultLanguageListener();
         topOWLOntology.addFrameListener(defaultLanguageListener);
     }
-    
+
     protected void detachDefaultLanguageListener() {
         if (topOWLOntology == null) { return; }
         try {
@@ -1556,9 +1564,9 @@ public abstract class AbstractOWLModel extends DefaultKnowledgeBase
     public String getNextAnonymousResourceName() {
         return AbstractOWLModel.getNextAnonymousResourceNameStatic();
     }
-    
+
     /*
-     * values must be guaranteed to be distinct from values 
+     * values must be guaranteed to be distinct from values
      */
     public static String getNextAnonymousResourceNameStatic() {
         StringBuffer sb = new StringBuffer(ANONYMOUS_BASE);
@@ -2302,7 +2310,7 @@ public abstract class AbstractOWLModel extends DefaultKnowledgeBase
     @Override
     public void setProject(Project project) {
         super.setProject(project);
-    
+
         project.setPrettyPrintSlotWidgetLabels(false);
 
         Slot nameSlot = getSlot(Model.Slot.NAME);
@@ -2316,10 +2324,10 @@ public abstract class AbstractOWLModel extends DefaultKnowledgeBase
         getProtegeClassificationStatusProperty().setVisible(false);
         getProtegeInferredSuperclassesProperty().setVisible(false);
         getProtegeInferredSubclassesProperty().setVisible(false);
-        getOWLOntologyClass().setVisible(false);      
+        getOWLOntologyClass().setVisible(false);
     }
 
-    
+
     protected FrameListener createDefaultLanguageListener() {
         return new FrameAdapter() {
             @Override
@@ -2329,10 +2337,10 @@ public abstract class AbstractOWLModel extends DefaultKnowledgeBase
                     defaultLanguageInitialized = false;
                     defaultLanguage = getDefaultLanguage();
                 }
-            }  
+            }
         };
     }
-    
+
 
     public void setSearchSynonymProperties(Collection slots) {
         if (slots.isEmpty()) {
@@ -3633,7 +3641,7 @@ public abstract class AbstractOWLModel extends DefaultKnowledgeBase
             return new JenaWriterSettings(this);
         }
     }
-    
+
     public void setWriterSettings(WriterSettings writerSettings) {
         if (writerSettings instanceof ProtegeWriterSettings) {
             getOWLProject().getSettingsMap().setString(JenaOWLModel.WRITER_SETTINGS_PROPERTY, JenaOWLModel.WRITER_PROTEGE);
@@ -3645,10 +3653,10 @@ public abstract class AbstractOWLModel extends DefaultKnowledgeBase
 
     @Override
     public synchronized void dispose() {
-        detachDefaultLanguageListener();    
-        
-    	super.dispose();    	
-    	
+        detachDefaultLanguageListener();
+
+    	super.dispose();
+
     	if (jenaModel != null) {
     		jenaModel.close();
     		jenaModel = null;
