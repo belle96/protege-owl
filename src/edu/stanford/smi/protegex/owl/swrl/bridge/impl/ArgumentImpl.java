@@ -25,7 +25,7 @@ public abstract class ArgumentImpl implements Argument
     this.variableName = variableName;
     isAVariable = true; 
     isArgumentUnbound = false;
-  } // ArgumentImpl
+  }
 
   public boolean isVariable() { return isAVariable; }
 
@@ -33,12 +33,12 @@ public abstract class ArgumentImpl implements Argument
   {
     this.variableName = variableName;
     isAVariable = true;
-  } // setVariableName
+  }
 
   public String getVariableName() 
   { 
     return variableName;
-  } // getVariableName
+  }
 
   public void setUnbound() { isArgumentUnbound = true; }
   public void setBound() { isArgumentUnbound = false; }
@@ -53,7 +53,7 @@ public abstract class ArgumentImpl implements Argument
     return (((variableName == impl.variableName || variableName != null && variableName.equals(impl.variableName))) &&
             (isAVariable == impl.isAVariable) &&
             (isArgumentUnbound == impl.isArgumentUnbound));
-  } // equals
+  } 
 
   public int hashCode()
   {
@@ -62,6 +62,5 @@ public abstract class ArgumentImpl implements Argument
     hash = hash + (isAVariable ? 0 : 1);
     hash = hash + (isArgumentUnbound ? 0 : 1);
     return hash;
-  } // hashCode
-
-} // ArgumentImpl
+  } 
+}

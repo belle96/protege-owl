@@ -11,7 +11,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.DataValueArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.IndividualArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.MultiArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.ObjectPropertyArgument;
-import edu.stanford.smi.protegex.owl.swrl.bridge.VariableBuiltInArgument;
+import edu.stanford.smi.protegex.owl.swrl.bridge.VariableArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.DataValueConversionException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDType;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
@@ -19,6 +19,8 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.DataValueImpl;
 
 public class ArgumentFactoryImpl extends ArgumentFactory
 {
+  public VariableArgument createVariableArgument(String variableName) { return new VariableArgumentImpl(variableName); }
+
   public ClassArgument createClassArgument(String classURI) { return new ClassArgumentImpl(classURI); }
   public ObjectPropertyArgument createObjectPropertyArgument(String propertyURI) { return new ObjectPropertyArgumentImpl(propertyURI); }
   public DataPropertyArgument createDataPropertyArgument(String propertyURI) { return new DataPropertyArgumentImpl(propertyURI); }
@@ -39,7 +41,6 @@ public class ArgumentFactoryImpl extends ArgumentFactory
   
   public DataValueArgument createDataValueArgument(Object o) throws DataValueConversionException { return new DataValueArgumentImpl(new DataValueImpl(o)); }
 
-  public VariableBuiltInArgument createVariableBuiltInArgument(String variableName) { return new VariableBuiltInArgumentImpl(variableName); }
   public MultiArgument createMultiArgument() { return new MultiArgumentImpl(); }
   public MultiArgument createMultiArgument(List<BuiltInArgument> arguments) { return new MultiArgumentImpl(arguments); }
 }

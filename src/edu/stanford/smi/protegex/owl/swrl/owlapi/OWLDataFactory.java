@@ -8,8 +8,6 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInAtom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLPropertyPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRule;
-import edu.stanford.smi.protegex.owl.swrl.bridge.VariableAtomArgument;
-import edu.stanford.smi.protegex.owl.swrl.bridge.VariableBuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLFactoryException;
 
 /**
@@ -39,10 +37,6 @@ public interface OWLDataFactory
   OWLSubClassAxiom getOWLSubClassAxiom(OWLClass subClass, OWLClass superClass);
   OWLSomeValuesFrom getOWLSomeValuesFrom(OWLClass owlClass, OWLProperty onProperty, OWLClass someValuesFrom);
   OWLDeclarationAxiom getOWLDeclarationAxiom(OWLEntity owlEntity);
-
-  VariableAtomArgument getSWRLVariableAtomArgument(String variableName);
-  VariableBuiltInArgument getSWRLVariableBuiltInArgument(String variableName);
-  BuiltInArgument getSWRLBuiltInArgument(String variableName);
   
   OWLTypedLiteral getOWLTypedLiteral(int value);
   OWLTypedLiteral getOWLTypedLiteral(float value);

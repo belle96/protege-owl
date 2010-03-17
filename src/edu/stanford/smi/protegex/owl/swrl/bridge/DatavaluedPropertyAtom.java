@@ -9,4 +9,4 @@ public interface DatavaluedPropertyAtom extends Atom
   String getPropertyURI();
   AtomArgument getArgument1();
   AtomArgument getArgument2();
-} // DatavaluedPropertyAtom
+} 

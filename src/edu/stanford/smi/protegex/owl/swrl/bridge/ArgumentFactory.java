@@ -12,6 +12,8 @@ public abstract class ArgumentFactory
 {
   public static ArgumentFactory getFactory() { return new ArgumentFactoryImpl(); }
 
+  public abstract VariableArgument createVariableArgument(String variableName);
+  
   public abstract ClassArgument createClassArgument(String classURI);
   public abstract IndividualArgument createIndividualArgument(String individualURI);
   public abstract ObjectPropertyArgument createObjectPropertyArgument(String propertyURI);
@@ -31,7 +33,6 @@ public abstract class ArgumentFactory
   public abstract DataValueArgument createDataValueArgument(XSDType xsd);
   public abstract DataValueArgument createDataValueArgument(Object o) throws DataValueConversionException;
 
-  public abstract VariableBuiltInArgument createVariableBuiltInArgument(String variableName);
   public abstract MultiArgument createMultiArgument();
   public abstract MultiArgument createMultiArgument(List<BuiltInArgument> arguments);
 }

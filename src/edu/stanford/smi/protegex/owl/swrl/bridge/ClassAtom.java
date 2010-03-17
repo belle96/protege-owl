@@ -5,4 +5,4 @@ public interface ClassAtom extends Atom
 {
   String getClassURI();
   AtomArgument getArgument1();
-} // ClassAtom
+} 

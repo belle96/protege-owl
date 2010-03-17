@@ -38,5 +38,5 @@ public interface BuiltInAtom  extends Atom
   
   void setUsesSQWRLCollectionResults();
   void setDependsOnVariableNames(Set<String> variableNames);
-} // BuiltInAtom
+}
 

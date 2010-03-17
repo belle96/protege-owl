@@ -7,4 +7,4 @@ package edu.stanford.smi.protegex.owl.swrl.bridge;
 public interface ClassArgument extends BuiltInArgument, AtomArgument
 {
   String getURI();
-} // ClassArgument
+}

@@ -17,7 +17,7 @@ public class IndividualArgumentImpl extends BuiltInArgumentImpl implements Indiv
   public int compareTo(BuiltInArgument o)
   {
   	return individualURI.compareTo(((IndividualArgument)o).getURI());
-  } // compareTo
+  } 
 
   public boolean equals(Object obj)
   {
@@ -34,4 +34,4 @@ public class IndividualArgumentImpl extends BuiltInArgumentImpl implements Indiv
     return hash;
   } // hashCode
 
-} // IndividualArgumentImpl
+}

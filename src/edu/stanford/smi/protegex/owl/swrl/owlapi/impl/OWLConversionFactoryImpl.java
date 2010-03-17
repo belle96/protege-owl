@@ -43,7 +43,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.ObjectPropertyArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.PropertyArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRule;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SameIndividualAtom;
-import edu.stanford.smi.protegex.owl.swrl.bridge.VariableAtomArgument;
+import edu.stanford.smi.protegex.owl.swrl.bridge.VariableArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.DataValueConversionException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.InvalidPropertyNameException;
@@ -436,7 +436,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
     
     if (atom.getArgument1() instanceof edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable) {
       edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable variable = (edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable)atom.getArgument1();
-      VariableAtomArgument argument1 = owlFactory.getSWRLVariableAtomArgument(variable.getLocalName());
+      VariableArgument argument1 = argumentFactory.createVariableArgument(variable.getLocalName());
       classAtom.setArgument1(argument1);
       classAtom.addReferencedVariableName(variable.getLocalName());
     } else if (atom.getArgument1() instanceof edu.stanford.smi.protegex.owl.model.OWLIndividual) {
@@ -463,7 +463,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
     		                                           "variable or individual, got instance of " + atom.getArgument1().getClass());
 
     return classAtom;
-  } // convertClassAtom
+  }
 
   private IndividualPropertyAtom convertIndividualPropertyAtom(edu.stanford.smi.protegex.owl.swrl.model.SWRLIndividualPropertyAtom atom)
     throws OWLConversionFactoryException 
@@ -478,7 +478,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
 
     if (atom.getArgument1() instanceof edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable) {
       edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable variable = (edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable)atom.getArgument1();
-      VariableAtomArgument argument1 = owlFactory.getSWRLVariableAtomArgument(variable.getLocalName());
+      VariableArgument argument1 = argumentFactory.createVariableArgument(variable.getLocalName());
       individualPropertyAtom.setArgument1(argument1);
       individualPropertyAtom.addReferencedVariableName(variable.getLocalName());
     } else if (atom.getArgument1() instanceof edu.stanford.smi.protegex.owl.model.OWLIndividual) {
@@ -491,7 +491,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
 
     if (atom.getArgument2() instanceof edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable) {
       edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable variable = (edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable)atom.getArgument2();
-      VariableAtomArgument argument2 = owlFactory.getSWRLVariableAtomArgument(variable.getLocalName());
+      VariableArgument argument2 = argumentFactory.createVariableArgument(variable.getLocalName());
       individualPropertyAtom.setArgument2(argument2);
       individualPropertyAtom.addReferencedVariableName(variable.getLocalName());
     } else if (atom.getArgument2() instanceof edu.stanford.smi.protegex.owl.model.OWLIndividual) {
@@ -516,7 +516,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
                                                    " - expecting variable or individual, got instance of " + atom.getArgument2().getClass());
 
     return individualPropertyAtom; 
-  } // convertIndividualPropertyAtom
+  } 
 
   private DatavaluedPropertyAtom convertDatavaluedPropertyAtom(edu.stanford.smi.protegex.owl.swrl.model.SWRLDatavaluedPropertyAtom atom) 
     throws OWLConversionFactoryException 
@@ -531,7 +531,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
 
     if (atom.getArgument1() instanceof edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable) {
       edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable variable = (edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable)atom.getArgument1();
-      VariableAtomArgument argument1 = owlFactory.getSWRLVariableAtomArgument(variable.getLocalName());
+      VariableArgument argument1 = argumentFactory.createVariableArgument(variable.getLocalName());
       datavaluedPropertyAtom.setArgument1(argument1);
       datavaluedPropertyAtom.addReferencedVariableName(variable.getLocalName());
     } else if (atom.getArgument1() instanceof edu.stanford.smi.protegex.owl.model.OWLIndividual) {
@@ -544,7 +544,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
 
     if (atom.getArgument2() instanceof edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable) {
       edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable variable = (edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable)atom.getArgument2();
-      VariableAtomArgument argument2 = owlFactory.getSWRLVariableAtomArgument(variable.getLocalName());
+      VariableArgument argument2 = argumentFactory.createVariableArgument(variable.getLocalName());
       datavaluedPropertyAtom.setArgument2(argument2);
       datavaluedPropertyAtom.addReferencedVariableName(variable.getLocalName());
     } else if (atom.getArgument2() instanceof RDFSLiteral) {
@@ -562,7 +562,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
 
     if (atom.getArgument1() instanceof edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable) {
       edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable variable = (edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable)atom.getArgument1();
-      VariableAtomArgument argument1 = owlFactory.getSWRLVariableAtomArgument(variable.getLocalName());
+      VariableArgument argument1 = argumentFactory.createVariableArgument(variable.getLocalName());
       sameIndividualAtom.setArgument1(argument1);
       sameIndividualAtom.addReferencedVariableName(variable.getLocalName());
     } else if (atom.getArgument1() instanceof edu.stanford.smi.protegex.owl.model.OWLIndividual) {
@@ -575,7 +575,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
 
     if (atom.getArgument2() instanceof edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable) {
       edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable variable = (edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable)atom.getArgument2();
-      VariableAtomArgument argument2 = owlFactory.getSWRLVariableAtomArgument(variable.getLocalName());
+      VariableArgument argument2 = argumentFactory.createVariableArgument(variable.getLocalName());
       sameIndividualAtom.setArgument2(argument2);
       sameIndividualAtom.addReferencedVariableName(variable.getLocalName());
     } else if (atom.getArgument2() instanceof edu.stanford.smi.protegex.owl.model.OWLIndividual) {
@@ -597,7 +597,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
 
     if (atom.getArgument1() instanceof edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable) {
       edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable variable = (edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable)atom.getArgument1();
-      VariableAtomArgument argument1 = owlFactory.getSWRLVariableAtomArgument(variable.getLocalName());
+      VariableArgument argument1 = argumentFactory.createVariableArgument(variable.getLocalName());
       differentIndividualsAtom.setArgument1(argument1);
       differentIndividualsAtom.addReferencedVariableName(variable.getLocalName());
     } else if (atom.getArgument1() instanceof edu.stanford.smi.protegex.owl.model.OWLIndividual) {
@@ -610,7 +610,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
 
     if (atom.getArgument2() instanceof edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable) {
       edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable variable = (edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable)atom.getArgument2();
-      VariableAtomArgument argument2 = owlFactory.getSWRLVariableAtomArgument(variable.getLocalName());
+      VariableArgument argument2 = argumentFactory.createVariableArgument(variable.getLocalName());
       differentIndividualsAtom.setArgument2(argument2);
       differentIndividualsAtom.addReferencedVariableName(variable.getLocalName());
     } else if (atom.getArgument2() instanceof edu.stanford.smi.protegex.owl.model.OWLIndividual) {
@@ -640,7 +640,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
       Object o = iterator.next();
       if (o instanceof edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable) {
         edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable variable = (edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable)o;
-        arguments.add(owlFactory.getSWRLVariableBuiltInArgument(variable.getLocalName()));
+        arguments.add(argumentFactory.createVariableArgument(variable.getLocalName()));
         builtInAtom.addReferencedVariableName(variable.getLocalName());
       } else if (o instanceof edu.stanford.smi.protegex.owl.model.OWLIndividual) {
         edu.stanford.smi.protegex.owl.model.OWLIndividual individual = (edu.stanford.smi.protegex.owl.model.OWLIndividual)o;
