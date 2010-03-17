@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -17,6 +18,7 @@ import edu.stanford.smi.protege.model.SimpleInstance;
 import edu.stanford.smi.protege.model.Slot;
 import edu.stanford.smi.protege.model.Transaction;
 import edu.stanford.smi.protege.model.framestore.FrameStoreAdapter;
+import edu.stanford.smi.protege.model.framestore.NarrowFrameStore;
 import edu.stanford.smi.protege.util.Log;
 import edu.stanford.smi.protegex.owl.model.OWLAnonymousClass;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
@@ -28,6 +30,8 @@ import edu.stanford.smi.protegex.owl.model.RDFSNamedClass;
 import edu.stanford.smi.protegex.owl.model.factory.OWLFactoryClassType;
 import edu.stanford.smi.protegex.owl.model.impl.AbstractOWLModel;
 import edu.stanford.smi.protegex.owl.model.impl.OWLSystemFrames;
+import edu.stanford.smi.protegex.owl.model.triplestore.TripleStore;
+import edu.stanford.smi.protegex.owl.model.triplestore.TripleStoreModel;
 
 public class TypeUpdateFrameStore extends FrameStoreAdapter {
 
@@ -92,7 +96,7 @@ public class TypeUpdateFrameStore extends FrameStoreAdapter {
         if (cls instanceof RDFSNamedClass) {
             ((RDFSNamedClass) cls).setPropertyValues(rdfSubClassOfProperty, directSuperclasses);
             if (!directTypes.contains(untypedClass)) {
-            	super.setDirectOwnSlotValues(cls, rdfType, directTypes);
+                super.setDirectOwnSlotValues(cls, rdfType, directTypes);
             }
         }
         else if (cls instanceof OWLRestriction) {
@@ -108,7 +112,7 @@ public class TypeUpdateFrameStore extends FrameStoreAdapter {
     public Slot createSlot(FrameID id, Collection directTypes, Collection directSuperslots, boolean loadDefaults) {
         Slot slot = super.createSlot(id, directTypes, directSuperslots, loadDefaults);
         if (slot instanceof RDFProperty &&
-        	 !directTypes.contains(untypedProperty)) {
+                !directTypes.contains(untypedProperty)) {
             super.setDirectOwnSlotValues(slot, rdfType, directTypes);
         }
         return slot;
@@ -118,7 +122,7 @@ public class TypeUpdateFrameStore extends FrameStoreAdapter {
     public SimpleInstance createSimpleInstance(FrameID id, Collection directTypes, boolean loadDefaults) {
         SimpleInstance instance = super.createSimpleInstance(id, directTypes, loadDefaults);
         if (instance instanceof RDFResource &&
-        		!directTypes.contains(untypedResource)) {
+                !directTypes.contains(untypedResource)) {
             super.setDirectOwnSlotValues(instance, rdfType, directTypes);
         }
         return instance;
@@ -128,9 +132,9 @@ public class TypeUpdateFrameStore extends FrameStoreAdapter {
     @SuppressWarnings("unchecked")
     @Override
     public void addDirectType(Instance instance, Cls type) {
-    	try {
-        	beginTransaction("Add to " + instance.getBrowserText() + " direct type : " + type.getBrowserText()
-        			+ Transaction.APPLY_TO_TRAILER_STRING + instance.getName());
+        try {
+            beginTransaction("Add to " + instance.getBrowserText() + " direct type : " + type.getBrowserText()
+                    + Transaction.APPLY_TO_TRAILER_STRING + instance.getName());
             super.addDirectType(instance, type);
             instance = (Instance) super.getFrame(instance.getFrameID());
             if (instance instanceof RDFProperty) {
@@ -151,46 +155,46 @@ public class TypeUpdateFrameStore extends FrameStoreAdapter {
                 super.setDirectOwnSlotValues(instance, rdfType, types);
             }
             commitTransaction();
-		} catch (Throwable e) {
-			Log.getLogger().log(Level.WARNING, "Error in transaction at adding to " +
-					instance + " direct type: " + type, e);
-			rollbackTransaction();
-			throw new RuntimeException(e);
-		}
+        } catch (Throwable e) {
+            Log.getLogger().log(Level.WARNING, "Error in transaction at adding to " +
+                    instance + " direct type: " + type, e);
+            rollbackTransaction();
+            throw new RuntimeException(e);
+        }
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public void removeDirectType(Instance instance, Cls directType) {
-    	try {
-    		beginTransaction("Remove from " + instance.getBrowserText() + " direct type : " + directType.getBrowserText()
-    				+ Transaction.APPLY_TO_TRAILER_STRING + instance.getName());
-    		if (instance instanceof RDFProperty) {
-    			if (directType.equals(functionalPropertyClass)) {
-    				((Slot) instance).setAllowsMultipleValues(true);
-    			}
-    		}
-    		if (instance instanceof OWLRestriction) {
-    			super.setDirectOwnSlotValues(instance, rdfType, Collections.singleton(restrictionClass));
-    		}
-    		else if (instance instanceof OWLAnonymousClass) {
-    			super.setDirectOwnSlotValues(instance, rdfType, Collections.singleton(owlClass));
-    		}
-    		else if (instance instanceof RDFResource) {
-    			Collection types = new ArrayList(super.getDirectOwnSlotValues(instance, rdfType));
-    			if (types.contains(directType)) {
-    				types.remove(directType);
-    				super.setDirectOwnSlotValues(instance, rdfType, types);
-    			}
-    		}
-    		super.removeDirectType(instance, directType);
-    		commitTransaction();
-    	} catch (Throwable e) {
-    		Log.getLogger().log(Level.WARNING, "Error in transaction at removing from " +
-    				instance + " direct type: " + directType, e);
-    		rollbackTransaction();
-    		throw new RuntimeException(e);
-    	}
+        try {
+            beginTransaction("Remove from " + instance.getBrowserText() + " direct type : " + directType.getBrowserText()
+                    + Transaction.APPLY_TO_TRAILER_STRING + instance.getName());
+            if (instance instanceof RDFProperty) {
+                if (directType.equals(functionalPropertyClass)) {
+                    ((Slot) instance).setAllowsMultipleValues(true);
+                }
+            }
+            if (instance instanceof OWLRestriction) {
+                super.setDirectOwnSlotValues(instance, rdfType, Collections.singleton(restrictionClass));
+            }
+            else if (instance instanceof OWLAnonymousClass) {
+                super.setDirectOwnSlotValues(instance, rdfType, Collections.singleton(owlClass));
+            }
+            else if (instance instanceof RDFResource) {
+                Collection types = new ArrayList(super.getDirectOwnSlotValues(instance, rdfType));
+                if (types.contains(directType)) {
+                    types.remove(directType);
+                    super.setDirectOwnSlotValues(instance, rdfType, types);
+                }
+            }
+            super.removeDirectType(instance, directType);
+            commitTransaction();
+        } catch (Throwable e) {
+            Log.getLogger().log(Level.WARNING, "Error in transaction at removing from " +
+                    instance + " direct type: " + directType, e);
+            rollbackTransaction();
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -214,7 +218,7 @@ public class TypeUpdateFrameStore extends FrameStoreAdapter {
             }
         }
         else if ((protegeType = fillerToProtegeTypeMap.get(slot)) != null &&
-                 !super.getDirectTypes((Instance) frame).contains(protegeType)) {
+                !super.getDirectTypes((Instance) frame).contains(protegeType)) {
             super.addDirectType((Instance) frame, protegeType);
         }
     }
@@ -229,4 +233,40 @@ public class TypeUpdateFrameStore extends FrameStoreAdapter {
             }
         }
     }
+
+    /**
+     * Used by the parser to write the facet values in the underlying frames model,
+     * so that frames API calls return the correct values. This method updates the facets for
+     * functional properties
+     * @param owlModel
+     */
+    public void updateFacetValues(OWLModel owlModel) {
+        boolean oldUndo = owlModel.isUndoEnabled();
+        TripleStoreModel tsm = owlModel.getTripleStoreModel();
+        TripleStore activeTripleStore = tsm.getActiveTripleStore();
+        owlModel.setUndoEnabled(false);
+
+        try {
+            for (TripleStore ts : tsm.getTripleStores()) {
+                tsm.setActiveTripleStore(ts);
+                updateCardinalityFacets(owlModel, ts);
+            }
+        } finally {
+            owlModel.setUndoEnabled(oldUndo);
+            owlModel.getTripleStoreModel().setActiveTripleStore(activeTripleStore);
+        }
+    }
+
+    private void updateCardinalityFacets(OWLModel owlModel, TripleStore ts) {
+        RDFSNamedClass propertyClass = ((AbstractOWLModel) owlModel).getOWLFunctionalPropertyClass();
+        NarrowFrameStore nfs = ts.getNarrowFrameStore();
+        Collection props = nfs.getValues(propertyClass, owlModel.getSystemFrames().getDirectInstancesSlot(), null, false);
+        for (Iterator iterator = props.iterator(); iterator.hasNext();) {
+            RDFProperty prop = (RDFProperty) iterator.next();
+            ((Slot)prop).setAllowsMultipleValues(false);
+        }
+        //TODO: only makes functional properties single cardinality, does not do anything about the other properties
+    }
+
+
 }
