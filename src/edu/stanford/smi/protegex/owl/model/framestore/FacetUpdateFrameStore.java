@@ -90,21 +90,19 @@ public class FacetUpdateFrameStore extends FrameStoreAdapter {
 	public void copyFacetValuesIntoNamedClses() {
 		boolean oldUndo = owlModel.isUndoEnabled();
 		TripleStoreModel tsm = owlModel.getTripleStoreModel();
-		
-		TripleStore activeTripleStore = tsm.getActiveTripleStore();		
-		
+
+		TripleStore activeTripleStore = tsm.getActiveTripleStore();
+
 		owlModel.setUndoEnabled(false);
-		
-		try {			
-			for (Iterator iterator = tsm.getTripleStores().iterator(); iterator.hasNext();) {
-				TripleStore ts = (TripleStore) iterator.next();				
+
+		try {
+			for (TripleStore ts : tsm.getTripleStores()) {
 				tsm.setActiveTripleStore(ts);
-				
-				for (Iterator<OWLRestriction> iterator2 = getRestrictionsForTS(ts).iterator(); iterator2.hasNext();) {
-					OWLRestriction restriction = (OWLRestriction) iterator2.next();
+
+				for (OWLRestriction restriction : getRestrictionsForTS(ts)) {
 					copyFacetValuesIntoOWLNamedClass(restriction);
-				}				
-			}			
+				}
+			}
 		} finally {
 			owlModel.setUndoEnabled(oldUndo);
 			owlModel.getTripleStoreModel().setActiveTripleStore(activeTripleStore);
@@ -117,25 +115,25 @@ public class FacetUpdateFrameStore extends FrameStoreAdapter {
 	 * @param ts
 	 * @return
 	 */
-	private Collection getRestrictionsForTS(TripleStore ts) {
+	private Collection<OWLRestriction> getRestrictionsForTS(TripleStore ts) {
 		Collection<OWLRestriction> restrictions = new ArrayList<OWLRestriction>();
-		
+
 		RDFSNamedClass restrictionClass = ((AbstractOWLModel) owlModel).getOWLRestrictionClass();
 
 		for (Iterator iterator = restrictionClass.getSubclasses(true).iterator(); iterator.hasNext();) {
 			RDFSNamedClass restrictionType = (RDFSNamedClass) iterator.next();
-			
+
 			NarrowFrameStore nfs = ts.getNarrowFrameStore();
-			Collection insts = nfs.getValues(restrictionClass, owlModel.getSystemFrames().getDirectInstancesSlot(), null, false);
-			
+			Collection insts = nfs.getValues(restrictionType, owlModel.getSystemFrames().getDirectInstancesSlot(), null, false);
+
 			for (Iterator iterator2 = insts.iterator(); iterator2.hasNext();) {
-				Object inst = iterator2.next();				
+			    Object inst = iterator2.next();
 				if (inst instanceof OWLRestriction) {
 					restrictions.add((OWLRestriction)inst);
 				}
-			}			
+			}
 		}
-				
+
 		return restrictions;
 	}
 
