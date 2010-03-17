@@ -168,7 +168,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     try {
       if (hasUnboundPropertyArgument) {
         MultiArgument multiArgument = createMultiArgument();
-        for (edu.stanford.smi.protegex.owl.model.OWLProperty property : SWRLOWLUtil.getPropertiesOfIndividual(getInvokingBridge().getOWLModel(), individualURI)) {
+        for (edu.stanford.smi.protegex.owl.model.OWLProperty property : SWRLOWLUtil.getOWLPropertiesOfIndividual(getInvokingBridge().getOWLModel(), individualURI)) {
           if (property.isObjectProperty()) multiArgument.addArgument(createObjectPropertyArgument(property.getURI()));
           else multiArgument.addArgument(createDataPropertyArgument(property.getURI()));
         } // for
@@ -201,7 +201,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     try {
       if (isUnboundArgument) {
         MultiArgument multiArgument = createMultiArgument();
-        for (edu.stanford.smi.protegex.owl.model.OWLIndividual individual: SWRLOWLUtil.getIndividualsOfClass(getInvokingBridge().getOWLModel(), classURI)) 
+        for (edu.stanford.smi.protegex.owl.model.OWLIndividual individual: SWRLOWLUtil.getOWLIndividualsOfClass(getInvokingBridge().getOWLModel(), classURI)) 
           multiArgument.addArgument(createIndividualArgument(individual.getURI()));
         arguments.get(1).setBuiltInResult(multiArgument);
         result = !multiArgument.hasNoArguments();
@@ -279,7 +279,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       } else {
         if (isUnboundArgument) {
           MultiArgument multiArgument = createMultiArgument();
-          for (OWLNamedClass cls: SWRLOWLUtil.getClassesOfIndividual(getInvokingBridge().getOWLModel(), individualURI)) 
+          for (OWLNamedClass cls: SWRLOWLUtil.getOWLClassesOfIndividual(getInvokingBridge().getOWLModel(), individualURI)) 
             multiArgument.addArgument(createClassArgument(cls.getURI()));
           arguments.get(1).setBuiltInResult(multiArgument);
           result = !multiArgument.hasNoArguments();

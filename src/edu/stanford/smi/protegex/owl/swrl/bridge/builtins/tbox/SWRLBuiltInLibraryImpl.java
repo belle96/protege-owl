@@ -82,10 +82,10 @@ import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLSomeValuesFrom;
 import edu.stanford.smi.protegex.owl.swrl.util.SWRLOWLUtil;
 
 /**
- ** Implementations library for SWRL TBox built-in methods. See <a
- ** href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLTBoxBuiltIns">here</a> for documentation on this library.
- **
- ** See <a href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLBuiltInBridge">here</a> for documentation on defining SWRL built-in libraries.
+ * Implementations library for SWRL TBox built-in methods. See <a
+ * href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLTBoxBuiltIns">here</a> for documentation on this library.
+ *
+ * See <a href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLBuiltInBridge">here</a> for documentation on defining SWRL built-in libraries.
  */
 public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 {
@@ -94,13 +94,13 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   public SWRLBuiltInLibraryImpl() 
   { 
     super(SWRLTBoxLibraryName); 
-  } // SWRLBuiltInLibraryImpl
+  }
 
   public void reset() {}
 
   /**
-   ** Is the second annotation property argument associated with the first ontology, class, property or individual argument. If the second
-   ** argument is unbound, bind it to the annotation properties associated with the first argument (if any exist).
+   * Is the second annotation property argument associated with the first ontology, class, property or individual argument. If the second
+   * argument is unbound, bind it to the annotation properties associated with the first argument (if any exist).
    */
   public boolean hasOWLAnnotationProperty(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -109,11 +109,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // hasOWLAnnotationProperty
+  } 
 
   /**
-   ** It the second integer argument equal to the cardinality specified by the first owl:Cardinality, owl:MaxCardinality, or
-   ** owl:MinCardinality restriction argument. If the second argument is unbound, bind it to the cardinality value.
+   * It the second integer argument equal to the cardinality specified by the first owl:Cardinality, owl:MaxCardinality, or
+   * owl:MinCardinality restriction argument. If the second argument is unbound, bind it to the cardinality value.
    */
   public boolean hasCardinality(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -122,11 +122,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // hasCardinality
+  } 
 
   /**
-   ** Is the second string argument the value specified by the first rdfs:comment annotation property argument. If the second argument is
-   ** unbound, bind it to the value specified by the first rdfs:comment annotation property argument.
+   * Is the second string argument the value specified by the first rdfs:comment annotation property argument. If the second argument is
+   * unbound, bind it to the value specified by the first rdfs:comment annotation property argument.
    */
   public boolean hasRDFSComment(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -135,11 +135,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // hasRDFSComment
+  } 
 
   /**
-   ** Is the second description argument associated with the first class or individual argument. If the second argument is unbound, bind it
-   ** to the descriptions associated with the first argument (if any exist).
+   * Is the second description argument associated with the first class or individual argument. If the second argument is unbound, bind it
+   * to the descriptions associated with the first argument (if any exist).
    */
   public boolean hasOWLDescription(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -148,11 +148,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // hasOWLDescription
+  }
 
   /**
-   ** Is the second resource argument the value specified by the first rdfs:isDefinedBy annotation property argument. If the second argument
-   ** is unbound, bind it to the value specified by the first rdfs:isDefinedBy annotation property argument.
+   * Is the second resource argument the value specified by the first rdfs:isDefinedBy annotation property argument. If the second argument
+   * is unbound, bind it to the value specified by the first rdfs:isDefinedBy annotation property argument.
    */
   public boolean hasRDFSIsDefinedBy(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -161,11 +161,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // hasRDFSIsDefinedBy
+  } 
 
   /**
-   ** Is the second string argument the value specified by the first rdfs:label annotation property argument. If the second argument is
-   ** unbound, bind it to the value specified by the first rdfs:label annotation property argument.
+   * Is the second string argument the value specified by the first rdfs:label annotation property argument. If the second argument is
+   * unbound, bind it to the value specified by the first rdfs:label annotation property argument.
    */
   public boolean hasRDFSLabel(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -174,11 +174,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // hasRDFSLabel
+  } 
 
   /**
-   ** Is the second resource argument the value specified by the first rdfs:seeAlso annotation property argument. If the second argument
-   ** is unbound, bind it to the value specified by the first rdfs:seeAlso annotation property argument.
+   * Is the second resource argument the value specified by the first rdfs:seeAlso annotation property argument. If the second argument
+   * is unbound, bind it to the value specified by the first rdfs:seeAlso annotation property argument.
    */
   public boolean hasRDFSSeeAlso(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -187,11 +187,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // hasRDFSSeeAlso
+  } 
 
   /**
-   ** Is the second string argument the value specified by the first rdfs:versionInfo annotation property argument. If the second argument
-   ** is unbound, bind it to the value specified by the first rdfs:versionInfo annotation property argument.
+   * Is the second string argument the value specified by the first rdfs:versionInfo annotation property argument. If the second argument
+   * is unbound, bind it to the value specified by the first rdfs:versionInfo annotation property argument.
    */
   public boolean hasOWLVersionInfo(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -200,10 +200,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // hasOWLVersionInfo
+  } 
 
   /**
-   ** Are all individual arguments declared to be the different from each other.
+   * Are all individual arguments declared to be the different from each other.
    */
   public boolean isOWLAllDifferents(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -212,10 +212,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isOWLAllDifferents
+  }
 
   /**
-   ** Is the single argument an owl:AllDifferentsAxiom.
+   * Is the single argument an owl:AllDifferentsAxiom.
    */
   public boolean isOWLAllDifferentsAxiom(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -224,10 +224,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isOWLAllDifferentsAxiom
+  } 
 
   /**
-   ** Is the single argument an owl:AllValuesFrom restriction.
+   * Is the single argument an owl:AllValuesFrom restriction.
    */
   public boolean isOWLAllValuesFromRestriction(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -236,10 +236,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isOWLAllValuesFromRestriction
+  } 
 
   /**
-   ** Is the single argument an annotation property.
+   * Is the single argument an annotation property.
    */
   public boolean isOWLAnnotationProperty(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -254,10 +254,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } // try
 
     return result;
-  } // isOWLAnnotationProperty
+  }
 
   /**
-   ** Is the single argument an owl:Cardinality restriction.
+   * Is the single argument an owl:Cardinality restriction.
    */
   public boolean isOWLCardinalityRestriction(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -266,10 +266,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isOWLCardinalityRestriction
+  }
 
   /**
-   ** Determine if a single argument is an OWL named class. If the argument is unbound, bind it to all OWL named classes in an ontology.
+   * Determine if a single argument is an OWL named class. If the argument is unbound, bind it to all OWL named classes in an ontology.
    */
   public boolean isOWLClass(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -301,10 +301,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } // try
 
     return result;
-  } // isOWLClass
+  } 
 
   /**
-   ** Is the single argument an OWL class description.
+   * Is the single argument an OWL class description.
    */
   public boolean isOWLClassDescription(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -312,10 +312,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isOWLClassDescription
+  } 
 
   /**
-   ** Is the single argument an rdfs:comment annotation.
+   * Is the single argument an rdfs:comment annotation.
    */
   public boolean isRDFSComment(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -324,11 +324,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isRDFSComment
+  } 
 
   /**
-   ** Is the first class argument the complement of the second class argument. If the second argument is unbound, bind it to the complement
-   ** of the first argument.
+   * Is the first class argument the complement of the second class argument. If the second argument is unbound, bind it to the complement
+   * of the first argument.
    */
   public boolean isComplementOf(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -336,10 +336,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isOWLComplementOf
+  } 
 
   /**
-   ** Is the single argument an owl:ComplementOf class description.
+   * Is the single argument an owl:ComplementOf class description.
    */
   public boolean isOWLComplementOfDescription(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -347,13 +347,13 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isOWLComplementOfDescription
+  }
 
   /**
-   ** Determine if the single argument is an OWL datatype property. If the argument is unbound, bind it to all OWL datatype
-   ** properties in an ontology.
+   * Determine if the single argument is an OWL data property. If the argument is unbound, bind it to all OWL datatype
+   * properties in an ontology.
    */
-  public boolean isOWLDatatypeProperty(List<BuiltInArgument> arguments) throws BuiltInException
+  public boolean isOWLDataProperty(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(1, arguments.size());
     boolean isUnboundArgument = isUnboundArgument(0, arguments);   
@@ -377,10 +377,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } // try
 
     return result;
-  } // isOWLDatatypeProperty
+  } 
 
   /**
-   ** Is the single argument an rdfs:isDefinedBy annotation.
+   * Is the single argument an rdfs:isDefinedBy annotation.
    */
   public boolean isRDFSIsDefinedBy(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -389,10 +389,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isRDFSIsDefinedBy
+  }
 
   /**
-   ** Is the single argument an owl:DifferentFrom axiom.
+   * Is the single argument an owl:DifferentFrom axiom.
    */
   public boolean isOWLDifferentFromAxiom(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -401,11 +401,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isOWLDifferentFromAxiom
+  } 
 
   /**
-   ** Check that the second class argument is a direct subclass of the first class argument. If the second argument is unbound, bind it to
-   ** the direct subclasses of the first argument (if any exist).
+   * Check that the second class argument is a direct subclass of the first class argument. If the second argument is unbound, bind it to
+   * the direct subclasses of the first argument (if any exist).
    */
   public boolean isDirectSubClassOf(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -413,35 +413,35 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   } 
 
   /**
-   ** Determine if the second property argument is a direct subproperty of the first property argument. If the second argument is unbound,
-   ** bind it to the direct sub properties of the first argument (if any exist).
+   * Determine if the second property argument is a direct subproperty of the first property argument. If the second argument is unbound,
+   * bind it to the direct sub properties of the first argument (if any exist).
    */
   public boolean isDirectSubPropertyOf(List<BuiltInArgument> arguments) throws BuiltInException
   {
     return isSubPropertyOf(arguments, false);
-  } // isDirectSubPropertyOf
+  } 
 
   /**
-   ** Check that the second class argument is a direct superclass of the first class argument. If the second argument is unbound, bind it to
-   ** the direct superclasses of the first argument (if any exist).
+   * Check that the second class argument is a direct superclass of the first class argument. If the second argument is unbound, bind it to
+   * the direct superclasses of the first argument (if any exist).
    */
   public boolean isDirectSuperClassOf(List<BuiltInArgument> arguments) throws BuiltInException
   {
     return isSuperClassOf(arguments, false);
-  } // isDirectSuperClassOf
+  } 
 
   /**
-   ** Determine if the second property argument is a direct superproperty of the first property argument. If the second argument is unbound,
-   ** bind it to the direct super properties of the first argument (if any exist).
+   * Determine if the second property argument is a direct superproperty of the first property argument. If the second argument is unbound,
+   * bind it to the direct super properties of the first argument (if any exist).
    */
   public boolean isDirectSuperPropertyOf(List<BuiltInArgument> arguments) throws BuiltInException
   {
     return isSuperPropertyOf(arguments, false);
-  } // isDirectSuperPropertyOf
+  } 
 
   /**
-   ** Determine if the two class arguments represent classes or properties that are disjoint with each other. If the second argument is
-   ** unbound, bind it to the disjoint classes of the first argument (if any exist).
+   * Determine if the two class arguments represent classes or properties that are disjoint with each other. If the second argument is
+   * unbound, bind it to the disjoint classes of the first argument (if any exist).
    */
   public boolean isDisjointWith(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -450,10 +450,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isDisjointWith
+  } 
 
   /**
-   ** Is the single argument an owl:DisjointWith axiom.
+   * Is the single argument an owl:DisjointWith axiom.
    */
   public boolean isOWLDisjointWithAxiom(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -462,10 +462,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isOWLDisjointWithAxiom
+  } 
 
   /**
-   ** Is the single argument an enumerated datatype axiom.
+   * Is the single argument an enumerated datatype axiom.
    */
   public boolean isOWLEnumeratedDatatypeAxiom(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -474,11 +474,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isOWLEnumeratedDatatypeAxiom
+  } 
 
   /**
-   ** Determine if the two class arguments are equivalent to each other. If the second
-   ** argument is unbound, bind it to the equivalent classes of the first argument (if any exist).
+   * Determine if the two class arguments are equivalent to each other. If the second
+   * argument is unbound, bind it to the equivalent classes of the first argument (if any exist).
    */
   public boolean isOWLEquivalentClass(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -487,10 +487,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isOWLEquivalentClass
+  } 
 
   /**
-   ** Is the single argument an owl:EquivalentClass axiom.
+   * Is the single argument an owl:EquivalentClass axiom.
    */
   public boolean isOWLEquivalentClassAxiom(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -499,11 +499,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isOWLEquivalentClassAxiom
+  } 
 
   /**
-   ** Determine if the two property arguments are equivalent to each other. If the second argument is unbound, bind it to the equivalent
-   ** properties of the first argument (if any exist).
+   * Determine if the two property arguments are equivalent to each other. If the second argument is unbound, bind it to the equivalent
+   * properties of the first argument (if any exist).
    */
   public boolean isOWLEquivalentProperty(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -512,10 +512,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isOWLEquivalentProperty
+  }
 
   /**
-   ** Is the single argument an owl:EquivalentProperty axiom.
+   * Is the single argument an owl:EquivalentProperty axiom.
    */
   public boolean isOWLEquivalentPropertyAxiom(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -524,10 +524,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isOWLEquivalentPropertyAxiom
+  } 
 
   /**
-   ** Determine if a single property argument is functional.
+   * Determine if a single property argument is functional.
    */
   public boolean isOWLFunctionalProperty(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -542,10 +542,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } // try
 
     return result;
-  } // isOWLFunctionalProperty
+  } 
 
   /**
-   ** Is the single argument an owl:functionalProperty axiom.
+   * Is the single argument an owl:functionalProperty axiom.
    */
   public boolean isOWLFunctionalPropertyAxiom(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -554,10 +554,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isIWKFunctionalPropertyAxiom
+  }
 
   /**
-   ** Is the single argument an owl:hasValue restriction
+   * Is the single argument an owl:hasValue restriction
    */
   public boolean isOWLHasValueRestriction(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -566,41 +566,41 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isOWLHasValueRestriction
+  } 
 
   /**
-   ** Check that the first class argument is in the domain of the second property argument (excluding its superproperties). If the first
-   ** argument is unbound and the second argument is bound, bind the first argument to the domain(s) of the second property argument (if any
-   ** exist). If the first class argument is bound and the second argument is unbound, bind the second argument to the properties that have
-   ** the class in their domain (if any). An error is thrown if both arguments are unbound.
+   * Check that the first class argument is in the domain of the second property argument (excluding its superproperties). If the first
+   * argument is unbound and the second argument is bound, bind the first argument to the domain(s) of the second property argument (if any
+   * exist). If the first class argument is bound and the second argument is unbound, bind the second argument to the properties that have
+   * the class in their domain (if any). An error is thrown if both arguments are unbound.
    */
   public boolean isInDirectDomainOf(List<BuiltInArgument> arguments) throws BuiltInException
   {
     return isInDomainOf(arguments, false);
-  } // isInDirectDomainOf
+  } 
 
   /**
-   ** Check that the first class argument is in the range of the second property argument excluding its superproperties. If the first
-   ** argument is unbound, bind it to the range of the second argument (if any exist).
+   * Check that the first class argument is in the range of the second property argument excluding its superproperties. If the first
+   * argument is unbound, bind it to the range of the second argument (if any exist).
    */
   public boolean isInDirectRangeOf(List<BuiltInArgument> arguments) throws BuiltInException
   {
     return isInRangeOf(arguments, false);
-  } // isInDirectRangeOf
+  } 
 
   /**
-   ** Check that the first class argument is in the domain of the second property argument (including its superproperties). If the first
-   ** argument is unbound and the second argument is bound, bind the first argument to the domain(s) of the second property argument (if any
-   ** exist). If the first class argument is bound and the second argument is unbound, bind the second argument to the properties that have
-   ** the class in their domain (if any). An error is thrown if both arguments are unbound.
+   * Check that the first class argument is in the domain of the second property argument (including its superproperties). If the first
+   * argument is unbound and the second argument is bound, bind the first argument to the domain(s) of the second property argument (if any
+   * exist). If the first class argument is bound and the second argument is unbound, bind the second argument to the properties that have
+   * the class in their domain (if any). An error is thrown if both arguments are unbound.
    */
   public boolean isInDomainOf(List<BuiltInArgument> arguments) throws BuiltInException
   {
     return isInDomainOf(arguments, true);
-  } // isInDomainOf
+  } 
 
   /**
-   ** Is the single argument an OWL domain axiom.
+   * Is the single argument an OWL domain axiom.
    */
   public boolean isOWLInDomainOfAxiom(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -609,19 +609,19 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isOWLInDomainOfAxiom
+  } 
 
   /**
-   ** Check that the first class argument is in the range of the second property argument (including its superproperties). If the first
-   ** argument is unbound, bind it to the range of the second argument (if any exist).
+   * Check that the first class argument is in the range of the second property argument (including its superproperties). If the first
+   * argument is unbound, bind it to the range of the second argument (if any exist).
    */
   public boolean isInRangeOf(List<BuiltInArgument> arguments) throws BuiltInException
   {
     return isInRangeOf(arguments, true);
-  } // isInRangeOf
+  } 
 
   /**
-   ** Is the single argument an OWL range axiom.
+   * Is the single argument an OWL range axiom.
    */
   public boolean isOWLInRangeOfAxiom(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -630,10 +630,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isOWLInRangeOfAxiom
+  } 
 
   /**
-   ** Is the single argument an owl:InteresctionOf class description.
+   * Is the single argument an owl:InteresctionOf class description.
    */
   public boolean isIntersectionOfDescription(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -642,10 +642,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isIntersectionOfDescription
+  } 
 
   /**
-   ** Is the single argument an owl:InverseFunctionalProperty axiom.
+   * Is the single argument an owl:InverseFunctionalProperty axiom.
    */
   public boolean isOWLInverseFunctionalPropertyAxiom(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -654,10 +654,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isOWLInverseFunctionalPropertyAxiom
+  } 
 
   /**
-   ** Determine if the second property argument is the inverse of the first property argument.
+   * Determine if the second property argument is the inverse of the first property argument.
    */
   public boolean isInverseOf(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -666,10 +666,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isInverseOf
+  }
 
   /**
-   ** Determine if a single property argument is inverse functional.
+   * Determine if a single property argument is inverse functional.
    */
   public boolean isInverseFunctionalProperty(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -684,10 +684,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } // try
 
     return result;
-  } // isInverseFunctionalProperty
+  } 
 
   /**
-   ** Is the single argument an owl:inverseOf axiom.
+   * Is the single argument an owl:inverseOf axiom.
    */
   public boolean isOWLInverseOfAxiom(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -696,10 +696,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isOWLInverseOfAxiom
+  } 
 
   /**
-   ** Is the single argument an rdfs:label annotation.
+   * Is the single argument an rdfs:label annotation.
    */
   public boolean isRDFSLabelAnnotation(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -708,10 +708,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isRDFSLabelAnnotation
+  } 
 
   /**
-   ** Is the single argument an owl:MaxCardinality restriction.
+   * Is the single argument an owl:MaxCardinality restriction.
    */
   public boolean isOWLMaxCardinalityRestriction(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -720,10 +720,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isOWLMaxCardinalityRestriction
+  } 
 
   /**
-   ** Is the single argument an owl:MinCardinality restriction.
+   * Is the single argument an owl:MinCardinality restriction.
    */
   public boolean isOWLMinCardinalityRestriction(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -732,11 +732,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isOWLMinCardinalityRestriction
+  } 
 
   /**
-   ** Determine if a single argument is an OWL object property. If the argument is unbound, bind it to all OWL object properties in an
-   ** ontology.
+   * Determine if a single argument is an OWL object property. If the argument is unbound, bind it to all OWL object properties in an
+   * ontology.
    */
   public boolean isOWLObjectProperty(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -755,17 +755,17 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
         result = !multiArgument.hasNoArguments();
       } else {
         String propertyURI = getArgumentAsAPropertyURI(0, arguments);
-        result = SWRLOWLUtil.isObjectProperty(getInvokingBridge().getOWLModel(), propertyURI, false);
+        result = SWRLOWLUtil.isOWLObjectProperty(getInvokingBridge().getOWLModel(), propertyURI, false);
       } // if
     } catch (SWRLOWLUtilException e) {
       throw new BuiltInException(e.getMessage());
     } // try
 
     return result;
-  } // isOWLObjectProperty
+  } 
 
   /**
-   ** Is the single argument an owl:oneOf class description.
+   * Is the single argument an owl:oneOf class description.
    */
   public boolean isOWLOneOfClassDescription(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -774,10 +774,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isOneOfClassDescription
+  } 
 
   /**
-   ** Is the single argument an owl:Ontology resource. If the argument is unbound, bind it to the current ontology.
+   * Is the single argument an owl:Ontology resource. If the argument is unbound, bind it to the current ontology.
    */
   public boolean isOWLOntology(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -789,7 +789,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   } 
 
   /**
-   * Determine if a single property argument is an OWL object or datatype property. If the argument is unbound, bind it to all OWL properties in an ontology.
+   * Determine if a single property argument is an OWL object or data property. If the argument is unbound, bind it to all OWL properties in an ontology.
    */
   public boolean isOWLProperty(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -808,7 +808,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
         result = !multiArgument.hasNoArguments();
       } else {
         String propertyURI = getArgumentAsAPropertyURI(0, arguments);
-        result = SWRLOWLUtil.isProperty(getInvokingBridge().getOWLModel(), propertyURI, false);
+        result = SWRLOWLUtil.isOWLProperty(getInvokingBridge().getOWLModel(), propertyURI, false);
       } // if
     } catch (SWRLOWLUtilException e) {
       throw new BuiltInException(e.getMessage());
@@ -827,7 +827,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isRDFSSeeAlsoAnnotation
+  } 
 
   /**
    * Is the single argument an owl:SameAs axiom.
@@ -874,7 +874,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   public boolean isSuperPropertyOf(List<BuiltInArgument> arguments) throws BuiltInException
   {
     return isSuperPropertyOf(arguments, true);
-  } // isSuperPropertyOf
+  } 
 
   /**
    * Determine if a single property argument is symmetric.
@@ -907,7 +907,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   } 
 
   /**
-   * Determine if a single property argument is transitive.
+   * Determine if a single property argument is a transitive property.
    */
   public boolean isOWLTransitiveProperty(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -1101,8 +1101,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
         } // if
       } else {
         String superClassURI = getArgumentAsAClassURI(0, arguments);
-        if (transitive) result = SWRLOWLUtil.isSuperClassOf(getInvokingBridge().getOWLModel(), superClassURI, classURI, true);
-        else result = SWRLOWLUtil.isDirectSuperClassOf(getInvokingBridge().getOWLModel(), superClassURI, classURI, true);
+        if (transitive) result = SWRLOWLUtil.isOWLSuperClassOf(getInvokingBridge().getOWLModel(), superClassURI, classURI, true);
+        else result = SWRLOWLUtil.isOWLDirectSuperClassOf(getInvokingBridge().getOWLModel(), superClassURI, classURI, true);
       } // if
     } catch (SWRLOWLUtilException e) {
       throw new BuiltInException(e.getMessage());
@@ -1153,8 +1153,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
           } // if
         } else {
           String subClassURI = getArgumentAsAClassURI(0, arguments);
-          if (transitive) result = SWRLOWLUtil.isSubClassOf(getInvokingBridge().getOWLModel(), subClassURI, classURI, true);
-          else  result = SWRLOWLUtil.isDirectSubClassOf(getInvokingBridge().getOWLModel(), subClassURI, classURI, true);
+          if (transitive) result = SWRLOWLUtil.isOWLSubClassOf(getInvokingBridge().getOWLModel(), subClassURI, classURI, true);
+          else  result = SWRLOWLUtil.isOWLDirectSubClassOf(getInvokingBridge().getOWLModel(), subClassURI, classURI, true);
         } // if
       } // if
     } catch (SWRLOWLUtilException e) {
@@ -1190,8 +1190,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
         } // if
       } else {
         String subPropertyURI = getArgumentAsAPropertyURI(0, arguments);
-        if (transitive) result = SWRLOWLUtil.isSubPropertyOf(getInvokingBridge().getOWLModel(), subPropertyURI, propertyURI, true);
-        else result = SWRLOWLUtil.isDirectSubPropertyOf(getInvokingBridge().getOWLModel(), subPropertyURI, propertyURI, true);
+        if (transitive) result = SWRLOWLUtil.isOWLSubPropertyOf(getInvokingBridge().getOWLModel(), subPropertyURI, propertyURI, true);
+        else result = SWRLOWLUtil.isOWLDirectSubPropertyOf(getInvokingBridge().getOWLModel(), subPropertyURI, propertyURI, true);
       } // if
     } catch (SWRLOWLUtilException e) {
       throw new BuiltInException(e.getMessage());
@@ -1226,8 +1226,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
         } // if
       } else {
         String superPropertyURI = getArgumentAsAPropertyURI(0, arguments);
-        if (transitive) result = SWRLOWLUtil.isSuperPropertyOf(getInvokingBridge().getOWLModel(), superPropertyURI, propertyURI, true);
-        else result = SWRLOWLUtil.isDirectSuperPropertyOf(getInvokingBridge().getOWLModel(), superPropertyURI, propertyURI, true);
+        if (transitive) result = SWRLOWLUtil.isOWLSuperPropertyOf(getInvokingBridge().getOWLModel(), superPropertyURI, propertyURI, true);
+        else result = SWRLOWLUtil.isOWLDirectSuperPropertyOf(getInvokingBridge().getOWLModel(), superPropertyURI, propertyURI, true);
       } // if
     } catch (SWRLOWLUtilException e) {
       throw new BuiltInException(e.getMessage());
@@ -1253,8 +1253,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       if (domainClassArgumentUnbound) {
         Set<edu.stanford.smi.protegex.owl.model.OWLNamedClass> domainClasses;
         propertyURI = getArgumentAsAPropertyURI(1, arguments);
-        if (includingSuperproperties) domainClasses = SWRLOWLUtil.getDomainClasses(getInvokingBridge().getOWLModel(), propertyURI);
-        else domainClasses = SWRLOWLUtil.getDirectDomainClasses(getInvokingBridge().getOWLModel(), propertyURI);
+        if (includingSuperproperties) domainClasses = SWRLOWLUtil.getOWLDomainClasses(getInvokingBridge().getOWLModel(), propertyURI);
+        else domainClasses = SWRLOWLUtil.getDirectOWLDomainClasses(getInvokingBridge().getOWLModel(), propertyURI);
         if (!domainClasses.isEmpty()) {
           MultiArgument multiArgument = createMultiArgument();
           for (edu.stanford.smi.protegex.owl.model.OWLNamedClass domainClass : domainClasses) multiArgument.addArgument(createClassArgument(domainClass.getURI()));
@@ -1278,9 +1278,9 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
         domainClassURI = getArgumentAsAClassURI(0, arguments);
         propertyURI = getArgumentAsAPropertyURI(1, arguments);
         if (includingSuperproperties) 
-          result = SWRLOWLUtil.isInPropertyDomain(getInvokingBridge().getOWLModel(), propertyURI, domainClassURI, true);
+          result = SWRLOWLUtil.isInOWLPropertyDomain(getInvokingBridge().getOWLModel(), propertyURI, domainClassURI, true);
         else 
-          result = SWRLOWLUtil.isInDirectPropertyDomain(getInvokingBridge().getOWLModel(), propertyURI, domainClassURI, true);
+          result = SWRLOWLUtil.isInDirectOWLPropertyDomain(getInvokingBridge().getOWLModel(), propertyURI, domainClassURI, true);
       } // if
     } catch (SWRLOWLUtilException e) {
       throw new BuiltInException(e.getMessage());
@@ -1303,8 +1303,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     try {
       if (rangeClassArgumentUnbound) {
         Set<edu.stanford.smi.protegex.owl.model.OWLNamedClass> rangeClasses;
-        if (includingSuperproperties) rangeClasses = SWRLOWLUtil.getRangeClasses(getInvokingBridge().getOWLModel(), propertyURI);
-        else rangeClasses = SWRLOWLUtil.getDirectRangeClasses(getInvokingBridge().getOWLModel(), propertyURI);
+        if (includingSuperproperties) rangeClasses = SWRLOWLUtil.getOWLRangeClasses(getInvokingBridge().getOWLModel(), propertyURI);
+        else rangeClasses = SWRLOWLUtil.getOWLDirectRangeClasses(getInvokingBridge().getOWLModel(), propertyURI);
         if (!rangeClasses.isEmpty()) {
           MultiArgument multiArgument = createMultiArgument();
           for (edu.stanford.smi.protegex.owl.model.OWLNamedClass rangeClass : rangeClasses) 

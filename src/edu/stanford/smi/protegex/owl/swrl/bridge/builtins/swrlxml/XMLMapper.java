@@ -75,7 +75,7 @@ public class XMLMapper
 
     try {
       xmlDocumentClass = SWRLOWLUtil.getNamedClass(owlModel, XMLDocumentOWLClassName);
-      xmlDocument = SWRLOWLUtil.getIndividual(owlModel, xmlDocumentClass, true, 1);
+      xmlDocument = SWRLOWLUtil.getOWLIndividual(owlModel, xmlDocumentClass, true, 1);
       propertyValue = SWRLOWLUtil.getObjectPropertyValue(owlModel, xmlDocument, XMLDocumentHasRootElementPropertyName, false);
 
       if (propertyValue == null) throw new XMLMapperException("no document root element specified");

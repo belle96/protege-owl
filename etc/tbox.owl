@@ -29,7 +29,7 @@
   <swrl:Builtin rdf:ID="isOWLNamedClass"/>
   <swrl:Builtin rdf:ID="isOWLProperty"/>
   <swrl:Builtin rdf:ID="isOWLObjectProperty"/>
-  <swrl:Builtin rdf:ID="isOWLDatatypeProperty"/>
+  <swrl:Builtin rdf:ID="isOWLDataProperty"/>
   <swrl:Builtin rdf:ID="isOWLTransitiveProperty"/>
   <swrl:Builtin rdf:ID="isOWLFunctionalProperty"/>
   <swrl:Builtin rdf:ID="isOWLSymmetricProperty"/>

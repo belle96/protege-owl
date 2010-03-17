@@ -77,7 +77,7 @@ public class XMLBridgeMapper
 
     try {
       xmlDocumentMappingClass = SWRLOWLUtil.getNamedClass(bridge.getOWLModel(), XMLDocumentMappingOWLClassName);
-      xmlDocumentMapping = SWRLOWLUtil.getIndividual(bridge.getOWLModel(), xmlDocumentMappingClass, true, 1);
+      xmlDocumentMapping = SWRLOWLUtil.getOWLIndividual(bridge.getOWLModel(), xmlDocumentMappingClass, true, 1);
       propertyValue = SWRLOWLUtil.getObjectPropertyValue(bridge.getOWLModel(), xmlDocumentMapping, 
                                                          XMLDocumentMappingHasRootElementPropertyName, false);
 

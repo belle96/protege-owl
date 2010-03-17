@@ -114,11 +114,11 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
   }
   
   public boolean containsClassReference(String classURI) { return SWRLOWLUtil.isOWLClass(owlModel, classURI); }
-  public boolean isOWLProperty(String propertyURI) { return SWRLOWLUtil.isProperty(owlModel, propertyURI); }
+  public boolean isOWLProperty(String propertyURI) { return SWRLOWLUtil.isOWLProperty(owlModel, propertyURI); }
   public boolean containsObjectPropertyReference(String propertyURI) { return SWRLOWLUtil.isOWLObjectProperty(owlModel, propertyURI); }
   public boolean containsDataPropertyReference(String propertyURI) { return SWRLOWLUtil.isOWLDataProperty(owlModel, propertyURI); }
   public boolean containsIndividualReference(String individualURI) { return SWRLOWLUtil.isOWLIndividual(owlModel, individualURI); }
-  public boolean isOWLIndividualOfClass(String individualURI, String classURI) { return SWRLOWLUtil.isIndividualOfClass(owlModel, individualURI, classURI); }
+  public boolean isOWLIndividualOfClass(String individualURI, String classURI) { return SWRLOWLUtil.isOWLIndividualOfClass(owlModel, individualURI, classURI); }
   public boolean isSWRLBuiltIn(String builtInURI) { return SWRLOWLUtil.isSWRLBuiltIn(owlModel, builtInURI); }
   public String createNewResourceName(String prefix) { return SWRLOWLUtil.createNewResourceName(owlModel, prefix); }
   
@@ -252,12 +252,12 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
     String classURI = owlClass.getURI();
     edu.stanford.smi.protegex.owl.model.OWLClass cls, superclass;
 
-    if (SWRLOWLUtil.isClass(owlModel, classURI)) cls = SWRLOWLUtil.getOWLNamedClass(owlModel, classURI);
+    if (SWRLOWLUtil.isOWLNamedClass(owlModel, classURI)) cls = SWRLOWLUtil.getOWLNamedClass(owlModel, classURI);
     else cls = SWRLOWLUtil.getOWLNamedClass(owlModel, classURI);
     
     for (OWLClass superClass : owlClass.getSuperClasses()) {
     	String superClassURI = superClass.getURI();
-      if (SWRLOWLUtil.isClass(owlModel, superClassURI)) superclass = SWRLOWLUtil.getOWLNamedClass(owlModel, superClassURI);
+      if (SWRLOWLUtil.isOWLNamedClass(owlModel, superClassURI)) superclass = SWRLOWLUtil.getOWLNamedClass(owlModel, superClassURI);
       else superclass = SWRLOWLUtil.getOWLNamedClass(owlModel, superClassURI);
       
       if (!cls.isSubclassOf(superclass)) cls.addSuperclass(superclass);
@@ -780,7 +780,7 @@ public class OWLConversionFactoryImpl implements OWLConversionFactory
   {
     String subClassURI = axiom.getSubClass().getURI();
     String superClassURI = axiom.getSuperClass().getURI();
-    SWRLOWLUtil.addSuperClass(owlModel, subClassURI, superClassURI);
+    SWRLOWLUtil.addOWLSuperClass(owlModel, subClassURI, superClassURI);
   } // write2OWLModel
   
   private DataRangeAtom convertDataRangeAtom(edu.stanford.smi.protegex.owl.swrl.model.SWRLDataRangeAtom atom) 
