@@ -1,4 +1,4 @@
-; Tue Mar 16 09:26:01 PST 2010
+; Wed Mar 17 11:52:03 PST 2010
 ; 
 ;+ (version "3.4.4")
 ;+ (build "Build 579")
@@ -6,14 +6,14 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[SQWRLExamples_ProjectKB_Class10063]
-		[SQWRLExamples_ProjectKB_Class10064]
-		[SQWRLExamples_ProjectKB_Class10065]
-		[SQWRLExamples_ProjectKB_Class10066]
-		[SQWRLExamples_ProjectKB_Class10067]
-		[SQWRLExamples_ProjectKB_Class10068]
-		[SQWRLExamples_ProjectKB_Class10069]
-		[SQWRLExamples_ProjectKB_Class10070]))
+		[SQWRLExamples_ProjectKB_Class10079]
+		[SQWRLExamples_ProjectKB_Class10080]
+		[SQWRLExamples_ProjectKB_Class10081]
+		[SQWRLExamples_ProjectKB_Class10082]
+		[SQWRLExamples_ProjectKB_Class10083]
+		[SQWRLExamples_ProjectKB_Class10084]
+		[SQWRLExamples_ProjectKB_Class10085]
+		[SQWRLExamples_ProjectKB_Class10086]))
 
 ([CLSES_TAB] of  Widget
 
@@ -7013,9 +7013,6 @@
 ([KB_183529_Class999] of  Property_List
 )
 
-([KB_238002_Class0] of  Map
-)
-
 ([KB_301165_Instance_1013] of  Widget
 
 	(is_hidden FALSE)
@@ -7207,6 +7204,9 @@
 	(name "http://www.w3.org/2002/07/owl#Ontology")
 	(property_list [KB_183529_Class343])
 	(widget_class_name "edu.stanford.smi.protegex.owl.ui.widget.OWLFormWidget"))
+
+([KB_810129_Class0] of  Map
+)
 
 ([KB_865583_Instance_10] of  Widget
 
@@ -7944,42 +7944,42 @@
 ([SQWRLExamples_ProjectKB_Class10062] of  Property_List
 )
 
-([SQWRLExamples_ProjectKB_Class10063] of  String
+([SQWRLExamples_ProjectKB_Class10079] of  String
 
 	(name "http://www.w3.org/2002/07/owl#Class")
 	(string_value "http%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23label"))
 
-([SQWRLExamples_ProjectKB_Class10064] of  String
+([SQWRLExamples_ProjectKB_Class10080] of  String
 
 	(name "http://www.w3.org/2000/01/rdf-schema#Class")
 	(string_value "http%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23label"))
 
-([SQWRLExamples_ProjectKB_Class10065] of  String
+([SQWRLExamples_ProjectKB_Class10081] of  String
 
 	(name ":INSTANCE-ANNOTATION")
 	(string_value "%3AANNOTATION-TEXT"))
 
-([SQWRLExamples_ProjectKB_Class10066] of  String
+([SQWRLExamples_ProjectKB_Class10082] of  String
 
 	(name ":META-CLASS")
 	(string_value "%3ANAME"))
 
-([SQWRLExamples_ProjectKB_Class10067] of  String
+([SQWRLExamples_ProjectKB_Class10083] of  String
 
 	(name "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property")
 	(string_value "http%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23label"))
 
-([SQWRLExamples_ProjectKB_Class10068] of  String
+([SQWRLExamples_ProjectKB_Class10084] of  String
 
 	(name "http://www.w3.org/2002/07/owl#Thing")
 	(string_value "http%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23label"))
 
-([SQWRLExamples_ProjectKB_Class10069] of  String
+([SQWRLExamples_ProjectKB_Class10085] of  String
 
 	(name "http://swrl.stanford.edu/3.4.4/SQWRLExamples.owl#Treatment")
 	(string_value "{%28}http%3A%2F%2Fswrl.stanford.edu%2F3.4.4%2FSQWRLExamples.owl%23hasDrug{%2C}http%3A%2F%2Fswrl.stanford.edu%2F3.4.4%2FSQWRLExamples.owl%23hasDose{%29}"))
 
-([SQWRLExamples_ProjectKB_Class10070] of  String
+([SQWRLExamples_ProjectKB_Class10086] of  String
 
 	(name ":PAL-CONSTRAINT")
 	(string_value "%3APAL-NAME"))

@@ -26,13 +26,13 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.InvalidBuiltInNameEx
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDTimeUtil;
 
 /**
- ** Implementations library for the core SWRL built-in methods. These built-ins are defined <a
- ** href="http://www.daml.org/2004/04/swrl/builtins.html">here</a> and are documented <a
- ** href="http://protege.cim3.net/cgi-bin/wiki.pl?CoreSWRLBuiltIns">here</a>.
- **
- ** See <a href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLBuiltInBridge">here</a> for documentation on defining SWRL built-in libraries.
- **
- ** Built-ins for lists and URIs not yet implemented.
+ * Implementations library for the core SWRL built-in methods. These built-ins are defined <a
+ * href="http://www.daml.org/2004/04/swrl/builtins.html">here</a> and are documented <a
+ * href="http://protege.cim3.net/cgi-bin/wiki.pl?CoreSWRLBuiltIns">here</a>.
+ *
+ * See <a href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLBuiltInBridge">here</a> for documentation on defining SWRL built-in libraries.
+ *
+ * Built-ins for lists and URIs not yet implemented.
  */
 public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 {
@@ -58,10 +58,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   private static String SWRLB_COS = SWRLBPrefix + "cos";
   private static String SWRLB_TAN = SWRLBPrefix + "tan";
 
-  public SWRLBuiltInLibraryImpl() 
-  { 
-    super(SWRLBLibraryName); 
-  } // SWRLBuiltInLibraryImpl
+  public SWRLBuiltInLibraryImpl() { super(SWRLBLibraryName); }
 
   public void reset() {}
   
@@ -85,7 +82,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } else throw new InvalidBuiltInArgumentException(0, "expecting string or numeric argument for comparison, got " + getArgumentAsAString(0, arguments));
 
     return result;
-  } // greaterThan
+  } 
 
   public boolean lessThan(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -105,8 +102,9 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } else throw new InvalidBuiltInArgumentException(0, "expecting string or numeric argument for comparison, got " + getArgumentAsAString(0, arguments));
 
     return result;
-  } // lessThan
+  } 
 
+  // TODO: XSD types
   public boolean equal(List<BuiltInArgument> arguments) throws BuiltInException
   {
     boolean result = false;
@@ -134,22 +132,22 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } else throw new InvalidBuiltInArgumentException(0, "expecting string, numeric or boolean argument for comparison, got " + getArgumentAsAString(0, arguments));
 
     return result;
-  } // equal
+  } 
 
   public boolean notEqual(List<BuiltInArgument> arguments) throws BuiltInException
   {
     return !equal(arguments);
-  } // notEqual
+  } 
 
   public boolean lessThanOrEqual(List<BuiltInArgument> arguments) throws BuiltInException
   {
     return equal(arguments) || lessThan(arguments);
-  } // lessThanOrEqual
+  } 
 
   public boolean greaterThanOrEqual(List<BuiltInArgument> arguments) throws BuiltInException
   {
     return equal(arguments) || greaterThan(arguments);
-  } // greaterThanOrEqual
+  }
 
   // Math Built-ins, defined in Section 8.2. of http://www.daml.org/2004/04/swrl/builtins.html.
   
@@ -158,119 +156,119 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     checkNumberOfArgumentsAtLeast(2, arguments.size());
 
     return mathOperation(SWRLB_ADD, arguments); 
-  } // add
+  }
 
   public boolean subtract(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(3, arguments.size());
 
     return mathOperation(SWRLB_SUBTRACT, arguments);
-  } // subtract
+  }
 
   public boolean multiply(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsAtLeast(2, arguments.size());
 
     return mathOperation(SWRLB_MULTIPLY, arguments);
-  } // multiply
+  }
 
   public boolean divide(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(3, arguments.size());
 
     return mathOperation(SWRLB_DIVIDE, arguments);
-  } // divide
+  }
 
   public boolean integerDivide(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(3, arguments.size());
 
     return mathOperation(SWRLB_INTEGER_DIVIDE, arguments);
-  } // integerDivide
+  }
 
   public boolean mod(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(3, arguments.size());
 
     return mathOperation(SWRLB_MOD, arguments);
-  } // mod
-
+  } 
+  
   public boolean pow(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(3, arguments.size());
 
     return mathOperation(SWRLB_POW, arguments);
-  } // pow
+  }
 
   public boolean unaryPlus(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(2, arguments.size());
 
     return mathOperation(SWRLB_UNARY_PLUS, arguments);
-  } // unaryPlus
+  }
 
   public boolean unaryMinus(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(2, arguments.size());
 
     return mathOperation(SWRLB_UNARY_MINUS, arguments);
-  } // unaryMinus
+  }
 
   public boolean abs(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(2, arguments.size());
 
     return mathOperation(SWRLB_ABS, arguments);
-  } // abs
+  } 
 
   public boolean ceiling(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(2, arguments.size());
 
     return mathOperation(SWRLB_CEILING, arguments);
-  } // ceiling
+  } 
 
   public boolean floor(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(2, arguments.size());
 
     return mathOperation(SWRLB_FLOOR, arguments);
-  } // floor
+  }
 
   public boolean round(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(2, arguments.size());
 
     return mathOperation(SWRLB_ROUND, arguments);
-  } // round
+  }
 
   public boolean roundHalfToEven(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(2, arguments.size());
 
     return mathOperation(SWRLB_ROUND_HALF_TO_EVEN, arguments);
-  } // roundHalfToEven
+  }
 
   public boolean sin(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(2, arguments.size());
 
     return mathOperation(SWRLB_SIN, arguments);
-  } // sin
+  }
 
   public boolean cos(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(2, arguments.size());
 
     return mathOperation(SWRLB_COS, arguments);
-  } // cos
+  }
 
   public boolean tan(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(2, arguments.size());
 
     return mathOperation(SWRLB_TAN, arguments);
-  } // tan
+  }
 
   // Built-ins for Booleans. cf. Section 8.3 of http://www.daml.org/2004/04/swrl/builtins.html
 
@@ -295,7 +293,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       result = !equal(arguments);
     } // if
     return result;
-  } // booleanNot
+  }
 
   // Built-ins for Strings. cf. Section 8.4 of http://www.daml.org/2004/04/swrl/builtins.html
   
@@ -310,40 +308,28 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     argument2 = getArgumentAsAString(1, arguments);
 
     return argument1.equalsIgnoreCase(argument2);
-  } // stringEqualIgnoreCase
+  }
 
   public boolean stringConcat(List<BuiltInArgument> arguments) throws BuiltInException
   {
     String operationResult = "";
-    boolean result;
 
     checkNumberOfArgumentsAtLeast(2, arguments.size());
-    checkForUnboundNonFirstArguments(arguments);
 
     for (int argumentNumber = 1; argumentNumber < arguments.size(); argumentNumber++) { // Exception thrown if argument is not a literal.
       operationResult = operationResult.concat(getArgumentAsADataValue(argumentNumber, arguments).toString());
     } // for
-
-    if (isUnboundArgument(0, arguments)) {
-      arguments.get(0).setBuiltInResult(createDataValueArgument(operationResult)); // Bind the result to the first parameter
-      result = true;
-    } else {
-      String argument1 = getArgumentAsAString(0, arguments);
-      result =  argument1.equals(operationResult);
-    } //if
-
-    return result;
-  } // stringConcat
+    
+    return processResultArgument(arguments, 0, operationResult);
+  } 
 
   public boolean substring(List<BuiltInArgument> arguments) throws BuiltInException
   {
     String argument2, operationResult;
     int startIndex, length;
-    boolean result;
 
     checkNumberOfArgumentsAtLeast(3, arguments.size());
     checkNumberOfArgumentsAtMost(4, arguments.size());
-    checkForUnboundNonFirstArguments(arguments);
 
     argument2 = getArgumentAsAString(1, arguments);
     startIndex = getArgumentAsAnInteger(2, arguments);
@@ -353,129 +339,81 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       operationResult = argument2.substring(startIndex, length);
     } else operationResult = argument2.substring(startIndex);
 
-    if (hasUnboundArguments(arguments)) {
-      arguments.get(0).setBuiltInResult(createDataValueArgument(operationResult)); // Bind the result to the first parameter
-      result = true;
-    } else {
-      String argument1 = getArgumentAsAString(0, arguments);
-      result =  argument1.equals(operationResult);
-    } //if
-    return result;
-  } // substring
+    return processResultArgument(arguments, 0, operationResult);
+  } 
 
   public boolean stringLength(List<BuiltInArgument> arguments) throws BuiltInException
   {
-    String argument2;
-    boolean result;
-    int operationResult;
-
     checkNumberOfArgumentsEqualTo(2, arguments.size());
-    checkForUnboundNonFirstArguments(arguments);
 
-    argument2 = getArgumentAsAString(1, arguments);
-    operationResult = argument2.length();
+    String argument2 = getArgumentAsAString(1, arguments);
+    int operationResult = argument2.length();
 
-    if (hasUnboundArguments(arguments)) {
-      arguments.get(0).setBuiltInResult(createDataValueArgument(operationResult)); // Bind the result to the first parameter
-      result = true;
-    } else {
-      String argument1 = getArgumentAsAString(0, arguments);
-      result = argument1.length() == operationResult;
-    } //if
-    return result;
-  } // stringLength
+    return processResultArgument(arguments, 0, operationResult);
+  }
 
   public boolean upperCase(List<BuiltInArgument> arguments) throws BuiltInException
   {
-    String argument2, operationResult;
-    boolean result;
-
     checkNumberOfArgumentsEqualTo(2, arguments.size());
-    checkForUnboundNonFirstArguments(arguments);
+   
+    String argument2 = getArgumentAsAString(1, arguments);
+    String operationResult = argument2.toUpperCase();
 
-    argument2 = getArgumentAsAString(1, arguments);
-    operationResult = argument2.toUpperCase();
-
-    if (hasUnboundArguments(arguments)) {
-      arguments.get(0).setBuiltInResult(createDataValueArgument(operationResult)); // Bind the result to the first parameter
-      result = true;
-    } else {
-      String argument1 = getArgumentAsAString(0, arguments);
-      result = argument1.equals(operationResult);
-    } //if
-    return result;
-  } // upperCase
+    return processResultArgument(arguments, 0, operationResult);
+  }
 
   public boolean lowerCase(List<BuiltInArgument> arguments) throws BuiltInException
   {
-    String argument2, operationResult;
-    boolean result;
-
     checkNumberOfArgumentsEqualTo(2, arguments.size());
-    checkForUnboundNonFirstArguments(arguments);
 
-    argument2 = getArgumentAsAString(1, arguments);
+    String argument2 = getArgumentAsAString(1, arguments);
+    String operationResult = argument2.toLowerCase();
 
-    operationResult = argument2.toLowerCase();
-
-    if (hasUnboundArguments(arguments)) {
-      arguments.get(0).setBuiltInResult(createDataValueArgument(operationResult)); // Bind the result to the first parameter
-      result = true;
-    } else {
-      String argument1 = getArgumentAsAString(0, arguments);
-      result = argument1.equals(operationResult);
-    } //if
-    return result;
-  } // lowerCase
+    return processResultArgument(arguments, 0, operationResult);
+  } 
 
   public boolean contains(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(2, arguments.size());
-    checkForUnboundArguments(arguments);
 
     String argument1 = getArgumentAsAString(0, arguments);
     String argument2 = getArgumentAsAString(1, arguments);
 
     return argument1.lastIndexOf(argument2) != -1;
-  } // contains
+  } 
 
   public boolean containsIgnoreCase(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(2, arguments.size());
-    checkForUnboundArguments(arguments);
 
     String argument1 = getArgumentAsAString(0, arguments);
     String argument2 = getArgumentAsAString(1, arguments);
 
     return argument1.toLowerCase().lastIndexOf(argument2.toLowerCase()) != -1;
-  } // containsIgnoreCase
+  } 
 
   public boolean startsWith(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(2, arguments.size());
-    checkForUnboundArguments(arguments);
 
     String argument1 = getArgumentAsAString(0, arguments);
     String argument2 = getArgumentAsAString(1, arguments);
 
     return argument1.startsWith(argument2);
-  } // startsWith
+  } 
 
   public boolean endsWith(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(2, arguments.size());
-    checkForUnboundArguments(arguments);
 
     String argument1 = getArgumentAsAString(0, arguments);
     String argument2 = getArgumentAsAString(1, arguments);
 
     return argument1.endsWith(argument2);
-  } // endsWith
+  }
 
   public boolean translate(List<BuiltInArgument> arguments) throws BuiltInException
   {
-    boolean result;
-
     checkNumberOfArgumentsEqualTo(4, arguments.size());
 
     String argument2 = getArgumentAsAString(1, arguments);
@@ -483,66 +421,37 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     String argument4 = getArgumentAsAString(3, arguments);
     String operationResult = StringUtils.replaceChars(argument2, argument3, argument4);
 
-    if (isUnboundArgument(0, arguments)) {
-      arguments.get(0).setBuiltInResult(createDataValueArgument(operationResult)); 
-      result = true;
-    } else {
-      String argument1 = getArgumentAsAString(0, arguments);
-      result = argument1.equals(operationResult);
-    } // if
-    
-    return result;
-  } // translate
+    return processResultArgument(arguments, 0, operationResult);
+  }
 
   public boolean substringAfter(List<BuiltInArgument> arguments) throws BuiltInException
   {
-    boolean result;
-
     checkNumberOfArgumentsEqualTo(3, arguments.size());
 
     String argument2 = getArgumentAsAString(1, arguments);
     String argument3 = getArgumentAsAString(2, arguments);
     String operationResult = StringUtils.substringAfter(argument2, argument3);
 
-    if (isUnboundArgument(0, arguments)) {
-      arguments.get(0).setBuiltInResult(createDataValueArgument(operationResult)); 
-      result = true;
-    } else {
-      String argument1 = getArgumentAsAString(0, arguments);
-      result = argument1.equals(operationResult);
-    } // if
-    
-    return result;
-  } // substringAfter
+    return processResultArgument(arguments, 0, operationResult);
+  } 
 
   public boolean substringBefore(List<BuiltInArgument> arguments) throws BuiltInException
   {
-    boolean result;
-
     checkNumberOfArgumentsEqualTo(3, arguments.size());
 
     String argument2 = getArgumentAsAString(1, arguments);
     String argument3 = getArgumentAsAString(2, arguments);
     String operationResult = StringUtils.substringBefore(argument2, argument3);
 
-    if (isUnboundArgument(0, arguments)) {
-      arguments.get(0).setBuiltInResult(createDataValueArgument(operationResult)); 
-      result = true;
-    } else {
-      String argument1 = getArgumentAsAString(0, arguments);
-      result = argument1.equals(operationResult);
-    } // if
-
-    return result;
-  } // substringBefore
+    return processResultArgument(arguments, 0, operationResult);
+  }
 
   public boolean matches(List<BuiltInArgument> arguments) throws BuiltInException
   {
     boolean result = false;
 
     checkNumberOfArgumentsEqualTo(2, arguments.size());
-    checkForUnboundArguments(arguments);
-
+    
     String argument1 = getArgumentAsAString(0, arguments);
     String argument2 = getArgumentAsAString(1, arguments);
 
@@ -553,14 +462,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } // try
 
     return result;
-  } // matches
+  }
 
   public boolean replace(List<BuiltInArgument> arguments) throws BuiltInException
   {
-    boolean result = false;
-
     checkNumberOfArgumentsEqualTo(4, arguments.size());
-    checkForUnboundNonFirstArguments(arguments);
 
     String input = getArgumentAsAString(1, arguments);
     String regex = getArgumentAsAString(2, arguments);
@@ -570,23 +476,12 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     Matcher m = p.matcher(input);
     String operationResult = m.replaceAll(replacement);
 
-    if (isUnboundArgument(0, arguments)) {
-      arguments.get(0).setBuiltInResult(createDataValueArgument(operationResult)); 
-      result = true;
-    } else {
-      String output = getArgumentAsAString(0, arguments);
-      result = output.equals(operationResult);
-    } // if
-
-    return result;
-  } // replace
+    return processResultArgument(arguments, 0, operationResult);
+  }
 
   public boolean normalizeSpace(List<BuiltInArgument> arguments) throws BuiltInException
   {
-    boolean result = false;
-
     checkNumberOfArgumentsEqualTo(2, arguments.size());
-    checkForUnboundNonFirstArguments(arguments);
 
     String input = getArgumentAsAString(1, arguments);
 
@@ -594,16 +489,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     Matcher m = p.matcher(input);
     String operationResult = m.replaceAll(" ").trim();
 
-    if (isUnboundArgument(0, arguments)) {
-      arguments.get(0).setBuiltInResult(createDataValueArgument(operationResult)); 
-      result = true;
-    } else {
-      String output = getArgumentAsAString(0, arguments);
-      result = output.equals(operationResult);
-    } // if
-
-    return result;
-  } // normalizeSpace
+    return processResultArgument(arguments, 0, operationResult);
+  }
 
   public boolean tokenize(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -646,7 +533,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     duration.setMonths(month);
 
     return processResultArgument(arguments, 0, duration.toString());
-  } // yearMonthDuration
+  } 
 
   @SuppressWarnings("deprecation")
   public boolean dayTimeDuration(List<BuiltInArgument> arguments) throws BuiltInException
@@ -664,7 +551,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     duration.setSeconds(seconds);
 
     return processResultArgument(arguments, 0, duration.toString());
-  } // dayTimeDuration
+  }
 
   public boolean dateTime(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -688,7 +575,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
                       calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND) + calendar.getTimeZone().getID();
 
     return processResultArgument(arguments, 0, operationResult);
-  } // dateTime
+  }
 
   public boolean date(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -708,7 +595,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     operationResult = "" + calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DAY_OF_MONTH) + calendar.getTimeZone().getID();
 
     return processResultArgument(arguments, 0, operationResult);
-  } // date
+  } 
 
   public boolean time(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -721,7 +608,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     String operationResult = "" + hours + ":" + minutes + ":" + seconds + timeZone;
 
     return processResultArgument(arguments, 0, operationResult);
-  } // time
+  } 
 
   public boolean addYearMonthDurations(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -735,7 +622,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } // for
 
     return processResultArgument(arguments, 0, operationDuration.toString());
-  } // addYearMonthDurations
+  }
 
   public boolean subtractYearMonthDurations(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -746,7 +633,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     org.apache.axis.types.Duration operationDuration = XSDTimeUtil.subtractYearMonthDurations(duration2, duration3);
 
     return processResultArgument(arguments, 0, operationDuration.toString());
-  } // subtractYearMonthDurations
+  }
 
   public boolean multiplyYearMonthDuration(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -757,7 +644,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     org.apache.axis.types.Duration operationDuration = XSDTimeUtil.multiplyYearMonthDurations(duration2, duration3);
 
     return processResultArgument(arguments, 0, operationDuration.toString());
-  } // multiplyYearMonthDuration
+  }
 
   public boolean divideYearMonthDurations(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -768,7 +655,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     org.apache.axis.types.Duration operationDuration = XSDTimeUtil.divideYearMonthDurations(duration2, duration3);
 
     return processResultArgument(arguments, 0, operationDuration.toString());
-  } // divideYearMonthDurations
+  }
 
   public boolean addDayTimeDurations(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -782,7 +669,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } // for
 
     return processResultArgument(arguments, 0, operationDuration.toString());
-  } // addDayTimeDurations
+  }
 
   public boolean subtractDayTimeDurations(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -793,7 +680,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     org.apache.axis.types.Duration operationDuration = XSDTimeUtil.subtractDayTimeDurations(duration2, duration3);
 
     return processResultArgument(arguments, 0, operationDuration.toString());
-  } // subtractDayTimeDurations
+  } 
 
   public boolean multiplyDayTimeDurations(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -804,7 +691,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     org.apache.axis.types.Duration operationDuration = XSDTimeUtil.multiplyDayTimeDurations(duration2, duration3);
 
     return processResultArgument(arguments, 0, operationDuration.toString());
-  } // multiplyDayTimeDurations
+  }
 
   public boolean divideDayTimeDuration(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -815,7 +702,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     org.apache.axis.types.Duration operationDuration = XSDTimeUtil.divideDayTimeDurations(duration2, duration3);
 
     return processResultArgument(arguments, 0, operationDuration.toString());
-  } // divideDayTimeDuration
+  }
 
   public boolean subtractDates(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -826,7 +713,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     org.apache.axis.types.Duration operationDuration = XSDTimeUtil.subtractDates(date2, date3);
 
     return processResultArgument(arguments, 0, operationDuration.toString());
-  } // subtractDates
+  }
 
   public boolean subtractTimes(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -837,7 +724,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     org.apache.axis.types.Duration operationDuration = XSDTimeUtil.subtractTimes(time2, time3);
 
     return processResultArgument(arguments, 0, operationDuration.toString());
-  } // subtractTimes
+  }
 
   public boolean addYearMonthDurationToDateTime(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -848,7 +735,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     java.util.Date operationDateTime = XSDTimeUtil.addYearMonthDurationToDateTime(date, duration);
 
     return processResultArgument(arguments, 0, XSDTimeUtil.date2XSDDateTimeString(operationDateTime));
-  } // addYearMonthDurationToDateTime
+  }
 
   public boolean subtractYearMonthDurationFromDateTime(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -859,7 +746,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     java.util.Date operationDateTime = XSDTimeUtil.subtractYearMonthDurationFromDateTime(date, duration);
  
     return processResultArgument(arguments, 0, XSDTimeUtil.date2XSDDateTimeString(operationDateTime));
-  } // subtractYearMonthDurationFromDateTime
+  } 
 
   public boolean addDayTimeDurationToDateTime(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -870,7 +757,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     java.util.Date operationDateTime = XSDTimeUtil.addDayTimeDurationToDateTime(date, duration);
  
     return processResultArgument(arguments, 0, XSDTimeUtil.date2XSDDateTimeString(operationDateTime));
-  } // addDayTimeDurationToDateTime
+  } 
 
   public boolean subtractDayTimeDurationFromDateTime(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -881,7 +768,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     java.util.Date operationDateTime = XSDTimeUtil.subtractDayTimeDurationFromDateTime(date, duration);
  
     return processResultArgument(arguments, 0, XSDTimeUtil.date2XSDDateTimeString(operationDateTime));
-  } // subtractDayTimeDurationFromDateTime
+  }
 
   public boolean addYearMonthDurationToDate(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -892,7 +779,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     java.util.Date operationDateTime = XSDTimeUtil.addYearMonthDurationToDate(date, duration);
  
     return processResultArgument(arguments, 0, XSDTimeUtil.date2XSDDateTimeString(operationDateTime));
-  } // addYearMonthDurationToDate
+  }
 
   public boolean subtractYearMonthDurationFromDate(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -903,7 +790,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     java.util.Date operationDateTime = XSDTimeUtil.subtractYearMonthDurationFromDate(date, duration);
  
     return processResultArgument(arguments, 0, XSDTimeUtil.date2XSDDateTimeString(operationDateTime));
-  } // subtractYearMonthDurationFromDate
+  } 
 
   public boolean addDayTimeDurationToDate(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -914,7 +801,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     java.util.Date operationDateTime = XSDTimeUtil.addDayTimeDurationToDateTime(date, duration);
  
     return processResultArgument(arguments, 0, XSDTimeUtil.date2XSDDateTimeString(operationDateTime));
-  } // addDayTimeDurationToDate
+  }
 
   public boolean subtractDayTimeDurationFromDate(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -925,7 +812,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     java.util.Date operationDateTime = XSDTimeUtil.subtractDayTimeDurationFromDateTime(date, duration);
  
     return processResultArgument(arguments, 0, XSDTimeUtil.date2XSDDateTimeString(operationDateTime));
-  } // subtractDayTimeDurationFromDate
+  }
 
   public boolean addDayTimeDurationToTime(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -936,7 +823,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     org.apache.axis.types.Time operationTime = XSDTimeUtil.addDayTimeDurationToTime(time, duration);
 
     return processResultArgument(arguments, 0, operationTime.toString());
-  } // addDayTimeDurationToTime
+  }
 
   public boolean subtractDayTimeDurationFromTime(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -947,7 +834,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     org.apache.axis.types.Time operationTime = XSDTimeUtil.subtractDayTimeDurationFromTime(time, duration);
 
     return processResultArgument(arguments, 0, operationTime.toString());
-  } // subtractDayTimeDurationFromTime
+  }
 
   public boolean subtractDateTimesYieldingYearMonthDuration(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -956,7 +843,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
    org.apache.axis.types.Duration operationDuration = XSDTimeUtil.subtractDateTimesYieldingYearMonthDuration(date1, date2);
  
    return processResultArgument(arguments, 0, operationDuration.toString());
-  } // subtractDateTimesYieldingYearMonthDuration
+  }
 
   public boolean subtractDateTimesYieldingDayTimeDuration(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -965,7 +852,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     org.apache.axis.types.Duration operationDuration = XSDTimeUtil.subtractDateTimesYieldingDayTimeDuration(date1, date2);
     
    return processResultArgument(arguments, 0, operationDuration.toString());
-  } // subtractDateTimesYieldingDayTimeDuration 
+  } 
 
   // Built-ins for URIs
 
@@ -976,7 +863,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // resolveURI
+  }
 
   public boolean anyURI(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -985,7 +872,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // anyURI
+  }
 
   // Built-ins for Lists
 
@@ -996,7 +883,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // listConcat
+  }
 
   public boolean listIntersection(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -1005,7 +892,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // listIntersection
+  }
 
   public boolean listSubtraction(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -1014,7 +901,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // listSubtraction
+  }
 
   public boolean member(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -1023,7 +910,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // member 
+  } 
 
   public boolean length(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -1032,7 +919,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // length
+  }
 
   public boolean first(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -1041,7 +928,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // first
+  }
 
   public boolean rest(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -1050,7 +937,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // rest
+  }
 
   public boolean sublist(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -1059,7 +946,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // sublist
+  }
 
   public boolean empty(List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -1068,7 +955,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // empty
+  }
 
   // Private methods
 
@@ -1101,7 +988,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } // if
 
     return result;
-  } // equal
+  }
 
   private boolean mathOperation(String builtInName, List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -1176,7 +1063,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } else result = (argument1 == operationResult);
 
     return result;
-  } // mathOperation
+  }
 
   private org.apache.axis.types.Duration getArgumentAsADuration(int argumentNumber, List<BuiltInArgument> arguments) 
     throws BuiltInException
@@ -1188,11 +1075,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       argument = getArgumentAsAString(argumentNumber, arguments);
       result = new org.apache.axis.types.Duration(argument);
     } catch (IllegalArgumentException e) {
-      throw new BuiltInException("invalid xsd:duration '" + argument + "': " + e.getMessage());
+      throw new BuiltInException("invalid xsd:duration " + argument + ": " + e.getMessage());
     } // try
 
     return result;
-  } // getArgumentAsADuration
+  }
 
   private java.util.Date getArgumentAsADate(int argumentNumber,  List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -1203,11 +1090,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       argument = getArgumentAsAString(argumentNumber, arguments);
       result = dateFormat.parse(argument); 
     } catch (ParseException e) {
-      throw new BuiltInException("invalid xsd:date '" + argument + "': " + e.getMessage());
+      throw new BuiltInException("invalid xsd:date " + argument + ": " + e.getMessage());
     } // try
 
     return result;
-  } // getArgumentAsADate
+  }
 
   private org.apache.axis.types.Time getArgumentAsATime(int argumentNumber,  List<BuiltInArgument> arguments) throws BuiltInException
   {
@@ -1218,10 +1105,9 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       argument = getArgumentAsAString(argumentNumber, arguments);
       result = new org.apache.axis.types.Time(argument); 
     } catch (NumberFormatException e) {
-      throw new BuiltInException("invalid xsd:time '" + argument + "': " + e.getMessage());
+      throw new BuiltInException("invalid xsd:time " + argument + ": " + e.getMessage());
     } // try
 
     return result;
-  } // getArgumentAsATime
-
-} // SWRLBuiltInLibraryImpl
+  } 
+}
