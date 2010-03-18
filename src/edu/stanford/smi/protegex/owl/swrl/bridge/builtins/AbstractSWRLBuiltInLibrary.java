@@ -12,6 +12,7 @@ import java.util.Map;
 import edu.stanford.smi.protegex.owl.swrl.bridge.ArgumentFactory;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.ClassArgument;
+import edu.stanford.smi.protegex.owl.swrl.bridge.CollectionArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.DataPropertyArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.DataValueArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.IndividualArgument;
@@ -1047,5 +1048,7 @@ public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
 	
 	public MultiArgument createMultiArgument() { return argumentFactory.createMultiArgument(); }
 	public MultiArgument createMultiArgument(List<BuiltInArgument> arguments) { return argumentFactory.createMultiArgument(arguments); }
+	
+	public CollectionArgument createCollectionArgument(String collectionID) { return argumentFactory.createCollectionArgument(collectionID); }
 
 }

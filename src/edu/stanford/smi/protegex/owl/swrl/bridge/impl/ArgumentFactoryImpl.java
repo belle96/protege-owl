@@ -6,6 +6,7 @@ import java.util.List;
 import edu.stanford.smi.protegex.owl.swrl.bridge.ArgumentFactory;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.ClassArgument;
+import edu.stanford.smi.protegex.owl.swrl.bridge.CollectionArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.DataPropertyArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.DataValueArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.IndividualArgument;
@@ -43,4 +44,6 @@ public class ArgumentFactoryImpl extends ArgumentFactory
 
   public MultiArgument createMultiArgument() { return new MultiArgumentImpl(); }
   public MultiArgument createMultiArgument(List<BuiltInArgument> arguments) { return new MultiArgumentImpl(arguments); }
+  
+  public CollectionArgument createCollectionArgument(String collectionID) { return new CollectionArgumentImpl(collectionID); }
 }

@@ -16,6 +16,7 @@ import java.util.Set;
 import edu.stanford.smi.protegex.owl.swrl.bridge.Argument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.ClassArgument;
+import edu.stanford.smi.protegex.owl.swrl.bridge.CollectionArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.DataPropertyArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.DataValueArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.IndividualArgument;
@@ -86,6 +87,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
        	DataPropertyArgument dataPropertyArgument = (DataPropertyArgument)argument;
        	DataPropertyValue dataPropertyValue =  resultValueFactory.createDataPropertyValue(dataPropertyArgument.getURI());
        	result.addRowData(dataPropertyValue);
+      } else if (argument instanceof CollectionArgument) {
+      	throw new InvalidBuiltInArgumentException(argumentIndex, "collections cannot be selected");
       } else throw new InvalidBuiltInArgumentException(argumentIndex, "unknown type " + argument.getClass());
       argumentIndex++;
     } // for
@@ -131,6 +134,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
      	DataPropertyArgument dataPropertyArgument = (DataPropertyArgument)argument;
      	DataPropertyValue dataPropertyValue =  resultValueFactory.createDataPropertyValue(dataPropertyArgument.getURI());
      	result.addRowData(dataPropertyValue);
+    } else if (argument instanceof CollectionArgument) {
+    	throw new InvalidBuiltInArgumentException(0, "collections cannot be counted");
     } else throw new InvalidBuiltInArgumentException(0, "unknown type " + argument.getClass());
     
     return false;
@@ -163,8 +168,9 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     } // if
 
     set.add(element);
-
-    if (isUnboundArgument(0, arguments)) arguments.get(0).setBuiltInResult(createDataValueArgument(collectionID));
+  
+    if (isUnboundArgument(0, arguments)) 
+    	arguments.get(0).setBuiltInResult(createCollectionArgument(collectionID));
 
     return true;
   }
@@ -184,7 +190,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
     bag.add(element);
 
-    if (isUnboundArgument(0, arguments)) arguments.get(0).setBuiltInResult(createDataValueArgument(collectionID));
+    if (isUnboundArgument(0, arguments)) arguments.get(0).setBuiltInResult(createCollectionArgument(collectionID));
 
     return true;
   }
@@ -568,10 +574,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
 	  if (!collections.containsKey(resultCollectionID)) collections.put(resultCollectionID, intersection);
 
-	  if (isUnboundArgument(0, arguments)) arguments.get(0).setBuiltInResult(createDataValueArgument(resultCollectionID));
+	  if (isUnboundArgument(0, arguments)) arguments.get(0).setBuiltInResult(createCollectionArgument(resultCollectionID));
 
 	  return true;
-   } // intersection
+   }
 
   public boolean append(List<BuiltInArgument> arguments) throws BuiltInException 
   { 
@@ -592,7 +598,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 		
 		if (!collections.containsKey(resultCollectionID)) collections.put(resultCollectionID, resultCollection);
 		
-		if (isUnboundArgument(0, arguments)) arguments.get(0).setBuiltInResult(createDataValueArgument(resultCollectionID));
+		if (isUnboundArgument(0, arguments)) arguments.get(0).setBuiltInResult(createCollectionArgument(resultCollectionID));
 		
 		return true;
 	} 
@@ -616,7 +622,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 		
 		if (!collections.containsKey(resultCollectionID)) collections.put(resultCollectionID, union);
 		
-		if (isUnboundArgument(0, arguments)) arguments.get(0).setBuiltInResult(createDataValueArgument(resultCollectionID));
+		if (isUnboundArgument(0, arguments)) arguments.get(0).setBuiltInResult(createCollectionArgument(resultCollectionID));
 		
 		return true;
 	} 
@@ -640,7 +646,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 	
 		if (!collections.containsKey(resultCollectionID)) collections.put(resultCollectionID, difference);
 		
-		if (isUnboundArgument(0, arguments)) arguments.get(0).setBuiltInResult(createDataValueArgument(resultCollectionID));
+		if (isUnboundArgument(0, arguments)) arguments.get(0).setBuiltInResult(createCollectionArgument(resultCollectionID));
 		
 		return true;
   }
@@ -1010,7 +1016,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 	  return processListResultArgument(arguments, resultCollectionArgumentNumber, resultListID, resultList);
   }
 
-	public boolean processListResultArgument(List<BuiltInArgument> arguments, int resultArgumentNumber, 
+	private boolean processListResultArgument(List<BuiltInArgument> arguments, int resultArgumentNumber, 
 											                     String resultListID, List<BuiltInArgument> resultList) 
 	  throws BuiltInException
 	{
@@ -1019,7 +1025,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 	  checkArgumentNumber(resultArgumentNumber, arguments);
 	
 	  if (isUnboundArgument(resultArgumentNumber, arguments)) {
-	    arguments.get(resultArgumentNumber).setBuiltInResult(createDataValueArgument(resultListID));
+	    arguments.get(resultArgumentNumber).setBuiltInResult(createCollectionArgument(resultListID));
 	    result = true;
 	  } else {
 	  	Collection<BuiltInArgument> collection = getCollection(resultListID);
@@ -1047,15 +1053,6 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   	return getCollection(collectionID);	
   }
-
-  private String getCollectionID(BuiltInArgument argument) throws BuiltInException
-  {
-  	DataValue dataValue = getArgumentAsADataValue(argument);
-	
-  	if (!dataValue.isString()) throw new BuiltInException("non collection argument: " + argument);
-	
-  	return dataValue.getString();	
-  }	
 
   private List<BuiltInArgument> getSortedListInSingleCollectionOperation(List<BuiltInArgument> arguments, int sourceCollectionArgumentNumber, 
   								                                                       int numberOfArguments)

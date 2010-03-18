@@ -19,7 +19,7 @@ public class ClassArgumentImpl extends BuiltInArgumentImpl implements ClassArgum
   public int compareTo(BuiltInArgument o)
   {
   	return classURI.compareTo(((ClassArgument)o).getURI());
-  } // compareTo
+  }
 
   public boolean equals(Object obj)
   {
@@ -34,6 +34,5 @@ public class ClassArgumentImpl extends BuiltInArgumentImpl implements ClassArgum
     int hash = 12;
     hash = hash + (null == getURI() ? 0 : getURI().hashCode());   
     return hash;
-  } // hashCode
-
-} // ClassArgumentImpl
+  }
+}

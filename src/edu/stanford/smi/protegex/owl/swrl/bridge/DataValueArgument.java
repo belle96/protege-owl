@@ -9,4 +9,4 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
 public interface DataValueArgument extends BuiltInArgument, AtomArgument
 {
 	DataValue getDataValue();
-} // DataValueArgument
+}

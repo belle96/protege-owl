@@ -35,4 +35,6 @@ public abstract class ArgumentFactory
 
   public abstract MultiArgument createMultiArgument();
   public abstract MultiArgument createMultiArgument(List<BuiltInArgument> arguments);
+  
+  public abstract CollectionArgument createCollectionArgument(String collectionID);
 }

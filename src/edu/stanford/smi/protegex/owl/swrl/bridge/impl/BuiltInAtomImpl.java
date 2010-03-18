@@ -14,7 +14,7 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLNames;
 
 /**
- ** Class representing a SWRL built-in atom
+ * Class representing a SWRL built-in atom
  */
 public class BuiltInAtomImpl extends AtomImpl implements BuiltInAtom
 {
@@ -29,14 +29,14 @@ public class BuiltInAtomImpl extends AtomImpl implements BuiltInAtom
     this.builtInURI = builtInURI;
     this.builtInPrefixedName = builtInPrefixedName;
     this.arguments = arguments;
-  } // BuiltInArgument
+  }
 
   public BuiltInAtomImpl(String builtInURI, String builtInPrefixedName)
   {
     this.builtInURI = builtInURI;
     this.builtInPrefixedName = builtInPrefixedName;
     this.arguments = new ArrayList<BuiltInArgument>();
-  } // BuiltInArgument
+  }
 
   public void setBuiltInArguments(List<BuiltInArgument> arguments) { this.arguments = arguments; }
 
@@ -65,27 +65,27 @@ public class BuiltInAtomImpl extends AtomImpl implements BuiltInAtom
     s.retainAll(getArgumentsVariableNames());
 
     return !s.isEmpty();
-  } // usesAtLeastOneVariableOf
+  }
 
   public boolean isArgumentAVariable(int argumentNumber) throws BuiltInException
   {
     checkArgumentNumber(argumentNumber);
 
     return arguments.get(argumentNumber).isVariable();
-  } // isArgumentAVariable
+  }
 
   public boolean isArgumentUnbound(int argumentNumber) throws BuiltInException
   {
     checkArgumentNumber(argumentNumber);
 
     return arguments.get(argumentNumber).isUnbound();
-  } // isArgumentUnbound
+  }
 
   public boolean hasUnboundArguments() 
   {
     for (BuiltInArgument argument: arguments) if (argument.isUnbound()) return true;
     return false;
-  } // hasUnboundArguments
+  }
 
   public Set<String> getUnboundArgumentVariableNames() throws BuiltInException
   {  
@@ -94,7 +94,7 @@ public class BuiltInAtomImpl extends AtomImpl implements BuiltInAtom
     for (BuiltInArgument argument : arguments) if (argument.isUnbound()) result.add(argument.getVariableName());
 
     return result;
-  } // getUnboundArgumentVariableNames
+  }
 
   public String getArgumentVariableName(int argumentNumber) throws BuiltInException
   {
@@ -104,7 +104,7 @@ public class BuiltInAtomImpl extends AtomImpl implements BuiltInAtom
       throw new BuiltInException("expecting a variable for (0-offset) argument #" + argumentNumber);
     
     return arguments.get(argumentNumber).getVariableName();
-  } // 
+  } 
 
   public List<String> getArgumentsVariableNames() throws BuiltInException
   {
@@ -123,22 +123,22 @@ public class BuiltInAtomImpl extends AtomImpl implements BuiltInAtom
     for (BuiltInArgument argument : arguments) if (argument.isVariable() && argumentCount++ != 0) result.add(argument.getVariableName());
 
     return result;
-  } // getArgumentsVariableNamesExceptFirst
+  }
 
   public void addArguments(List<BuiltInArgument> additionalArguments) 
   { 
     arguments.addAll(additionalArguments); 
-  } // addArguments
+  }
 
   public void setDependsOnVariableNames(Set<String> variableNames)
   {
 	  dependsOnVariableNames = variableNames;
-  } // setDependsOnVariableNames
+  }
   
   private void checkArgumentNumber(int argumentNumber) throws BuiltInException
   {
     if (argumentNumber < 0 || argumentNumber > arguments.size()) throw new BuiltInException("invalid (0-offset) argument #" + argumentNumber);
-  } // checkArgumentNumber  
+  }  
 
   public String toString() 
   {
@@ -159,6 +159,5 @@ public class BuiltInAtomImpl extends AtomImpl implements BuiltInAtom
     result += ")";
 
     return result;
-  } // toString
-
-} // BuiltInAtomImpl
+  }
+}
