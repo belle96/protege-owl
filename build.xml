@@ -134,6 +134,9 @@
         <mkdir dir="${classes}"/>
         <mkdir dir="${dist}"/>
         <mkdir dir="${plugins}"/>
+    	<echo message="******************************************" />
+        <echo message="Using Java version to compile: ${ant.java.version}" />
+    	<echo message="******************************************" />
     </target>
 
     <!-- ================================================================ -->
