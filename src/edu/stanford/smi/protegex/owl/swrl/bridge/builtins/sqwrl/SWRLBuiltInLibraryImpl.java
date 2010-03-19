@@ -62,7 +62,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   	checkThatInConsequent();
     checkForUnboundArguments(arguments);
     checkNumberOfArgumentsAtLeast(1, arguments.size());
-    SQWRLResultImpl result = getSQWRLResult(getInvokingRuleName());
+    SQWRLResultImpl result = getSQWRLUnpreparedResult(getInvokingRuleName());
 
     if (!result.isRowOpen()) result.openRow();
 
@@ -110,7 +110,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     checkForUnboundArguments(arguments);
     checkNumberOfArgumentsEqualTo(1, arguments.size());
 
-    SQWRLResultImpl result = getSQWRLResult(getInvokingRuleName());
+    SQWRLResultImpl result = getSQWRLUnpreparedResult(getInvokingRuleName());
     BuiltInArgument argument = arguments.get(0);
 
     if (!result.isRowOpen()) result.openRow();
@@ -232,7 +232,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       checkForUnboundArguments(arguments);
       checkNumberOfArgumentsEqualTo(1, arguments.size());
       
-      SQWRLResultImpl resultImpl = getSQWRLResult(getInvokingRuleName());
+      SQWRLResultImpl resultImpl = getSQWRLUnpreparedResult(getInvokingRuleName());
       BuiltInArgument argument = arguments.get(0);
       
       if (!resultImpl.isRowOpen()) resultImpl.openRow();
@@ -256,7 +256,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       checkForUnboundArguments(arguments);
       checkNumberOfArgumentsEqualTo(1, arguments.size());
       
-      SQWRLResultImpl resultImpl = getSQWRLResult(getInvokingRuleName());
+      SQWRLResultImpl resultImpl = getSQWRLUnpreparedResult(getInvokingRuleName());
       BuiltInArgument argument = arguments.get(0);
       
       if (!resultImpl.isRowOpen()) resultImpl.openRow();
@@ -281,7 +281,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       checkForUnboundArguments(arguments);
       checkNumberOfArgumentsEqualTo(1, arguments.size());
       
-      SQWRLResultImpl resultImpl = getSQWRLResult(getInvokingRuleName());
+      SQWRLResultImpl resultImpl = getSQWRLUnpreparedResult(getInvokingRuleName());
       BuiltInArgument argument = arguments.get(resultArgumentNumber);
       
       if (!resultImpl.isRowOpen()) resultImpl.openRow();
@@ -320,7 +320,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       checkForUnboundArguments(arguments);
       checkNumberOfArgumentsEqualTo(1, arguments.size());
       
-      SQWRLResultImpl resultImpl = getSQWRLResult(getInvokingRuleName());
+      SQWRLResultImpl resultImpl = getSQWRLUnpreparedResult(getInvokingRuleName());
       Argument argument = arguments.get(0);
       
       if (!resultImpl.isRowOpen()) resultImpl.openRow();
@@ -1035,11 +1035,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 	  return result;
 	} 
 
-  private SQWRLResultImpl getSQWRLResult(String queryName) throws BuiltInException
+  private SQWRLResultImpl getSQWRLUnpreparedResult(String queryURI) throws BuiltInException
   {
-    return getInvokingBridge().getSWRLRule(queryName).getSQWRLResult();
+    return getInvokingBridge().getSQWRLUnpreparedResult(queryURI);
   }
-  
+
   private void checkThatElementIsComparable(BuiltInArgument element) throws BuiltInException
   {
     if (!(element instanceof DataValueArgument) || !((DataValueArgument)element).getDataValue().isComparable())

@@ -162,5 +162,4 @@ public class SWRLRuleGroupTreeTableModel extends DefaultTreeTableModel
 		if (column == IsEnabledColumn) return Boolean.class;
 		else return super.getColumnClass(column);
 	} 
-
 } 

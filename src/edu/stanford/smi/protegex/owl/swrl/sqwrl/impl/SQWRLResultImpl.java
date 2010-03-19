@@ -675,8 +675,9 @@ public class SQWRLResultImpl implements SQWRLResult, SQWRLResultGenerator, Seria
 
   private void throwExceptionIfAlreadyPrepared() throws SQWRLException
   {
-    if (isPrepared()) throw new ResultStateException("attempt to modify prepared result");
-  } // throwExceptionIfAlreadyConfigured
+    if (isPrepared()) 
+    	throw new ResultStateException("attempt to modify prepared result");
+  } 
 
   private void checkColumnName(String columnName) throws InvalidColumnNameException
   {

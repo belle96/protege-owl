@@ -2,6 +2,7 @@
 package edu.stanford.smi.protegex.owl.swrl.bridge;
 
 import java.util.List;
+import java.util.Set;
 
 import edu.stanford.smi.protegex.owl.swrl.SWRLRuleEngine;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLRuleEngineBridgeException;
@@ -35,10 +36,10 @@ public interface SWRLRuleEngineBridge extends SWRLRuleEngine, SQWRLQueryEngine
   boolean invokeSWRLBuiltIn(String ruleName, String builtInName, int builtInIndex, boolean isInConsequent, List<BuiltInArgument> arguments) 
     throws SWRLRuleEngineBridgeException;
 
-  boolean isOWLClass(String classURI);
-  boolean isOWLObjectProperty(String propertyURI);
-  boolean isOWLDataProperty(String propertyURI);
-  boolean isOWLIndividual(String individualURI);
+  boolean isOWLClass(String uri);
+  boolean isOWLObjectProperty(String uri);
+  boolean isOWLDataProperty(String uri);
+  boolean isOWLIndividual(String uri);
 
   OWLDataFactory getOWLDataFactory();
   OWLDataValueFactory getOWLDataValueFactory();
@@ -46,4 +47,12 @@ public interface SWRLRuleEngineBridge extends SWRLRuleEngine, SQWRLQueryEngine
   
   String uri2PrefixedName(String uri);
   String name2URI(String prefixedName);
+  
+  // SQWRL-related functionality
+  boolean isSQWRLQuery(SWRLRule query);
+  boolean usesSQWRLCollections(SWRLRule query);
+  List<Atom> getSQWRLPhase1BodyAtoms(SWRLRule query);
+  List<Atom> getSQWRLPhase2BodyAtoms(SWRLRule query);
+  List<BuiltInAtom> getBuiltInAtomsFromHead(SWRLRule query, Set<String> builtInNames);
+  List<BuiltInAtom> getBuiltInAtomsFromBody(SWRLRule query, Set<String> builtInNames);
 }

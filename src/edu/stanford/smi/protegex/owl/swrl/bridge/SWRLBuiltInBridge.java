@@ -12,6 +12,8 @@ import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClass;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDataFactory;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLIndividual;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLPropertyAssertionAxiom;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.SQWRLResultImpl;
 
 /**
  * The SWRL Built-in Bridge defines the methods seen by built-in implementations at run time. Ideally, built-in implementations should only
@@ -53,7 +55,8 @@ public interface SWRLBuiltInBridge
    * Method to provide access to SWRL rules from a built-in.  Should not be called by built-ins in general; provided (temporarily) for the
    * use of the SQWRL built-in library.
    */
-  SWRLRule getSWRLRule(String ruleName) throws SWRLBuiltInBridgeException;
+  SWRLRule getSWRLRule(String ruleURI) throws SWRLBuiltInBridgeException;
+  SQWRLResultImpl getSQWRLUnpreparedResult(String queryURI) throws SQWRLException;
 
   OWLDataFactory getOWLDataFactory();
   OWLDataValueFactory getOWLDataValueFactory();
