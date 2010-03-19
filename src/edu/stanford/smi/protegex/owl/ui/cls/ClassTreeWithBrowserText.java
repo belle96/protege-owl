@@ -64,7 +64,7 @@ public class ClassTreeWithBrowserText extends ClassTree {
                     } else {
                         for (Object object : path) {
                             if (object instanceof Frame) {
-                                fbtPath.add(new FrameWithBrowserText((Frame) object));
+                                fbtPath.add(FrameWithBrowserText.getFrameWithBrowserText((Frame) object));
                             }
                         }
                     }

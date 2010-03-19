@@ -17,9 +17,12 @@ import edu.stanford.smi.protege.event.ClsListener;
 import edu.stanford.smi.protege.event.FrameAdapter;
 import edu.stanford.smi.protege.event.FrameEvent;
 import edu.stanford.smi.protege.event.FrameListener;
+import edu.stanford.smi.protege.event.InstanceEvent;
+import edu.stanford.smi.protege.event.InstanceListener;
 import edu.stanford.smi.protege.exception.ProtegeException;
 import edu.stanford.smi.protege.model.Cls;
 import edu.stanford.smi.protege.model.Frame;
+import edu.stanford.smi.protege.model.Instance;
 import edu.stanford.smi.protege.model.KnowledgeBase;
 import edu.stanford.smi.protege.model.Model;
 import edu.stanford.smi.protege.server.RemoteSession;
@@ -48,8 +51,16 @@ public class ClassTreeWithBrowserTextNode extends LazyTreeNode {
 		if (frame instanceof Cls) {
 			attachListener((Cls)frame);          
 		}
+		if (log.isLoggable(Level.FINE)) {
+			log.fine(logIntro() + "Constructed");
+			if (userObj.getTypes() != null) {
+				for (Cls cls : userObj.getTypes()) {
+					log.fine("\thasType = " + cls);
+				}
+			}
+		}
 	}
-
+	
 	/*
 	 * Listener code
 	 */
@@ -58,6 +69,7 @@ public class ClassTreeWithBrowserTextNode extends LazyTreeNode {
 		 if (cls != null) {
 			 cls.addClsListener(_clsListener);
 			 cls.addFrameListener(_frameListener);
+			 cls.addInstanceListener(instanceListener);
 		 }
 	 }
 
@@ -65,6 +77,7 @@ public class ClassTreeWithBrowserTextNode extends LazyTreeNode {
 		 if (cls != null) {
 			 cls.removeClsListener(_clsListener);
 			 cls.removeFrameListener(_frameListener);
+			 cls.removeInstanceListener(instanceListener);
 		 }
 	 }
 
@@ -160,6 +173,50 @@ public class ClassTreeWithBrowserTextNode extends LazyTreeNode {
 			 notifyNodeChanged();
 		 }
 	 };
+	 
+	 private InstanceListener instanceListener = new InstanceListener() {
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public void directTypeAdded(InstanceEvent event) {
+			 if (event.isReplacementEvent()) return;
+			 FrameWithBrowserText fbt = (FrameWithBrowserText) getUserObject();
+			 if (fbt.getFrame() instanceof Instance) {
+				 fbt.setTypes(((Instance) fbt.getFrame()).getDirectTypes());
+				 if (log.isLoggable(Level.FINE)) {
+					 log.fine(logIntro() + "Types changed");
+					 Collection<Cls> types = ((FrameWithBrowserText) getUserObject()).getTypes();
+					 if (types != null) {
+						 for (Cls cls : types) {
+							 log.fine("\thasType = " + cls);
+						 }
+					 }
+				 }
+			 }
+			 notifyNodeChanged();
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public void directTypeRemoved(InstanceEvent event) {
+			 if (event.isReplacementEvent()) return;
+			 FrameWithBrowserText fbt = (FrameWithBrowserText) getUserObject();
+			 if (fbt.getFrame() instanceof Instance) {
+				 fbt.setTypes(((Instance) fbt.getFrame()).getDirectTypes());
+				 if (log.isLoggable(Level.FINE)) {
+					 log.fine(logIntro() + "Types changed");
+					 Collection<Cls> types = ((FrameWithBrowserText) getUserObject()).getTypes();
+					 if (types != null) {
+						 for (Cls cls : types) {
+							 log.fine("\thasType = " + cls);
+						 }
+					 }
+				 }
+			 }
+			 notifyNodeChanged();
+		}
+		 
+	 };
 
 	 protected void notifyNodeChanged() {
 		 notifyNodeChanged(this);
@@ -167,7 +224,9 @@ public class ClassTreeWithBrowserTextNode extends LazyTreeNode {
 
 	 protected FrameWithBrowserText createFrameWithBrowserText(Frame frame) {
 		 if (frame == null) { return null; }
-		 return new FrameWithBrowserText(frame, frame.getBrowserText(), null, ProtegeUI.getPotentialIconName(frame));
+		 FrameWithBrowserText result = FrameWithBrowserText.getFrameWithBrowserText(frame);
+		 result.setIconName(ProtegeUI.getPotentialIconName(frame));
+		 return result;
 	 }
 
 	 
@@ -286,13 +345,22 @@ public class ClassTreeWithBrowserTextNode extends LazyTreeNode {
 	 }
 
 
-	 protected void dispose() {        
+	 protected void dispose() {  
+		 if (log.isLoggable(Level.FINE)) {
+			 log.fine(logIntro() + "Disposed!");
+		 }
 		 detachListeners(getCls());
 		 super.dispose();
 	 }
 
 
-	 /*
+	 private String logIntro() {
+		return "FrameWBText Node (" + ((FrameWithBrowserText) getUserObject()).getFrame()
+									+ ", " + hashCode() + "): ";
+	}
+
+
+	/*
 	  * Protege job for computing and sorting children on the server
 	  */            
 
