@@ -25,7 +25,6 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRuleEngineBridge;
 import edu.stanford.smi.protegex.owl.swrl.bridge.TargetSWRLRuleEngine;
 import edu.stanford.smi.protegex.owl.swrl.bridge.builtins.BuiltInLibraryManager;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
-import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.DataValueConversionException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLConversionFactoryException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLFactoryException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLBuiltInBridgeException;
@@ -51,6 +50,7 @@ import edu.stanford.smi.protegex.owl.swrl.owlapi.impl.OWLDataFactoryImpl;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.impl.PrefixManagerImpl;
 import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParseException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResult;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.DataValueConversionException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.SQWRLResultImpl;
 

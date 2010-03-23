@@ -3,7 +3,7 @@ package edu.stanford.smi.protegex.owl.swrl.bridge.xsd;
 
 import java.net.URISyntaxException;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.DataValueConversionException;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.DataValueConversionException;
 
 public abstract class XSDType implements Comparable<XSDType>
 {

@@ -1,7 +1,7 @@
 
 package edu.stanford.smi.protegex.owl.swrl.bridge.xsd;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.DataValueConversionException;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.DataValueConversionException;
 
 import edu.stanford.smi.protegex.owl.model.XSDNames;
 

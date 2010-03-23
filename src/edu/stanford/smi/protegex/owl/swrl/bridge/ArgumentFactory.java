@@ -3,10 +3,10 @@ package edu.stanford.smi.protegex.owl.swrl.bridge;
 
 import java.util.List;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.DataValueConversionException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.impl.ArgumentFactoryImpl;
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDType;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.DataValueConversionException;
 
 public abstract class ArgumentFactory
 {

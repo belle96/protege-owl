@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.DataValueConversionException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDAnyURI;
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDDate;
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDDateTime;
@@ -14,9 +13,10 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDTime;
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDType;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResultValue;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.DataValueConversionException;
 
 /**
- * Implementation of an data value object that represents Java and XML Schema primitive data literals.
+ * Implementation of a data value object that represents Java and XML Schema primitive data literals.
  */
 public class DataValueImpl  implements DataValue {
 	private Object value; // TODO: This value object should implement Comparable.
@@ -82,7 +82,7 @@ public class DataValueImpl  implements DataValue {
     if (!isXSDType()) 
       throw new DataValueConversionException("cannot convert value of type " + value.getClass().getCanonicalName() + " to XSDType"); 
     return (XSDType)value; 
-  } // getPrimitiveXSDType
+  }
 
   public boolean getBoolean() throws DataValueConversionException 
   { 
@@ -90,7 +90,7 @@ public class DataValueImpl  implements DataValue {
       throw new DataValueConversionException("cannot convert value of type " + value.getClass().getCanonicalName() + " to boolean"); 
 
     return ((Boolean)value).booleanValue(); 
-  } // getBoolean
+  }
 
   public int getInt() throws DataValueConversionException 
   {
@@ -101,7 +101,7 @@ public class DataValueImpl  implements DataValue {
     else throw new DataValueConversionException("cannot convert value of type " + value.getClass().getCanonicalName() + " to int"); 
 
     return result;
-  } // getInt
+  }
 
   public long getLong() throws DataValueConversionException 
   { 
@@ -113,7 +113,7 @@ public class DataValueImpl  implements DataValue {
     else throw new DataValueConversionException("cannot convert value of type " + value.getClass().getCanonicalName() + " to long"); 
 
     return result;
-  } // getLong
+  }
 
   // Some precision loss possible going from integer and long to
   // float. cf. http://www.particle.kth.se/~lindsey/JavaCourse/Book/Part1/Java/Chapter02/castsMixing.html
@@ -128,7 +128,7 @@ public class DataValueImpl  implements DataValue {
     else throw new DataValueConversionException("cannot convert value of type " + value.getClass().getCanonicalName() + " to float"); 
 
     return result;
-  } // getFloat
+  } 
 
   // Some precision loss possible going from long to
   // double. cf. http://www.particle.kth.se/~lindsey/JavaCourse/Book/Part1/Java/Chapter02/castsMixing.html
@@ -144,21 +144,21 @@ public class DataValueImpl  implements DataValue {
     else throw new DataValueConversionException("cannot convert value of type " + value.getClass().getCanonicalName() + " to double"); 
 
     return result;
-  } // getDouble
+  }
 
   public short getShort() throws DataValueConversionException 
   { 
     if (!isShort()) 
       throw new DataValueConversionException("cannot convert value of type " + value.getClass().getCanonicalName() + " to short"); 
     return ((Short)value).shortValue(); 
-  } // getShort
+  }
 
   public byte getByte() throws DataValueConversionException 
   {
     if (!isByte()) 
       throw new DataValueConversionException("cannot convert value of type " + value.getClass().getCanonicalName() + " to byte"); 
     return ((java.lang.Byte)value).byteValue();
-  } // getByte
+  }
 
   public String toString() 
   { 
@@ -167,7 +167,8 @@ public class DataValueImpl  implements DataValue {
   
   public String toQuotedString() 
   { 
-  	return "\"" + value.toString().replaceAll("[~\\\\]\"", "\\\\\"") + "\""; // Escape non-escaped double quote characters; for humans: [^\\]" -> \\"
+  	// Escape non-escaped double quote characters; for humans: [^\\]" -> \\"
+  	return "\"" + value.toString().replaceAll("[~\\\\]\"", "\\\\\"") + "\""; 
   } 
 
   public Object getValue() { return value; }
@@ -179,20 +180,20 @@ public class DataValueImpl  implements DataValue {
     if((obj == null) || (obj.getClass() != this.getClass())) return false;
     DataValueImpl info = (DataValueImpl)obj;
     return (value != null && info.value != null && value.equals(info.value));
-  } // equals
+  } 
 
   public int hashCode()
   {
     int hash = 66;
     hash = hash + (null == value ? 0 : value.toString().hashCode());
     return hash;
-  } // hashCode
+  }
 
   // TODO: this is a mess. Clean up.
   public int compareTo(SQWRLResultValue dataValue)
   {
     return  ((Comparable)value).compareTo(((DataValueImpl)dataValue).getValue());
-  } // compareTo
+  } 
 
   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
   {
@@ -202,6 +203,5 @@ public class DataValueImpl  implements DataValue {
   public void writeExternal(ObjectOutput out) throws IOException
   {
     out.writeObject(getValue());
-  } // writeExternal
-
-} // DataValueImpl
+  }
+}

@@ -23,11 +23,11 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLBuiltInBridge;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInLibraryException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInMethodRuntimeException;
-import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.DataValueConversionException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.InvalidBuiltInArgumentException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.InvalidBuiltInArgumentNumberException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDType;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.DataValueConversionException;
 
 /** 
  * A class that must be subclassed by a class implementing a library of SWRL built-in methods. See <a

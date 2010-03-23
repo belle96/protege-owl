@@ -1,8 +1,8 @@
 
 package edu.stanford.smi.protegex.owl.swrl.sqwrl;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.DataValueConversionException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDType;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.DataValueConversionException;
 
 public interface DataValue extends SQWRLResultValue
 {
