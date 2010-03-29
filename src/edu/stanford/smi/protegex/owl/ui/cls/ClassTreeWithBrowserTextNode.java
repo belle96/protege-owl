@@ -177,7 +177,6 @@ public class ClassTreeWithBrowserTextNode extends LazyTreeNode {
 	 private InstanceListener instanceListener = new InstanceListener() {
 
 		@SuppressWarnings("unchecked")
-		@Override
 		public void directTypeAdded(InstanceEvent event) {
 			 if (event.isReplacementEvent()) return;
 			 FrameWithBrowserText fbt = (FrameWithBrowserText) getUserObject();
@@ -197,7 +196,6 @@ public class ClassTreeWithBrowserTextNode extends LazyTreeNode {
 		}
 
 		@SuppressWarnings("unchecked")
-		@Override
 		public void directTypeRemoved(InstanceEvent event) {
 			 if (event.isReplacementEvent()) return;
 			 FrameWithBrowserText fbt = (FrameWithBrowserText) getUserObject();
