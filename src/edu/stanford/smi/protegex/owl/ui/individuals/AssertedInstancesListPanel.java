@@ -2,6 +2,7 @@ package edu.stanford.smi.protegex.owl.ui.individuals;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -15,11 +16,9 @@ import javax.swing.Icon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.ListModel;
 
 import edu.stanford.smi.protege.action.DeleteInstancesAction;
@@ -47,7 +46,6 @@ import edu.stanford.smi.protege.resource.ResourceKey;
 import edu.stanford.smi.protege.server.framestore.RemoteClientFrameStore;
 import edu.stanford.smi.protege.ui.BrowserTextListFinder;
 import edu.stanford.smi.protege.ui.ConfigureAction;
-import edu.stanford.smi.protege.ui.FrameComparator;
 import edu.stanford.smi.protege.ui.FrameRenderer;
 import edu.stanford.smi.protege.ui.HeaderComponent;
 import edu.stanford.smi.protege.util.AllowableAction;
@@ -70,6 +68,7 @@ import edu.stanford.smi.protegex.owl.model.NamespaceUtil;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.model.RDFSClass;
 import edu.stanford.smi.protegex.owl.ui.OWLLabeledComponent;
+import edu.stanford.smi.protegex.owl.ui.ProtegeUI;
 import edu.stanford.smi.protegex.owl.ui.icons.OWLIcons;
 import edu.stanford.smi.protegex.owl.ui.widget.OWLUI;
 
@@ -334,7 +333,8 @@ public class AssertedInstancesListPanel extends SelectableContainer implements D
         return new ConfigureAction() {
             @Override
 			public void loadPopupMenu(JPopupMenu menu) {
-                menu.add(createSetDisplaySlotAction());
+                menu.add(createSetDisplaySlotMenuItem());
+                menu.add(createSetDisplaySlotsMenuItem());
                 menu.add(createShowAllInstancesAction());
             }
         };
@@ -351,12 +351,6 @@ public class AssertedInstancesListPanel extends SelectableContainer implements D
         item.setSelected(showSubclassInstances);
         return item;
     }
-
-    //    private void initializeShowSubclassInstances() {
-    //        showSubclassInstances = ApplicationProperties.getBooleanProperty(SHOW_SUBCLASS_INSTANCES, false);
-    //        reload();
-    //        fixRenderer();
-    //    }
 
 
     private void setShowAllInstances(boolean b) {
@@ -379,50 +373,40 @@ public class AssertedInstancesListPanel extends SelectableContainer implements D
     }
 
 
-    protected JMenu createSetDisplaySlotAction() {
-        JMenu menu = ComponentFactory.createMenu("Set Display Property");
-        boolean enabled = false;
-        Cls cls = getSoleAllowedCls();
-        if (cls != null) {
-            BrowserSlotPattern pattern = cls.getBrowserSlotPattern();
-            Slot browserSlot = pattern != null && pattern.isSimple() ? pattern.getFirstSlot() : null;
-            ArrayList<Slot> slots = new ArrayList<Slot>(cls.getVisibleTemplateSlots());
-            slots.add(cls.getKnowledgeBase().getNameSlot());
-            Collections.sort(slots, new FrameComparator<Slot>());
-            Iterator<Slot> i = slots.iterator();
-            while (i.hasNext()) {
-                Slot slot = i.next();
-                JRadioButtonMenuItem item = new JRadioButtonMenuItem(createSetDisplaySlotAction(slot));
-                if (slot.equals(browserSlot)) {
-                    item.setSelected(true);
-                }
-                menu.add(item);
-                enabled = true;
-            }
-            JRadioButtonMenuItem item = new JRadioButtonMenuItem(createSetDisplaySlotMultipleAction());
-            if (browserSlot == null) {
-                item.setSelected(true);
-            }
-            menu.add(item);
-        }
-        menu.setEnabled(enabled);
+    protected JMenuItem createSetDisplaySlotMenuItem() {
+        JMenuItem menu = new JMenuItem("Set Display Property");
+        menu.addActionListener(new ActionListener() {
+           @SuppressWarnings("unchecked")
+        public void actionPerformed(ActionEvent e) {
+               Cls cls = getSoleAllowedCls();
+               ArrayList<Slot> slots = new ArrayList<Slot>(cls.getVisibleTemplateSlots());
+               slots.add(cls.getKnowledgeBase().getNameSlot());
+               Collections.sort(slots);
+               Slot slot =  ProtegeUI.getSelectionDialogFactory().selectProperty(AssertedInstancesListPanel.this, owlModel, slots);
+               if (slot != null) {
+                   cls.setDirectBrowserSlot(slot);  
+               }
+            } 
+        });
+        return menu;
+    }
+    
+    /*
+     * A significant change  happened at svn revision 18150.
+     * The functionality at that time was more friendly than this version but didn't work 
+     * well when there were multiple properties
+     */
+    protected JMenuItem createSetDisplaySlotsMenuItem() {
+        JMenuItem menu = new JMenuItem(createSetDisplaySlotMultipleAction());
+        menu.setEnabled(true);
         return menu;
     }
 
 
-    protected Action createSetDisplaySlotAction(final Slot slot) {
-        return new AbstractAction(slot.getBrowserText(), slot.getIcon()) {
-            public void actionPerformed(ActionEvent event) {
-                getSoleAllowedCls().setDirectBrowserSlot(slot);
-                updateLabel();
-                repaint();
-            }
-        };
-    }
-
-
     protected Action createSetDisplaySlotMultipleAction() {
-        return new AbstractAction("Multiple Slots...") {
+        return new AbstractAction("Set Display Properties") {
+            private static final long serialVersionUID = -5884471155567559812L;
+
             public void actionPerformed(ActionEvent event) {
                 Cls cls = getSoleAllowedCls();
                 BrowserSlotPattern currentPattern = getSoleAllowedCls().getBrowserSlotPattern();

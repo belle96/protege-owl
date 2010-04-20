@@ -5,6 +5,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import javax.swing.ComboBoxModel;
@@ -35,7 +36,9 @@ public class MultiSlotPanel extends JPanel {
     private void createUI() {
     	this.setLayout(new GridBagLayout());
     	GridBagConstraints c = new GridBagConstraints();
-        Collection slots = cls.getVisibleTemplateSlots();
+        List slots = new ArrayList(cls.getVisibleTemplateSlots());
+        Collections.sort(slots);
+        
     	
     	// label
         c.gridx = 0;
