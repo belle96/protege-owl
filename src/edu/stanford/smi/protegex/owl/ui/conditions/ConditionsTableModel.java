@@ -54,8 +54,18 @@ import edu.stanford.smi.protegex.owl.ui.widget.OWLUI;
  */
 public class ConditionsTableModel extends AbstractTableModel
 implements ConditionsTableConstants, OWLTableModel {
-	private static transient final Logger log = Log.getLogger(ConditionsTableModel.class);
+    private static final long serialVersionUID = 2692996397421191932L;
+    private static transient final Logger log = Log.getLogger(ConditionsTableModel.class);
 	private static final String SHOW_INHERITED_RESTRICTIONS = "restriction.show.inherited";
+	
+	private static boolean showInheritedRestrictions = false;
+	private static boolean showInheritedRestrictionsWithInference = false;
+	static {
+	    String inheritedSpec = ApplicationProperties.getApplicationOrSystemProperty(SHOW_INHERITED_RESTRICTIONS, "true");
+	    showInheritedRestrictionsWithInference = inheritedSpec.toLowerCase().equals("use.inference");
+	    showInheritedRestrictions = showInheritedRestrictionsWithInference || inheritedSpec.toLowerCase().equals("true");
+	}
+	
 
 
 	private ClassListener classListener = new ClassAdapter() {
@@ -183,105 +193,125 @@ implements ConditionsTableConstants, OWLTableModel {
 	 * @param originCls the class where aClassass has been defined
 	 */
 	private void addItemUnlessOverloaded(RDFSClass aClass, OWLNamedClass originCls) {
-		if (aClass instanceof OWLLogicalClass) {
-			String browserText = aClass.getBrowserText();
-			for (ConditionsTableItem existing : items) {
-				if (!existing.isSeparator() && browserText.equals(existing.aClass.getBrowserText())) {
-					return;  // Don't add if entry with same browser text exists
-				}
-			}
-		} else if (aClass instanceof OWLRestriction) {
-			RDFSClass directType = aClass.getProtegeType();
-			RDFProperty property = ((OWLRestriction) aClass).getOnProperty();
+	    if (log.isLoggable(Level.FINE)) {
+	        log.fine("adding inherited superclass " + aClass.getBrowserText()  + " from " + originCls.getBrowserText());
+	    }
+	    if (showInheritedRestrictionsWithInference) {
+	        if (aClass instanceof OWLLogicalClass) {
+	            String browserText = aClass.getBrowserText();
+	            for (ConditionsTableItem existing : items) {
+	                if (!existing.isSeparator() && browserText.equals(existing.aClass.getBrowserText())) {
+	                    if (log.isLoggable(Level.FINE)) { log.fine("existing restriction exists based on browswer text"); };
+	                    return;  // Don't add if entry with same browser text exists
+	                }
+	            }
+	        } else if (aClass instanceof OWLRestriction) {
+	            RDFSClass directType = aClass.getProtegeType();
+	            RDFProperty property = ((OWLRestriction) aClass).getOnProperty();
 
-			if (aClass instanceof OWLHasValue) {
-				String browserText = aClass.getBrowserText();
-				for (ConditionsTableItem existing : items) {
-					if (!existing.isSeparator() && browserText.equals(existing.aClass.getBrowserText())) {
-						return;  // Don't add if entry with same browser text exists
-					}
-				}
-			} else if (aClass instanceof OWLSomeValuesFrom) {
-				final OWLSomeValuesFrom someRestriction = (OWLSomeValuesFrom) aClass;
-				if (someRestriction.getFiller() instanceof RDFSClass) {
-					RDFSClass filler = (RDFSClass) someRestriction.getFiller();
-					String browserText = aClass.getBrowserText();
-					for (Iterator it = items.iterator(); it.hasNext();) {
-    					ConditionsTableItem existing = (ConditionsTableItem) it.next();
-						if (!existing.isSeparator() && existing.aClass instanceof OWLSomeValuesFrom) {
-							if (browserText.equals(existing.aClass.getBrowserText())) {
-								return;  // Don't add if entry with same browser text exists
-							}
-							OWLSomeValuesFrom other = (OWLSomeValuesFrom) existing.aClass;
-							if (other.getOnProperty().equals(property)) {
-								if (other.getFiller() instanceof RDFSClass) {
-									RDFSClass otherFiller = (RDFSClass) other.getFiller();
-									if (otherFiller.equals(filler) ||
-											filler.getSubclasses(true).contains(otherFiller)) {
-										return;  // Don't add if OWLSomeValuesFrom with a subclass exists
-									} else if (otherFiller.getSubclasses(true).contains(filler)) {
-										it.remove();
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			else if (aClass instanceof OWLAllValuesFrom) {
+	            if (aClass instanceof OWLHasValue) {
+	                String browserText = aClass.getBrowserText();
+	                for (ConditionsTableItem existing : items) {
+	                    if (!existing.isSeparator() && browserText.equals(existing.aClass.getBrowserText())) {
+	                        if (log.isLoggable(Level.FINE)) { log.fine("existing restriction exists based on browswer text"); };
+	                        return;  // Don't add if entry with same browser text exists
+	                    }
+	                }
+	            } else if (aClass instanceof OWLSomeValuesFrom) {
+	                final OWLSomeValuesFrom someRestriction = (OWLSomeValuesFrom) aClass;
+	                if (someRestriction.getFiller() instanceof RDFSClass) {
+	                    RDFSClass filler = (RDFSClass) someRestriction.getFiller();
+	                    String browserText = aClass.getBrowserText();
+	                    for (Iterator<ConditionsTableItem> it = items.iterator(); it.hasNext();) {
+	                        ConditionsTableItem existing = (ConditionsTableItem) it.next();
+	                        if (!existing.isSeparator() && existing.aClass instanceof OWLSomeValuesFrom) {
+	                            if (browserText.equals(existing.aClass.getBrowserText())) {
+	                                if (log.isLoggable(Level.FINE)) { log.fine("existing restriction exists based on browswer text"); };
+	                                return;  // Don't add if entry with same browser text exists
+	                            }
+	                            OWLSomeValuesFrom other = (OWLSomeValuesFrom) existing.aClass;
+	                            if (other.getOnProperty().equals(property)) {
+	                                if (other.getFiller() instanceof RDFSClass) {
+	                                    RDFSClass otherFiller = (RDFSClass) other.getFiller();
+	                                    if (otherFiller.equals(filler) ||
+	                                            filler.getSubclasses(true).contains(otherFiller)) {
+	                                        if (log.isLoggable(Level.FINE)) { 
+	                                            log.fine("existing restriction exists because " + otherFiller.getBrowserText() + " is a subclass of " + filler.getBrowserText()); 
+	                                        }
+	                                        return;  // Don't add if OWLSomeValuesFrom with a subclass exists
+	                                    } else if (otherFiller.getSubclasses(true).contains(filler)) {
+	                                        if (log.isLoggable(Level.FINE)) { 
+	                                            log.fine("existing restriction is removed because " + filler.getBrowserText() + " is a subclass of " + otherFiller.getBrowserText()); 
+	                                        }
+	                                        it.remove();
+	                                    }
+	                                }
+	                            }
+	                        }
+	                    }
+	                }
+	            }
+	            else if (aClass instanceof OWLAllValuesFrom) {
 
-				RDFResource filler = ((OWLAllValuesFrom) aClass).getFiller();
+	                RDFResource filler = ((OWLAllValuesFrom) aClass).getFiller();
 
-				if (filler instanceof RDFSClass) {
-					OWLAllValuesFrom newRestriction = (OWLAllValuesFrom) aClass;
-					OWLNamedClass newSourceClass = newRestriction.getOwner();
-					for (Iterator it = items.iterator(); it.hasNext();) {
-    					ConditionsTableItem existing = (ConditionsTableItem) it.next();
-						if (!existing.isSeparator() && directType.equals(existing.aClass.getProtegeType()) &&
-								property.equals(((OWLRestriction) existing.aClass).getOnProperty())) {
-							OWLAllValuesFrom existingRestriction = (OWLAllValuesFrom) existing.aClass;
-							OWLNamedClass existingSourceCls = existingRestriction.getOwner();
+	                if (filler instanceof RDFSClass) {
+	                    OWLAllValuesFrom newRestriction = (OWLAllValuesFrom) aClass;
+	                    OWLNamedClass newSourceClass = newRestriction.getOwner();
+	                    for (Iterator it = items.iterator(); it.hasNext();) {
+	                        ConditionsTableItem existing = (ConditionsTableItem) it.next();
+	                        if (!existing.isSeparator() && directType.equals(existing.aClass.getProtegeType()) &&
+	                                property.equals(((OWLRestriction) existing.aClass).getOnProperty())) {
+	                            OWLAllValuesFrom existingRestriction = (OWLAllValuesFrom) existing.aClass;
+	                            OWLNamedClass existingSourceCls = existingRestriction.getOwner();
 
-							RDFSClass existingFiller = (RDFSClass) existingRestriction.getFiller();
-							RDFSClass newRestrictionFiller = (RDFSClass) newRestriction.getFiller();
+	                            RDFSClass existingFiller = (RDFSClass) existingRestriction.getFiller();
+	                            RDFSClass newRestrictionFiller = (RDFSClass) newRestriction.getFiller();
 
-							if ((existingFiller.equals(newRestrictionFiller) || newRestrictionFiller.getSubclasses(true).contains(existingFiller))
-							        &&
-							        !existingSourceCls.equals(newSourceClass)) {
-							    return;
-							}
-							else if (existingFiller.getBrowserText().equals(newRestrictionFiller.getBrowserText()) ) {
-								return;
-							} else if (existingFiller.getSubclasses(true).contains(newRestrictionFiller)) {
-								it.remove();
-							}
-						}
-					}
-				} else 	{ //filler is not an RDFSClass
-					String browserText = aClass.getBrowserText();
-					for (ConditionsTableItem existing : items) {
-						if (!existing.isSeparator() && browserText.equals(existing.aClass.getBrowserText())) {
-							return;  // Don't add if entry with same browser text exists
-						}
-					}
-				}
-			}
-			else {
-				boolean qcr = false;
-				if (aClass instanceof OWLCardinalityBase) {
-					OWLCardinalityBase base = (OWLCardinalityBase) aClass;
-					qcr = base.isQualified();
-				}
-				if (!qcr) {
-					for (ConditionsTableItem existing : items) {
-						if (!existing.isSeparator() && directType.equals(existing.aClass.getProtegeType()) &&
-								property.equals(((OWLRestriction) existing.aClass).getOnProperty())) {
-							return;  // Don't add if entry with same type exists
-						}
-					}
-				}
-			}
-		}
+	                            if ((existingFiller.equals(newRestrictionFiller) || newRestrictionFiller.getSubclasses(true).contains(existingFiller))
+	                                    && !existingSourceCls.equals(newSourceClass)) {
+                                    if (log.isLoggable(Level.FINE)) { 
+                                        log.fine("existing restriction exists because " + existingFiller.getBrowserText() + " is a subclass of " + newRestrictionFiller.getBrowserText()); 
+                                    }
+	                                return;
+	                            }
+	                            else if (existingFiller.getBrowserText().equals(newRestrictionFiller.getBrowserText()) ) {
+	                                if (log.isLoggable(Level.FINE)) { log.fine("existing restriction exists based on filler browswer text"); };
+	                                return;
+	                            } else if (existingFiller.getSubclasses(true).contains(newRestrictionFiller)) {
+                                    if (log.isLoggable(Level.FINE)) { 
+                                        log.fine("existing restriction is removed because " + newRestrictionFiller.getBrowserText() + " is a subclass of " + existingFiller.getBrowserText()); 
+                                    }
+	                                it.remove();
+	                            }
+	                        }
+	                    }
+	                } else 	{ //filler is not an RDFSClass
+	                    String browserText = aClass.getBrowserText();
+	                    for (ConditionsTableItem existing : items) {
+	                        if (!existing.isSeparator() && browserText.equals(existing.aClass.getBrowserText())) {
+	                            return;  // Don't add if entry with same browser text exists
+	                        }
+	                    }
+	                }
+	            }
+	            else {
+	                boolean qcr = false;
+	                if (aClass instanceof OWLCardinalityBase) {
+	                    OWLCardinalityBase base = (OWLCardinalityBase) aClass;
+	                    qcr = base.isQualified();
+	                }
+	                if (!qcr) {
+	                    for (ConditionsTableItem existing : items) {
+	                        if (!existing.isSeparator() && directType.equals(existing.aClass.getProtegeType()) &&
+	                                property.equals(((OWLRestriction) existing.aClass).getOnProperty())) {
+	                            return;  // Don't add if entry with same type exists
+	                        }
+	                    }
+	                }
+	            }
+	        }
+	    }
 		addInheritedSeparator();
 		items.add(ConditionsTableItem.createInherited(aClass, originCls));
 	}
@@ -536,11 +566,15 @@ implements ConditionsTableConstants, OWLTableModel {
 			fillDefinitionItems(coveredClses);
 			fillDirectSuperclassItems(coveredClses);
 
-			String showInheritedRestrictionsString = ApplicationProperties.getApplicationOrSystemProperty(SHOW_INHERITED_RESTRICTIONS, "true");
-			boolean showInheritedRestrictions = showInheritedRestrictionsString.equals("true");
-
 			if (showInheritedRestrictions) {
+			    if (log.isLoggable(Level.FINE)) {
+			        log.fine("-----------------------------------------------------------------");
+			        log.fine("Showing inherited items for " + hostClass.getBrowserText() + "...");
+			    }
 				fillInheritedItems(coveredClses);
+                if (log.isLoggable(Level.FINE)) {
+                    log.fine("-----------------------------------------------------------------");
+                }
 			}
 
 			sortItems();
