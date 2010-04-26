@@ -56,13 +56,14 @@ public class ConditionsTableModel extends AbstractTableModel
 implements ConditionsTableConstants, OWLTableModel {
     private static final long serialVersionUID = 2692996397421191932L;
     private static transient final Logger log = Log.getLogger(ConditionsTableModel.class);
-	private static final String SHOW_INHERITED_RESTRICTIONS = "restriction.show.inherited";
+	public static final String SHOW_INHERITED_RESTRICTIONS = "restriction.show.inherited";
+	public static final String USE_INFERENCE="use.inference";
 	
-	private static boolean showInheritedRestrictions = false;
-	private static boolean showInheritedRestrictionsWithInference = false;
-	static {
+	private boolean showInheritedRestrictions = false;
+	private boolean showInheritedRestrictionsWithInference = false;
+	{
 	    String inheritedSpec = ApplicationProperties.getApplicationOrSystemProperty(SHOW_INHERITED_RESTRICTIONS, "true");
-	    showInheritedRestrictionsWithInference = inheritedSpec.toLowerCase().equals("use.inference");
+	    showInheritedRestrictionsWithInference = inheritedSpec.toLowerCase().equals(USE_INFERENCE);
 	    showInheritedRestrictions = showInheritedRestrictionsWithInference || inheritedSpec.toLowerCase().equals("true");
 	}
 	

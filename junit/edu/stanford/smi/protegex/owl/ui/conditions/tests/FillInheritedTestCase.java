@@ -30,7 +30,7 @@ public class FillInheritedTestCase extends AbstractConditionsTableTestCase {
      * children <= 12
      */
     public void testInheritedRestrictions() {
-
+        System.setProperty(ConditionsTableModel.SHOW_INHERITED_RESTRICTIONS, ConditionsTableModel.USE_INFERENCE);
         OWLObjectProperty property = owlModel.createOWLObjectProperty("children");
 
         OWLNamedClass animalCls = owlModel.createOWLNamedClass("Animal");
@@ -62,6 +62,7 @@ public class FillInheritedTestCase extends AbstractConditionsTableTestCase {
         assertEquals(TYPE_SUPERCLASS, tableModel.getType(3));
         assertEquals(personCls, tableModel.getOriginClass(5));
         assertEquals(TYPE_INHERITED, tableModel.getType(5));
+        System.getProperties().remove(ConditionsTableModel.SHOW_INHERITED_RESTRICTIONS);
     }
 
 
@@ -146,6 +147,7 @@ public class FillInheritedTestCase extends AbstractConditionsTableTestCase {
      * * slot Sub
      */
     public void testDontInheritOverloadedAllRestrictions() {
+        System.setProperty(ConditionsTableModel.SHOW_INHERITED_RESTRICTIONS, ConditionsTableModel.USE_INFERENCE);
         OWLObjectProperty property = owlModel.createOWLObjectProperty("property");
         OWLNamedClass superCls = (OWLNamedClass) owlModel.createOWLNamedSubclass("Super", owlThing);
         superCls.addSuperclass(owlModel.createOWLAllValuesFrom(property, superCls));
@@ -158,6 +160,7 @@ public class FillInheritedTestCase extends AbstractConditionsTableTestCase {
                 superCls,
                 OWLAllValuesFrom.class
         });
+        System.getProperties().remove(ConditionsTableModel.SHOW_INHERITED_RESTRICTIONS);
     }
 
 
@@ -244,6 +247,7 @@ public class FillInheritedTestCase extends AbstractConditionsTableTestCase {
      * Sub       (? slot Sub)
      */
     public void testInheritSpecializingSomeRestrictions() {
+        System.setProperty(ConditionsTableModel.SHOW_INHERITED_RESTRICTIONS, ConditionsTableModel.USE_INFERENCE);
         OWLObjectProperty property = owlModel.createOWLObjectProperty("property");
 
         OWLNamedClass superCls = (OWLNamedClass) owlModel.createOWLNamedSubclass("Super", owlThing);
@@ -259,6 +263,7 @@ public class FillInheritedTestCase extends AbstractConditionsTableTestCase {
                 superCls,
                 OWLSomeValuesFrom.class
         });
+        System.getProperties().remove(ConditionsTableModel.SHOW_INHERITED_RESTRICTIONS);
     }
 
 
@@ -268,6 +273,7 @@ public class FillInheritedTestCase extends AbstractConditionsTableTestCase {
      * Sub       (? slot Super)
      */
     public void testInheritEqualSomeRestriction() {
+        System.setProperty(ConditionsTableModel.SHOW_INHERITED_RESTRICTIONS, ConditionsTableModel.USE_INFERENCE);
         OWLObjectProperty property = owlModel.createOWLObjectProperty("property");
         OWLNamedClass superCls = (OWLNamedClass) owlModel.createOWLNamedSubclass("Super", owlThing);
         superCls.addSuperclass(owlModel.createOWLSomeValuesFrom(property, superCls));
@@ -280,5 +286,6 @@ public class FillInheritedTestCase extends AbstractConditionsTableTestCase {
                 superCls,
                 OWLSomeValuesFrom.class
         });
+        System.getProperties().remove(ConditionsTableModel.SHOW_INHERITED_RESTRICTIONS);
     }
 }

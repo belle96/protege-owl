@@ -346,6 +346,7 @@ public class DeleteRowTestCase extends AbstractConditionsTableTestCase {
      * <necessary>
      */
     public void testAldi() {
+        System.setProperty(ConditionsTableModel.SHOW_INHERITED_RESTRICTIONS, ConditionsTableModel.USE_INFERENCE);
         OWLObjectProperty property = owlModel.createOWLObjectProperty("children");
         OWLNamedClass maleCls = owlModel.createOWLNamedClass("Male");
         OWLNamedClass cls = owlModel.createOWLNamedClass("Person");
@@ -372,6 +373,7 @@ public class DeleteRowTestCase extends AbstractConditionsTableTestCase {
                 OWLMinCardinality.class,
                 null
         });
+        System.getProperties().remove(ConditionsTableModel.SHOW_INHERITED_RESTRICTIONS);
     }
 
 

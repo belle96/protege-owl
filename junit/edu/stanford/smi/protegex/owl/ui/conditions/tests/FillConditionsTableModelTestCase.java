@@ -190,6 +190,7 @@ public class FillConditionsTableModelTestCase extends AbstractConditionsTableTes
      * owl:Thing
      */
     public void testMultipleEquivalentClasses() {
+        System.setProperty(ConditionsTableModel.SHOW_INHERITED_RESTRICTIONS, ConditionsTableModel.USE_INFERENCE);
         OWLNamedClass aldiCls = owlModel.createOWLNamedClass("Aldi");
         OWLNamedClass menschCls = owlModel.createOWLNamedClass("Mensch");
         OWLNamedClass personCls = owlModel.createOWLNamedClass("Person");
@@ -214,6 +215,7 @@ public class FillConditionsTableModelTestCase extends AbstractConditionsTableTes
                 NECESSARY,
                 owlThing
         });
+        System.getProperties().remove(ConditionsTableModel.SHOW_INHERITED_RESTRICTIONS);
     }
 
 
@@ -236,6 +238,7 @@ public class FillConditionsTableModelTestCase extends AbstractConditionsTableTes
      * owl:Thing
      */
     public void testMultipleEquivalentClassesPreordered() {
+        System.setProperty(ConditionsTableModel.SHOW_INHERITED_RESTRICTIONS, ConditionsTableModel.USE_INFERENCE);
         OWLNamedClass aldiCls = owlModel.createOWLNamedClass("Aldi");
         OWLNamedClass menschCls = owlModel.createOWLNamedClass("Mensch");
         OWLNamedClass personCls = owlModel.createOWLNamedClass("Person");
@@ -262,5 +265,6 @@ public class FillConditionsTableModelTestCase extends AbstractConditionsTableTes
                 NECESSARY,
                 owlThing
         });
+        System.getProperties().remove(ConditionsTableModel.SHOW_INHERITED_RESTRICTIONS);
     }
 }

@@ -234,6 +234,7 @@ public class AddRowTestCase extends AbstractConditionsTableTestCase {
      * Person
      */
     public void testAddAnonEquivalentClassAtSecondDefinition() {
+        System.setProperty(ConditionsTableModel.SHOW_INHERITED_RESTRICTIONS, ConditionsTableModel.USE_INFERENCE);
         OWLNamedClass personCls = owlModel.createOWLNamedClass("Person");
         OWLNamedClass menschCls = owlModel.createOWLNamedClass("Mensch");
         OWLNamedClass otherCls = owlModel.createOWLNamedClass("Other");
@@ -280,6 +281,7 @@ public class AddRowTestCase extends AbstractConditionsTableTestCase {
         assertEquals(2, definition.getOperands().size());
         assertTrue(definition.getOperands().contains(otherCls));
         assertTrue(events.size() > 0);
+        System.getProperties().remove(ConditionsTableModel.SHOW_INHERITED_RESTRICTIONS);
     }
 
 
