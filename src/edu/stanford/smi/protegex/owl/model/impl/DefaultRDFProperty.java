@@ -407,13 +407,13 @@ public class DefaultRDFProperty extends DefaultSlot implements RDFProperty {
     }
 
 
+    /*
+     * See OWLModel.getProtegeReadOnlyProperty javadoc for explanation of protege:readOnly property.
+     */
     public boolean isReadOnly() {
         Slot readOnlySlot = ((OWLModel) getKnowledgeBase()).getProtegeReadOnlyProperty();
-        if (readOnlySlot != null) {
-            Object value = getDirectOwnSlotValue(readOnlySlot);
-            return Boolean.TRUE.equals(value);
-        }
-        return false;
+        Object value = getDirectOwnSlotValue(readOnlySlot);
+        return Boolean.TRUE.equals(value);
     }
 
 

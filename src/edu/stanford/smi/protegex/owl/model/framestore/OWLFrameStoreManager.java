@@ -13,9 +13,7 @@ import edu.stanford.smi.protegex.owl.model.impl.AbstractOWLModel;
 /**
  * @author Holger Knublauch  <holger@knublauch.com>
  */
-public class OWLFrameStoreManager extends FrameStoreManager {
-	public static final String USE_PROTEGE_READ_ONLY_FRAME_STORE="use.protege.read.only.flag";
-    
+public class OWLFrameStoreManager extends FrameStoreManager {    
     private OWLModel  owlModel;
     
     private OWLFrameStore owlFrameStore;
@@ -26,7 +24,6 @@ public class OWLFrameStoreManager extends FrameStoreManager {
     private OwlSubclassFrameStore owlSubclassFrameStore;
     private TypeUpdateFrameStore typeUpdateFrameStore;
     private LocalClassificationFrameStore localClassificationFrameStore;
-    private ProtegeReadOnlyFrameStore protegeReadOnlyFrameStore;
     
     private List<FrameStore> frameStores = new ArrayList<FrameStore>();
 
@@ -45,11 +42,6 @@ public class OWLFrameStoreManager extends FrameStoreManager {
         addFrameStore(rangeUpdateFrameStore = new RangeUpdateFrameStore(owlModel));
         addFrameStore(owlSubclassFrameStore = new OwlSubclassFrameStore(owlModel));
         addFrameStore(typeUpdateFrameStore = new TypeUpdateFrameStore(owlModel));  // this goes near the end so that the others see the swizzle.
-        
-        protegeReadOnlyFrameStore = new ProtegeReadOnlyFrameStore(owlModel);
-        if (ApplicationProperties.getBooleanProperty(USE_PROTEGE_READ_ONLY_FRAME_STORE, false)) {
-        	addFrameStore(protegeReadOnlyFrameStore);
-        }
         
         for (FrameStore fs : frameStores) {
             insertFrameStore(fs);
@@ -118,10 +110,5 @@ public class OWLFrameStoreManager extends FrameStoreManager {
 
     public LocalClassificationFrameStore getLocalClassificationFrameStore() {
         return localClassificationFrameStore;
-    }
-    
-    public ProtegeReadOnlyFrameStore getProtegeReadOnlyFrameStore() {
-		return protegeReadOnlyFrameStore;
-	}
-    
+    }    
 }

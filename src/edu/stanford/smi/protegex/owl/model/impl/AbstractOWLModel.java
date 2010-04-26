@@ -1843,6 +1843,8 @@ public abstract class AbstractOWLModel extends DefaultKnowledgeBase
      * This is a bit hacky but it should run faster than this.getSlot(...).  As long
      * as we don't try to determine that protege.owl is not imported by checking the
      * result of this call.
+     *
+     * See OWLModel.getProtegeReadOnlyProperty javadoc for explanation of protege:readOnly property.
      */
     public RDFProperty getProtegeReadOnlyProperty() {
         return new DefaultOWLDatatypeProperty(this, new FrameID(ProtegeNames.getReadOnlySlotName()));

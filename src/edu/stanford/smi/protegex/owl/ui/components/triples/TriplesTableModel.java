@@ -38,6 +38,12 @@ import edu.stanford.smi.protegex.owl.ui.metadata.AnnotationsWidgetPlugin;
  */
 public class TriplesTableModel extends AbstractTableModel {
     private static final long serialVersionUID = 4888649374752349462L;
+    
+    /*
+     * This is a hacky mechanism to allow a readOnly property value to be edited while a property value is being created. 
+     */
+    private boolean allowReadOnlyEdit = false;
+    
 
     /**
      * The list of Properties currently displayed
@@ -305,11 +311,21 @@ public class TriplesTableModel extends AbstractTableModel {
         return true;
     }
 
+    public void setAllowReadOnlyEdit(boolean allowReadOnlyEdit) {
+        this.allowReadOnlyEdit = allowReadOnlyEdit;
+    }
 
+    /* 
+     * WARNING!
+     *    See OWLModel.getProtegeReadOnlyProperty javadoc for explanation of protege:readOnly property.
+     */
     @Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
+        RDFProperty property = getPredicate(rowIndex);
+        if (!allowReadOnlyEdit && property.isReadOnly()) {
+            return false;
+        }
         if (columnIndex != COL_PROPERTY) {
-            RDFProperty property = getPredicate(rowIndex);
             if (columnIndex == COL_VALUE) {
                 Object value = getValue(rowIndex);
                 for (Iterator<AnnotationsWidgetPlugin> it = TriplesComponent.plugins(); it.hasNext();) {
@@ -319,10 +335,16 @@ public class TriplesTableModel extends AbstractTableModel {
                     }
                 }
                 OWLModel owlModel = property.getOWLModel();
-                return (property instanceof OWLDatatypeProperty || property.isAnnotationProperty() && !(value instanceof Instance)) &&
-                        !property.isReadOnly() &&
-                        owlModel.getTripleStoreModel().isActiveTriple(subject, property, value) ||
-                       getDefaultProperties().contains(property) && value == null;
+                if (!owlModel.getTripleStoreModel().isActiveTriple(subject, property, value)) {
+                    return false;
+                }
+                else if (getDefaultProperties().contains(property) && value == null) {
+                    return true;
+                }
+                else {
+                    return property instanceof OWLDatatypeProperty || 
+                                (property.isAnnotationProperty() && !(value instanceof Instance));
+                }
             }
             else if (isTypeColumn(columnIndex)) {
                 return getValueAt(rowIndex, columnIndex) instanceof RDFSDatatype;
@@ -337,11 +359,15 @@ public class TriplesTableModel extends AbstractTableModel {
         }
     }
 
-
+    /* 
+     * WARNING!
+     *    See OWLModel.getProtegeReadOnlyProperty javadoc for explanation of protege:readOnly property.
+     */
     public boolean isDeleteEnabled(int row) {
         RDFProperty predicate = getPredicate(row);
         Object object = getValue(row);
-        return edu.stanford.smi.protegex.owl.ui.actions.triple.DeleteTripleAction.isSuitable(subject, predicate, object);
+        return !predicate.isReadOnly() 
+                && edu.stanford.smi.protegex.owl.ui.actions.triple.DeleteTripleAction.isSuitable(subject, predicate, object);
     }
 
 

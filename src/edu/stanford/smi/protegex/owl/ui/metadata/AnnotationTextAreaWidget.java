@@ -180,7 +180,10 @@ public class AnnotationTextAreaWidget extends AbstractPropertyWidget {
         setEditedValueInternal(property, value, language, v);
     }
 
-
+    /* 
+     * WARNING!
+     *    See OWLModel.getProtegeReadOnlyProperty javadoc for explanation of protege:readOnly property.
+     */
     private void setEditedValueInternal(OWLDatatypeProperty property,
                                         String value, String language, Object v) {
         if (value == null) {

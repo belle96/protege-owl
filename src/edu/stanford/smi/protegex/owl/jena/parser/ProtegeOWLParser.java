@@ -261,8 +261,6 @@ public class ProtegeOWLParser {
 	    owlModel.setExpandShortNameInMethods(false);
 
 	    OWLFrameStoreManager frameStoreManager = owlModel.getFrameStoreManager();
-	    boolean protegeReadOnlyFrameStoreEnabled = frameStoreManager.setEnabled(frameStoreManager.getProtegeReadOnlyFrameStore(), false);
-
 	    try {
 	        tripleProcessor = ((AbstractOWLModel) owlModel).getGlobalParserCache().getTripleProcessor();
 
@@ -316,7 +314,6 @@ public class ProtegeOWLParser {
 	    finally {
 	        owlModel.setGenerateEventsEnabled(eventsEnabled);
 	        owlModel.setExpandShortNameInMethods(isExpandShortNamesEnabled);
-	        frameStoreManager.setEnabled(frameStoreManager.getProtegeReadOnlyFrameStore(), protegeReadOnlyFrameStoreEnabled);
 	    }
 	}
 

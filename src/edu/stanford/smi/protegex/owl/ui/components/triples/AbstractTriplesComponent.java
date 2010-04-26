@@ -163,10 +163,14 @@ public abstract class AbstractTriplesComponent extends AbstractPropertyValuesCom
         updateActions();
     }
 
-
+    /* 
+     * WARNING!
+     *    See OWLModel.getProtegeReadOnlyProperty javadoc for explanation of protege:readOnly property.
+     */
     private void handleTableDoubleClick() {
         int selIndex = table.getSelectedRow();
-        if (selIndex >= 0 && selIndex < tableModel.getRowCount() && viewValueAction.isEnabled()) {
+        RDFProperty p = tableModel.getPredicate(selIndex);
+        if (selIndex >= 0 && selIndex < tableModel.getRowCount() && !p.isReadOnly() && viewValueAction.isEnabled()) {
             viewValue();
         }
     }
@@ -214,7 +218,10 @@ public abstract class AbstractTriplesComponent extends AbstractPropertyValuesCom
         viewValue(row);
     }
 
-
+    /* 
+     * WARNING!
+     *    See OWLModel.getProtegeReadOnlyProperty javadoc for explanation of protege:readOnly property.
+     */
     private void viewValue(final int row) {
         Object value = tableModel.getValue(row);
         if (value instanceof RDFResource) {

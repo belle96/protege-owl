@@ -1113,6 +1113,13 @@ public interface OWLModel extends ProtegeKnowledgeBase, OWLTestManager {
 
 
     /**
+     * The Protege readOnly property has a special behavior required by NCI.  First of all, it is only 
+     * relevant for annotation properties.  If we view a change to an annotation value as the removal of
+     * an annotation assertion axiom followed by adding a different annotation assertion axiom then the rules 
+     * can be stated as
+     * 1. if p is a readOnly annotation property then a user is allowed to add an assertion <x p y>
+     * 2. if p is a readOnly annotation property then a user is not allowed to remove an assertion <x p y>
+     * 
      * @return the Slot ProtegeNames.READ_ONLY
      */
     RDFProperty getProtegeReadOnlyProperty();

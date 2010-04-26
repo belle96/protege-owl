@@ -23,7 +23,10 @@ public class DeleteTripleAction extends AbstractTripleAction {
         return isSuitable(triple.getSubject(), triple.getPredicate(), triple.getObject());
     }
 
-
+    /* 
+     * WARNING!
+     *    See OWLModel.getProtegeReadOnlyProperty javadoc for explanation of protege:readOnly property.
+     */
     public static boolean isSuitable(RDFResource subject, RDFProperty predicate, Object object) {
         if (!predicate.isReadOnly()) {
             if (object instanceof RDFResource) {

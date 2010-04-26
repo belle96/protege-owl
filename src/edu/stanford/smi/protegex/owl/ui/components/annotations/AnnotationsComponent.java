@@ -1,5 +1,6 @@
 package edu.stanford.smi.protegex.owl.ui.components.annotations;
 
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -26,7 +27,7 @@ import edu.stanford.smi.protegex.owl.ui.icons.OWLIcons;
  * @author Holger Knublauch  <holger@knublauch.com>
  */
 public class AnnotationsComponent extends AbstractTriplesComponent {
-
+    private static final long serialVersionUID = -8853232024353780133L;
     private Action deleteRowAction;
     private Action createValueAction;
     private Action todoAction;
@@ -44,7 +45,20 @@ public class AnnotationsComponent extends AbstractTriplesComponent {
 
     protected void addButtons(LabeledComponent lc) {
         createValueAction = new CreateValueAction(getTable(), "Create new annotation value", OWLIcons.getCreateIcon(OWLIcons.ANNOTATION)) {
+            private static final long serialVersionUID = 2018303283100762805L;
 
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                getTableModel().setAllowReadOnlyEdit(true);
+                try {
+                    super.actionPerformed(e);
+                }
+                finally {
+                    getTableModel().setAllowReadOnlyEdit(false);
+                }
+            }
+            
+            @SuppressWarnings("unchecked")
             public Collection getSelectableResources() {
                 TriplesTableModel tableModel = table.getTableModel();
                 OWLModel owlModel = tableModel.getOWLModel();
@@ -53,14 +67,7 @@ public class AnnotationsComponent extends AbstractTriplesComponent {
                 Collection ontologyProperties = owlModel.getOWLOntologyProperties();
                 RDFResource resource = tableModel.getSubject();
                 for (RDFProperty property : annotationProperties) {
-                    /*
-                     * Warning... The property.isReadOnly() really is  here deliberately to support an unusual
-                     *            NCI definition of a read only property.
-                     */
-                    if (property.isReadOnly()) {
-                        continue;
-                    }
-                    else if (ontologyProperties.contains(property)) {
+                    if (ontologyProperties.contains(property)) {
                         if (resource instanceof OWLOntology) {
                             properties.add(property);
                         }
@@ -90,13 +97,7 @@ public class AnnotationsComponent extends AbstractTriplesComponent {
             protected Collection getAllowedProperties(OWLModel owlModel) {
                 Collection<RDFProperty> allowedProperties = new ArrayList<RDFProperty>();
                 for (RDFProperty property : owlModel.getOWLAnnotationProperties()) {
-                    /*
-                     * Warning... The property.isReadOnly() really is here deliberately to support an unusual
-                     *            NCI definition of a read only property.
-                     */
-                    if (!property.isReadOnly()) {
-                        allowedProperties.add(property);
-                    }
+                    allowedProperties.add(property);
                 }
                 return allowedProperties;
             }
