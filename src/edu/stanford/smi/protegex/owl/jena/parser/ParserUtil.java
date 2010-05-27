@@ -11,8 +11,13 @@ import edu.stanford.smi.protege.model.framestore.SimpleFrameStore;
 import edu.stanford.smi.protegex.owl.model.impl.AbstractOWLModel;
 
 public class ParserUtil {
-    
-    public static final String PARSERS_UNIQUE_SESSION_ID = UUID.randomUUID().toString().replace("-", "_");
+
+    public static String PARSERS_UNIQUE_SESSION_ID = UUID.randomUUID().toString().replace("-", "_");
+
+
+    public static void resetUniqueSessionId() {
+        PARSERS_UNIQUE_SESSION_ID = UUID.randomUUID().toString().replace("-", "_");
+    }
 
 
 	public static String getResourceName(AResource resource) {
