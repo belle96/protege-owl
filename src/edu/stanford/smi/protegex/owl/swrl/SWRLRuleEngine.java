@@ -1,19 +1,22 @@
 
 package edu.stanford.smi.protegex.owl.swrl;
 
+import java.util.Set;
+
+import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValueFactory;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRule;
 import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLRuleEngineException;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClass;
-import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLIndividual;
-
-import java.util.Set;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLNamedIndividual;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngine;
 
 /**
- * This interface defines the methods that must be provided by a SWRL rule engine.
- *
+ * This interface defines methods that must be provided by a SWRL rule engine.
+ * 
+ * Detailed documentation for this mechanism can be found <a href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLRuleEngineBridgeFAQ">here</a>.
  */
-public interface SWRLRuleEngine
+public interface SWRLRuleEngine extends SQWRLQueryEngine
 {
   /**
    * Load rules and knowledge from OWL into bridge, send them to a rule engine, run the rule engine, and write any inferred knowledge back
@@ -26,11 +29,9 @@ public interface SWRLRuleEngine
    * engine will be reset.
    */
   void importSWRLRulesAndOWLKnowledge() throws SWRLRuleEngineException;
-  void importSWRLRulesAndOWLKnowledge(String ruleGroupName) throws SWRLRuleEngineException;
-  void importSWRLRulesAndOWLKnowledge(Set<String> ruleGroupNames) throws SWRLRuleEngineException;
 
   /**
-   ** Run the rule engine.
+   * Run the rule engine.
    */
   void run() throws SWRLRuleEngineException;
 
@@ -45,25 +46,29 @@ public interface SWRLRuleEngine
    */
   void reset() throws SWRLRuleEngineException;
 
-  // Convenience methods to display bridge activity
-  int getNumberOfImportedAxioms();
-  int getNumberOfInferredAxioms();
-  int getNumberOfInjectedAxioms();
+  // Convenience methods to display rule engine activity
   int getNumberOfImportedSWRLRules();
-  int getNumberOfImportedClasses();
-  int getNumberOfImportedIndividuals();
-  int getNumberOfInferredIndividuals();
-  int getNumberOfInjectedClasses();
-  int getNumberOfInjectedIndividuals();
+  int getNumberOfImportedOWLAxioms();
+  int getNumberOfInferredOWLAxioms();
+  int getNumberOfInjectedOWLAxioms();
+  int getNumberOfImportedOWLClasses();
+  int getNumberOfImportedOWLIndividuals();
+  int getNumberOfInferredOWLIndividuals();
+  int getNumberOfInjectedOWLClasses();
+  int getNumberOfInjectedOWLIndividuals();
 
-  Set<OWLAxiom> getImportedAxioms();
-  Set<OWLAxiom> getInferredAxioms();
-  Set<OWLAxiom> getInjectedAxioms();
-
+  Set<OWLAxiom> getImportedOWLAxioms();
+  Set<OWLAxiom> getInferredOWLAxioms();
+  Set<OWLAxiom> getInjectedOWLAxioms();
   Set<SWRLRule> getImportedSWRLRules();
-  Set<OWLClass> getImportedClasses();
-  Set<OWLIndividual> getImportedIndividuals();
-  Set<OWLIndividual> getInferredIndividuals();
-  Set<OWLClass> getInjectedClasses();
-  Set<OWLIndividual> getInjectedIndividuals();
+  Set<OWLClass> getImportedOWLClassDeclarations();
+  Set<OWLNamedIndividual> getImportedOWLIndividualDeclarations();
+  Set<OWLNamedIndividual> getInferredOWLIndividuals();
+  Set<OWLClass> getInjectedOWLClassDeclarations();
+  Set<OWLNamedIndividual> getInjectedOWLIndividualDeclarations();
+
+  // TODO: temporary
+  String uri2PrefixedName(String uri);
+  String name2URI(String prefixedName);
+  OWLDataValueFactory getOWLDataValueFactory();
 }

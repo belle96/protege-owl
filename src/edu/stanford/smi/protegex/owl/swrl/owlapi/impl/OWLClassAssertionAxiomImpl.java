@@ -3,21 +3,21 @@ package edu.stanford.smi.protegex.owl.swrl.owlapi.impl;
 
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClass;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClassAssertionAxiom;
-import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLIndividual;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLNamedIndividual;
 
 public class OWLClassAssertionAxiomImpl implements OWLClassAssertionAxiom
 {
-  private OWLIndividual individual;
+  private OWLNamedIndividual individual;
   private OWLClass description;
 
-  public OWLClassAssertionAxiomImpl(OWLIndividual individual, OWLClass description)
+  public OWLClassAssertionAxiomImpl(OWLNamedIndividual individual, OWLClass description)
   {
     this.individual = individual;
     this.description = description;
   } // OWLClassAssertionAxiomImpl
 
   public OWLClass getDescription() { return description; }
-  public OWLIndividual getIndividual() { return individual; }
+  public OWLNamedIndividual getIndividual() { return individual; }
 
   public boolean equals(Object obj)
   {

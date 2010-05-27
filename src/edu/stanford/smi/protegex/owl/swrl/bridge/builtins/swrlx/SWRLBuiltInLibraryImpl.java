@@ -9,7 +9,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.builtins.AbstractSWRLBuiltInLib
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLRuleEngineBridgeException;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClass;
-import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLIndividual;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLNamedIndividual;
 
 /**
  * Implementations library for SWRL Extensions built-in methods. See <a
@@ -21,7 +21,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 {
   private static String SWRLXLibraryName = "SWRLExtensionsBuiltIns";
   private HashMap<String, OWLClass> classInvocationMap;
-  private HashMap<String, OWLIndividual> individualInvocationMap;
+  private HashMap<String, OWLNamedIndividual> individualInvocationMap;
 
   public SWRLBuiltInLibraryImpl() 
   { 
@@ -31,7 +31,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   public void reset() 
   {
     classInvocationMap = new HashMap<String, OWLClass>();
-    individualInvocationMap = new HashMap<String, OWLIndividual>();
+    individualInvocationMap = new HashMap<String, OWLNamedIndividual>();
   } // reset
 
   /**
@@ -45,12 +45,12 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (isUnboundArgument(0, arguments)) {
       OWLClass owlClass = null;
       String createInvocationPattern 
-        = createInvocationPattern(getInvokingBridge(), getInvokingRuleName(), getInvokingBuiltInIndex(), getIsInConsequent(),
+        = createInvocationPattern(getBuiltInBridge(), getInvokingRuleName(), getInvokingBuiltInIndex(), getIsInConsequent(),
                                   arguments.subList(1, arguments.size()));
 
       if (classInvocationMap.containsKey(createInvocationPattern)) owlClass = classInvocationMap.get(createInvocationPattern);
       else {
-        owlClass = getInvokingBridge().injectOWLClass();
+        owlClass = getBuiltInBridge().injectOWLClassDeclaration();
         classInvocationMap.put(createInvocationPattern, owlClass);
       } // if
       arguments.get(0).setBuiltInResult(createClassArgument(owlClass.getURI())); // Bind the result to the first parameter      
@@ -68,14 +68,14 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     checkNumberOfArgumentsAtLeast(2, arguments.size());
 
     if (isUnboundArgument(0, arguments)) {
-      OWLIndividual owlIndividual = null;
+      OWLNamedIndividual owlIndividual = null;
       String createInvocationPattern 
-        = createInvocationPattern(getInvokingBridge(), getInvokingRuleName(), getInvokingBuiltInIndex(), getIsInConsequent(),
+        = createInvocationPattern(getBuiltInBridge(), getInvokingRuleName(), getInvokingBuiltInIndex(), getIsInConsequent(),
                                   arguments.subList(1, arguments.size()));
 
       if (individualInvocationMap.containsKey(createInvocationPattern)) owlIndividual = individualInvocationMap.get(createInvocationPattern);
       else {
-        owlIndividual = getInvokingBridge().injectOWLIndividual();
+        owlIndividual = getBuiltInBridge().injectOWLIndividualDeclaration();
         individualInvocationMap.put(createInvocationPattern, owlIndividual);
       } // if
       arguments.get(0).setBuiltInResult(createIndividualArgument(owlIndividual.getURI())); // Bind the result to the first parameter      
@@ -105,14 +105,14 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     boolean result = false;
 
     try {
-      result = getInvokingBridge().invokeSWRLBuiltIn(getInvokingRuleName(), builtInName, getInvokingBuiltInIndex(), getIsInConsequent(),
+      result = getBuiltInBridge().invokeSWRLBuiltIn(getInvokingRuleName(), builtInName, getInvokingBuiltInIndex(), getIsInConsequent(),
                                                      arguments.subList(1, arguments.size()));
     } catch (SWRLRuleEngineBridgeException e) {
       throw new BuiltInException("error invoking built-in '" + builtInName + "' from built-in: " + e.getMessage());
     } // try
 
     return result;
-  } // invokeSWRLBuiltIn
+  } 
 
 
 } // SWRLBuiltInLibraryImpl

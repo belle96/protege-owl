@@ -38,4 +38,8 @@ public interface SQWRLQueryEngine
    * Get the names of SQWRL queries.
    */
   //Set<String> getSQWRLQueryNames();
-} // SQWRLQueryEngine
+  
+  // TODO: temporary
+  String uri2PrefixedName(String uri);
+  String name2URI(String prefixedName);
+}

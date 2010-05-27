@@ -11,8 +11,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRule;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLFactoryException;
 
 /**
- * Factory to create OWLAPI-like entities. Provides a rough starting point for a port to the OWLAPI. 
- * 
+ * Factory to create OWLAPI-like entities. Provides a rough starting point for a port to the OWLAPI.  
  */
 public interface OWLDataFactory
 {
@@ -20,20 +19,17 @@ public interface OWLDataFactory
   SWRLRule getSWRLRule(String ruleName) throws OWLFactoryException;
   BuiltInAtom getSWRLBuiltInAtom(String builtInURI, String builtInPrefixedName, List<BuiltInArgument> arguments);
 
-  OWLClass getOWLClass();
   OWLClass getOWLClass(String classURI);
-  
-  OWLIndividual getOWLIndividual(String individualURI);
-  
+  OWLNamedIndividual getOWLIndividual(String individualURI);
   OWLObjectProperty getOWLObjectProperty(String propertyURI);
   OWLDataProperty getOWLDataProperty(String propertyURI);
   
-  OWLDataPropertyAssertionAxiom getOWLDataPropertyAssertionAxiom(OWLIndividual subject, OWLProperty property, OWLLiteral object);
-  OWLObjectPropertyAssertionAxiom getOWLObjectPropertyAssertionAxiom(OWLIndividual subject, OWLProperty property, OWLIndividual object);
-  OWLDifferentIndividualsAxiom getOWLDifferentIndividualsAxiom(OWLIndividual individual1, OWLIndividual individual2);
-  OWLDifferentIndividualsAxiom getOWLDifferentIndividualsAxiom(Set<OWLIndividual> individuals);
-  OWLSameIndividualAxiom getOWLSameIndividualAxiom(OWLIndividual individual1, OWLIndividual individual2);
-  OWLClassAssertionAxiom getOWLClassAssertionAxiom(OWLIndividual individual, OWLClass description);
+  OWLDataPropertyAssertionAxiom getOWLDataPropertyAssertionAxiom(OWLNamedIndividual subject, OWLProperty property, OWLLiteral object);
+  OWLObjectPropertyAssertionAxiom getOWLObjectPropertyAssertionAxiom(OWLNamedIndividual subject, OWLProperty property, OWLNamedIndividual object);
+  OWLDifferentIndividualsAxiom getOWLDifferentIndividualsAxiom(OWLNamedIndividual individual1, OWLNamedIndividual individual2);
+  OWLDifferentIndividualsAxiom getOWLDifferentIndividualsAxiom(Set<OWLNamedIndividual> individuals);
+  OWLSameIndividualAxiom getOWLSameIndividualAxiom(OWLNamedIndividual individual1, OWLNamedIndividual individual2);
+  OWLClassAssertionAxiom getOWLClassAssertionAxiom(OWLNamedIndividual individual, OWLClass description);
   OWLSubClassAxiom getOWLSubClassAxiom(OWLClass subClass, OWLClass superClass);
   OWLSomeValuesFrom getOWLSomeValuesFrom(OWLClass owlClass, OWLProperty onProperty, OWLClass someValuesFrom);
   OWLDeclarationAxiom getOWLDeclarationAxiom(OWLEntity owlEntity);
@@ -45,6 +41,6 @@ public interface OWLDataFactory
   OWLTypedLiteral getOWLTypedLiteral(String value);
   
   // The following do not have corresponding methods in the OWLAPI.
-  OWLClassPropertyAssertionAxiom getOWLClassPropertyAssertionAxiom(OWLIndividual subject, OWLProperty property, OWLClass object);
-  OWLPropertyPropertyAssertionAxiom getOWLPropertyPropertyAssertionAxiom(OWLIndividual subject, OWLProperty property, OWLProperty object);
+  OWLClassPropertyAssertionAxiom getOWLClassPropertyAssertionAxiom(OWLNamedIndividual subject, OWLProperty property, OWLClass object);
+  OWLPropertyPropertyAssertionAxiom getOWLPropertyPropertyAssertionAxiom(OWLNamedIndividual subject, OWLProperty property, OWLProperty object);
 }

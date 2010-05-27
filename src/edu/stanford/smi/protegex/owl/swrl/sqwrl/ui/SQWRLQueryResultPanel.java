@@ -18,11 +18,11 @@ import javax.swing.JTable;
 import javax.swing.JViewport;
 import javax.swing.table.AbstractTableModel;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRuleEngineBridge;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.ClassValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.IndividualValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.PropertyValue;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngine;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResult;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResultValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.InvalidQueryNameException;
@@ -32,13 +32,13 @@ public class SQWRLQueryResultPanel extends JPanel
 {
   private String queryName;
   private JTable table;
-  private SWRLRuleEngineBridge queryEngine;
+  private SQWRLQueryEngine queryEngine;
   private SQWRLResult result = null;
   private SQWRLQueryControlPanel controlPanel;
   private SQWRLQueryResultModel swrlQueryResultModel;
   private static File currentDirectory = null;
 
-  public SQWRLQueryResultPanel(SWRLRuleEngineBridge queryEngine, String queryName, SQWRLResult result, SQWRLQueryControlPanel controlPanel) 
+  public SQWRLQueryResultPanel(SQWRLQueryEngine queryEngine, String queryName, SQWRLResult result, SQWRLQueryControlPanel controlPanel) 
   {
     this.queryEngine = queryEngine;
     this.queryName = queryName;
@@ -67,7 +67,7 @@ public class SQWRLQueryResultPanel extends JPanel
     
     add(BorderLayout.CENTER, scrollPane);
     add(BorderLayout.SOUTH, buttonsPanel);
-  } // SQWRLQueryResultPanel
+  }
   
   public void validate() { swrlQueryResultModel.fireTableStructureChanged(); super.validate(); }
   
@@ -97,7 +97,7 @@ public class SQWRLQueryResultPanel extends JPanel
       } // if
       */
     } // try
-  } // RunQueriesActionListener
+  }
   
   private class CloseTabActionListener implements ActionListener
   {
@@ -105,8 +105,8 @@ public class SQWRLQueryResultPanel extends JPanel
     {
       controlPanel.removeResultPanel(queryName);
       controlPanel.appendText("'" + queryName + "' tab closed.\n");
-    } // ActionPerformed
-  } // CloseTabActionListener
+    }
+  }
   
   private class SaveResultActionListener implements ActionListener
   {
@@ -116,12 +116,12 @@ public class SQWRLQueryResultPanel extends JPanel
     {
       chooser = new JFileChooser();
       chooser.setCurrentDirectory(currentDirectory);
-    } // SaveResultActionListener
+    }
 
     public void actionPerformed(ActionEvent event) 
     {
       saveResults();
-    } // ActionPerformed
+    }
 
     private void saveResults() 
     {
@@ -166,9 +166,8 @@ public class SQWRLQueryResultPanel extends JPanel
                                       JOptionPane.ERROR_MESSAGE);
         // TODO: findbugs - stream not closed on all paths
       } // try
-    } // saveResults
-    
-  } // SaveResultActionListener
+    }
+  } 
   
   private JButton createButton(String text, String toolTipText, ActionListener listener)
   {
@@ -179,7 +178,7 @@ public class SQWRLQueryResultPanel extends JPanel
     button.addActionListener(listener);
 
     return button;
-  } // createButton
+  }
 
   private class SQWRLQueryResultModel extends AbstractTableModel
   {
@@ -192,7 +191,7 @@ public class SQWRLQueryResultPanel extends JPanel
       } catch (SQWRLException e) {}
 
       return count;
-    } // getRowCount
+    } 
     
     public int getColumnCount() 
     {
@@ -203,7 +202,7 @@ public class SQWRLQueryResultPanel extends JPanel
       } catch (SQWRLException e) {}
 
       return count;
-    } // getColumnCount
+    }
     
     public String getColumnName(int columnIndex) 
     {
@@ -214,7 +213,7 @@ public class SQWRLQueryResultPanel extends JPanel
       } catch (SQWRLException e) {}
       
       return columnName;
-    } // getColumnName
+    }
 
     public Object getValueAt(int row, int column) 
     { 
@@ -238,8 +237,6 @@ public class SQWRLQueryResultPanel extends JPanel
       } catch (SQWRLException e) {}
 
       return representation;
-    } // getValueAt
-    
-  } // SQWRLQueryResultModel
-
-} // SQWRLQueryResultPanel
+    }
+  }
+}

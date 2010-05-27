@@ -7,15 +7,15 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.stanford.smi.protegex.owl.model.NamespaceManager;
-import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.IRI;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLOntology;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.PrefixManager;
 
 public class PrefixManagerImpl implements PrefixManager 
 {
 	private NamespaceManager namespaceManager;
 	
-	public PrefixManagerImpl(OWLModel owlModel) { namespaceManager = owlModel.getNamespaceManager(); }
+	public PrefixManagerImpl(OWLOntology activeOntology) { namespaceManager = activeOntology.getOWLModel().getNamespaceManager(); }
 	public String getDefaultPrefix() { return namespaceManager.getPrefix(namespaceManager.getDefaultNamespace()); } 
 	public boolean containsPrefixMapping(String prefixName) { return namespaceManager.getPrefix(prefixName) != null; } 
 	public String getPrefix(String prefixName) { return namespaceManager.getPrefix(prefixName); }

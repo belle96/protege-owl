@@ -9,4 +9,4 @@ public interface OWLClass extends OWLDescription, OWLEntity
 	Set<OWLClass> getSuperClasses();
 	Set<OWLClass> getSubClasses();
   Set<OWLClass> getEquivalentClasses();
-} // OWLClass
+}

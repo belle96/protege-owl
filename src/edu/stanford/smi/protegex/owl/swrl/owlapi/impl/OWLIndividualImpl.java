@@ -5,18 +5,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClass;
-import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLIndividual;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLNamedIndividual;
 
 /**
  * Class representing an OWL individual. 
  */
-public class OWLIndividualImpl implements OWLIndividual
+public class OWLIndividualImpl implements OWLNamedIndividual
 {
   // NOTE: equals() method defined in this class
 
   private String individualURI;  
   private Set<OWLClass> definingClasses;
-  private Set<OWLIndividual> sameAsIndividuals, differentFromIndividuals;
+  private Set<OWLNamedIndividual> sameAsIndividuals, differentFromIndividuals;
 
   public OWLIndividualImpl(String individualURI)
   {
@@ -28,11 +28,11 @@ public class OWLIndividualImpl implements OWLIndividual
   
   public void addType(OWLClass definingClass) { definingClasses.add(definingClass); }
   
-  public void addSameAsIndividual(OWLIndividual sameAsIndividual) { sameAsIndividuals.add(sameAsIndividual); }
-  public void addDifferentFromIndividual(OWLIndividual differentFromIndividual) { differentFromIndividuals.add(differentFromIndividual); }
+  public void addSameAsIndividual(OWLNamedIndividual sameAsIndividual) { sameAsIndividuals.add(sameAsIndividual); }
+  public void addDifferentFromIndividual(OWLNamedIndividual differentFromIndividual) { differentFromIndividuals.add(differentFromIndividual); }
 
-  public Set<OWLIndividual> getSameIndividuals() { return sameAsIndividuals; }
-  public Set<OWLIndividual> getDifferentIndividuals() { return differentFromIndividuals; }
+  public Set<OWLNamedIndividual> getSameIndividuals() { return sameAsIndividuals; }
+  public Set<OWLNamedIndividual> getDifferentIndividuals() { return differentFromIndividuals; }
 
   public boolean hasType(String classURI) 
   {
@@ -71,8 +71,8 @@ public class OWLIndividualImpl implements OWLIndividual
     this.individualURI = individualURI;
 
     definingClasses = new HashSet<OWLClass>();
-    sameAsIndividuals = new HashSet<OWLIndividual>();
-    differentFromIndividuals = new HashSet<OWLIndividual>();
+    sameAsIndividuals = new HashSet<OWLNamedIndividual>();
+    differentFromIndividuals = new HashSet<OWLNamedIndividual>();
   } // initialize
 
 } // OWLIndividualImpl

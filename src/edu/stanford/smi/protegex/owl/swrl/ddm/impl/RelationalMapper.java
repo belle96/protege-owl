@@ -29,7 +29,7 @@ import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClass;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDataFactory;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDataProperty;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDataPropertyAssertionAxiom;
-import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLIndividual;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLNamedIndividual;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLObjectPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLProperty;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.impl.OWLDataFactoryImpl;
@@ -119,7 +119,7 @@ public class RelationalMapper implements Mapper, MapperGenerator
     datatypePropertyMaps.put(propertyName, datatypePropertyMap);
   } // addMap
 
-  public Set<OWLIndividual> mapOWLClass(OWLClass owlClass) throws MapperException
+  public Set<OWLNamedIndividual> mapOWLClass(OWLClass owlClass) throws MapperException
   {
     String className = owlClass.getURI();
     OWLClassMap classMap = getOWLClassMap(className);
@@ -128,7 +128,7 @@ public class RelationalMapper implements Mapper, MapperGenerator
     Database database = primaryKey.getBaseTable().getDatabase();
     String tableName = primaryKey.getBaseTable().getTableName();
     //String columnName = primaryKey.getPrimaryKeyColumns().iterator().next().getColumnName();
-    Set<OWLIndividual> result = new HashSet<OWLIndividual>();
+    Set<OWLNamedIndividual> result = new HashSet<OWLNamedIndividual>();
     DatabaseConnection databaseConnection;
     ResultSet rs;
 
@@ -150,7 +150,7 @@ public class RelationalMapper implements Mapper, MapperGenerator
     return result;
   } // mapOWLClass
 
-  public Set<OWLIndividual> mapOWLClass(OWLClass owlClass, OWLIndividual owlIndividual) throws MapperException
+  public Set<OWLNamedIndividual> mapOWLClass(OWLClass owlClass, OWLNamedIndividual owlIndividual) throws MapperException
   {
     throw new MapperException("not implemented");
   } // mapOWLClass
@@ -181,8 +181,8 @@ public class RelationalMapper implements Mapper, MapperGenerator
       rs = databaseConnection.executeQuery(query);
       
       while (rs.next()) {
-        OWLIndividual subject = owlFactory.getOWLIndividual(rs.getString(subjectPrimaryKeyColumnName));
-        OWLIndividual object = owlFactory.getOWLIndividual(rs.getString(objectPrimaryKeyColumnName));
+        OWLNamedIndividual subject = owlFactory.getOWLIndividual(rs.getString(subjectPrimaryKeyColumnName));
+        OWLNamedIndividual object = owlFactory.getOWLIndividual(rs.getString(objectPrimaryKeyColumnName));
         OWLObjectPropertyAssertionAxiom axiom = owlFactory.getOWLObjectPropertyAssertionAxiom(subject, owlProperty, object);
         result.add(axiom);
       } // while
@@ -195,18 +195,18 @@ public class RelationalMapper implements Mapper, MapperGenerator
     return result;
   } // mapOWLObjectProperty
 
-  public Set<OWLObjectPropertyAssertionAxiom> mapOWLObjectProperty(OWLProperty owlProperty, OWLIndividual subject) throws MapperException
+  public Set<OWLObjectPropertyAssertionAxiom> mapOWLObjectProperty(OWLProperty owlProperty, OWLNamedIndividual subject) throws MapperException
   {
     throw new MapperException("not implemented");
   } // mapOWLObjectProperty
 
-  public Set<OWLObjectPropertyAssertionAxiom> mapOWLObjectProperty(OWLProperty owlProperty, OWLIndividual subject, OWLIndividual object) 
+  public Set<OWLObjectPropertyAssertionAxiom> mapOWLObjectProperty(OWLProperty owlProperty, OWLNamedIndividual subject, OWLNamedIndividual object) 
     throws MapperException
   {
     throw new MapperException("not implemented");
   } // mapOWLbjectProperty
 
-  public Set<OWLDataPropertyAssertionAxiom> mapOWLDataProperty(OWLProperty owlProperty, OWLIndividual subjectOWLIndividual,
+  public Set<OWLDataPropertyAssertionAxiom> mapOWLDataProperty(OWLProperty owlProperty, OWLNamedIndividual subjectOWLIndividual,
                                                                        OWLDataValue objectOWLDatatypeValue) 
     throws MapperException
   {
@@ -242,7 +242,7 @@ public class RelationalMapper implements Mapper, MapperGenerator
       rs = databaseConnection.executeQuery(query);
       
       while (rs.next()) {
-        OWLIndividual subject = owlFactory.getOWLIndividual(rs.getString(subjectPrimaryKeyColumnName));
+        OWLNamedIndividual subject = owlFactory.getOWLIndividual(rs.getString(subjectPrimaryKeyColumnName));
         OWLDataValue value = owlDataValueFactory.getOWLDataValue(rs.getFloat(valueColumnName)); // TODO: float only
         OWLDataPropertyAssertionAxiom axiom = owlFactory.getOWLDataPropertyAssertionAxiom(subject, owlProperty, value);
         result.add(axiom);
@@ -258,7 +258,7 @@ public class RelationalMapper implements Mapper, MapperGenerator
   } // mapOWLDatatypeProperty
 
   public Set<OWLDataPropertyAssertionAxiom> mapOWLDataProperty(OWLProperty owlProperty,
-                                                                       OWLIndividual subjectOWLIndividual)
+                                                                       OWLNamedIndividual subjectOWLIndividual)
 
     throws MapperException
   {

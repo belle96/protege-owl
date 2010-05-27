@@ -1,7 +1,7 @@
 
 package edu.stanford.smi.protegex.owl.swrl.bridge.exceptions;
 
-public class IncompatibleBuiltInClassException extends BuiltInLibraryException 
+public class IncompatibleBuiltInClassException extends SWRLBuiltInLibraryException 
 {
   public IncompatibleBuiltInClassException(String ruleName, String prefix, String className, String message) 
   { 

@@ -1,7 +1,7 @@
 
 package edu.stanford.smi.protegex.owl.swrl.bridge.exceptions;
 
-public class UnresolvedBuiltInMethodException extends BuiltInLibraryException 
+public class UnresolvedBuiltInMethodException extends SWRLBuiltInLibraryException 
 {
   public UnresolvedBuiltInMethodException(String ruleName, String prefix, String builtInName, String message) 
   { 

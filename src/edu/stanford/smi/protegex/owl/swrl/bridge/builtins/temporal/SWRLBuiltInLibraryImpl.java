@@ -319,10 +319,10 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       result = new Period(temporal, datetimeString, datetimeString, granularity);
     } else if (isArgumentAnIndividual(argumentNumber, arguments)) {
       String individualURI = getArgumentAsAnIndividualURI(argumentNumber, arguments);
-      if (getInvokingBridge().isOWLIndividualOfClass(individualURI, ValidInstantClassName)) {
+      if (getBuiltInBridge().isOWLIndividualOfClass(individualURI, ValidInstantClassName)) {
         Instant instant = getValidInstant(individualURI, granularity);
         result = new Period(temporal, instant, granularity);
-      } else if (getInvokingBridge().isOWLIndividualOfClass(individualURI,  ValidPeriodClassName)) {
+      } else if (getBuiltInBridge().isOWLIndividualOfClass(individualURI,  ValidPeriodClassName)) {
         result = getValidPeriod(individualURI, granularity);
       } else throw new InvalidBuiltInArgumentException(argumentNumber, "individual " + individualURI + " is not a " +
                                                        ValidInstantClassName + " or " + ValidPeriodClassName);
@@ -342,7 +342,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       result = new Instant(temporal, datetimeString, granularity);
     } else if (isArgumentAnIndividual(argumentNumber, arguments)) {
       String individualURI = getArgumentAsAnIndividualURI(argumentNumber, arguments);
-      if (getInvokingBridge().isOWLIndividualOfClass(individualURI, ValidInstantClassName)) {
+      if (getBuiltInBridge().isOWLIndividualOfClass(individualURI, ValidInstantClassName)) {
         result = getValidInstant(individualURI, granularity);
       } else throw new InvalidBuiltInArgumentException(argumentNumber, "individual " + individualURI + " is not a " + ValidInstantClassName);
     } else throw new InvalidBuiltInArgumentException(argumentNumber, "expecting an XSD datetime or " + ValidInstantClassName + " individual" +
@@ -361,7 +361,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       granularity = Temporal.getIntegerGranularityRepresentation(granularityName);
     } else if (isArgumentAnIndividual(argumentNumber, arguments)) {
       String individualURI = getArgumentAsAnIndividualURI(argumentNumber, arguments);
-      if (getInvokingBridge().isOWLIndividualOfClass(individualURI, GranularityClassName)) {
+      if (getBuiltInBridge().isOWLIndividualOfClass(individualURI, GranularityClassName)) {
         int hashIndex = individualURI.indexOf('#');
         if (hashIndex == -1) granularityName = individualURI;
         else granularityName = individualURI.substring(hashIndex + 1, individualURI.length());
@@ -383,7 +383,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       result = Temporal.isValidGranularityString(granularityName);
     } else if (isArgumentAnIndividual(argumentNumber, arguments)) {
       String individualURI = getArgumentAsAnIndividualURI(argumentNumber, arguments);
-      result = getInvokingBridge().isOWLIndividualOfClass(individualURI, GranularityClassName);
+      result = getBuiltInBridge().isOWLIndividualOfClass(individualURI, GranularityClassName);
     } // if
 
     return result;
@@ -392,7 +392,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   private Instant getValidInstant(String individualURI, int granularity) 
     throws BuiltInException, TemporalException
   {
-    String datetimeString = getDataPropertyValueAsAString(getInvokingBridge(), individualURI, HasTimePropertyName);
+    String datetimeString = getDataPropertyValueAsAString(getBuiltInBridge(), individualURI, HasTimePropertyName);
 
     return new Instant(temporal, datetimeString, granularity);
   } 
@@ -400,8 +400,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   private Period getValidPeriod(String individualURI, int granularity) 
     throws BuiltInException, TemporalException
   {
-    String startDatetimeString = getDataPropertyValueAsAString(getInvokingBridge(), individualURI, HasStartTimePropertyName);
-    String finishDatetimeString = getDataPropertyValueAsAString(getInvokingBridge(), individualURI, HasFinishTimePropertyName);
+    String startDatetimeString = getDataPropertyValueAsAString(getBuiltInBridge(), individualURI, HasStartTimePropertyName);
+    String finishDatetimeString = getDataPropertyValueAsAString(getBuiltInBridge(), individualURI, HasFinishTimePropertyName);
 
     return new Period(temporal, startDatetimeString, finishDatetimeString, granularity);
   }
@@ -438,7 +438,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
     literal = ((OWLDataPropertyAssertionAxiom)axiom).getObject();
 
-    dataValue = getInvokingBridge().getOWLDataValueFactory().getOWLDataValue(literal);
+    dataValue = getBuiltInBridge().getOWLDataValueFactory().getOWLDataValue(literal);
     
     return dataValue.getInt();
   }   

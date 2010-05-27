@@ -2,22 +2,22 @@
 package edu.stanford.smi.protegex.owl.swrl.owlapi.impl;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.*;
-import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLIndividual;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLNamedIndividual;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLProperty;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLPropertyAssertionAxiom;
 
 public abstract class OWLPropertyAssertionAxiomImpl implements OWLPropertyAssertionAxiom 
 {
-  private OWLIndividual subject;
+  private OWLNamedIndividual subject;
   private OWLProperty property;
 
-  public OWLPropertyAssertionAxiomImpl(OWLIndividual subject, OWLProperty property)
+  public OWLPropertyAssertionAxiomImpl(OWLNamedIndividual subject, OWLProperty property)
   {
     this.subject = subject;
     this.property = property;
   } // OWLPropertyAssertionAxiomImpl
 
-  public OWLIndividual getSubject() { return subject; }
+  public OWLNamedIndividual getSubject() { return subject; }
   public OWLProperty getProperty() { return property; }
 
   public boolean equals(Object obj)

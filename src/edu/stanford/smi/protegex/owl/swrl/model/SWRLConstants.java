@@ -128,7 +128,7 @@ public interface SWRLConstants {
 
         public static final String SUBTRACT_YEAR_MONTH_DURATION_FROM_DATE_TIME = "subtractYearMonthDurationFromDateTime";
 
-        public static final String SUBTRACT_DAY_TIME_DURATION_FROM_DATE_TIME = "subtractDayTImeDurationFromDateTime";
+        public static final String SUBTRACT_DAY_TIME_DURATION_FROM_DATE_TIME = "subtractDayTimeDurationFromDateTime";
 
         public static final String ADD_YEAR_MONTH_DURATION_TO_DATE = "addYearMonthDurationToDate";
 

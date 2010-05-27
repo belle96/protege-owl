@@ -21,10 +21,10 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.ObjectPropertyArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.PropertyArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLBuiltInBridge;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
-import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInLibraryException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInMethodRuntimeException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.InvalidBuiltInArgumentException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.InvalidBuiltInArgumentNumberException;
+import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLBuiltInLibraryException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDType;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.DataValueConversionException;
@@ -55,38 +55,38 @@ public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
      argumentFactory = ArgumentFactory.getFactory();
      invocationPatternID = 0L;
      invocationPatternMap = new HashMap<String, Long>();
-  } // AbstractSWRLBuiltInLibrary
+  }
 
   public String getLibraryName() { return libraryName; }
 
-  public SWRLBuiltInBridge getInvokingBridge() throws BuiltInLibraryException
+  public SWRLBuiltInBridge getBuiltInBridge() throws SWRLBuiltInLibraryException
   {
     if (invokingBridge == null) 
-      throw new BuiltInLibraryException("invalid call to getInvokingBridge - should only be called from within a built-in");
+      throw new SWRLBuiltInLibraryException("invalid call to getInvokingBridge - should only be called from within a built-in");
 
     return invokingBridge;
-  } // getInvokingBridge
+  }
 
-  public String getInvokingRuleName() throws BuiltInLibraryException
+  public String getInvokingRuleName() throws SWRLBuiltInLibraryException
   {
     if (invokingRuleName.equals("")) 
-      throw new BuiltInLibraryException("invalid call to getInvokingRuleName - should only be called from within a built-in");
+      throw new SWRLBuiltInLibraryException("invalid call to getInvokingRuleName - should only be called from within a built-in");
 
     return invokingRuleName;
   } // getInvokingRuleName
 
-  public int getInvokingBuiltInIndex() throws BuiltInLibraryException
+  public int getInvokingBuiltInIndex() throws SWRLBuiltInLibraryException
   {
     if (invokingBuiltInIndex == -1) 
-      throw new BuiltInLibraryException("invalid call to getInvokingBuiltInIndex - should only be called from within a built-in");
+      throw new SWRLBuiltInLibraryException("invalid call to getInvokingBuiltInIndex - should only be called from within a built-in");
 
     return invokingBuiltInIndex;
   } // getInvokingBuiltInIndex
 
-  public boolean getIsInConsequent() throws BuiltInLibraryException
+  public boolean getIsInConsequent() throws SWRLBuiltInLibraryException
   {
     if (invokingBridge == null) 
-      throw new BuiltInLibraryException("invalid call to getIsInConsequent - should only be called from within a built-in");
+      throw new SWRLBuiltInLibraryException("invalid call to getIsInConsequent - should only be called from within a built-in");
 
     return isInConsequent;
   } // getIsInConsequent
@@ -94,7 +94,7 @@ public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
   public void checkThatInConsequent() throws BuiltInException
   {
     if (invokingBridge == null) 
-      throw new BuiltInLibraryException("invalid call to checkThatInConsequent - should only be called from within a built-in");
+      throw new SWRLBuiltInLibraryException("invalid call to checkThatInConsequent - should only be called from within a built-in");
 
     if (!isInConsequent) throw new BuiltInException("built-in can only be used in consequent");
   } // checkIfInConsequent
@@ -102,14 +102,14 @@ public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
   public void checkThatInAntecedent() throws BuiltInException
   {
     if (invokingBridge == null) 
-      throw new BuiltInLibraryException("invalid call to checkThatInAntecedent - should only be called from within a built-in");
+      throw new SWRLBuiltInLibraryException("invalid call to checkThatInAntecedent - should only be called from within a built-in");
 
     if (isInConsequent) throw new BuiltInException("built-in can only be used in antecedent");
   } // checkIfInAntecedent
 
-  public abstract void reset() throws BuiltInLibraryException;
+  public abstract void reset() throws SWRLBuiltInLibraryException;
 
-  public void invokeResetMethod(SWRLBuiltInBridge bridge) throws BuiltInLibraryException
+  public void invokeResetMethod(SWRLBuiltInBridge bridge) throws SWRLBuiltInLibraryException
   {
     synchronized (this) {
       invokingBridge = bridge;
@@ -146,7 +146,7 @@ public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
         } else throw new BuiltInException("unknown exception thrown by built-in " + builtInName + " in rule " + 
                                           ruleName + ": " + e.toString(), e);
       } catch (Throwable e) { // Should be one of IllegalAccessException or IllegalArgumentException
-        throw new BuiltInLibraryException("internal built-in library exception when invoking built-in " + builtInName + " in rule " + 
+        throw new SWRLBuiltInLibraryException("internal built-in library exception when invoking built-in " + builtInName + " in rule " + 
                                           ruleName + ": " + e.getMessage(), e);        
       } // try
       
@@ -154,7 +154,7 @@ public abstract class AbstractSWRLBuiltInLibrary implements SWRLBuiltInLibrary
     } // synchronized
 
     return result.booleanValue();
-  } // invokeBuiltInMethod
+  } 
 
   public void checkNumberOfArgumentsEqualTo(int expecting, int actual) 
   throws InvalidBuiltInArgumentNumberException

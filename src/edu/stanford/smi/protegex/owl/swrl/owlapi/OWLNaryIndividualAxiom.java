@@ -5,5 +5,5 @@ import java.util.Set;
 
 public interface OWLNaryIndividualAxiom extends OWLIndividualAxiom
 {
-  Set<OWLIndividual> getIndividuals();
+  Set<OWLNamedIndividual> getIndividuals();
 } // OWLNaryIndividualAxiom

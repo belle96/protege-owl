@@ -22,7 +22,7 @@ public class BuiltInAtomImpl extends AtomImpl implements BuiltInAtom
   private List<BuiltInArgument> arguments; 
   private int builtInIndex = -1; // Index of this built-in atom in rule body; left-to-right, first built-in index is 0, second in 1, and so on
   private boolean sqwrlCollectionResultsUsed = false;
-  private Set<String> dependsOnVariableNames = new HashSet<String>();
+  private Set<String> pathVariableNames = new HashSet<String>();
   
   public BuiltInAtomImpl(String builtInURI, String builtInPrefixedName, List<BuiltInArgument> arguments)
   {
@@ -47,7 +47,7 @@ public class BuiltInAtomImpl extends AtomImpl implements BuiltInAtom
   public int getNumberOfArguments() { return arguments.size(); }
   public int getBuiltInIndex() { return builtInIndex; }
   public void setBuiltInIndex(int builtInIndex) { this.builtInIndex = builtInIndex; }
-  public Set<String> getDependsOnVariableNames() { return dependsOnVariableNames; }
+  public Set<String> getPathVariableNames() { return pathVariableNames; }
 
   public boolean usesSQWRLCollectionResults() { return sqwrlCollectionResultsUsed; } 
   public boolean isSQWRLBuiltIn() { return SQWRLNames.isSQWRLBuiltIn(builtInURI); }
@@ -130,9 +130,9 @@ public class BuiltInAtomImpl extends AtomImpl implements BuiltInAtom
     arguments.addAll(additionalArguments); 
   }
 
-  public void setDependsOnVariableNames(Set<String> variableNames)
+  public void setPathVariableNames(Set<String> variableNames)
   {
-	  dependsOnVariableNames = variableNames;
+	  pathVariableNames = variableNames;
   }
   
   private void checkArgumentNumber(int argumentNumber) throws BuiltInException

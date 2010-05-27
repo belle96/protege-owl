@@ -3,11 +3,13 @@ package edu.stanford.smi.protegex.owl.swrl.bridge.builtins.rdfb;
 
 import java.util.List;
 
+import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.MultiArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.builtins.AbstractSWRLBuiltInLibrary;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInNotImplementedException;
+import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLBuiltInLibraryException;
 import edu.stanford.smi.protegex.owl.swrl.util.SWRLOWLUtil;
 
 /**
@@ -49,13 +51,13 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     
     if (isUnboundArgument) {
     	MultiArgument multiArgument = createMultiArgument();
-    	for (String label : SWRLOWLUtil.getRDFSLabels(getInvokingBridge().getOWLModel(), resourceName, language))
+    	for (String label : SWRLOWLUtil.getRDFSLabels(getOWLModel(), resourceName, language))
     		multiArgument.addArgument(createDataValueArgument(label));
     	arguments.get(1).setBuiltInResult(multiArgument);
     	result = !multiArgument.hasNoArguments();
     } else { // Bound argument
     	String label = getArgumentAsAString(1, arguments);
-    	result = SWRLOWLUtil.getRDFSLabels(getInvokingBridge().getOWLModel(), resourceName, language).contains(label);
+    	result = SWRLOWLUtil.getRDFSLabels(getOWLModel(), resourceName, language).contains(label);
     } // if
     
     return result;
@@ -78,13 +80,13 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
     if (isUnboundArgument) {
      	MultiArgument multiArgument = createMultiArgument();
-    	for (String language : SWRLOWLUtil.getRDFSLabelLanguages(getInvokingBridge().getOWLModel(), resourceName))
+    	for (String language : SWRLOWLUtil.getRDFSLabelLanguages(getOWLModel(), resourceName))
     		multiArgument.addArgument(createDataValueArgument(language));
     	arguments.get(1).setBuiltInResult(multiArgument);
     	result = !multiArgument.hasNoArguments();
     } else { // Bound argument
     	String language = getArgumentAsAString(1, arguments);
-    	result = SWRLOWLUtil.getRDFSLabelLanguages(getInvokingBridge().getOWLModel(), resourceName).contains(language);
+    	result = SWRLOWLUtil.getRDFSLabelLanguages(getOWLModel(), resourceName).contains(language);
     } // if
     
     return result;
@@ -136,6 +138,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!result) throw new BuiltInNotImplementedException();
 
     return result;
-  } // isResource
+  } 
+  
+  private OWLModel getOWLModel() throws SWRLBuiltInLibraryException { return getBuiltInBridge().getActiveOntology().getOWLModel(); }
 
-} // SWRLBuiltInLibraryImpl
+}

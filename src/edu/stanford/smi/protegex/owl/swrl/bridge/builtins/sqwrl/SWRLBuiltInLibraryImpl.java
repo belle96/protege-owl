@@ -933,7 +933,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     String collectionName = getCollectionName(arguments, 0); // The collection is always the first argument.
     int numberOfGroupArguments = arguments.size() - 2;
     boolean hasGroupPattern  = numberOfGroupArguments != 0;
-    String groupPattern = !hasGroupPattern ? "" : createInvocationPattern(getInvokingBridge(), queryName, 0, false,
+    String groupPattern = !hasGroupPattern ? "" : createInvocationPattern(getBuiltInBridge(), queryName, 0, false,
                                                                           arguments.subList(2, arguments.size()));
     String collectionID;
     
@@ -969,7 +969,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     checkThatInAntecedent();
     
     if (hasGroupPattern)
-    	collectionID = collectionName + ":" + createInvocationPattern(getInvokingBridge(), queryName, 0, false, arguments.subList(coreArgumentNumber, arguments.size()));
+    	collectionID = collectionName + ":" + createInvocationPattern(getBuiltInBridge(), queryName, 0, false, arguments.subList(coreArgumentNumber, arguments.size()));
     else
     	collectionID = collectionName;
 
@@ -990,7 +990,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (!collectionGroupElementNumbersMap.containsKey(collectionName)) collectionGroupElementNumbersMap.put(collectionName, numberOfRelevantGroupArguments);
     
     if (hasGroupPattern)
-      collectionID = collectionName + ":" + createInvocationPattern(getInvokingBridge(), queryName, 0, false, 
+      collectionID = collectionName + ":" + createInvocationPattern(getBuiltInBridge(), queryName, 0, false, 
       				                                                      arguments.subList(coreArgumentNumber + groupArgumentOffset, 
       				                                                      coreArgumentNumber + groupArgumentOffset + numberOfRelevantGroupArguments));
     else collectionID = collectionName;
@@ -1037,7 +1037,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   private SQWRLResultImpl getSQWRLUnpreparedResult(String queryURI) throws BuiltInException
   {
-    return getInvokingBridge().getSQWRLUnpreparedResult(queryURI);
+    return getBuiltInBridge().getSQWRLUnpreparedResult(queryURI);
   }
 
   private void checkThatElementIsComparable(BuiltInArgument element) throws BuiltInException

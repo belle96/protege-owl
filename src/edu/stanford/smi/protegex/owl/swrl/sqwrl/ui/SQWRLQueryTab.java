@@ -9,11 +9,11 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import edu.stanford.smi.protegex.owl.model.OWLModel;
-import edu.stanford.smi.protegex.owl.swrl.bridge.BridgeFactory;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BridgePluginManager;
-import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRuleEngineBridge;
-import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLRuleEngineBridgeException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.ui.SWRLPluginGUIAdapter;
+import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLRuleEngineException;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngine;
+import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngineFactory;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.ui.icons.QueryIcons;
 
 public class SQWRLQueryTab extends JTabbedPane implements SWRLPluginGUIAdapter
@@ -23,26 +23,26 @@ public class SQWRLQueryTab extends JTabbedPane implements SWRLPluginGUIAdapter
     BridgePluginManager.registerPlugin("SQWRLQueryTab", "Activate/deactivate SQWRLQueryTab", QueryIcons.getQueryIcon(), new SQWRLQueryTab());
   } // static
 
-  private SWRLRuleEngineBridge bridge;
+  private SQWRLQueryEngine queryEngine;
 
   public Container getPluginContainer() { return this; }
 
   public Container createPluginContainer(OWLModel owlModel)
   {
     try {
-      bridge = BridgeFactory.createBridge(owlModel);
-    } catch (SWRLRuleEngineBridgeException e) {
+      queryEngine = SQWRLQueryEngineFactory.create(owlModel);
+    } catch (SWRLRuleEngineException e) {
       System.err.println(e.toString());
       return makeErrorWindow(e.toString());
     } // try
 
     removeAll();
 
-    SQWRLQueryControlPanel controlPanel = new SQWRLQueryControlPanel(bridge);
+    SQWRLQueryControlPanel controlPanel = new SQWRLQueryControlPanel(queryEngine);
     addTab("SQWRLQueryTab", QueryIcons.getQueryIcon(), controlPanel, "Control Panel");
 
     return this;
-  } // createPluginContainer
+  } 
 
   private Container makeErrorWindow(String text) 
   { 
@@ -56,5 +56,5 @@ public class SQWRLQueryTab extends JTabbedPane implements SWRLPluginGUIAdapter
     add(panel);
 
     return this;
-  }  // makeErrorWindow
-} // SQWRLQueryTab
+  } 
+}

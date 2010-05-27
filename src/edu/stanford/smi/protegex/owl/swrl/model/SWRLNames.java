@@ -140,18 +140,18 @@ public interface SWRLNames extends OWLNames {
       public final static String DIVIDE_DAY_TIME_DURATION = (SWRLB_NAMESPACE  + "divideDayTimeDuration").intern();
       public final static String SUBTRACT_DATES = (SWRLB_NAMESPACE  + "subtractDates").intern();
       public final static String SUBTRACT_TIMES = (SWRLB_NAMESPACE  + "subtractTimes").intern();
-      public final static String ADD_YEAR_MONTH_DURATION_TO_DATETIME = (SWRLB_NAMESPACE  + "addYearMonthDurationToDatetime").intern();
-      public final static String ADD_DAY_TIME_DURATION_TO_DATETIME = (SWRLB_NAMESPACE  + "addDayTimeDurationToDatetime").intern();
-      public final static String SUBTRACT_YEAR_MONTH_DURATION_FROM_DATETIME = (SWRLB_NAMESPACE  + "subtractYearMonthDurationFromDatetime").intern();
-      public final static String SUBTRACT_DAY_TIME_DURATION_FROM_DATETIME = (SWRLB_NAMESPACE  + "subtractDayTimeDurationFromDatetime").intern();
+      public final static String ADD_YEAR_MONTH_DURATION_TO_DATETIME = (SWRLB_NAMESPACE  + "addYearMonthDurationToDateTime").intern();
+      public final static String ADD_DAY_TIME_DURATION_TO_DATETIME = (SWRLB_NAMESPACE  + "addDayTimeDurationToDateTime").intern();
+      public final static String SUBTRACT_YEAR_MONTH_DURATION_FROM_DATETIME = (SWRLB_NAMESPACE  + "subtractYearMonthDurationFromDateTime").intern();
+      public final static String SUBTRACT_DAY_TIME_DURATION_FROM_DATETIME = (SWRLB_NAMESPACE  + "subtractDayTimeDurationFromDateTime").intern();
       public final static String ADD_YEAR_MONTH_DURATION_TO_DATE = (SWRLB_NAMESPACE  + "addYearMonthDurationToDate").intern();
       public final static String ADD_DAY_TIME_DURATION_TO_DATE = (SWRLB_NAMESPACE  + "addDayTimeDurationToDate").intern();
       public final static String SUBTRACT_YEAR_MONTH_DURATION_FROM_DATE = (SWRLB_NAMESPACE  + "subtractYearMonthDurationFromDate").intern();
       public final static String SUBTRACT_DAY_TIME_DURATION_FROM_DATE = (SWRLB_NAMESPACE  + "subtractDayTimeDurationFromDate").intern();
       public final static String ADD_DAY_TIME_DURATION_TO_TIME = (SWRLB_NAMESPACE  + "addDayTimeDurationToTime").intern();
       public final static String SUBTRACT_DAY_TIME_DURATION_FROM_TIME = (SWRLB_NAMESPACE  + "subtractDatTimeDurationFromTime").intern();
-      public final static String SUBTRACT_DATETIMES_YIELDING_YEAR_MONTH_DURATION = (SWRLB_NAMESPACE  + "subtractDatetimesYieldingYearMonthDuration").intern();
-      public final static String SUBTRACT_DATETIMES_YIELDING_DAY_TIME_DURATION = (SWRLB_NAMESPACE  + "subtractDatetimesYieldingDayTimeDuration").intern();
+      public final static String SUBTRACT_DATETIMES_YIELDING_YEAR_MONTH_DURATION = (SWRLB_NAMESPACE  + "subtractDateTimesYieldingYearMonthDuration").intern();
+      public final static String SUBTRACT_DATETIMES_YIELDING_DAY_TIME_DURATION = (SWRLB_NAMESPACE  + "subtractDateTimesYieldingDayTimeDuration").intern();
   }
 
   public static interface Annotations 

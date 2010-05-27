@@ -26,7 +26,7 @@ public interface BuiltInAtom  extends Atom
   String getArgumentVariableName(int argumentNumber) throws BuiltInException;
   List<String> getArgumentsVariableNames() throws BuiltInException;
   List<String> getArgumentsVariableNamesExceptFirst() throws BuiltInException;
-  Set<String> getDependsOnVariableNames(); // Indicates variables that this built-in depends on (directly  or indirectly)
+  Set<String> getPathVariableNames(); // Indicates variables that this built-in depends on (directly  or indirectly)
   void addArguments(List<BuiltInArgument> additionalArguments);
 
   boolean usesSQWRLCollectionResults();
@@ -37,6 +37,6 @@ public interface BuiltInAtom  extends Atom
   boolean isSQWRLCollectionCreateOperation();
   
   void setUsesSQWRLCollectionResults();
-  void setDependsOnVariableNames(Set<String> variableNames);
+  void setPathVariableNames(Set<String> variableNames);
 }
 

@@ -1,6 +1,4 @@
 
-// TODO: very long - needs serious refactoring
-
 package edu.stanford.smi.protegex.owl.swrl.owlapi.impl;
 
 import java.util.HashMap;
@@ -9,10 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInAtom;
-import edu.stanford.smi.protegex.owl.swrl.bridge.OWLConversionFactory;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLPropertyPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRule;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
@@ -29,10 +25,11 @@ import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDataPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDeclarationAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDifferentIndividualsAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLEntity;
-import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLIndividual;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLLiteral;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLNamedIndividual;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLObjectProperty;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLObjectPropertyAssertionAxiom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLOntology;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLProperty;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLSameIndividualAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLSomeValuesFrom;
@@ -43,28 +40,26 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 public class OWLDataFactoryImpl implements OWLDataFactory
 {
   private Map<String, OWLClass> classes = new HashMap<String, OWLClass>();
-  private Map<String, OWLIndividual> individuals = new HashMap<String, OWLIndividual>();
+  private Map<String, OWLNamedIndividual> individuals = new HashMap<String, OWLNamedIndividual>();
   private Map<String, OWLObjectProperty> objectProperties = new HashMap<String, OWLObjectProperty>();
   private Map<String, OWLDataProperty> dataProperties = new HashMap<String, OWLDataProperty>();
 
-  private OWLModel owlModel;
-  private OWLConversionFactory conversionFactory;
+  private OWLOntology activeOntology;
 
-  public OWLDataFactoryImpl() { owlModel = null; }
+  public OWLDataFactoryImpl() { activeOntology = null; }
 
-  public OWLDataFactoryImpl(OWLModel owlModel) 
+  public OWLDataFactoryImpl(OWLOntology activeOntology) 
   { 
-    this.owlModel = owlModel; 
-    conversionFactory = new OWLConversionFactoryImpl(owlModel, this);
+    this.activeOntology = activeOntology;
   }
 
   public Set<SWRLRule> getSWRLRules() throws OWLFactoryException
   {
     Set<SWRLRule> result = new HashSet<SWRLRule>();
     
-    if (hasOWLModel()) {
+    if (hasActiveOntology()) {
       try {
-        result = conversionFactory.getRules();
+        result = activeOntology.getSWRLRules();
       } catch (OWLConversionFactoryException e) {
     	  throw new OWLFactoryException("conversion exception getting SWRL rule or SQWRL query: " + e.getMessage());
       } catch (SQWRLException e) {
@@ -81,27 +76,18 @@ public class OWLDataFactoryImpl implements OWLDataFactory
   {
     SWRLRule result = null;
     
-    if (hasOWLModel()) {
+    if (hasActiveOntology()) {
       try {
-        result = conversionFactory.getSWRLRule(ruleName);
+        result = activeOntology.getSWRLRule(ruleName);
       } catch (OWLConversionFactoryException e) {
     	  throw new OWLFactoryException("conversion exception getting SWRL rule or SQWRL query: " + e.getMessage());
-      } catch (SQWRLException e) {
-    	  throw new OWLFactoryException("SQWRL exception getting query: " + e.getMessage());
-      } catch (BuiltInException e) {
-    	  throw new OWLFactoryException("built-in exception getting SWRL rule or SQWRL query: " + e.getMessage());      
       } // try
     } // if
 
     return result;
-  } // getSWRLRule
+  } 
 
   // Basic OWL entities
-
-  public OWLClass getOWLClass() 
-  {
-    return conversionFactory.getOWLClass();
-  } // getOWLClass
 
   public OWLClass getOWLClass(String classURI)
   { 
@@ -109,9 +95,9 @@ public class OWLDataFactoryImpl implements OWLDataFactory
     
     if (classes.containsKey(classURI)) owlClass = classes.get(classURI);
     else {
-      if (hasOWLModel()) {
+      if (hasActiveOntology()) {
         try {
-          owlClass = conversionFactory.getOWLClass(classURI);
+          owlClass = activeOntology.getOWLClass(classURI);
         } catch (OWLConversionFactoryException e) {
           owlClass = new OWLClassImpl(classURI); 
         } // try
@@ -122,15 +108,15 @@ public class OWLDataFactoryImpl implements OWLDataFactory
     return owlClass; 
   } // getOWLClass
     
-  public OWLIndividual getOWLIndividual(String individualURI)
+  public OWLNamedIndividual getOWLIndividual(String individualURI)
   {
-    OWLIndividual owlIndividual = null;
+    OWLNamedIndividual owlIndividual = null;
     
     if (individuals.containsKey(individualURI)) owlIndividual = individuals.get(individualURI);
     else {
-      if (hasOWLModel()) {
+      if (hasActiveOntology()) {
         try {
-          owlIndividual = conversionFactory.getOWLIndividual(individualURI);
+          owlIndividual = activeOntology.getOWLIndividual(individualURI);
         } catch (OWLConversionFactoryException e) {
           owlIndividual = new OWLIndividualImpl(individualURI); 
         } // try
@@ -147,9 +133,9 @@ public class OWLDataFactoryImpl implements OWLDataFactory
     
     if (objectProperties.containsKey(propertyURI)) property = objectProperties.get(propertyURI);
     else {
-      if (hasOWLModel()) {
+      if (hasActiveOntology()) {
         try {
-          property = conversionFactory.getOWLObjectProperty(propertyURI);
+          property = activeOntology.getOWLObjectProperty(propertyURI);
         } catch (OWLConversionFactoryException e) {
           property = new OWLObjectPropertyImpl(propertyURI); 
         } // try
@@ -166,9 +152,9 @@ public class OWLDataFactoryImpl implements OWLDataFactory
     
     if (dataProperties.containsKey(propertyURI)) property = dataProperties.get(propertyURI);
     else {
-      if (hasOWLModel()) {
+      if (hasActiveOntology()) {
         try {
-          property = conversionFactory.getOWLDataProperty(propertyURI);
+          property = activeOntology.getOWLDataProperty(propertyURI);
         } catch (OWLConversionFactoryException e) {
           property = new OWLDataPropertyImpl(propertyURI); 
         } // try
@@ -180,21 +166,21 @@ public class OWLDataFactoryImpl implements OWLDataFactory
   } // getOWLDataProperty
 
   // OWL axioms
-  public OWLDataPropertyAssertionAxiom getOWLDataPropertyAssertionAxiom(OWLIndividual subject, OWLProperty property, OWLLiteral object) 
+  public OWLDataPropertyAssertionAxiom getOWLDataPropertyAssertionAxiom(OWLNamedIndividual subject, OWLProperty property, OWLLiteral object) 
     { return new OWLDatatypePropertyAssertionAxiomImpl(subject, property, object); }
-  public OWLObjectPropertyAssertionAxiom getOWLObjectPropertyAssertionAxiom(OWLIndividual subject, OWLProperty property, OWLIndividual object)  
+  public OWLObjectPropertyAssertionAxiom getOWLObjectPropertyAssertionAxiom(OWLNamedIndividual subject, OWLProperty property, OWLNamedIndividual object)  
     { return new OWLObjectPropertyAssertionAxiomImpl(subject, property, object); }
-  public OWLDifferentIndividualsAxiom getOWLDifferentIndividualsAxiom(OWLIndividual individual1, OWLIndividual individual2) 
+  public OWLDifferentIndividualsAxiom getOWLDifferentIndividualsAxiom(OWLNamedIndividual individual1, OWLNamedIndividual individual2) 
     { return new OWLDifferentIndividualsAxiomImpl(individual1, individual2); }
-  public OWLDifferentIndividualsAxiom getOWLDifferentIndividualsAxiom(Set<OWLIndividual> individuals) 
+  public OWLDifferentIndividualsAxiom getOWLDifferentIndividualsAxiom(Set<OWLNamedIndividual> individuals) 
     { return new OWLDifferentIndividualsAxiomImpl(individuals); }
-  public OWLSameIndividualAxiom getOWLSameIndividualAxiom(OWLIndividual individual1, OWLIndividual individual2) 
+  public OWLSameIndividualAxiom getOWLSameIndividualAxiom(OWLNamedIndividual individual1, OWLNamedIndividual individual2) 
     { return new OWLSameIndividualAxiomImpl(individual1, individual2); }
-  public OWLClassPropertyAssertionAxiom getOWLClassPropertyAssertionAxiom(OWLIndividual subject, OWLProperty property, OWLClass object)  
+  public OWLClassPropertyAssertionAxiom getOWLClassPropertyAssertionAxiom(OWLNamedIndividual subject, OWLProperty property, OWLClass object)  
     { return new OWLClassPropertyAssertionAxiomImpl(subject, property, object); } // OWL Full
-  public OWLPropertyPropertyAssertionAxiom getOWLPropertyPropertyAssertionAxiom(OWLIndividual subject, OWLProperty property, OWLProperty object)  
+  public OWLPropertyPropertyAssertionAxiom getOWLPropertyPropertyAssertionAxiom(OWLNamedIndividual subject, OWLProperty property, OWLProperty object)  
     { return new OWLPropertyPropertyAssertionAxiomImpl(subject, property, object); } // OWL Full
-  public OWLClassAssertionAxiom getOWLClassAssertionAxiom(OWLIndividual individual, OWLClass description)  
+  public OWLClassAssertionAxiom getOWLClassAssertionAxiom(OWLNamedIndividual individual, OWLClass description)  
     { return new OWLClassAssertionAxiomImpl(individual, description); } // TODO: should be OWLDescription
   public OWLSubClassAxiom getOWLSubClassAxiom(OWLClass subClass, OWLClass superClass)  
     { return new OWLSubClassAxiomImpl(subClass, superClass); } // TODO: should be OWLDescription
@@ -213,5 +199,5 @@ public class OWLDataFactoryImpl implements OWLDataFactory
   public OWLTypedLiteral getOWLTypedLiteral(boolean value)  { return new OWLDataValueImpl(value); }
   public OWLTypedLiteral getOWLTypedLiteral(String value)  { return new OWLDataValueImpl(value); }
 
-  private boolean hasOWLModel() { return owlModel != null; }
+  private boolean hasActiveOntology() { return activeOntology != null; }
 }

@@ -13,8 +13,9 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.IndividualArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.MultiArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.ObjectPropertyArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLBuiltInBridge;
+import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRuleEngineBridge;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
-import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInLibraryException;
+import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLBuiltInLibraryException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.InvalidBuiltInArgumentNumberException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDType;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
@@ -32,11 +33,11 @@ public interface SWRLBuiltInLibrary
   String getLibraryName();
   void reset() throws BuiltInException;
   
-  SWRLBuiltInBridge getInvokingBridge() throws BuiltInLibraryException;
-  String getInvokingRuleName() throws BuiltInLibraryException;
-  int getInvokingBuiltInIndex() throws BuiltInLibraryException;
+  SWRLBuiltInBridge getBuiltInBridge() throws SWRLBuiltInLibraryException;
+  String getInvokingRuleName() throws SWRLBuiltInLibraryException;
+  int getInvokingBuiltInIndex() throws SWRLBuiltInLibraryException;
     
-  void invokeResetMethod(SWRLBuiltInBridge bridge) throws BuiltInLibraryException;
+  void invokeResetMethod(SWRLBuiltInBridge bridge) throws SWRLBuiltInLibraryException;
 
   boolean invokeBuiltInMethod(Method method, SWRLBuiltInBridge bridge, String ruleName, 
                               String prefix, String builtInMethodName, int builtInIndex, boolean isInConsequent,
@@ -45,7 +46,7 @@ public interface SWRLBuiltInLibrary
   // Antecedent or consequent handling
   void checkThatInConsequent() throws BuiltInException;
   void checkThatInAntecedent() throws BuiltInException;
-  boolean getIsInConsequent() throws BuiltInLibraryException;
+  boolean getIsInConsequent() throws SWRLBuiltInLibraryException;
 
   // Variable name handling
 	String getVariableName(int argumentNumber, List<BuiltInArgument> arguments) throws BuiltInException; 

@@ -19,7 +19,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLFactoryException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLBuiltInBridgeException;
 import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLOWLUtilException;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDataFactory;
-import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLIndividual;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLNamedIndividual;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLProperty;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.impl.OWLDataFactoryImpl;
 import edu.stanford.smi.protegex.owl.swrl.util.SWRLOWLUtil;
@@ -76,9 +76,9 @@ public class XMLBridgeMapper
     Document doc = new Document();
 
     try {
-      xmlDocumentMappingClass = SWRLOWLUtil.getNamedClass(bridge.getOWLModel(), XMLDocumentMappingOWLClassName);
-      xmlDocumentMapping = SWRLOWLUtil.getOWLIndividual(bridge.getOWLModel(), xmlDocumentMappingClass, true, 1);
-      propertyValue = SWRLOWLUtil.getObjectPropertyValue(bridge.getOWLModel(), xmlDocumentMapping, 
+      xmlDocumentMappingClass = SWRLOWLUtil.getNamedClass(bridge.getActiveOntology().getOWLModel(), XMLDocumentMappingOWLClassName);
+      xmlDocumentMapping = SWRLOWLUtil.getOWLIndividual(bridge.getActiveOntology().getOWLModel(), xmlDocumentMappingClass, true, 1);
+      propertyValue = SWRLOWLUtil.getObjectPropertyValue(bridge.getActiveOntology().getOWLModel(), xmlDocumentMapping, 
                                                          XMLDocumentMappingHasRootElementPropertyName, false);
 
       if (propertyValue == null) throw new XMLBridgeMapperException("no document root element specified");
@@ -97,12 +97,12 @@ public class XMLBridgeMapper
   private void xmlElementMapping2Element(Document doc, SWRLBuiltInBridge bridge, edu.stanford.smi.protegex.owl.model.OWLIndividual xmlElementMapping, Element parentElement) 
     throws XMLBridgeMapperException, SWRLOWLUtilException
   {
-    String elementName = SWRLOWLUtil.getDatavaluedPropertyValueAsString(bridge.getOWLModel(), xmlElementMapping, XMLMappingHasNamePropertyName, true);
-    String elementNamespacePrefix = SWRLOWLUtil.getDatavaluedPropertyValueAsString(bridge.getOWLModel(), xmlElementMapping, XMLMappingHasNamespacePrefixPropertyName, false, "");
-    String elementNamespaceURI = SWRLOWLUtil.getDatavaluedPropertyValueAsString(bridge.getOWLModel(), xmlElementMapping, XMLMappingHasNamespaceURIPropertyName, false, "");
-    Set<edu.stanford.smi.protegex.owl.model.RDFResource> attributes = SWRLOWLUtil.getObjectPropertyValues(bridge.getOWLModel(), xmlElementMapping, XMLElementMappingHasAttributesPropertyName, false);
-    Set<edu.stanford.smi.protegex.owl.model.RDFResource> subElements = SWRLOWLUtil.getObjectPropertyValues(bridge.getOWLModel(), xmlElementMapping, XMLElementMappingHasSubElementsPropertyName, false);
-    String content = SWRLOWLUtil.getDatavaluedPropertyValueAsString(bridge.getOWLModel(), xmlElementMapping, XMLElementMappingHasContentPropertyName, false, "");
+    String elementName = SWRLOWLUtil.getDatavaluedPropertyValueAsString(bridge.getActiveOntology().getOWLModel(), xmlElementMapping, XMLMappingHasNamePropertyName, true);
+    String elementNamespacePrefix = SWRLOWLUtil.getDatavaluedPropertyValueAsString(bridge.getActiveOntology().getOWLModel(), xmlElementMapping, XMLMappingHasNamespacePrefixPropertyName, false, "");
+    String elementNamespaceURI = SWRLOWLUtil.getDatavaluedPropertyValueAsString(bridge.getActiveOntology().getOWLModel(), xmlElementMapping, XMLMappingHasNamespaceURIPropertyName, false, "");
+    Set<edu.stanford.smi.protegex.owl.model.RDFResource> attributes = SWRLOWLUtil.getObjectPropertyValues(bridge.getActiveOntology().getOWLModel(), xmlElementMapping, XMLElementMappingHasAttributesPropertyName, false);
+    Set<edu.stanford.smi.protegex.owl.model.RDFResource> subElements = SWRLOWLUtil.getObjectPropertyValues(bridge.getActiveOntology().getOWLModel(), xmlElementMapping, XMLElementMappingHasSubElementsPropertyName, false);
+    String content = SWRLOWLUtil.getDatavaluedPropertyValueAsString(bridge.getActiveOntology().getOWLModel(), xmlElementMapping, XMLElementMappingHasContentPropertyName, false, "");
     Element element = createElement(doc, parentElement, elementName);
 
     element.setNamespace(Namespace.getNamespace(elementNamespacePrefix, elementNamespaceURI));
@@ -127,23 +127,23 @@ public class XMLBridgeMapper
   private void xmlAttributeMapping2Attribute(Document doc, SWRLBuiltInBridge bridge, edu.stanford.smi.protegex.owl.model.OWLIndividual xmlAttributeMapping, Element element) 
     throws XMLBridgeMapperException, SWRLOWLUtilException
   {
-    String attributeName = SWRLOWLUtil.getDatavaluedPropertyValueAsString(bridge.getOWLModel(), xmlAttributeMapping, XMLMappingHasNamePropertyName, true);
-    String attributeValue = SWRLOWLUtil.getDatavaluedPropertyValueAsString(bridge.getOWLModel(), xmlAttributeMapping, XMLAttributeMappingHasValuePropertyName, true);
-    String attributeNamespacePrefix = SWRLOWLUtil.getDatavaluedPropertyValueAsString(bridge.getOWLModel(), xmlAttributeMapping, XMLMappingHasNamespacePrefixPropertyName, false, "");
-    String attributeNamespaceURI = SWRLOWLUtil.getDatavaluedPropertyValueAsString(bridge.getOWLModel(), xmlAttributeMapping, XMLMappingHasNamespaceURIPropertyName, false, "");
+    String attributeName = SWRLOWLUtil.getDatavaluedPropertyValueAsString(bridge.getActiveOntology().getOWLModel(), xmlAttributeMapping, XMLMappingHasNamePropertyName, true);
+    String attributeValue = SWRLOWLUtil.getDatavaluedPropertyValueAsString(bridge.getActiveOntology().getOWLModel(), xmlAttributeMapping, XMLAttributeMappingHasValuePropertyName, true);
+    String attributeNamespacePrefix = SWRLOWLUtil.getDatavaluedPropertyValueAsString(bridge.getActiveOntology().getOWLModel(), xmlAttributeMapping, XMLMappingHasNamespacePrefixPropertyName, false, "");
+    String attributeNamespaceURI = SWRLOWLUtil.getDatavaluedPropertyValueAsString(bridge.getActiveOntology().getOWLModel(), xmlAttributeMapping, XMLMappingHasNamespaceURIPropertyName, false, "");
 
     setAttribute(element, attributeName, attributeValue, attributeNamespacePrefix, attributeNamespaceURI);
   } // xmlAttributeMapping2Attribute
 
-  public OWLIndividual document2XMLDocumentMapping(Document doc, SWRLBuiltInBridge bridge) throws XMLBridgeMapperException
+  public OWLNamedIndividual document2XMLDocumentMapping(Document doc, SWRLBuiltInBridge bridge) throws XMLBridgeMapperException
   {
     Element rootElement = doc.getRootElement();
-    OWLIndividual xmlDocumentMapping;
+    OWLNamedIndividual xmlDocumentMapping;
 
     if (isSchema(rootElement)) throw new XMLBridgeMapperException("not expecting 'schema' root element");
 
     try {
-      xmlDocumentMapping = bridge.injectOWLIndividualOfClass(owlDataFactory.getOWLClass(XMLDocumentMappingOWLClassName));
+      xmlDocumentMapping = bridge.injectOWLIndividualDeclaration(owlDataFactory.getOWLClass(XMLDocumentMappingOWLClassName));
       element2XMLElementMapping(doc, bridge, xmlDocumentMapping, null, rootElement);
     } catch (SWRLBuiltInBridgeException e) {
       throw new XMLBridgeMapperException("bridge error mapping Document to OWL XML ontology: " + e.getMessage());
@@ -154,11 +154,11 @@ public class XMLBridgeMapper
     return xmlDocumentMapping;
   } // document2XMLDocumentMapping
 
-  private void element2XMLElementMapping(Document doc, SWRLBuiltInBridge bridge, OWLIndividual xmlDocumentMapping, 
-                                         OWLIndividual parentElementMapping, Element element) 
+  private void element2XMLElementMapping(Document doc, SWRLBuiltInBridge bridge, OWLNamedIndividual xmlDocumentMapping, 
+                                         OWLNamedIndividual parentElementMapping, Element element) 
     throws XMLBridgeMapperException, SWRLBuiltInBridgeException, OWLFactoryException
   {
-    OWLIndividual elementMapping = bridge.injectOWLIndividualOfClass(owlDataFactory.getOWLClass(XMLElementMappingOWLClassName));
+    OWLNamedIndividual elementMapping = bridge.injectOWLIndividualDeclaration(owlDataFactory.getOWLClass(XMLElementMappingOWLClassName));
     String elementName = element.getName();
     String elementNamespacePrefix = element.getNamespace().getPrefix();
     String elementNamespaceURI = element.getNamespace().getURI();
@@ -194,10 +194,10 @@ public class XMLBridgeMapper
     for (Element subElement : getSubElements(element)) element2XMLElementMapping(doc, bridge, xmlDocumentMapping, elementMapping, subElement);
   } // element2XMLElementMapping
 
-  private void attribute2XMLAttributeMapping(Document doc, SWRLBuiltInBridge bridge, OWLIndividual elementMapping, Attribute attribute) 
+  private void attribute2XMLAttributeMapping(Document doc, SWRLBuiltInBridge bridge, OWLNamedIndividual elementMapping, Attribute attribute) 
     throws XMLBridgeMapperException, SWRLBuiltInBridgeException, OWLFactoryException
   {
-    OWLIndividual attributeMapping = bridge.injectOWLIndividualOfClass(owlDataFactory.getOWLClass(XMLAttributeMappingOWLClassName));
+    OWLNamedIndividual attributeMapping = bridge.injectOWLIndividualDeclaration(owlDataFactory.getOWLClass(XMLAttributeMappingOWLClassName));
     String attributeName = attribute.getName();
     String attributeValue = attribute.getValue();
     String attributeNamespacePrefix = attribute.getNamespace().getPrefix();

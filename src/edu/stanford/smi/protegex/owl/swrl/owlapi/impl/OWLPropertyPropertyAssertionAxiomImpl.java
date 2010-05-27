@@ -2,14 +2,14 @@
 package edu.stanford.smi.protegex.owl.swrl.owlapi.impl;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLPropertyPropertyAssertionAxiom;
-import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLIndividual;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLNamedIndividual;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLProperty;
 
 public class OWLPropertyPropertyAssertionAxiomImpl extends OWLPropertyAssertionAxiomImpl implements OWLPropertyPropertyAssertionAxiom
 {
   private OWLProperty object;
 
-  public OWLPropertyPropertyAssertionAxiomImpl(OWLIndividual subject, OWLProperty property, OWLProperty object)
+  public OWLPropertyPropertyAssertionAxiomImpl(OWLNamedIndividual subject, OWLProperty property, OWLProperty object)
   {
     super(subject, property);
     this.object = object;
