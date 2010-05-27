@@ -46,6 +46,7 @@ import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.jena.graph.JenaModelFactory;
 import edu.stanford.smi.protegex.owl.jena.parser.GlobalParserCache;
 import edu.stanford.smi.protegex.owl.jena.parser.OWLImportsCache;
+import edu.stanford.smi.protegex.owl.jena.parser.ParserUtil;
 import edu.stanford.smi.protegex.owl.jena.parser.UnresolvedImportHandler;
 import edu.stanford.smi.protegex.owl.jena.writersettings.JenaWriterSettings;
 import edu.stanford.smi.protegex.owl.jena.writersettings.WriterSettings;
@@ -390,6 +391,7 @@ public abstract class AbstractOWLModel extends DefaultKnowledgeBase
             Repository rep = getRepository(activeTripleStore, ontologyName);
             if(rep != null) {
                 log.info("Importing " + ontologyName + " from location: " + rep.getOntologyLocationDescription(ontologyName));
+                ParserUtil.resetUniqueSessionId(); //needed to handle properly anonymous nodeIds across imports
                 TripleStore importedTripleStore = rep.loadImportedAssertions(this, ontologyName);
                 importedTripleStore.addIOAddress(ontologyName.toString());
                 if (log.isLoggable(Level.FINE)) {
