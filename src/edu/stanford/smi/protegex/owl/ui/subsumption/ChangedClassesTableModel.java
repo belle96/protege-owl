@@ -21,6 +21,7 @@ import java.util.*;
  * @author Holger Knublauch  <holger@knublauch.com>
  */
 public class ChangedClassesTableModel extends AbstractTableModel implements Disposable {
+    private static final long serialVersionUID = 3094682908756274652L;
 
     public final static int COL_CLS = 0;
 
