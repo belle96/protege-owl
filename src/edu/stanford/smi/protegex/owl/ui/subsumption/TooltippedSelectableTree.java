@@ -1,24 +1,28 @@
 package edu.stanford.smi.protegex.owl.ui.subsumption;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.Action;
+import javax.swing.ToolTipManager;
+import javax.swing.tree.TreePath;
+
 import edu.stanford.smi.protege.model.Frame;
 import edu.stanford.smi.protege.util.FrameWithBrowserText;
 import edu.stanford.smi.protege.util.LazyTreeNode;
 import edu.stanford.smi.protege.util.LazyTreeRoot;
-import edu.stanford.smi.protege.util.Log;
 import edu.stanford.smi.protege.util.SelectableTree;
 import edu.stanford.smi.protegex.owl.model.RDFResource;
 import edu.stanford.smi.protegex.owl.ui.owltable.OWLTable;
 import edu.stanford.smi.protegex.owl.ui.widget.OWLUI;
 
-import javax.swing.*;
-import javax.swing.tree.TreePath;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
 /**
  * @author Holger Knublauch  <holger@knublauch.com>
  */
 public class TooltippedSelectableTree extends SelectableTree {
+
+    private static final long serialVersionUID = 6697428920472428637L;
+
 
     public TooltippedSelectableTree(Action doubleClickAction, LazyTreeRoot root) {
         super(doubleClickAction, root);
