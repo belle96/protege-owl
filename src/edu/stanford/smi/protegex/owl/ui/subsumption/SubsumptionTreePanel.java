@@ -1,11 +1,45 @@
 package edu.stanford.smi.protegex.owl.ui.subsumption;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Logger;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JTree;
+import javax.swing.SwingConstants;
+import javax.swing.tree.TreePath;
+
 import edu.stanford.smi.protege.model.Cls;
 import edu.stanford.smi.protege.model.ModelUtilities;
 import edu.stanford.smi.protege.model.Slot;
 import edu.stanford.smi.protege.resource.Icons;
 import edu.stanford.smi.protege.ui.HeaderComponent;
-import edu.stanford.smi.protege.util.*;
+import edu.stanford.smi.protege.util.CollectionUtilities;
+import edu.stanford.smi.protege.util.ComponentFactory;
+import edu.stanford.smi.protege.util.ComponentUtilities;
+import edu.stanford.smi.protege.util.DefaultRenderer;
+import edu.stanford.smi.protege.util.LabeledComponent;
+import edu.stanford.smi.protege.util.LazyTreeNode;
+import edu.stanford.smi.protege.util.LazyTreeRoot;
+import edu.stanford.smi.protege.util.Log;
+import edu.stanford.smi.protege.util.SelectableContainer;
+import edu.stanford.smi.protege.util.SelectableTree;
+import edu.stanford.smi.protege.util.SelectionEvent;
+import edu.stanford.smi.protege.util.SelectionListener;
+import edu.stanford.smi.protege.util.TreePopupMenuMouseListener;
+import edu.stanford.smi.protege.util.ViewAction;
 import edu.stanford.smi.protege.widget.AbstractTreeWidget;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLNamedClass;
@@ -17,16 +51,14 @@ import edu.stanford.smi.protegex.owl.ui.cls.ClassTree;
 import edu.stanford.smi.protegex.owl.ui.cls.ClassTreePanel;
 import edu.stanford.smi.protegex.owl.ui.cls.Hierarchy;
 import edu.stanford.smi.protegex.owl.ui.cls.ToggleSuperclassExplorerAction;
-import edu.stanford.smi.protegex.owl.ui.search.finder.*;
+import edu.stanford.smi.protegex.owl.ui.search.finder.DefaultClassFind;
+import edu.stanford.smi.protegex.owl.ui.search.finder.Find;
+import edu.stanford.smi.protegex.owl.ui.search.finder.FindAction;
+import edu.stanford.smi.protegex.owl.ui.search.finder.FindInDialogAction;
+import edu.stanford.smi.protegex.owl.ui.search.finder.ResourceFinder;
+import edu.stanford.smi.protegex.owl.ui.search.finder.ResultsViewModelFind;
 import edu.stanford.smi.protegex.owl.ui.widget.OWLUI;
 import edu.stanford.smi.protegex.owl.ui.widget.WidgetUtilities;
-
-import javax.swing.*;
-import javax.swing.tree.TreePath;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.util.*;
-import java.util.List;
 
 /**
  * A component that displays the computed or asserted subsumption relationship
@@ -35,14 +67,14 @@ import java.util.List;
  * @author Holger Knublauch   <holger@knublauch.com>
  */
 public abstract class SubsumptionTreePanel extends SelectableContainer implements Hierarchy, ClassTreePanel {
-
+    private static final long serialVersionUID = 1243920040955545245L;
+    private static Logger log = Log.getLogger(SubsumptionTreePanel.class);
+    
     private HeaderComponent headerComponent;
 
     private LabeledComponent lc;
 
     private OWLModel owlModel;
-
-    private final static int MAX_EXPANSIONS = 100;
 
     private Slot superclassesSlot;
 
