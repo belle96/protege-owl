@@ -13,6 +13,7 @@ import edu.stanford.smi.protegex.owl.ui.cls.Hierarchy;
  * @author Holger Knublauch  <holger@knublauch.com>
  */
 public class AssertedSubsumptionTreePanel extends SubsumptionTreePanel {
+    private static final long serialVersionUID = 1L;
 
     private Cls root;
 
