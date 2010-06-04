@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import edu.stanford.smi.protege.model.Cls;
 import edu.stanford.smi.protege.model.FrameID;
+import edu.stanford.smi.protege.model.Slot;
 import edu.stanford.smi.protege.model.framestore.FrameStoreAdapter;
 import edu.stanford.smi.protege.util.Log;
 import edu.stanford.smi.protegex.owl.model.OWLIntersectionClass;
@@ -23,19 +24,23 @@ public class OwlSubclassFrameStore extends FrameStoreAdapter {
     
     private OWLModel owlModel;
     
+    private Slot directSuperclassesSlot;
+    private Slot directSubclassesSlot;
     private RDFProperty rdfsSubClassOfProperty;
     private RDFProperty owlEquivalentClassProperty;
     
     public OwlSubclassFrameStore(OWLModel owlModel) {
         this.owlModel = owlModel;
+        directSuperclassesSlot =owlModel.getSystemFrames().getDirectSuperclassesSlot();
+        directSubclassesSlot = owlModel.getSystemFrames().getDirectSubclassesSlot();
         rdfsSubClassOfProperty = owlModel.getRDFSSubClassOfProperty();
         owlEquivalentClassProperty = owlModel.getOWLEquivalentClassProperty();
     }
 
 
     private void addNamedOperandsToDirectSuperclasses(OWLNamedClass cls, OWLIntersectionClass superCls) {
-        for (Iterator<RDFSClass> it = superCls.getOperands().iterator(); it.hasNext();) {
-            RDFSClass operand = it.next();
+        for (Iterator it = superCls.getOperands().iterator(); it.hasNext();) {
+            RDFSClass operand = (RDFSClass) it.next();
             if (operand instanceof OWLNamedClass) {
                 cls.addSuperclass(operand);
             }
@@ -48,6 +53,7 @@ public class OwlSubclassFrameStore extends FrameStoreAdapter {
      *
      * @param cls the RDFSClass that has changed its superclasses
      */
+    @SuppressWarnings("unchecked")
     private void updateRDFSSubClassOf(RDFSNamedClass cls) {
         Collection<RDFSClass> newSuperclasses = new ArrayList<RDFSClass>();
         Collection<RDFSClass> newEquivalentClasses = new ArrayList<RDFSClass>();
@@ -69,9 +75,10 @@ public class OwlSubclassFrameStore extends FrameStoreAdapter {
         super.setDirectOwnSlotValues(cls, owlEquivalentClassProperty, newEquivalentClasses);
     }
     
+    @SuppressWarnings("unchecked")
     private void removeNamedOperandsFromDirectSuperclasses(OWLNamedClass cls,
                                                            OWLIntersectionClass intersectionCls) {
-        Collection<RDFSNamedClass> toRemove = intersectionCls.getNamedOperands();
+        Collection toRemove = intersectionCls.getNamedOperands();
         if (!toRemove.isEmpty()) {
         	for (Object o : super.getDirectSuperclasses(cls)) {
         		if (o  instanceof RDFSClass && super.getDirectSuperclasses((RDFSClass) o).contains(cls)) {
@@ -81,8 +88,8 @@ public class OwlSubclassFrameStore extends FrameStoreAdapter {
                     }
         		}
         	}
-            for (Iterator<RDFSNamedClass> it = toRemove.iterator(); it.hasNext();) {
-                RDFSNamedClass namedCls = it.next();
+            for (Iterator it = toRemove.iterator(); it.hasNext();) {
+                RDFSNamedClass namedCls = (RDFSNamedClass) it.next();
                 if (!namedCls.hasEquivalentClass(cls)) {
                     cls.removeSuperclass(namedCls);
                 }
@@ -113,7 +120,9 @@ public class OwlSubclassFrameStore extends FrameStoreAdapter {
                 log.fine("-> " +cls.getBrowserText() + " ADDED " + superCls.getBrowserText());
             }
             super.addDirectSuperclass(cls, superCls);
-            if (superCls instanceof OWLIntersectionClass && cls instanceof OWLNamedClass) {
+            if (superCls instanceof OWLIntersectionClass &&
+                cls instanceof OWLNamedClass &&
+                super.getDirectSuperclasses(superCls).contains(cls)) {
                 addNamedOperandsToDirectSuperclasses((OWLNamedClass) cls, (OWLIntersectionClass) superCls);
             }
             else if (cls instanceof OWLIntersectionClass &&
