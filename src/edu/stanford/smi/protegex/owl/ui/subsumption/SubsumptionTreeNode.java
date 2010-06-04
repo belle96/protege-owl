@@ -66,8 +66,8 @@ public class SubsumptionTreeNode extends LazyTreeNode {
     }
 
 
-    protected Collection getChildObjects() {
-        Collection result = new ArrayList();
+    protected Collection<Cls> getChildObjects() {
+        Collection<Cls> result = new ArrayList<Cls>();
         Cls cls = getCls();
         List list = new ArrayList(cls.getDirectOwnSlotValues(ownSlot));
         Collections.sort(list);
