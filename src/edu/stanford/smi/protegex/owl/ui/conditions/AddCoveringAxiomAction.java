@@ -1,16 +1,25 @@
 package edu.stanford.smi.protegex.owl.ui.conditions;
 
-import edu.stanford.smi.protegex.owl.model.*;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
+import edu.stanford.smi.protege.util.ModalDialog;
+import edu.stanford.smi.protegex.owl.model.OWLModel;
+import edu.stanford.smi.protegex.owl.model.OWLNamedClass;
+import edu.stanford.smi.protegex.owl.model.OWLUnionClass;
+import edu.stanford.smi.protegex.owl.model.RDFResource;
+import edu.stanford.smi.protegex.owl.model.RDFSClass;
 import edu.stanford.smi.protegex.owl.ui.ProtegeUI;
 import edu.stanford.smi.protegex.owl.ui.actions.ResourceAction;
 import edu.stanford.smi.protegex.owl.ui.cls.AddSubclassAction;
 import edu.stanford.smi.protegex.owl.ui.icons.OWLIcons;
 import edu.stanford.smi.protegex.owl.ui.resourcedisplay.ResourceDisplay;
 import edu.stanford.smi.protegex.owl.ui.widget.OWLUI;
-
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.util.*;
 
 /**
  * An Action to add a covering axiom.
@@ -29,8 +38,12 @@ public class AddCoveringAxiomAction extends ResourceAction {
 
     public void actionPerformed(ActionEvent e) {
         OWLNamedClass namedClass = (OWLNamedClass) getResource();
-        if (isSuitable(getComponent(), namedClass)) {
+        if (isSuitableActionForResource(getComponent(), namedClass)) {
             performAction(namedClass);
+        } else {
+            ModalDialog.showMessageDialog(getComponent(), namedClass == null ?
+                    "Nothing selected" : "Add covering axiom action is not suitable for " +
+                    namedClass.getBrowserText() + ".", "Not suitable");
         }
     }
 
@@ -53,7 +66,18 @@ public class AddCoveringAxiomAction extends ResourceAction {
     }
 
 
-    public boolean isSuitable(Component component,
+    /*
+     * Does not do the real suitability check because it was very expensive.
+     * The check is now done only if the user performs the action.
+     */
+    @Override
+    public boolean isSuitable(Component component, RDFResource resource) {
+        return component instanceof ResourceDisplay &&
+                resource instanceof OWLNamedClass &&
+                !resource.isSystem();
+    }
+
+    private boolean isSuitableActionForResource(Component component,
                               RDFResource resource) {
         if (component instanceof ResourceDisplay &&
                 resource instanceof OWLNamedClass &&
