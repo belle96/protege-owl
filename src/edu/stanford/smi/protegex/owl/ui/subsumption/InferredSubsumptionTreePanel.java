@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -151,6 +150,7 @@ public class InferredSubsumptionTreePanel extends SubsumptionTreePanel {
     }
 
 
+    @SuppressWarnings("deprecation")
     private void saveInferred() {
         JFileChooser fileChooser = ComponentFactory.createFileChooser("Select file", "owl");
         if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -171,21 +171,27 @@ public class InferredSubsumptionTreePanel extends SubsumptionTreePanel {
                 baseURI = baseURI.substring(0, baseURI.length() - 1);
             }
             JenaCreator jenaCreator = new JenaCreator(owlModel, false, true, clses,
-                                                      new ModalProgressBarManager("Preparing File"));
+                    new ModalProgressBarManager("Preparing File"));
             OntModel ontModel = jenaCreator.createOntModel();
+            //engine.run();
+            final String ns = owlModel.getNamespaceManager().getDefaultNamespace();
             try {
-                //engine.run();
-                final String ns = owlModel.getNamespaceManager().getDefaultNamespace();
                 Ontology ontology = Jena.getDefaultJenaOntology(ns, ontModel);
                 ontology.addProperty(OWL.versionInfo, ontModel.createTypedLiteral("classified"));
+            } catch (Exception e) {
+                Log.getLogger().log(Level.WARNING, "Could not set the ontology annotation classified. Probably the ontology has an invalid name.", e);
+            }
+            boolean success = false;
+            try {
                 JenaOWLModel.save(file, ontModel, FileUtils.langXMLAbbrev, ns);
-                ProtegeUI.getModalDialogFactory().showMessageDialog(owlModel,
-                                                                    "Successfully saved to " + file + ".");
+                success = true;
+            } catch (Exception e) {
+                Log.getLogger().log(Level.WARNING, "There was an error at saving the inferred ontology.", e);
+                success = false;
             }
-            catch (IOException ex) {
-                Log.getLogger().log(Level.SEVERE, "Exception caught", ex);
-                ProtegeUI.getModalDialogFactory().showThrowable(owlModel, ex);
-            }
+            ProtegeUI.getModalDialogFactory().showMessageDialog(owlModel,
+                    (success ?  "Successfully saved inferred ontology" : "There was an error saving inferred ontology") +
+                    " to " + file + ".");
         }
     }
 
