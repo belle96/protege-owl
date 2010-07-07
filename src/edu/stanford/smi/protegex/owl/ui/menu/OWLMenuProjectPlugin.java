@@ -45,6 +45,7 @@ import edu.stanford.smi.protege.resource.ResourceKey;
 import edu.stanford.smi.protege.ui.ProjectMenuBar;
 import edu.stanford.smi.protege.ui.ProjectToolBar;
 import edu.stanford.smi.protege.ui.ProjectView;
+import edu.stanford.smi.protege.util.ApplicationProperties;
 import edu.stanford.smi.protege.util.ComponentFactory;
 import edu.stanford.smi.protege.util.ComponentUtilities;
 import edu.stanford.smi.protege.util.Log;
@@ -570,5 +571,7 @@ public class OWLMenuProjectPlugin extends ProjectPluginAdapter {
         helpMenu.addSeparator();
 	    ComponentFactory.addMenuItemNoIcon(helpMenu, new ShowAboutProtegeOWLAction());
 	    ComponentFactory.addMenuItemNoIcon(helpMenu, new ShowAboutPluginsBox());
+	    ComponentFactory.addMenuItemNoIcon(helpMenu, new DisplayHtml(ResourceKey.HELP_MENU_CITE_PROTEGE, 
+	    		ApplicationProperties.getHowToCiteProtegeURLString()));
     }
 }

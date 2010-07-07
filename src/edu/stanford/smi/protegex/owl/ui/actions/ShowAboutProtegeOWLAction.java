@@ -25,7 +25,7 @@ public class ShowAboutProtegeOWLAction extends ProjectAction {
 	public void actionPerformed(ActionEvent e) {
         JComponent pane = getProjectManager().getMainPanel();
         URL url = OWLText.getAboutURL();
-        Dimension preferredSize = new Dimension(575, 525);
+        Dimension preferredSize = new Dimension(575, 545);
         AboutBox aboutProtegeOWL = new AboutBox(url, preferredSize);
         ModalDialog.showDialog(pane, aboutProtegeOWL, "About " + OWLText.getName(), ModalDialog.MODE_CLOSE);
 	}
