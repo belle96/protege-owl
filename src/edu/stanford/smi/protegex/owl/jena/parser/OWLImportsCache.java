@@ -16,8 +16,17 @@ public class OWLImportsCache {
 	}
 
 	public static void addOWLImport(String owlOntologyURI, String importURI) {
+		addImport(owlOntologyURI, importURI);
+		
+		//add support for imports by location for merging imports mode
+		String currentlyParsingOntologyLocation = ProtegeOWLParser.getCurrentlyParsingOntologyLocation();
+		if (currentlyParsingOntologyLocation != null) {
+			addImport(currentlyParsingOntologyLocation, importURI);			
+		}
+	}
+	
+	private static void addImport(String owlOntologyURI, String importURI) {
 		Set<String> imports = getOWLImportsURI(owlOntologyURI);
-
 		imports.add(importURI);
 		owlOntoloyToImportsMap.put(owlOntologyURI, imports);
 	}
