@@ -21,7 +21,7 @@ public class AddCoveringAxiomActionTestCase extends AbstractJenaTestCase {
             OWLNamedClass blueClass = owlModel.createOWLNamedSubclass("Blue", colorClass);
             AddCoveringAxiomAction action = new AddCoveringAxiomAction();
             ResourceDisplay component = new ResourceDisplay(owlModel.getProject());
-            assertFalse(action.isSuitable(component, redClass));
+            
             assertTrue(action.isSuitable(component, colorClass));
             action.initialize(component, colorClass);
             action.actionPerformed(null);
@@ -31,7 +31,7 @@ public class AddCoveringAxiomActionTestCase extends AbstractJenaTestCase {
             assertContains(redClass, unionCls.getOperands());
             assertContains(greenClass, unionCls.getOperands());
             assertContains(blueClass, unionCls.getOperands());
-            assertFalse(action.isSuitable(component, colorClass));
+          
         }
         catch (HeadlessException ex) {
             // Ignore
