@@ -30,8 +30,8 @@ import edu.stanford.smi.protege.exception.OntologyLoadException;
 import edu.stanford.smi.protege.util.ApplicationProperties;
 import edu.stanford.smi.protege.util.Log;
 import edu.stanford.smi.protege.util.MessageError;
-import edu.stanford.smi.protege.util.URIUtilities;
 import edu.stanford.smi.protege.util.MessageError.Severity;
+import edu.stanford.smi.protege.util.URIUtilities;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.model.NamespaceManager;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
@@ -64,6 +64,8 @@ public class ProtegeOWLParser {
 
 	private static Collection errors;
 	private static String topOntologyName;
+	//needed for merging imports to support import by location
+	private static String currentlyParsingOntologyLocation;
 
 	private OWLModel owlModel;
 	private boolean importing = false;
@@ -268,6 +270,8 @@ public class ProtegeOWLParser {
 
 	        ARP arp = createARP(tripleStore);
 
+	        currentlyParsingOntologyLocation = ontologyURI;
+	        
 	        long startTime = System.currentTimeMillis();
 
 	        try {
@@ -281,6 +285,8 @@ public class ProtegeOWLParser {
 
 	        long endTime = System.currentTimeMillis();
 
+	        currentlyParsingOntologyLocation = null;
+	        
 	        Log.getLogger().info("    Completed triple loading after " + (endTime - startTime) + " ms");
 	        tripleProcessor.getGlobalParserCache().dumpUndefTriples(Level.FINE);
 
@@ -467,6 +473,10 @@ public class ProtegeOWLParser {
 		topOntologyName = ontName;
 	}
 
+	static String getCurrentlyParsingOntologyLocation() {
+		return currentlyParsingOntologyLocation;
+	}
+	
 	public static Collection getErrors() {
 		return errors;
 	}
