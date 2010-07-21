@@ -38,7 +38,7 @@ public class OWLDateWidget extends AbstractPropertyWidget {
     private JDateChooser dateChooser;
     private LabeledComponent lc;
 
-    private PropertyChangeListener propertyChangeListener = new PropertyChangeListener() {
+    private final PropertyChangeListener propertyChangeListener = new PropertyChangeListener() {
         public void propertyChange(PropertyChangeEvent evt) {
             if ("date".equals(evt.getPropertyName())) {
                 updateValues();
@@ -46,13 +46,13 @@ public class OWLDateWidget extends AbstractPropertyWidget {
         }
     };
 
-    private Action deleteAction = new AbstractAction("Delete value", OWLIcons.getDeleteIcon()) {
+    private final Action deleteAction = new AbstractAction("Delete value", OWLIcons.getDeleteIcon()) {
         public void actionPerformed(ActionEvent e) {
             deleteValue();
         }
     };
 
-    private Action setAction = new AbstractAction("Set value", OWLIcons.getAddIcon()) {
+    private final Action setAction = new AbstractAction("Set value", OWLIcons.getAddIcon()) {
         public void actionPerformed(ActionEvent e) {
             setPropertyValue(new Date());
         }
@@ -88,28 +88,28 @@ public class OWLDateWidget extends AbstractPropertyWidget {
 
 
     public static Date getDate(String s) {
+        if (s == null) { return null; }
         Date date = new Date();
-        if (s != null) {
-            int index = s.indexOf("T");
-            if (index >= 0) {
-                s = s.substring(0, index);
+
+        int index = s.indexOf("T");
+        if (index >= 0) {
+            s = s.substring(0, index);
+        }
+        //TODO: Does not consider the timezone!
+        int zindex = s.indexOf("Z");
+        if (zindex >= 0) {
+            s = s.substring(0, zindex);
+        }
+        String[] ss = s.split("-");
+        if (ss.length >= 3) {
+            try {
+                int year = Integer.parseInt(ss[0]);
+                int month = Integer.parseInt(ss[1]) - 1;
+                int day = Integer.parseInt(ss[2]);
+                date = new Date(new GregorianCalendar(year, month, day).getTimeInMillis());
             }
-            //TODO: Does not consider the timezone!
-            int zindex = s.indexOf("Z");
-            if (zindex >= 0) {
-                s = s.substring(0, zindex);
-            }
-            String[] ss = s.split("-");
-            if (ss.length >= 3) {
-                try {
-                    int year = Integer.parseInt(ss[0]);
-                    int month = Integer.parseInt(ss[1]) - 1;
-                    int day = Integer.parseInt(ss[2]);
-                    date = new Date(new GregorianCalendar(year, month, day).getTimeInMillis());
-                }
-                catch (Exception ex) {
-                    Log.getLogger().warning("Could not parse value " + s + ": " + ex.getMessage());
-                }
+            catch (Exception ex) {
+                Log.getLogger().warning("Could not parse value " + s + ": " + ex.getMessage());
             }
         }
         return date;
@@ -147,8 +147,12 @@ public class OWLDateWidget extends AbstractPropertyWidget {
         RDFResource resource = getEditedResource();
         RDFProperty property = getRDFProperty();
         if (resource != null && property != null) {
-            Object value = createPropertyValue(date);
-            resource.setPropertyValue(property, value);
+            if (date == null) {
+                resource.setPropertyValue(property, null);
+            } else {
+                Object value = createPropertyValue(date);
+                resource.setPropertyValue(property, value);
+            }
         }
     }
 
