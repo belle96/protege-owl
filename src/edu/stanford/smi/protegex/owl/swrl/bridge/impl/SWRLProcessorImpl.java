@@ -67,7 +67,7 @@ public class SWRLProcessorImpl implements SWRLProcessor
 	public SWRLProcessorImpl(OWLOntology activeOntology) 
 	{
 		this.activeOntology = activeOntology;
-		this.dataFactory = new OWLDataFactoryImpl();
+		this.dataFactory = new OWLDataFactoryImpl(activeOntology);
 		reset(); 
 	}
 	
@@ -117,8 +117,8 @@ public class SWRLProcessorImpl implements SWRLProcessor
   }
 
 	public int getNumberOfImportedSWRLRules() { return importedSWRLRules.values().size(); }
-  public int getNumberOfImportedOWLClasses() { return importedOWLClassDeclarations.values().size(); }
-  public int getNumberOfImportedOWLIndividuals() { return importedOWLIndividualDeclarations.values().size(); }
+  public int getNumberOfImportedOWLClasseDeclarations() { return importedOWLClassDeclarations.values().size(); }
+  public int getNumberOfImportedOWLIndividualDeclarations() { return importedOWLIndividualDeclarations.values().size(); }
   public int getNumberOfImportedOWLAxioms() { return importedOWLAxioms.size(); }
   
   public Set<SWRLRule> getImportedSWRLRules() { return new HashSet<SWRLRule>(importedSWRLRules.values()); }

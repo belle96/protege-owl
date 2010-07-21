@@ -56,12 +56,11 @@ public class SQWRLTest
       System.err.println("Exception: " + e.getMessage());
       e.printStackTrace();
     } // try
-  } // main
+  }
 
   private static void Usage()
   {
     System.err.println("Usage: SQWRLTest <owlFileName>");
     System.exit(1);
-  } // Usage
-
-} // SQWRLTest
+  }
+}

@@ -4,7 +4,6 @@ package edu.stanford.smi.protegex.owl.swrl.bridge;
 import java.util.List;
 import java.util.Set;
 
-import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLRuleEngineException;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLAxiom;
@@ -21,8 +20,8 @@ public interface SWRLProcessor
 	void reset();
 	
 	int getNumberOfImportedSWRLRules();
-  int getNumberOfImportedOWLClasses();
-  int getNumberOfImportedOWLIndividuals();
+  int getNumberOfImportedOWLClasseDeclarations();
+  int getNumberOfImportedOWLIndividualDeclarations();
   int getNumberOfImportedOWLAxioms();
   
   SWRLRule getSWRLRule(String ruleURI) throws SWRLRuleEngineException;

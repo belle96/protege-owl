@@ -57,7 +57,7 @@ public class SWRLOWLUtil
     } // try
 
     return owlModel;
-  }  // createJenaOWLModel
+  }
 
   public static JenaOWLModel createJenaOWLModel() throws SWRLOWLUtilException
   {
@@ -70,7 +70,7 @@ public class SWRLOWLUtil
     } // try
 
     return owlModel;
-  } // createJenaOWLModel
+  }
 
   public static void importOWLFile(JenaOWLModel owlModel, String importOWLFileName) throws SWRLOWLUtilException
   {
@@ -375,8 +375,8 @@ public class SWRLOWLUtil
   
   public static RDFResource getRDFResource(OWLModel owlModel, String resourceName)
   {
-	return owlModel.getRDFResource(resourceName);
-  } // getRDFResource
+	  return owlModel.getRDFResource(resourceName);
+  } 
 
   public static RDFSClass getRDFSClass(OWLModel owlModel, String className) throws SWRLOWLUtilException
   {
@@ -385,7 +385,7 @@ public class SWRLOWLUtil
     if (resource == null || !(resource instanceof RDFSClass)) throw new SWRLOWLUtilException("invalid RDFS class " + className);
 
     return (RDFSClass)resource;
-  } // getRDFSClass
+  }
 
   public static OWLClass getOWLClassDescription(OWLModel owlModel, String descriptionClassName) throws SWRLOWLUtilException
   {
@@ -395,23 +395,23 @@ public class SWRLOWLUtil
       throw new SWRLOWLUtilException("invalid OWL class description " + descriptionClassName);
 
     return (OWLClass)resource;
-  } // getOWLClassDescription
+  }
 
   public static OWLIndividual createIndividual(OWLModel owlModel, String individualName) throws SWRLOWLUtilException
   {
     return createIndividualOfClass(owlModel, getOWLThingClass(owlModel), individualName);
-  } // createIndividualOfClass
+  }
 
   public static OWLIndividual createOWLIndividual(OWLModel owlModel) throws SWRLOWLUtilException
   {
     return (OWLIndividual)getOWLThingClass(owlModel).createInstance(null);
-  } // createOWLIndividual
+  }
 
   public static OWLIndividual createIndividualOfClass(OWLModel owlModel, String className)
     throws SWRLOWLUtilException
   {
     return createIndividualOfClass(owlModel, className, null);
-  } // createIndividualOfClass
+  }
 
   public static OWLIndividual createIndividualOfClass(OWLModel owlModel, String className, String individualName)
     throws SWRLOWLUtilException
@@ -419,7 +419,7 @@ public class SWRLOWLUtil
     OWLNamedClass cls = getNamedClass(owlModel, className);
 
     return createIndividualOfClass(owlModel, cls, individualName);
-  } // createIndividualOfClass
+  }
 
   public static OWLIndividual createIndividualOfClass(OWLModel owlModel, OWLClass cls)
     throws SWRLOWLUtilException
@@ -1306,7 +1306,7 @@ public class SWRLOWLUtil
                                      individual.getPrefixedName() + " is not of type " +  expectedInstanceClassName);
     
     return individualValue;
-  } // getObjectPropertyIndividualValue
+  } 
 
   public static OWLProperty getOWLObjectPropertyPropertyValue(OWLModel owlModel, OWLIndividual individual, String propertyName) 
     throws SWRLOWLUtilException
@@ -1323,7 +1323,7 @@ public class SWRLOWLUtil
   public static Set<RDFResource> getObjectPropertyValues(OWLModel owlModel, OWLIndividual individual, String propertyName, boolean mustExist) throws SWRLOWLUtilException
   { 
     return getObjectPropertyValues(owlModel, individual.getName(), propertyName, mustExist);
-  } // getObjectPropertyValues
+  } 
 
   public static Set<RDFResource> getObjectPropertyValues(OWLModel owlModel, String individualName, String propertyName, boolean mustExist) 
     throws SWRLOWLUtilException
@@ -1821,15 +1821,15 @@ public class SWRLOWLUtil
     return literal;
   } // createRDFSLiteral
 
-  public static OWLClass createOWLClassDescription(OWLModel owlModel, String expression) throws SWRLOWLUtilException
+  public static OWLClass createOWLClassDescription(OWLModel owlModel, String classExpression) throws SWRLOWLUtilException
   {
     OWLClassParser parser = owlModel.getOWLClassParser();
     OWLClass cls = null;
 
     try {
-      cls = (OWLClass)parser.parseClass(owlModel, expression);
+      cls = (OWLClass)parser.parseClass(owlModel, classExpression);
     } catch (OWLClassParseException e) {
-      throw new SWRLOWLUtilException("OWL class expression " + expression + " not valid: " + e.getMessage());
+      throw new SWRLOWLUtilException("OWL class expression " + classExpression + " not valid: " + e.getMessage());
     } // try
 
     return cls;
@@ -1924,7 +1924,7 @@ public class SWRLOWLUtil
     return cls;
   } 
 
-  public static OWLDatatypeProperty getOWLDatatypePropertyFromName(OWLModel owlModel, String name) throws SWRLOWLUtilException
+  public static OWLDatatypeProperty getOWLDataPropertyFromName(OWLModel owlModel, String name) throws SWRLOWLUtilException
   {
     String id = ParserUtils.dequoteIdentifier(name);
     OWLDatatypeProperty property = null;
@@ -1965,6 +1965,20 @@ public class SWRLOWLUtil
 
     return individual;
   }
+
+  public static RDFProperty getRDFPropertyFromName(OWLModel owlModel, String name) throws SWRLOWLUtilException
+  {
+    String id = ParserUtils.dequoteIdentifier(name);
+    RDFProperty property = null;
+
+    try {
+      property = ParserUtils.getRDFPropertyFromName(owlModel, id);
+    } catch (AmbiguousNameException e) {
+      throw new SWRLOWLUtilException("ambiguous RDF property name " + name);
+    } // if 
+
+    return property;
+  } 
 
   private static void throwException(String message) throws SWRLOWLUtilException
   {

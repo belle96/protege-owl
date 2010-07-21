@@ -239,7 +239,7 @@ public class SWRLFactory
     Set<String> ruleGroupNames = new HashSet<String>();
     ruleGroupNames.add(ruleGroupName);
     return getImps(ruleGroupNames, true); 
-  } // getEnabledImps
+  }
 
   // If the ruleGroupNames is empty, return all imps.
   private Collection<SWRLImp> getImps(Set<String> ruleGroupNames, boolean isEnabled) 
