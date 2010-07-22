@@ -33,7 +33,12 @@ public interface SQWRLQueryEngine
    * Create a SQWRL query.
    */
   void createSQWRLQuery(String queryName, String queryText) throws SQWRLException, SWRLParseException;
-  
+
+  /**
+   * Delete a SQWRL query.
+   */
+  void deleteSQWRLQuery(String queryName) throws SQWRLException;
+
   /**
    * Get the results from a SQWRL query. Null is returned if there is no result.
    */

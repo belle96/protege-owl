@@ -207,6 +207,15 @@ public class DefaultSWRLRuleEngine implements SWRLRuleEngine
   {
   	return swrlProcessor.getSQWRLResult(queryURI);
   }
+  
+  public void deleteSQWRLQuery(String queryURI) throws SQWRLException
+  {
+  	try {
+  		activeOntology.deleteSWRLRule(queryURI);
+  	} catch (OWLConversionFactoryException e) {
+  		throw new SQWRLException("error deleting SQWRL query " + queryURI);
+  	}
+  }
 
   public SQWRLResultImpl getSQWRLUnpreparedResult(String queryURI) throws SQWRLException
   {

@@ -52,6 +52,8 @@ public interface OWLOntology
   String createNewResourceURI(String prefix);
   SWRLRule createSWRLRule(String ruleName, String ruleText) throws OWLConversionFactoryException, SWRLParseException;
   
+  void deleteSWRLRule(String ruleURI) throws OWLConversionFactoryException;
+  
   OWLModel getOWLModel(); // TODO: Protege-OWL dependency
 }
   

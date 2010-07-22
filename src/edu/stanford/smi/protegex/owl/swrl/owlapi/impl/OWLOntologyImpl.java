@@ -166,6 +166,11 @@ public class OWLOntologyImpl implements OWLOntology
     return new SWRLRuleImpl(imp.getPrefixedName(), bodyAtoms, headAtoms);
   } 
 
+  public void deleteSWRLRule(String ruleURI) throws OWLConversionFactoryException
+  {
+    swrlFactory.deleteImp(ruleURI);
+  } 
+
   public OWLClass createOWLClass() 
   { 
     String anonymousURI = SWRLOWLUtil.getNextAnonymousResourceName(owlModel);
