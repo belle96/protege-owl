@@ -103,12 +103,24 @@ public class SWRLProcessorImpl implements SWRLProcessor
     allOWLIndividuals = new HashMap<String, OWLNamedIndividual>();
 	}
 
-	public void importOWLAxioms() throws SWRLRuleEngineException
+	public void importSWRLRulesAndOWLAxioms() throws SWRLRuleEngineException
 	{
 	  importSWRLRules(); 
 	  importReferencedOWLKnowledge();
 	} 
+
+	public void importReferencedOWLAxioms() throws SWRLRuleEngineException
+	{ 
+	  importReferencedOWLKnowledge();
+	} 
 	
+  public SWRLRule getSQWRLQuery(String queryURI) throws SWRLRuleEngineException
+  {
+    if (!queries.containsKey(queryURI)) throw new SWRLRuleEngineException("invalid query name " + queryURI);
+
+    return queries.get(queryURI);
+  }
+
   public SWRLRule getSWRLRule(String ruleURI) throws SWRLRuleEngineException
   {
     if (!importedSWRLRules.containsKey(ruleURI)) throw new SWRLRuleEngineException("invalid rule name " + ruleURI);
@@ -135,7 +147,7 @@ public class SWRLProcessorImpl implements SWRLProcessor
 
 	public void process(SWRLRule ruleOrQuery) throws BuiltInException
   {
-        
+
   	for (Atom atom : ruleOrQuery.getBodyAtoms()) processSWRLAtom(ruleOrQuery, atom, false);
   	for (Atom atom : ruleOrQuery.getHeadAtoms()) processSWRLAtom(ruleOrQuery, atom, true);
 
@@ -146,7 +158,8 @@ public class SWRLProcessorImpl implements SWRLProcessor
     
   	if (hasSQWRLBuiltIns(ruleOrQuery)) 
   		queries.put(ruleOrQuery.getURI(), ruleOrQuery);
-  	rules.put(ruleOrQuery.getURI(), ruleOrQuery);
+  	
+  	rules.put(ruleOrQuery.getURI(), ruleOrQuery); 
   } 
 
   public boolean isSQWRLQuery(String uri) 
@@ -303,7 +316,7 @@ public class SWRLProcessorImpl implements SWRLProcessor
   private void importSWRLRules() throws SWRLRuleEngineException
   {
     try {
-      for (SWRLRule rule : dataFactory.getSWRLRules()) 
+      for (SWRLRule rule : dataFactory.getSWRLRules())
       	importSWRLRule(rule);    	  
     } catch (OWLFactoryException e) {
       throw new SWRLRuleEngineBridgeException("factory error importing rules: " + e.getMessage());

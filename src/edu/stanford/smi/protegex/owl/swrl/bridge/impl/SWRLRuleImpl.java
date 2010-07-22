@@ -33,8 +33,8 @@ public class SWRLRuleImpl implements SWRLRule
   public void appendAtomsToBody(List<Atom> atoms) { bodyAtoms.addAll(atoms); }
   public void setBodyAtoms(List<Atom> atoms) { bodyAtoms = atoms; }
   public String toString() { return ruleURI; }
-  public boolean isEnabled() { return true; }
-  public void setEnabled(boolean isEnabled) {}
+  public boolean isEnabled() { return true; } // TODO - used only in SWRLRuleGroupTreeTableModel 
+  public void setEnabled(boolean isEnabled) {} // TODO - used only in SWRLRuleGroupTreeTableModel 
   
   public String getRuleText()
   {

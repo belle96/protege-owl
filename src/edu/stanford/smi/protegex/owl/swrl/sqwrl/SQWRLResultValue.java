@@ -7,4 +7,4 @@ package edu.stanford.smi.protegex.owl.swrl.sqwrl;
  */
 public interface SQWRLResultValue extends Comparable<SQWRLResultValue>
 {
-} // SQWRLResultValue
+}

@@ -1,7 +1,6 @@
 
 package edu.stanford.smi.protegex.owl.swrl.sqwrl;
 
-public interface IndividualValue extends SQWRLResultValue
+public interface IndividualValue extends SQWRLNamedResultValue
 {
-  String getURI();
-} // IndividualValue
+}

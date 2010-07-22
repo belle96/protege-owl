@@ -1,7 +1,6 @@
 
 package edu.stanford.smi.protegex.owl.swrl.sqwrl;
 
-public interface PropertyValue extends SQWRLResultValue
+public interface PropertyValue extends SQWRLNamedResultValue
 {
-  String getURI();
-} // PropertyValue
+}

@@ -10,9 +10,14 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 public interface SQWRLQueryEngine
 {
   /**
-   * Run a named SQWRL query.
+   * Run a named SQWRL query. SWRL rules will also be executed and any inferences produced by them will be available in the query.
    */
   SQWRLResult runSQWRLQuery(String queryName) throws SQWRLException;
+
+  /**
+   * Run a named SQWRL query ignoring all SWRL rules in ontology.
+   */
+  SQWRLResult runStandaloneSQWRLQuery(String queryName) throws SQWRLException;
 
   /**
    * Run all SQWRL queries.

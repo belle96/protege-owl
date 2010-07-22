@@ -1,4 +1,4 @@
-; Wed Jul 21 11:08:02 PDT 2010
+; Thu Jul 22 07:23:35 PDT 2010
 ; 
 ;+ (version "3.4.4")
 ;+ (build "Build 579")
@@ -6,14 +6,14 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
+		[SQWRLExamples_ProjectKB_Class10067]
+		[SQWRLExamples_ProjectKB_Class10068]
+		[SQWRLExamples_ProjectKB_Class10069]
+		[SQWRLExamples_ProjectKB_Class10070]
 		[SQWRLExamples_ProjectKB_Class10071]
 		[SQWRLExamples_ProjectKB_Class10072]
 		[SQWRLExamples_ProjectKB_Class10073]
-		[SQWRLExamples_ProjectKB_Class10074]
-		[SQWRLExamples_ProjectKB_Class10075]
-		[SQWRLExamples_ProjectKB_Class10076]
-		[SQWRLExamples_ProjectKB_Class10077]
-		[SQWRLExamples_ProjectKB_Class10078]))
+		[SQWRLExamples_ProjectKB_Class10074]))
 
 ([CLSES_TAB] of  Widget
 
@@ -7125,9 +7125,6 @@
 	(name "owl_file_name")
 	(string_value "SQWRLExamples.owl"))
 
-([KB_382186_Class0] of  Map
-)
-
 ([KB_444675_Instance_0] of  String
 
 	(name "SwitchableClassDefinitionType")
@@ -7139,6 +7136,9 @@
 	(name "http://protege.stanford.edu/plugins/owl/protege#ExternalResource")
 	(property_list [KB_183529_Class442])
 	(widget_class_name "edu.stanford.smi.protegex.owl.ui.widget.OWLFormWidget"))
+
+([KB_510664_Class0] of  Map
+)
 
 ([KB_632156_Instance_0] of  String
 
@@ -7870,7 +7870,7 @@
 
 	(is_hidden TRUE)
 	(property_list [SQWRLExamples_ProjectKB_Class10049])
-	(widget_class_name "org.algernon.kb.okbc.protege.plugins.AlgernonTab"))
+	(widget_class_name "edu.stanford.smi.protegex.changeanalysis.ChangeAnalysisTab"))
 
 ([SQWRLExamples_ProjectKB_Class10049] of  Property_List
 )
@@ -7879,7 +7879,7 @@
 
 	(is_hidden TRUE)
 	(property_list [SQWRLExamples_ProjectKB_Class10051])
-	(widget_class_name "edu.stanford.smi.protegex.widget.pal.PalQueriesTab"))
+	(widget_class_name "org.protege.owl.axiome.ui.AxiomeTab"))
 
 ([SQWRLExamples_ProjectKB_Class10051] of  Property_List
 )
@@ -7888,7 +7888,7 @@
 
 	(is_hidden TRUE)
 	(property_list [SQWRLExamples_ProjectKB_Class10053])
-	(widget_class_name "edu.stanford.smi.protegex.chatPlugin.ChatTab"))
+	(widget_class_name "org.algernon.kb.okbc.protege.plugins.AlgernonTab"))
 
 ([SQWRLExamples_ProjectKB_Class10053] of  Property_List
 )
@@ -7897,7 +7897,7 @@
 
 	(is_hidden TRUE)
 	(property_list [SQWRLExamples_ProjectKB_Class10055])
-	(widget_class_name "edu.stanford.smi.RemoteKBTab.UMLSTab"))
+	(widget_class_name "edu.stanford.smi.protegex.widget.pal.PalQueriesTab"))
 
 ([SQWRLExamples_ProjectKB_Class10055] of  Property_List
 )
@@ -7906,7 +7906,7 @@
 
 	(is_hidden TRUE)
 	(property_list [SQWRLExamples_ProjectKB_Class10057])
-	(widget_class_name "edu.stanford.smi.protegex.server_changes.prompt.UsersTab"))
+	(widget_class_name "edu.stanford.smi.protegex.chatPlugin.ChatTab"))
 
 ([SQWRLExamples_ProjectKB_Class10057] of  Property_List
 )
@@ -7915,65 +7915,83 @@
 
 	(is_hidden TRUE)
 	(property_list [SQWRLExamples_ProjectKB_Class10059])
-	(widget_class_name "uk.ac.man.cs.mig.coode.owlviz.ui.OWLVizTab"))
+	(widget_class_name "edu.stanford.smi.RemoteKBTab.UMLSTab"))
 
 ([SQWRLExamples_ProjectKB_Class10059] of  Property_List
 )
 
 ([SQWRLExamples_ProjectKB_Class10060] of  Widget
 
+	(is_hidden TRUE)
+	(property_list [SQWRLExamples_ProjectKB_Class10061])
+	(widget_class_name "edu.stanford.smi.protegex.server_changes.prompt.UsersTab"))
+
+([SQWRLExamples_ProjectKB_Class10061] of  Property_List
+)
+
+([SQWRLExamples_ProjectKB_Class10062] of  Widget
+
+	(is_hidden TRUE)
+	(property_list [SQWRLExamples_ProjectKB_Class10063])
+	(widget_class_name "uk.ac.man.cs.mig.coode.owlviz.ui.OWLVizTab"))
+
+([SQWRLExamples_ProjectKB_Class10063] of  Property_List
+)
+
+([SQWRLExamples_ProjectKB_Class10064] of  Widget
+
 	(is_hidden FALSE)
 	(label "Name")
 	(name ":NAME")
-	(property_list [SQWRLExamples_ProjectKB_Class10062])
+	(property_list [SQWRLExamples_ProjectKB_Class10066])
 	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget"))
 
-([SQWRLExamples_ProjectKB_Class10061] of  Widget
+([SQWRLExamples_ProjectKB_Class10065] of  Widget
 
 	(is_hidden FALSE)
 	(label "Comment")
 	(name "http://www.w3.org/2000/01/rdf-schema#comment")
 	(widget_class_name "edu.stanford.smi.protege.widget.FormWidget"))
 
-([SQWRLExamples_ProjectKB_Class10062] of  Property_List
+([SQWRLExamples_ProjectKB_Class10066] of  Property_List
 )
 
-([SQWRLExamples_ProjectKB_Class10071] of  String
+([SQWRLExamples_ProjectKB_Class10067] of  String
 
 	(name "http://www.w3.org/2002/07/owl#Class")
 	(string_value "http%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23label"))
 
-([SQWRLExamples_ProjectKB_Class10072] of  String
+([SQWRLExamples_ProjectKB_Class10068] of  String
 
 	(name "http://www.w3.org/2000/01/rdf-schema#Class")
 	(string_value "http%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23label"))
 
-([SQWRLExamples_ProjectKB_Class10073] of  String
+([SQWRLExamples_ProjectKB_Class10069] of  String
 
 	(name ":INSTANCE-ANNOTATION")
 	(string_value "%3AANNOTATION-TEXT"))
 
-([SQWRLExamples_ProjectKB_Class10074] of  String
+([SQWRLExamples_ProjectKB_Class10070] of  String
 
 	(name ":META-CLASS")
 	(string_value "%3ANAME"))
 
-([SQWRLExamples_ProjectKB_Class10075] of  String
+([SQWRLExamples_ProjectKB_Class10071] of  String
 
 	(name "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property")
 	(string_value "http%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23label"))
 
-([SQWRLExamples_ProjectKB_Class10076] of  String
+([SQWRLExamples_ProjectKB_Class10072] of  String
 
 	(name "http://www.w3.org/2002/07/owl#Thing")
 	(string_value "http%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23label"))
 
-([SQWRLExamples_ProjectKB_Class10077] of  String
+([SQWRLExamples_ProjectKB_Class10073] of  String
 
 	(name "http://swrl.stanford.edu/3.4.4/SQWRLExamples.owl#Treatment")
 	(string_value "{%28}http%3A%2F%2Fswrl.stanford.edu%2F3.4.4%2FSQWRLExamples.owl%23hasDrug{%2C}http%3A%2F%2Fswrl.stanford.edu%2F3.4.4%2FSQWRLExamples.owl%23hasDose{%29}"))
 
-([SQWRLExamples_ProjectKB_Class10078] of  String
+([SQWRLExamples_ProjectKB_Class10074] of  String
 
 	(name ":PAL-CONSTRAINT")
 	(string_value "%3APAL-NAME"))
@@ -8098,8 +8116,8 @@
 ([SQWRLExamples_ProjectKB_Class6] of  Property_List
 
 	(properties
-		[SQWRLExamples_ProjectKB_Class10060]
-		[SQWRLExamples_ProjectKB_Class10061]))
+		[SQWRLExamples_ProjectKB_Class10064]
+		[SQWRLExamples_ProjectKB_Class10065]))
 
 ([SQWRLExamples_ProjectKB_Class8] of  Property_List
 

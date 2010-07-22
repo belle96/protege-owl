@@ -1,8 +1,6 @@
 
 package edu.stanford.smi.protegex.owl.swrl.test;
 
-import java.util.Collection;
-
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLImp;

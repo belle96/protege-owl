@@ -135,7 +135,7 @@ public class OWLOntologyImpl implements OWLOntology
     } // while
 
     return result;
-  } // getSWRLRules
+  } 
 
   public SWRLRule createSWRLRule(String ruleName, String ruleText) throws OWLConversionFactoryException, SWRLParseException
   {

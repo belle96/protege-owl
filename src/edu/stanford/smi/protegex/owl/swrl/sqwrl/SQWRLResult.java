@@ -6,8 +6,8 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 import java.util.List;
 
 /**
- ** Interface that defines methods to process results from a SQWRL query. See <a
- ** href="http://protege.cim3.net/cgi-bin/wiki.pl?SQWRLQueryAPI">here</a> for documentation.
+ * Interface that defines methods to process results from a SQWRL query. See <a
+ * href="http://protege.cim3.net/cgi-bin/wiki.pl?SQWRLQueryAPI">here</a> for documentation.
  */
 public interface SQWRLResult
 {
@@ -45,4 +45,4 @@ public interface SQWRLResult
 
   List<SQWRLResultValue> getColumn(String columnName) throws SQWRLException;
   List<SQWRLResultValue> getColumn(int columnIndex) throws SQWRLException;
-} // SQWRLResult
+}

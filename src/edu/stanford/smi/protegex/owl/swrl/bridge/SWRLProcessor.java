@@ -14,7 +14,8 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.SQWRLResultImpl;
 
 public interface SWRLProcessor 
 { 
-	void importOWLAxioms() throws SWRLRuleEngineException;
+	void importReferencedOWLAxioms() throws SWRLRuleEngineException;
+	void importSWRLRulesAndOWLAxioms() throws SWRLRuleEngineException;
 	
 	void process(SWRLRule ruleOrQuery) throws BuiltInException;
 	void reset();
@@ -25,6 +26,7 @@ public interface SWRLProcessor
   int getNumberOfImportedOWLAxioms();
   
   SWRLRule getSWRLRule(String ruleURI) throws SWRLRuleEngineException;
+  SWRLRule getSQWRLQuery(String queryURI) throws SWRLRuleEngineException;
   
   Set<SWRLRule> getImportedSWRLRules();
   Set<OWLClass> getImportedOWLClassDeclarations();

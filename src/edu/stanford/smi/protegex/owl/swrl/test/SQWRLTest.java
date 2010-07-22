@@ -1,10 +1,10 @@
 
 package edu.stanford.smi.protegex.owl.swrl.test;
 
-import edu.stanford.smi.protegex.owl.model.OWLModel;
+import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLOWLUtilException;
+import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
 import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParseException;
-import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.IndividualValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngine;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngineFactory;
@@ -24,18 +24,25 @@ public class SQWRLTest
     } else Usage();
     
     try {
-      OWLModel owlModel = SWRLOWLUtil.createJenaOWLModel(owlFileName);
+      JenaOWLModel owlModel = SWRLOWLUtil.createJenaOWLModel(owlFileName);
       SQWRLQueryEngine queryEngine = SQWRLQueryEngineFactory.create(owlModel);
+      SWRLFactory factory = new SWRLFactory(owlModel);
       SQWRLResult result;
       
-      result = queryEngine.runSQWRLQuery("T1", "Adult(?a) . sqwrl:makeSet(?s, ?a) . sqwrl:contains(?s, ?e) -> sqwrl:select(?e)");
+      queryEngine.createSQWRLQuery("T1", "Adult(?a) . sqwrl:makeSet(?s, ?a) . sqwrl:contains(?s, ?e) -> sqwrl:select(?e)");
+      result = queryEngine.runSQWRLQuery("T1");
 
       while (result.hasNext()) {
         IndividualValue e = result.getObjectValue("?e");
         System.err.println("value: e=" + e);
         result.next();
       } // while
+      
+      factory.deleteImps();
+      
+      SWRLOWLUtil.writeJenaOWLModel2File(owlModel, owlFileName);
 
+      /*
       result = queryEngine.runSQWRLQuery("PersonAverageDrugDosesAndAverageAllDrugDoses");
 
       while (result.hasNext()) {
@@ -45,6 +52,7 @@ public class SQWRLTest
         System.err.println("value: p=" + p + ", avgP=" + avgP + ", avgD=" + avgD);
         result.next();
       } // while
+      */
 
     } catch (SQWRLException e) {
       System.err.println("SQWRL exception: " + e.getMessage());

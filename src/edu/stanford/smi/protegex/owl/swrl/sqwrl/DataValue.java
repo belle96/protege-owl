@@ -16,7 +16,7 @@ public interface DataValue extends SQWRLResultValue
   double getDouble() throws DataValueConversionException; 
   short getShort() throws DataValueConversionException; 
   byte getByte() throws DataValueConversionException;
-  boolean isComparable();
+
   boolean isNumeric();
   boolean isBoolean();
   boolean isShort();
@@ -25,6 +25,8 @@ public interface DataValue extends SQWRLResultValue
   boolean isFloat();
   boolean isDouble();
   boolean isString();
+  
+  boolean isComparable();
   
   Object getValue();
   
