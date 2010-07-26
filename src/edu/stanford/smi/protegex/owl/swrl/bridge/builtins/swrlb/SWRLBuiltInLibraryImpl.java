@@ -646,7 +646,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     return processResultArgument(arguments, 0, operationDuration.toString());
   }
 
-  public boolean divideYearMonthDurations(List<BuiltInArgument> arguments) throws BuiltInException
+  public boolean divideYearMonthDuration(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(3, arguments.size());
 
@@ -682,7 +682,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     return processResultArgument(arguments, 0, operationDuration.toString());
   } 
 
-  public boolean multiplyDayTimeDurations(List<BuiltInArgument> arguments) throws BuiltInException
+  public boolean multiplyDayTimeDuration(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(3, arguments.size());
 
