@@ -413,7 +413,8 @@ public class DefaultRDFProperty extends DefaultSlot implements RDFProperty {
     public boolean isReadOnly() {
         Slot readOnlySlot = ((OWLModel) getKnowledgeBase()).getProtegeReadOnlyProperty();
         Object value = getDirectOwnSlotValue(readOnlySlot);
-        return Boolean.TRUE.equals(value);
+        return Boolean.TRUE.equals(value)
+            || (value != null && (value instanceof String) && ((String) value).toLowerCase().equals("true"));
     }
 
 
