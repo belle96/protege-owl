@@ -1,7 +1,6 @@
 
 package edu.stanford.smi.protegex.owl.swrl.owlapi.impl;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.*;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLNamedIndividual;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLProperty;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLPropertyAssertionAxiom;

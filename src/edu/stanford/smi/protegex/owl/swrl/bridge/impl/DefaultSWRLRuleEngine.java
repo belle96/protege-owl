@@ -246,16 +246,16 @@ public class DefaultSWRLRuleEngine implements SWRLRuleEngine
 
   // Convenience methods to display the contents of the bridge
   public Set<SWRLRule> getImportedSWRLRules() { return swrlProcessor.getImportedSWRLRules(); }
-  public Set<OWLClass> getImportedOWLClassDeclarations() { return swrlProcessor.getImportedOWLClassDeclarations(); }
-  public Set<OWLNamedIndividual> getImportedOWLIndividualDeclarations() { return swrlProcessor.getImportedOWLIndividualDeclarations(); }
+  public Set<OWLClass> getImportedOWLClasses() { return swrlProcessor.getImportedOWLClassDeclarations(); }
+  public Set<OWLNamedIndividual> getImportedOWLIndividuals() { return swrlProcessor.getImportedOWLIndividualDeclarations(); }
   public Set<OWLAxiom> getImportedOWLAxioms() { return swrlProcessor.getImportedOWLAxioms(); }
 
-  public Set<OWLNamedIndividual> getInferredOWLIndividuals(){ return ruleEngineBridgeController.getInferredOWLIndividuals(); }
+  public Set<OWLNamedIndividual> getReclassifiedOWLIndividuals(){ return ruleEngineBridgeController.getInferredOWLIndividuals(); }
   public Set<OWLAxiom> getInferredOWLAxioms() { return ruleEngineBridgeController.getInferredOWLAxioms(); }
 
   public Set<OWLAxiom> getInjectedOWLAxioms() { return getInjectedOWLAxioms(); }
-  public Set<OWLClass> getInjectedOWLClassDeclarations() { return builtInBridgeController.getInjectedOWLClassDeclarations(); }
-  public Set<OWLNamedIndividual> getInjectedOWLIndividualDeclarations() { return builtInBridgeController.getInjectedOWLIndividualDeclarations(); }
+  public Set<OWLClass> getInjectedOWLClasses() { return builtInBridgeController.getInjectedOWLClassDeclarations(); }
+  public Set<OWLNamedIndividual> getInjectedOWLIndividuals() { return builtInBridgeController.getInjectedOWLIndividualDeclarations(); }
 
   public String uri2PrefixedName(String uri)
   {

@@ -61,11 +61,11 @@ public interface SWRLRuleEngine extends SQWRLQueryEngine
   Set<OWLAxiom> getInferredOWLAxioms();
   Set<OWLAxiom> getInjectedOWLAxioms();
   Set<SWRLRule> getImportedSWRLRules();
-  Set<OWLClass> getImportedOWLClassDeclarations();
-  Set<OWLNamedIndividual> getImportedOWLIndividualDeclarations();
-  Set<OWLNamedIndividual> getInferredOWLIndividuals();
-  Set<OWLClass> getInjectedOWLClassDeclarations();
-  Set<OWLNamedIndividual> getInjectedOWLIndividualDeclarations();
+  Set<OWLClass> getImportedOWLClasses();
+  Set<OWLClass> getInjectedOWLClasses();
+  Set<OWLNamedIndividual> getImportedOWLIndividuals();
+  Set<OWLNamedIndividual> getReclassifiedOWLIndividuals();
+  Set<OWLNamedIndividual> getInjectedOWLIndividuals();
 
   // TODO: temporary
   String uri2PrefixedName(String uri);

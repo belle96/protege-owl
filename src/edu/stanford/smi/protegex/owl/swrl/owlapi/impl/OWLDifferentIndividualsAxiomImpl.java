@@ -1,11 +1,10 @@
 
 package edu.stanford.smi.protegex.owl.swrl.owlapi.impl;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.*;
+import java.util.Set;
+
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDifferentIndividualsAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLNamedIndividual;
-
-import java.util.*;
 
 public class OWLDifferentIndividualsAxiomImpl extends OWLNaryIndividualAxiomImpl implements OWLDifferentIndividualsAxiom
 {

@@ -1,7 +1,6 @@
 
 package edu.stanford.smi.protegex.owl.swrl.owlapi.impl;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.*;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLNamedIndividual;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLSameIndividualAxiom;
 
@@ -15,10 +14,10 @@ public class OWLSameIndividualAxiomImpl extends OWLNaryIndividualAxiomImpl imple
     addIndividual(individual2);
     this.individual1 = individual1;
     this.individual2 = individual2;
-  } // OWLSameIndividualsAxiomImpl
+  } 
 
   public OWLNamedIndividual getIndividual1() { return individual1; }
   public OWLNamedIndividual getIndividual2() { return individual2; }
 
   public String toString() { return "sameAs" + super.toString(); }  
-} // OWLSameIndividualAxiomImpl
+} 

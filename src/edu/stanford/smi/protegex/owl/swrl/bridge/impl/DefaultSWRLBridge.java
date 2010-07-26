@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.bridge.Atom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInAtom;
@@ -28,18 +27,17 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.TargetSWRLRuleEngine
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClass;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClassAssertionAxiom;
-import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLOntology;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDataFactory;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDataPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDeclarationAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLEntity;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLNamedIndividual;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLObjectPropertyAssertionAxiom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLOntology;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLProperty;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLSubClassAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.PrefixManager;
-import edu.stanford.smi.protegex.owl.swrl.owlapi.impl.OWLOntologyImpl;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.impl.OWLDataFactoryImpl;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.impl.PrefixManagerImpl;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.DataValueConversionException;
