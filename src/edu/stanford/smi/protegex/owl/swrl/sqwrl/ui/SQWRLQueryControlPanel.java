@@ -57,7 +57,7 @@ public class SQWRLQueryControlPanel extends JPanel
     textArea.append("Executing queries in this tab does not modify the ontology.\n\n");
     textArea.append("Select a SQWRL query from the list above and press the 'Run' button.\n");
     textArea.append("If the selected query generates a result, the result will appear in a new sub tab.\n\n");
-  } // SQWRLQueryControlPanel
+  } 
 
   public void appendText(String text)
   {
@@ -89,7 +89,7 @@ public class SQWRLQueryControlPanel extends JPanel
     button.addActionListener(listener);
 
     return button;
-  } // createButton
+  } 
 
   private JTextArea createTextArea()
   {
@@ -109,8 +109,8 @@ public class SQWRLQueryControlPanel extends JPanel
     {
       this.textArea = textArea;
       this.controlPanel = controlPanel;
-    } // ListenerBase
-  } // ListenerBase
+    }
+  }
 
   private class RunActionListener extends ListenerBase implements ActionListener
   {
@@ -130,18 +130,21 @@ public class SQWRLQueryControlPanel extends JPanel
 	      try {
           queryName = BridgePluginManager.getSelectedRuleName();
           
-          if (queryName == null || queryName.equals("")) textArea.append("No SQWRL query selected.\n");
+          if (queryName == null || queryName.equals("")) textArea.append("No enabled SQWRL query selected.\n");
           else {
+          	long startTime = System.currentTimeMillis();
             result = queryEngine.runSQWRLQuery(queryName);
+  
             if (result == null || result.getNumberOfRows() == 0) {
-              textArea.append("Query '" + queryName + "' did not generate any result.\n");
+              textArea.append("SQWRL query " + queryName + " did not generate any result.\n");
               if  (resultPanels.containsKey(queryName)) {
                 resultPanel = resultPanels.get(queryName);
                 resultPanels.remove(resultPanel);
                 ((JTabbedPane)getParent()).remove(resultPanel);
               } // if
             } else { // A result was returned
-              textArea.append("See the '" + queryName + "' tab to review results of the SQWRL query.\n");
+            	textArea.append("See the " + queryName + " tab to review results of the SQWRL query.\n");
+            	textArea.append("The query took " + (System.currentTimeMillis() - startTime) + " milliseconds.\n");
               
               if  (resultPanels.containsKey(queryName)) resultPanel = resultPanels.get(queryName); // Existing tab found
               else { // Create new tab
@@ -155,15 +158,15 @@ public class SQWRLQueryControlPanel extends JPanel
           } // if
         } catch (InvalidQueryNameException e) {
           textArea.append("Invalid query name '" + queryName + "'.\n");
-	} catch (SQWRLException e) {
-          if (queryName.equals("")) textArea.append("Exception running SQWRL queries: " + e.getMessage() + "\n");
+        } catch (SQWRLException e) {
+        	if (queryName.equals("")) textArea.append("Exception running SQWRL queries: " + e.getMessage() + "\n");
           else textArea.append("Exception when running SQWRL query '" + queryName + "': " + e.getMessage() + "\n");
-	} // try
+        } // try
       } // if
-    } // ActionPerformed
-  } // RunActionListener
+    } 
+  }
 
-} // SQWRLQueryControlPanel
+} 
 
 
 

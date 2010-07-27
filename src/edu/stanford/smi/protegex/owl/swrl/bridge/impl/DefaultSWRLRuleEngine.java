@@ -1,8 +1,6 @@
 
 package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -145,9 +143,6 @@ public class DefaultSWRLRuleEngine implements SWRLRuleEngine
   public SQWRLResult runSQWRLQuery(String queryName) throws SQWRLException
   {
     SQWRLResult result = null;
-    Calendar cal = new GregorianCalendar();
-  	
-    long start = cal.getTimeInMillis();
     
     try {
       reset();
@@ -158,18 +153,12 @@ public class DefaultSWRLRuleEngine implements SWRLRuleEngine
       throw new SQWRLException("error running SQWRL queries: " + e.getMessage());
     } // try
     
-    cal = new GregorianCalendar();
-    System.err.println("duration: " + (cal.getTimeInMillis() - start));
-    
     return result;
   }
 
   public SQWRLResult runStandaloneSQWRLQuery(String queryName) throws SQWRLException
   {
     SQWRLResult result = null;
-    Calendar cal = new GregorianCalendar();
-  	
-    long start = cal.getTimeInMillis();
     
     try {
       reset();
@@ -182,9 +171,6 @@ public class DefaultSWRLRuleEngine implements SWRLRuleEngine
     } catch (SWRLRuleEngineException e) {
       throw new SQWRLException("error running SQWRL queries: " + e.getMessage());
     } // try
-    
-    cal = new GregorianCalendar();
-    System.err.println("duration: " + (cal.getTimeInMillis() - start));
     
     return result;
   }

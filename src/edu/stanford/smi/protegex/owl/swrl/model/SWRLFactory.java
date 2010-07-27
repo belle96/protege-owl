@@ -38,8 +38,7 @@ public class SWRLFactory
   {
     this.owlModel = owlModel;
     systemFrames = owlModel.getSystemFrames();
-  } // SWRLFactory
-  
+  }
 
   public SWRLImp createImp() 
   {
@@ -359,14 +358,14 @@ public class SWRLFactory
     Set<String> ruleGroupNames = new HashSet<String>();
     ruleGroupNames.add(ruleGroupName);
     enableStatusUpdate(ruleGroupNames, true); 
-  } // enable
+  } 
 
   public void disableAll(String ruleGroupName) 
   {
     Set<String> ruleGroupNames = new HashSet<String>();
     ruleGroupNames.add(ruleGroupName);
     enableStatusUpdate(ruleGroupNames, false); 
-  } // enable
+  } 
 
   public static boolean isSWRLFilteredResource(RDFResource resource)
   {
@@ -393,7 +392,7 @@ public class SWRLFactory
         if (enable) imp.enable(); else imp.disable();
       } // if
     } // while
-  } // enableAll
+  } 
 
   public Collection<RDFSNamedClass> getSWRLClasses() {
 	  ArrayList<RDFSNamedClass> swrlClasses = new ArrayList<RDFSNamedClass>();

@@ -42,7 +42,6 @@ public class DefaultSWRLImp extends AbstractSWRLIndividual implements SWRLImp
     
   public static final String EMPTY_RULE_TEXT = "<EMPTY_RULE>";
   
-  private boolean isCacheInitialized = false;
   private boolean isRuleEnabled = true;
   private Map<String, Boolean> ruleGroups; // Contains rule groups and their enabled status.
  
@@ -55,12 +54,9 @@ public class DefaultSWRLImp extends AbstractSWRLIndividual implements SWRLImp
   {
   }
   
-  private void checkCacheInitialized() {
-      if (!isCacheInitialized) {
-          isRuleEnabled = getIsRuleEnabledAnnotation();
-          ruleGroups = getRuleGroupAnnotations();
-          isCacheInitialized = true;
-      }
+  private void updateEnabledAndGroupInformation() {
+  	isRuleEnabled = getIsRuleEnabledAnnotation();
+  	ruleGroups = getRuleGroupAnnotations();
   }
 
   public SWRLImp createClone() 
@@ -104,7 +100,7 @@ public class DefaultSWRLImp extends AbstractSWRLIndividual implements SWRLImp
                   OWLIndividual ruleGroupIndividual = (OWLIndividual)iterator.next();
                   Object isEnabled = ruleGroupIndividual.getPropertyValue(ruleGroupEnabledProperty);
                   if (isEnabled != null) enabled = (Boolean)isEnabled;
-                  result.put(ruleGroupIndividual.getName(), enabled);
+                  result.put(ruleGroupIndividual.getLocalName(), enabled);
               } // while
           } // if
       } // if
@@ -234,7 +230,7 @@ public class DefaultSWRLImp extends AbstractSWRLIndividual implements SWRLImp
 
   public boolean isEnabled() 
   { 
-      checkCacheInitialized();
+      updateEnabledAndGroupInformation();
       return isRuleEnabled;
   } 
 
@@ -249,7 +245,7 @@ public class DefaultSWRLImp extends AbstractSWRLIndividual implements SWRLImp
 
   public void enable(Set<String> ruleGroupNames) 
   {
-      checkCacheInitialized();
+      updateEnabledAndGroupInformation();
       if (ruleGroupNames.isEmpty()) {
           OWLDatatypeProperty ruleEnabledProperty = getRuleEnabledProperty();
           if (ruleEnabledProperty != null) setPropertyValue(ruleEnabledProperty, Boolean.TRUE);
@@ -279,7 +275,8 @@ public class DefaultSWRLImp extends AbstractSWRLIndividual implements SWRLImp
 
   public void disable(Set<String> ruleGroupNames) 
   { 
-      checkCacheInitialized();
+      updateEnabledAndGroupInformation();
+      
       if (ruleGroupNames.isEmpty()) {
           OWLDatatypeProperty ruleEnabledProperty = getRuleEnabledProperty();
           if (ruleEnabledProperty != null) setPropertyValue(ruleEnabledProperty, Boolean.FALSE);
@@ -290,8 +287,8 @@ public class DefaultSWRLImp extends AbstractSWRLIndividual implements SWRLImp
           for (String ruleGroupName : ruleGroupNames) {
               OWLIndividual ruleGroupIndividual = getOWLModel().getOWLIndividual(ruleGroupName);
               if (ruleGroupIndividual != null && ruleGroupProperty != null) {
-                  addPropertyValue(ruleGroupProperty, ruleGroupIndividual);
-                  ruleGroupIndividual.addPropertyValue(ruleGroupEnabledProperty, Boolean.FALSE);
+              	addPropertyValue(ruleGroupProperty, ruleGroupIndividual);
+              	ruleGroupIndividual.addPropertyValue(ruleGroupEnabledProperty, Boolean.FALSE);
               }  // if
               ruleGroups.put(ruleGroupName, Boolean.FALSE);
           } // for
@@ -299,25 +296,26 @@ public class DefaultSWRLImp extends AbstractSWRLIndividual implements SWRLImp
   } 
 
   public Set<String> getRuleGroupNames() { 
-      checkCacheInitialized();
+      updateEnabledAndGroupInformation();
       return ruleGroups.keySet(); 
   }
   
   public boolean isInRuleGroup(String name) { 
-      checkCacheInitialized();
+      updateEnabledAndGroupInformation();
       return ruleGroups.containsKey(name); 
   }
 
   public boolean isInRuleGroups(Set<String> names) 
   { 
-      checkCacheInitialized();
-      for (String name : names) if (ruleGroups.containsKey(name)) return true;
+      updateEnabledAndGroupInformation();
+   
+      for (String name : names) 
+      	if (ruleGroups.containsKey(name)) return true;
       return false;
   }
 
   /**
-   ** Add a rule group name to a rule. Returns true on success. The name must the name of an OWL individual of class RuleGroup defined in
-   ** the ontology http://swrl.stanford.edu/ontologies/3.3/swrla.owl. Make the group enabled by default.
+   * Add a rule group name to a rule. Returns true on success. Make the group enabled by default.
    */
   public boolean addRuleGroup(String name) 
   { 
@@ -325,34 +323,35 @@ public class DefaultSWRLImp extends AbstractSWRLIndividual implements SWRLImp
       OWLObjectProperty ruleGroupProperty = getRuleGroupProperty();
       OWLDatatypeProperty ruleGroupEnabledProperty = getRuleGroupEnabledProperty();
       
-      checkCacheInitialized();
+      updateEnabledAndGroupInformation();
       boolean result = false;
 
       if (isInRuleGroup(name)) return true;
 
       if (ruleGroupClass != null) {
-          OWLIndividual ruleGroupIndividual = getOWLModel().getOWLIndividual(name);
-          if (ruleGroupIndividual != null) {
-              if (ruleGroupProperty != null) {
-                  addPropertyValue(ruleGroupProperty, ruleGroupIndividual);
-                  ruleGroupIndividual.addPropertyValue(ruleGroupEnabledProperty, Boolean.TRUE);
-                  ruleGroups.put(name, Boolean.TRUE);
-                  result = true;
-              } // if
-          } // if
+      	OWLIndividual ruleGroupIndividual = getOWLModel().getOWLIndividual(name);
+      	if (ruleGroupIndividual == null) 
+      		ruleGroupIndividual = ruleGroupClass.createOWLIndividual(name);
+
+      	if (ruleGroupIndividual != null && ruleGroupProperty != null) {
+      		addPropertyValue(ruleGroupProperty, ruleGroupIndividual);
+      		ruleGroupIndividual.addPropertyValue(ruleGroupEnabledProperty, Boolean.TRUE);
+      		ruleGroups.put(name, Boolean.TRUE);
+      		result = true;
+      	} // if
       } // if
 
     return result;
   }
 
   /**
-   ** Remove a rule group name from a rule. Returns true on success. 
+   * Remove a rule group name from a rule. Returns true on success. 
    */
   public boolean removeRuleGroup(String name) 
   { 
       OWLNamedClass ruleGroupClass = getRuleGroupClass();
       OWLObjectProperty ruleGroupProperty = getRuleGroupProperty();
-      checkCacheInitialized();
+      updateEnabledAndGroupInformation();
       boolean result = false;
 
       if (!isInRuleGroup(name)) return true;
@@ -370,7 +369,6 @@ public class DefaultSWRLImp extends AbstractSWRLIndividual implements SWRLImp
 
       return result;
   } 
-  
   
   private OWLDatatypeProperty getRuleEnabledProperty() {
       return getOWLModel().getOWLDatatypeProperty(SWRLNames.Annotations.IS_RULE_ENABLED);

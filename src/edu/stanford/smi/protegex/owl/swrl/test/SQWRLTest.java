@@ -2,8 +2,10 @@
 package edu.stanford.smi.protegex.owl.swrl.test;
 
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
+import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLFactoryException;
 import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLOWLUtilException;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
+import edu.stanford.smi.protegex.owl.swrl.model.SWRLImp;
 import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParseException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.IndividualValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngine;
@@ -29,7 +31,13 @@ public class SQWRLTest
       SWRLFactory factory = new SWRLFactory(owlModel);
       SQWRLResult result;
       
-      queryEngine.createSQWRLQuery("T1", "Adult(?a) . sqwrl:makeSet(?s, ?a) . sqwrl:contains(?s, ?e) -> sqwrl:select(?e)");
+      queryEngine.createSQWRLQuery("T1", "Adult(?a) . sqwrl:makeSet(?s, ?a) . sqwrl:element(?e, ?s) -> sqwrl:select(?e)");
+      
+      SWRLImp imp = factory.getImp("T1");
+      imp.addRuleGroup("G1");
+      factory.disableAll();
+      factory.enableAll("G1");
+      
       result = queryEngine.runSQWRLQuery("T1");
 
       while (result.hasNext()) {
@@ -40,7 +48,7 @@ public class SQWRLTest
       
       factory.deleteImps();
       
-      SWRLOWLUtil.writeJenaOWLModel2File(owlModel, owlFileName);
+      //SWRLOWLUtil.writeJenaOWLModel2File(owlModel, owlFileName);
 
       /*
       result = queryEngine.runSQWRLQuery("PersonAverageDrugDosesAndAverageAllDrugDoses");
@@ -59,6 +67,9 @@ public class SQWRLTest
       e.printStackTrace();
     } catch (SWRLParseException e) {
       System.err.println("Parse exception: " + e.getMessage());
+      e.printStackTrace();
+    } catch (SWRLFactoryException e) {
+      System.err.println("Factory exception: " + e.getMessage());
       e.printStackTrace();
     } catch (SWRLOWLUtilException e) {
       System.err.println("Exception: " + e.getMessage());
