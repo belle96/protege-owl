@@ -11,6 +11,13 @@ import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParseException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.DataValueConversionException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 
+/**
+ * Interface that is very roughly equivalent to the OWLAPI interfaces OWLOntology and OWLOntologyManager. 
+ * All SWRLTab code in Protege-OWL will eventually use this interface to interact with an OWL ontology, 
+ * thus easing the port to the OWLAPI.
+ * 
+ * At present, this interface is not fully aligned with the OWLAPI.
+ */
 public interface OWLOntology
 {
   boolean containsClassInSignature(String classURI, boolean includeImportsClosure);
