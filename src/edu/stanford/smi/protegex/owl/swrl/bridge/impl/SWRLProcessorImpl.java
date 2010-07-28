@@ -221,7 +221,8 @@ public class SWRLProcessorImpl implements SWRLProcessor
   public void addReferencedIndividualURI(String uri) 
   {
   	// Use the empty string to index indirectly referenced URIs
-  	if (referencedOWLIndividualURIMap.containsKey("")) referencedOWLIndividualURIMap.get("").add(uri);
+  	if (referencedOWLIndividualURIMap.containsKey("")) 
+  		referencedOWLIndividualURIMap.get("").add(uri);
   	else {
   		Set<String> uris = new HashSet<String>();
   		uris.add(uri);
@@ -870,15 +871,18 @@ public class SWRLProcessorImpl implements SWRLProcessor
   	String uri = ruleOrQuery.getURI();
   	
     if (atom.hasReferencedClasses()) 
-    	if (referencedOWLClassURIMap.containsKey(uri)) referencedOWLClassURIMap.get(uri).addAll(atom.getReferencedClassURIs());
+    	if (referencedOWLClassURIMap.containsKey(uri)) 
+    		referencedOWLClassURIMap.get(uri).addAll(atom.getReferencedClassURIs());
     	else referencedOWLClassURIMap.put(uri, atom.getReferencedClassURIs());
 
     if (atom.hasReferencedProperties()) 
-    	if (referencedOWLPropertyURIMap.containsKey(uri)) referencedOWLPropertyURIMap.get(uri).addAll(atom.getReferencedPropertyURIs());
+    	if (referencedOWLPropertyURIMap.containsKey(uri)) 
+    		referencedOWLPropertyURIMap.get(uri).addAll(atom.getReferencedPropertyURIs());
     	else referencedOWLPropertyURIMap.put(uri, atom.getReferencedPropertyURIs());
 
     if (atom.hasReferencedIndividuals()) 
-    	if (referencedOWLIndividualURIMap.containsKey(uri)) referencedOWLIndividualURIMap.get(uri).addAll(atom.getReferencedIndividualURIs());
+    	if (referencedOWLIndividualURIMap.containsKey(uri)) 
+    		referencedOWLIndividualURIMap.get(uri).addAll(atom.getReferencedIndividualURIs());
     	else referencedOWLIndividualURIMap.put(uri, atom.getReferencedIndividualURIs());
   } 
 
@@ -1009,7 +1013,6 @@ public class SWRLProcessorImpl implements SWRLProcessor
 			  importOWLClasses(property.getDomainClasses());
 			  importOWLClasses(property.getRangeClasses());
         
-			  importOWLPropertyAssertionAxioms(property.getSuperProperties());
 			  importOWLPropertyAssertionAxioms(property.getSuperProperties());
 			  importOWLPropertyAssertionAxioms(property.getEquivalentProperties());
 		  } // for

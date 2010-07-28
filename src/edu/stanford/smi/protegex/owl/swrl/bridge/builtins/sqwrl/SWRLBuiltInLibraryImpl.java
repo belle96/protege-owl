@@ -33,10 +33,10 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLNames;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResultValueFactory;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.SQWRLResultImpl;
 
-/*
+/**
  * Implementation library for SQWRL built-ins. See <a href="http://protege.cim3.net/cgi-bin/wiki.pl?SQWRL">here</a> for documentation.
  * 
- * Unlike other built-in libraries, this library needs to be preprocessed. cf. SWRLRuleImpl.java.
+ * Unlike other built-in libraries, this library needs to be preprocessed. cf. SWRLProcessor.java.
  */
 public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 {
@@ -148,7 +148,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     return count(arguments);
   }
 
-  // These built-ins are preprocessed so nothing to do
+  // These built-ins are preprocessed by SWRLProcessor so nothing to do
   public boolean columnNames(List<BuiltInArgument> arguments) throws BuiltInException { checkThatInConsequent(); return true; } 
   public boolean orderBy(List<BuiltInArgument> arguments) throws BuiltInException { checkThatInConsequent(); return true; } 
   public boolean orderByDescending(List<BuiltInArgument> arguments) throws BuiltInException { checkThatInConsequent(); return true; }
@@ -161,6 +161,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 	  Collection<BuiltInArgument> set;
 	
 	  checkThatInAntecedent();
+	  checkForUnboundNonFirstArguments(arguments);
 	    
     if (collections.containsKey(collectionID)) set = collections.get(collectionID);
     else {  
@@ -182,6 +183,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 		Collection<BuiltInArgument> bag;	
 		
 		checkThatInAntecedent();
+		checkForUnboundNonFirstArguments(arguments);
   	
     if (collections.containsKey(collectionID)) bag = collections.get(collectionID);
     else {  
@@ -195,7 +197,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     return true;
   }
 
-  // Preprocesed so nothing to do
+  // Preprocesed by SWRLProcessor so nothing to do
   public boolean groupBy(List<BuiltInArgument> arguments) throws BuiltInException
   {
 	  checkThatInAntecedent();
