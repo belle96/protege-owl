@@ -9,9 +9,9 @@ import java.util.TimeZone;
 import edu.stanford.smi.protegex.owl.swrl.bridge.builtins.temporal.exceptions.TemporalException;
 
 /**
- ** A class supporting processing of datetime strings represented in the standard XML Schema date format 'yyyy-MM-ddTHH:mm:ss.S'.
- ** <p>
- ** Timezone offsets are not yet supported.
+ * A class supporting processing of datetime strings represented in the standard XML Schema date format 'yyyy-MM-ddTHH:mm:ss.S'.
+ * <p>
+ * Timezone offsets are not yet supported.
  */
 public class XSDDatetimeStringProcessor extends DatetimeStringProcessor
 {
@@ -31,7 +31,7 @@ public class XSDDatetimeStringProcessor extends DatetimeStringProcessor
   public XSDDatetimeStringProcessor()
   {
     super(_dateFormat, _delimiters, _gTokenIndex, _datetimeRoundDownPadding, _datetimeRoundUpPadding);
-  } // XSDDatetimeStringProcessor
+  } 
 
   protected String constructDatetimeStringFromMillisecondsFrom1970Count(long millisecondsFrom1970) throws TemporalException
   {
@@ -39,9 +39,8 @@ public class XSDDatetimeStringProcessor extends DatetimeStringProcessor
     TimeZone tz = gc.getTimeZone();
     
     if (tz.inDaylightTime(ts)) 
-    	ts = new Timestamp(millisecondsFrom1970 - daylightSavingsTimeOffsetInMillis);
+    	ts = new Timestamp(millisecondsFrom1970 - Temporal.daylightSavingsTimeOffsetInMillis);
         
     return ts.toString().replace(' ', 'T'); // Timestamp.toString returns in JDBC format so replace space with 'T'.
-  } // constructDatetimeStringFromMillisecondsFrom1970Count
-
-} // XSDDatetimeStringProcessor
+  } 
+} 

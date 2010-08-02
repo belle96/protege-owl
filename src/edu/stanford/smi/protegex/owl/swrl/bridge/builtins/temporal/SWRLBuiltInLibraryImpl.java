@@ -11,6 +11,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.builtins.AbstractSWRLBuiltInLib
 import edu.stanford.smi.protegex.owl.swrl.bridge.builtins.temporal.exceptions.TemporalException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.InvalidBuiltInArgumentException;
+import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLBuiltInLibraryException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDDateTime;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDataPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLLiteral;
@@ -19,8 +20,8 @@ import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLObjectPropertyAssertionAxiom
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLPropertyAssertionAxiom;
 
 /**
- ** Implementation library for SWRL temporal built-ins. See <a href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLTemporalBuiltIns">here</a>
- ** for documentation on this built-in library.
+ * Implementation library for SWRL temporal built-ins. See <a href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLTemporalBuiltIns">here</a>
+ * for documentation on this built-in library.
  */
 public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 {
@@ -60,10 +61,16 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     super(TemporalLibraryName); 
   } 
 
-  public void reset()
+  public void reset() throws SWRLBuiltInLibraryException
   {
     XSDDatetimeStringProcessor d = new XSDDatetimeStringProcessor();
-    temporal = new Temporal(d);
+    
+    try {
+      temporal = new Temporal(d);
+    	temporal.setNow();
+    } catch (TemporalException e) {
+    	throw new SWRLBuiltInLibraryException("error initializing temporal library: " + e.getMessage());
+    }
   }
 
   public boolean equals(List<BuiltInArgument> arguments) throws BuiltInException { return temporalOperation(TemporalEquals, arguments); }

@@ -9,12 +9,11 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- ** Class that represents a single instant in time.
+ * Class that represents a single instant in time.
  */
 public class Instant 
 {
   private Temporal temporal;
-  private boolean isNow = false;
   private long granuleCount;
   private int granularity;
 
@@ -27,12 +26,12 @@ public class Instant
     this.granularity = granularity;
 
     clearGranuleCountArray();
-  } // Instant
+  }
 
   public Instant(Temporal temporal, Timestamp timestamp) throws TemporalException
   {
     this(temporal, timestamp, Temporal.FINEST);
-  } // Instant
+  } 
 
   public Instant(Temporal temporal, Timestamp timestamp, int granularity) throws TemporalException
   {
@@ -41,12 +40,12 @@ public class Instant
     this.granularity = granularity;
 
     clearGranuleCountArray();
-  } // Instant
+  }
 
   public Instant(Temporal temporal, java.util.Date date) throws TemporalException
   {
     this(temporal, date, Temporal.FINEST);
-  } // Instant
+  }
 
   public Instant(Temporal temporal, java.util.Date date, int granularity) throws TemporalException
   {
@@ -60,7 +59,7 @@ public class Instant
   public Instant(Temporal temporal, java.sql.Date date) throws TemporalException
   {
     this(temporal, date, Temporal.FINEST);
-  } // Instant
+  }
 
   public Instant(Temporal temporal, java.sql.Date date, int granularity) throws TemporalException
   {
@@ -69,132 +68,113 @@ public class Instant
     this.granularity = granularity;
 
     clearGranuleCountArray();
-  } // Instant
+  }
 
   public Instant(Temporal temporal, String datetimeString, int granularity) throws TemporalException
   {
     this(temporal, datetimeString, granularity, false);
-  } // Instant
+  }
 
   public Instant(Temporal temporal, String datetimeString, int granularity, boolean roundUp) throws TemporalException
   {
     initialize(temporal, datetimeString, granularity, roundUp);
 
     clearGranuleCountArray();
-  } // Instant
+  } 
 
   public Instant(Temporal temporal, String datetimeString) throws TemporalException
   {
     this (temporal, datetimeString, false);
-  } // Instant
+  } 
 
   public Instant(Temporal temporal, String datetimeString, boolean roundUp) throws TemporalException
   {
     initialize(temporal, datetimeString, Temporal.FINEST, roundUp);
 
     clearGranuleCountArray();
-  } // Instant
+  }
 
   public Instant(Temporal temporal, Instant instant) throws TemporalException
   {
     this(temporal, instant.getGranuleCount(instant.getGranularity()), instant.getGranularity());
-  } // Instant
+  }
 
-  public boolean isNow() { return isNow; }
-  public boolean isOngoingInstant() { return isNow(); }
   public int getGranularity() { return granularity; }
 
   public void setGranularity(int granularity) throws TemporalException
   {
     if (this.granularity == granularity) return;
 
-    if (!isNow) {
-      granuleCount = Temporal.convertGranuleCount(granuleCount, this.granularity, granularity);
-      clearGranuleCountArray(); // All previous granularity conversion will now be invalid.
-    } // if
+    granuleCount = Temporal.convertGranuleCount(granuleCount, this.granularity, granularity);
+    clearGranuleCountArray(); // All previous granularity conversion will now be invalid.
 
     this.granularity = granularity;
-  } // setGranularity
+  }
 
   public void setGranuleCount(long granuleCount, int granularity)
   {
-    isNow = false;  // Can no longer be an ongoing intstant if we explicitly set a granuleCount.
-
     this.granuleCount = granuleCount;
     this.granularity = granularity;
 
     clearGranuleCountArray(); // All previous granularity conversion will now be invalid.
-  } // setGranularity
+  }
 
   public long getGranuleCount() throws TemporalException
   {
-    if (isNow) return getNowGranuleCount(granularity);
-    else return granuleCount;
-  } // getGranuleCount
+  	return granuleCount;
+  } 
 
   // We use an array to cache the result of granule count conversions for each granularity.
   public long getGranuleCount(int granularity) throws TemporalException
   {
     long resultGranuleCount;
 
-    if (isNow) resultGranuleCount = getNowGranuleCount(granularity);
-    else {
-      if (getGranularity() != granularity) {
+    if (getGranularity() != granularity) {
 
-	if (granuleCountArray[granularity] == -1) { // No conversion yet for this granularity.
-	  resultGranuleCount = Temporal.convertGranuleCount(granuleCount, getGranularity(), granularity);
-	  granuleCountArray[granularity] = resultGranuleCount;
-	} else resultGranuleCount = granuleCountArray[granularity];
-      } else resultGranuleCount = getGranuleCount(); // Same granularity.
-    } // if
+    	if (granuleCountArray[granularity] == -1) { // No conversion yet for this granularity.
+    		resultGranuleCount = Temporal.convertGranuleCount(granuleCount, getGranularity(), granularity);
+    		granuleCountArray[granularity] = resultGranuleCount;
+    	} else resultGranuleCount = granuleCountArray[granularity];
+    } else resultGranuleCount = getGranuleCount(); // Same granularity.
 
     return resultGranuleCount;
-  } // getGranuleCount
+  }
 
   public String getDatetimeString() throws TemporalException
   {
-      return getDatetimeString(Temporal.FINEST);
-  } //  getDatetimeString
+  	return getDatetimeString(Temporal.FINEST);
+  }
 
   public String getDatetimeString(int granularity) throws TemporalException
   {
-    long localGranuleCount;
-
-    if (isNow) localGranuleCount = getNowGranuleCount(granularity);
-    else localGranuleCount = getGranuleCount(granularity);
+    long localGranuleCount = getGranuleCount(granularity);
 
     return temporal.stripDatetimeString(temporal.granuleCount2DatetimeString(localGranuleCount, granularity), granularity);
-  } //  getDatetimeString
+  } 
 
   public java.util.Date getUtilDate() throws TemporalException
   {
     return getUtilDate(granularity);
-  } //  getUtilDate
+  } 
 
   public java.util.Date getUtilDate(int granularity) throws TemporalException
   {
-    long localGranuleCount;
-
-    if (isNow) localGranuleCount = getNowGranuleCount(granularity);
-    else localGranuleCount = granuleCount;
+    long localGranuleCount = granuleCount;
 
     return Temporal.granuleCount2UtilDate(localGranuleCount, granularity);
-  } //  getDatetime
+  }
 
   public java.sql.Date getSQLDate() throws TemporalException
   {
     return getSQLDate(granularity);
-  } // getSQLDate
+  }
 
   public java.sql.Date getSQLDate(int granularity) throws TemporalException
   {
-    long localGranuleCount;
-
-    if (isNow) localGranuleCount = getNowGranuleCount(granularity);
-    else localGranuleCount = granuleCount;
+    long localGranuleCount = granuleCount;
 
     return Temporal.granuleCount2SQLDate(localGranuleCount, granularity);
-  } //  getSQLDate
+  }
 
   public boolean isStartOfTime() { return (granuleCount == 0); }
 
@@ -219,12 +199,10 @@ public class Instant
 
     plusGranuleCount = Temporal.convertGranuleCount(granuleCount, granularity, this.granularity);
 
-    if (isNow) isNow = false; // Can no longer be a 'now' valid time if we modify it.
-
     this.granuleCount = getGranuleCount() + plusGranuleCount;
 
     clearGranuleCountArray();
-  } // addGranuleCount
+  } 
 
   public void subtractGranuleCount(long granuleCount, int granularity) throws TemporalException
   {
@@ -235,27 +213,27 @@ public class Instant
     this.granuleCount -= subtractGranuleCount;
 
     clearGranuleCountArray();
-  } // subtractGranuleCount
+  } 
 
   public long duration(Instant i2, int granularity) throws TemporalException
   {
     return java.lang.Math.abs(getGranuleCount(granularity) - i2.getGranuleCount(granularity));
-  } // duration
+  } 
 
   public boolean before(Instant i2, int granularity) throws TemporalException
   {
     return getGranuleCount(granularity) < i2.getGranuleCount(granularity);
-  } // before
+  }
 
   public boolean after(Instant i2, int granularity) throws TemporalException
   {
     return getGranuleCount(granularity) > i2.getGranuleCount(granularity);
-  } // after
+  }
 
   public boolean equals(Instant i2, int granularity) throws TemporalException
   {
     return getGranuleCount(granularity) == i2.getGranuleCount(granularity);
-  } // equals
+  } 
 
   public boolean meets(Instant i2, int granularity) throws TemporalException
   {
@@ -266,52 +244,52 @@ public class Instant
   public boolean met_by(Instant i2, int granularity) throws TemporalException
   {
     return i2.meets(this, granularity);
-  } // met_by
+  } 
 
   public boolean adjacent(Instant i2, int granularity) throws TemporalException
   {
     return (meets(i2, granularity) || met_by(i2, granularity));
-  } // met_by
+  } 
 
   public boolean overlaps(Instant i2, int granularity) throws TemporalException
   {
     return false; // Instants cannot overlap.
-  } // overlaps
+  }
 
   public boolean overlapped_by(Instant i2, int granularity) throws TemporalException
   {
     return i2.overlaps(this, granularity);
-  } // overlapped_by
+  }
 
   public boolean contains(Instant i2, int granularity) throws TemporalException
   {
     return false; // Instant cannot contain another instant.
-  } // contains
+  }
 
   public boolean during(Instant i2, int granularity) throws TemporalException
   {
     return false; // Instant cannot be during another instant.
-  } // during
+  }
 
   public boolean starts(Instant i2, int granularity) throws TemporalException
   {
     return false; // One instant cannot start another
-  } // starts
+  }
 
   public boolean started_by(Instant i2, int granularity) throws TemporalException
   {
     return i2.starts(this, granularity);
-  } // started_by
+  }
 
   public boolean finishes(Instant i2, int granularity) throws TemporalException
   {
     return false; // One instant cannot finish another
-  } // finish
+  }
 
   public boolean finished_by(Instant i2, int granularity) throws TemporalException
   {
     return i2.finishes(this, granularity);
-  } // finished_by
+  }
 
   // Take a list of instants and remove dulicate identical elements.
   public List<Instant> coalesce(List<Instant> instants, int granularity) throws TemporalException
@@ -338,7 +316,7 @@ public class Instant
     } // while
       
     return resultList;
-  } // coalesce
+  }
 
   private void initialize(Temporal temporal, String datetimeString, int granularity, boolean roundUp) throws TemporalException
   {
@@ -346,27 +324,20 @@ public class Instant
 
     this.temporal = temporal;
 
-    if (datetimeString.trim().equalsIgnoreCase("+")) isNow = true;
-
-    // normalizeDatetimeString will deal with +, -, now etc.
-    localDatetimeString = temporal.normalizeDatetimeString(datetimeString, granularity, roundUp);
+    if (datetimeString.equals("now")) localDatetimeString = temporal.getNowDatetimeString();
+    else localDatetimeString = datetimeString.trim();
+    
+    localDatetimeString = temporal.normalizeDatetimeString(localDatetimeString, granularity, roundUp);
+    
     this.granularity = granularity;
 
-    if (!isNow) {
-      localDatetimeString = temporal.expressDatetimeStringAtGranularity(localDatetimeString, granularity);
-      granuleCount = temporal.datetimeString2GranuleCount(localDatetimeString, granularity);
-    } else granuleCount = -1;
-  } // initialize
+    localDatetimeString = temporal.expressDatetimeStringAtGranularity(localDatetimeString, granularity);
+    granuleCount = temporal.datetimeString2GranuleCount(localDatetimeString, granularity);
+  }
 
   private void clearGranuleCountArray()
   {
     for (int i = 0; i < Temporal.NUMBER_OF_GRANULARITIES; i++) granuleCountArray[i] = -1;
-  } // clearGranuleCountArray
-
-  protected long getNowGranuleCount(int granularity) throws TemporalException
-  {
-    return temporal.getNowGranuleCount(granularity);
-  } // getNowGranuleCount
-
-} // Instant
+  }
+} 
 

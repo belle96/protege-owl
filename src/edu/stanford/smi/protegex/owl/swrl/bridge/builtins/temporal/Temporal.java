@@ -4,13 +4,14 @@ package edu.stanford.smi.protegex.owl.swrl.bridge.builtins.temporal;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.builtins.temporal.exceptions.TemporalException;
 
 /** 
- ** A class that supports temporal operations using the Gregorian calendar. In instance of this class is supplied with a
- ** DatetimeStringProcessor that governs how timestamps are converted to and from datetime strings. Apart from the granularity constants,
- ** users should generally not use this class directly but should instead use the Instant and Period classes in this package.
+ * A class that supports temporal operations using the Gregorian calendar. In instance of this class is supplied with a
+ * DatetimeStringProcessor that governs how timestamps are converted to and from datetime strings. Apart from the granularity constants,
+ * users should generally not use this class directly but should instead use the Instant and Period classes in this package.
  */
 public class Temporal
 {
@@ -39,6 +40,9 @@ public class Temporal
 
   // 10-day discontinuity between October 4, 1582 and October 15, 1582.
   public static final long millisecondsInGregorianDiscontinuity = 864000000L; // 10 * 24 * 60 * 60 * 1000L;
+  
+  // Number of milliseconds in one hour
+  public static final long daylightSavingsTimeOffsetInMillis = 60 * 60 * 1000;
 
   // The following table is used to convert an integral number of granules at one granularity (the y axis) to an integral number of granules
   // at another granularity (the x axis). If the source granularity is finer than the target granularity we divide by the number in the
@@ -81,23 +85,25 @@ public class Temporal
   public Temporal(DatetimeStringProcessor _datetimeStringProcessor)
   {
     this.datetimeStringProcessor = _datetimeStringProcessor;
-  } // Temporal
+  } 
 
   public void setNow(String nowDatetimeString) throws TemporalException
   {
     nowGranuleCountInMillis = datetimeString2GranuleCount(nowDatetimeString, MILLISECONDS);
-  } // setNow
+  } 
 
   public void setNow() throws TemporalException
   {
-    GregorianCalendar calendar = new GregorianCalendar();
-    nowGranuleCountInMillis = calendar.getTimeInMillis();
-  } // setNow
+	  long millisecondsFrom1970 = System.currentTimeMillis();
+	  Timestamp ts = new Timestamp(millisecondsFrom1970);
+	  
+	  nowGranuleCountInMillis = timestamp2GranuleCount(ts, MILLISECONDS);
+  }
 
   public void checkGranularity(String granularity) throws TemporalException
   {
     getIntegerGranularityRepresentation(granularity); // Will throw an exception if it cannot convert the granularity.
-  } // if
+  } 
 
   public static void checkMonthCount(long monthCount) throws TemporalException
   {
@@ -111,13 +117,13 @@ public class Temporal
     else { 
       int i = 0;
       while (i < stringGranularityRepresentation.length) {
-	if (stringGranularityRepresentation[i].equalsIgnoreCase(granularity)) return i;
-	i++;
+      	if (stringGranularityRepresentation[i].equalsIgnoreCase(granularity)) return i;
+      	i++;
       } // while
     } // if
 
     throw new TemporalException("invalid granularity '" + granularity + "'");
-  } // getIntegerGranularityRepresentation
+  }
 
   public static boolean isValidGranularityString(String granularity)
   {
@@ -130,18 +136,20 @@ public class Temporal
     } // while
 
     return found;
-  } // isValidGranularityString
+  } 
 
   public static String getStringGranularityRepresentation(int granularity) throws TemporalException
   {
     checkGranularity(granularity);
 
     return stringGranularityRepresentation[granularity];
-  } // getStringGranularityRepresentation
+  } 
 
   /**
-   ** Take a granule count (from the beginning of calendar time, i.e., '0000-01-01 00:00:00.000' in JDBC timestamp format) at any
-   ** granularity and convert it to a Timestamp. Java Timestamps record time as milliseconds from January 1st 1970.
+   * Take a granule count (from the beginning of calendar time, e.g., '0000-01-01 00:00:00.000' in JDBC timestamp format) at any
+   * granularity and convert it to a Timestamp. Java Timestamps record time as milliseconds from January 1st 1970.
+   * 
+   * java.sql.timestamp will take car of the time zone offset plus daylight savings time.
    */
   public static java.sql.Timestamp granuleCount2Timestamp(long granuleCount, int granularity) throws TemporalException
   {
@@ -157,7 +165,7 @@ public class Temporal
     granuleCountInMilliSeconds -= millisecondsTo1970;
 
     return new java.sql.Timestamp(granuleCountInMilliSeconds);
-  } // granuleCount2Timestamp
+  } 
 
   /**
    ** Take a timestamp and return the number of granules at the specified granularity since 1 C.E.
@@ -188,10 +196,10 @@ public class Temporal
     if ((months > 1) && isLeapYear(years)) resultGranuleCount += conversion_table[granularity][DAYS];
 
     return resultGranuleCount;
-  } // timestamp2GranuleCount
+  } 
 
   /**
-   ** Take a full specification datetime and return the number of granules at the specified granularity since 1 C.E.
+   * Take a full specification datetime and return the number of granules at the specified granularity since 1 C.E.
    */
   public long datetimeString2GranuleCount(String datetimeString, int granularity) throws TemporalException
   {
@@ -232,7 +240,7 @@ public class Temporal
   } // datetimeString2GranuleCount
 
   /**
-   ** Convert a granule count from one granularity to another. 
+   * Convert a granule count from one granularity to another. 
    */
   public static long convertGranuleCount(long granuleCount, int from_granularity, int to_granularity) throws TemporalException
   {    long result, localGranuleCount, leapOffsetGranuleCount = 0;
@@ -267,21 +275,21 @@ public class Temporal
     } // if
 
     return result;
-  } // convertGranuleCount
+  } 
 
   public static long getDaysInMonth(long monthCount) throws TemporalException
   {
     checkMonthCount(monthCount);
 
     return days_in_month[(int)monthCount - 1];
-  } // getDaysInMonth
+  } 
 
   public static boolean isLeapYear(long yearCount) 
   { 
     GregorianCalendar gc = new GregorianCalendar();
 
     return gc.isLeapYear((int)yearCount); 
-  } // isLeapYear
+  } 
 
   // We ignore leap years here - convertGranuleCount adjusts for them.
   public static long convertGranuleCount2MonthCount(long granuleCount, int from_granularity) throws TemporalException
@@ -298,13 +306,13 @@ public class Temporal
 
       int i = 1;
       while (days_to_month[i] <= dayInYear) {
-	monthCount++; 
-	i++;
+      	monthCount++; 
+      	i++;
       } // while
     } // if
 
     return monthCount;
-  } // convertGranuleCount2MonthCount
+  } 
 
   // We ignore leap years here - convertGranuleCount adjusts for them.
 
@@ -313,19 +321,19 @@ public class Temporal
     checkGranularity(granularity);
 
     return granuleCount2UtilDate(sqlDate2GranuleCount(sqlDate, granularity), granularity);
-  } // sqlDate2UtilDate
+  }
 
   public static java.util.Date sqlDate2UtilDate(java.sql.Date sqlDate) throws TemporalException
   {
     return sqlDate2UtilDate(sqlDate, FINEST);
-  } // sqlDate2UtilDate
+  }
 
   public static long sqlDate2GranuleCount(java.sql.Date date, int granularity) throws TemporalException
   {
     checkGranularity(granularity);
 
     return utilDate2GranuleCount(sqlDate2UtilDate(date, granularity), granularity);
-  } // sqlDate2GranuleCount
+  }
 
   public static long utilDate2GranuleCount(java.util.Date date, int granularity) throws TemporalException
   {
@@ -344,14 +352,14 @@ public class Temporal
     localGranuleCountInMilliseconds += date.getTime();
 
     return convertGranuleCount(localGranuleCountInMilliseconds, MILLISECONDS, granularity);
-  } // utilDate2GranuleCount
+  }
 
   public java.sql.Date utilDate2SQLDate(java.util.Date date) throws TemporalException
   {
     if (date instanceof java.sql.Date) return (java.sql.Date)date;
 
     return datetimeString2SQLDate(utilDate2DatetimeString(date));
-  } // utilDate2SQLDate
+  }
 
   public static java.util.Date addGranuleCount(java.util.Date date, long granuleCount, int granularity) throws TemporalException
   {
@@ -362,7 +370,7 @@ public class Temporal
     resultGranuleCount = utilDate2GranuleCount(date, granularity) + granuleCount;
 
     return granuleCount2UtilDate(resultGranuleCount, granularity);
-  } // addGranuleCount
+  } 
 
   public static java.util.Date subtractGranuleCount(java.util.Date date, long granuleCount, int granularity) throws TemporalException
   {
@@ -373,24 +381,24 @@ public class Temporal
     resultGranuleCount = utilDate2GranuleCount(date, granularity) - granuleCount;
 
     return granuleCount2UtilDate(resultGranuleCount, granularity);
-  } // subtractGranuleCount
+  } 
 
   public java.sql.Date getNowSQLDate() throws TemporalException
   {
     return java.sql.Date.valueOf(getNowDatetimeString());
-  } // getNowSQLDate
+  } 
 
   public java.util.Date getNowUtilDate() throws TemporalException
   {
     return granuleCount2UtilDate(nowGranuleCountInMillis, FINEST);
-  } // getNowUtilDate
+  } 
 
   public long getNowGranuleCount(int granularity) throws TemporalException
   {
     checkGranularity(granularity);
 
     return convertGranuleCount(nowGranuleCountInMillis, MILLISECONDS, granularity);
-  } // getNowGranuleCount
+  } 
 
   public static java.util.Date granuleCount2UtilDate(long granuleCount, int granularity) throws TemporalException
   {
@@ -406,7 +414,7 @@ public class Temporal
     granuleCountInMilliseconds -= millisecondsTo1970;
 
     return new java.util.Date(granuleCountInMilliseconds);
-  } // granuleCount2UtilDate
+  } 
 
   public static java.sql.Date granuleCount2SQLDate(long granuleCount, int granularity) throws TemporalException
   {
@@ -422,17 +430,17 @@ public class Temporal
     granuleCountInMilliseconds -= millisecondsTo1970;
 
     return new java.sql.Date(granuleCountInMilliseconds);
-  } // granuleCount2SQLDate
+  }
 
   public String getNowDatetimeString() throws TemporalException
   {
     return granuleCount2DatetimeString(nowGranuleCountInMillis, FINEST);
-  } // getNowDatetimeString
+  }
 
   public String normalizeDatetimeString(String datetimeString, int granularity, boolean roundUp) throws TemporalException
   {
     return datetimeStringProcessor.normalizeDatetimeString(datetimeString, granularity, roundUp);
-  } // normalizeDatetimeString
+  } 
 
   public String normalizeDatetimeString(String datetimeString, int granularity) throws TemporalException
   {
@@ -535,17 +543,17 @@ public class Temporal
   public String granuleCount2DatetimeString(long granuleCount, int granularity) throws TemporalException
   {
     return datetimeStringProcessor.granuleCount2DatetimeString(granuleCount, granularity);
-  } // granuleCount2DatetimeString
+  }
 
   public static void checkGranularity(int granularity) throws TemporalException
   {
     if (granularity < COARSEST || granularity > FINEST) throw new TemporalException("invalid granularity '" + granularity + "'");
-  } // checkGranularity
+  }
 
   public static void throwInvalidDatetimeStringException(String datetimeString) throws TemporalException
   {
     throw new TemporalException("invalid datetime string: '" + datetimeString + "'");
-  } // throwInvalidDatetimeStringException
+  }
 
   private static long convertMonthCount2GranuleCount(long monthCount, int to_granularity) throws TemporalException
   {

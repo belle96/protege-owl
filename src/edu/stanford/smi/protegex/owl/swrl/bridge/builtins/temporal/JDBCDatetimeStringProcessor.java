@@ -9,7 +9,7 @@ import java.util.TimeZone;
 import edu.stanford.smi.protegex.owl.swrl.bridge.builtins.temporal.exceptions.TemporalException;
 
 /**
- **  A class supporting processing of datetime strings represented in the standard JDBC format 'y-M-d h:m:s.S'.
+ *  A class supporting processing of datetime strings represented in the standard JDBC format 'y-M-d h:m:s.S'.
  */
 public class JDBCDatetimeStringProcessor extends DatetimeStringProcessor
 {
@@ -31,7 +31,7 @@ public class JDBCDatetimeStringProcessor extends DatetimeStringProcessor
   public JDBCDatetimeStringProcessor()
   {
     super(_dateFormat, _delimiters, _gTokenIndex, _datetimeRoundDownPadding, _datetimeRoundUpPadding);
-  } // JDBCDatetimeStringProcessor
+  } 
 
   protected String constructDatetimeStringFromMillisecondsFrom1970Count(long millisecondsFrom1970) throws TemporalException
   {
@@ -39,10 +39,9 @@ public class JDBCDatetimeStringProcessor extends DatetimeStringProcessor
 	  TimeZone tz = gc.getTimeZone();
 	    
 	  if (tz.inDaylightTime(ts)) 
-		  ts = new Timestamp(millisecondsFrom1970 - daylightSavingsTimeOffsetInMillis);
+		  ts = new Timestamp(millisecondsFrom1970 - Temporal.daylightSavingsTimeOffsetInMillis);
 	       
 	  return ts.toString(); // Returns in JDBC format.
-  } // constructDatetimeString
-
-} // JDBCDatetimeStringProcessor
+  } 
+} 
 
