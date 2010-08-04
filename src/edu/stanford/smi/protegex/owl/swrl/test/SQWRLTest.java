@@ -5,7 +5,6 @@ import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLFactoryException;
 import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLOWLUtilException;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
-import edu.stanford.smi.protegex.owl.swrl.model.SWRLImp;
 import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParseException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.IndividualValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngine;
@@ -31,6 +30,7 @@ public class SQWRLTest
       SWRLFactory factory = new SWRLFactory(owlModel);
       SQWRLResult result;
       
+      /*
       queryEngine.createSQWRLQuery("T1", "Adult(?a) . sqwrl:makeSet(?s, ?a) . sqwrl:element(?e, ?s) -> sqwrl:select(?e)");
       
       SWRLImp imp = factory.getImp("T1");
@@ -38,15 +38,17 @@ public class SQWRLTest
       factory.disableAll();
       factory.enableAll("G1");
       
-      result = queryEngine.runSQWRLQuery("T1");
+      */
+      
+      result = queryEngine.runSQWRLQuery("Smarthome-device");
 
       while (result.hasNext()) {
-        IndividualValue e = result.getObjectValue("?e");
+        IndividualValue e = result.getObjectValue("?service");
         System.err.println("value: e=" + e);
         result.next();
       } // while
       
-      factory.deleteImps();
+      //factory.deleteImps();
       
       //SWRLOWLUtil.writeJenaOWLModel2File(owlModel, owlFileName);
 
@@ -65,18 +67,21 @@ public class SQWRLTest
     } catch (SQWRLException e) {
       System.err.println("SQWRL exception: " + e.getMessage());
       e.printStackTrace();
-    } catch (SWRLParseException e) {
-      System.err.println("Parse exception: " + e.getMessage());
-      e.printStackTrace();
-    } catch (SWRLFactoryException e) {
-      System.err.println("Factory exception: " + e.getMessage());
-      e.printStackTrace();
     } catch (SWRLOWLUtilException e) {
       System.err.println("Exception: " + e.getMessage());
       e.printStackTrace();
     } // try
   }
 
+  /*
+   *     } catch (SWRLParseException e) {
+      System.err.println("Parse exception: " + e.getMessage());
+      e.printStackTrace();
+    } catch (SWRLFactoryException e) {
+      System.err.println("Factory exception: " + e.getMessage());
+      e.printStackTrace();
+
+   */
   private static void Usage()
   {
     System.err.println("Usage: SQWRLTest <owlFileName>");
