@@ -16,7 +16,6 @@ import edu.stanford.smi.protege.event.FrameAdapter;
 import edu.stanford.smi.protege.event.FrameEvent;
 import edu.stanford.smi.protege.model.Project;
 import edu.stanford.smi.protege.server.framestore.RemoteClientFrameStore;
-import edu.stanford.smi.protege.server.metaproject.impl.OperationImpl;
 import edu.stanford.smi.protege.util.AddAction;
 import edu.stanford.smi.protege.util.CollectionUtilities;
 import edu.stanford.smi.protege.util.ComponentFactory;
@@ -29,6 +28,7 @@ import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.model.RDFProperty;
 import edu.stanford.smi.protegex.owl.model.event.PropertyAdapter;
 import edu.stanford.smi.protegex.owl.model.event.PropertyListener;
+import edu.stanford.smi.protegex.owl.server.metaproject.OwlMetaProjectConstants;
 import edu.stanford.smi.protegex.owl.ui.OWLLabeledComponent;
 import edu.stanford.smi.protegex.owl.ui.ProtegeUI;
 import edu.stanford.smi.protegex.owl.ui.ResourceRenderer;
@@ -250,7 +250,7 @@ public class OWLSuperpropertiesPanel extends SelectableContainer {
     
     @Override
     public void setEnabled(boolean enabled) {
-    	enabled = enabled && RemoteClientFrameStore.isOperationAllowed(owlModel, OperationImpl.PROPERTY_TAB_WRITE);
+    	enabled = enabled && RemoteClientFrameStore.isOperationAllowed(owlModel, OwlMetaProjectConstants.OPERATION_PROPERTY_TAB_WRITE);
     	addAction.setEnabled(enabled);
     	removeAction.setEnabled(enabled);
     	super.setEnabled(enabled);

@@ -27,7 +27,6 @@ import edu.stanford.smi.protege.model.Frame;
 import edu.stanford.smi.protege.model.Project;
 import edu.stanford.smi.protege.resource.Icons;
 import edu.stanford.smi.protege.server.framestore.RemoteClientFrameStore;
-import edu.stanford.smi.protege.server.metaproject.impl.OperationImpl;
 import edu.stanford.smi.protege.ui.SlotsTreeDragSourceListener;
 import edu.stanford.smi.protege.ui.SlotsTreeTarget;
 import edu.stanford.smi.protege.util.CollectionUtilities;
@@ -47,6 +46,7 @@ import edu.stanford.smi.protegex.owl.model.OWLProperty;
 import edu.stanford.smi.protegex.owl.model.RDFProperty;
 import edu.stanford.smi.protegex.owl.model.RDFResource;
 import edu.stanford.smi.protegex.owl.model.impl.AbstractOWLModel;
+import edu.stanford.smi.protegex.owl.server.metaproject.OwlMetaProjectConstants;
 import edu.stanford.smi.protegex.owl.ui.ResourceRenderer;
 import edu.stanford.smi.protegex.owl.ui.actions.ResourceActionManager;
 import edu.stanford.smi.protegex.owl.ui.icons.OWLIcons;
@@ -512,7 +512,7 @@ public class OWLSubpropertyPane extends SelectableContainer implements HostResou
 
 	@Override
 	public void setEnabled(boolean enabled) {
-		enabled = enabled && RemoteClientFrameStore.isOperationAllowed(getOWLModel(), OperationImpl.PROPERTY_TAB_WRITE);
+		enabled = enabled && RemoteClientFrameStore.isOperationAllowed(getOWLModel(), OwlMetaProjectConstants.OPERATION_PROPERTY_TAB_WRITE);
 		createAnnotationOWLDatatypePropertyAction.setEnabled(enabled);
 		createAnnotationOWLObjectPropertyAction.setEnabled(enabled);
 		createOWLDatatypePropertyAction.setEnabled(enabled);

@@ -7,4 +7,8 @@ public class OwlMetaProjectConstants {
     public final static Operation SET_ACTIVE_IMPORT   = new  UnbackedOperationImpl("SetActiveImport", null);
     public final static Operation USE_OWL_CLASSES_TAB = new UnbackedOperationImpl("UseOwlClassesTab", null);
     public final static Operation USE_PROPERTY_TAB    = new UnbackedOperationImpl("UsePropertiesTab", null);
+    
+    public final static Operation OPERATION_PROPERTY_TAB_WRITE = new UnbackedOperationImpl("PropertyTabWrite", null);
+
+    public final static Operation OPERATION_ONTOLOGY_TAB_WRITE = new UnbackedOperationImpl("OntologyTabWrite", null);
 }

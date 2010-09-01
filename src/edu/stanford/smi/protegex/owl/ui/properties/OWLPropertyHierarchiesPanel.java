@@ -19,7 +19,6 @@ import edu.stanford.smi.protege.resource.Icons;
 import edu.stanford.smi.protege.resource.LocalizedText;
 import edu.stanford.smi.protege.resource.ResourceKey;
 import edu.stanford.smi.protege.server.framestore.RemoteClientFrameStore;
-import edu.stanford.smi.protege.server.metaproject.impl.OperationImpl;
 import edu.stanford.smi.protege.ui.FrameRenderer;
 import edu.stanford.smi.protege.ui.HeaderComponent;
 import edu.stanford.smi.protege.util.ComponentFactory;
@@ -32,6 +31,7 @@ import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLObjectProperty;
 import edu.stanford.smi.protegex.owl.model.RDFProperty;
 import edu.stanford.smi.protegex.owl.model.RDFResource;
+import edu.stanford.smi.protegex.owl.server.metaproject.OwlMetaProjectConstants;
 import edu.stanford.smi.protegex.owl.ui.results.HostResourceDisplay;
 
 /**
@@ -175,7 +175,7 @@ public class OWLPropertyHierarchiesPanel extends JPanel
     }
     
     public void setEnabled(boolean enabled) {
-    	enabled = enabled && RemoteClientFrameStore.isOperationAllowed(owlModel, OperationImpl.PROPERTY_TAB_WRITE);
+    	enabled = enabled && RemoteClientFrameStore.isOperationAllowed(owlModel, OwlMetaProjectConstants.OPERATION_PROPERTY_TAB_WRITE);
     	objectPropertyHierarchy.setEnabled(enabled);
     	datatypePropertyHierarchy.setEnabled(enabled);
     	annotationPropertyHierarchy.setEnabled(enabled);

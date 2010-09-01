@@ -23,6 +23,7 @@ import edu.stanford.smi.protegex.owl.model.RDFProperty;
 import edu.stanford.smi.protegex.owl.model.RDFResource;
 import edu.stanford.smi.protegex.owl.model.RDFSDatatype;
 import edu.stanford.smi.protegex.owl.model.RDFSLiteral;
+import edu.stanford.smi.protegex.owl.server.metaproject.OwlMetaProjectConstants;
 import edu.stanford.smi.protegex.owl.ui.ProtegeUI;
 import edu.stanford.smi.protegex.owl.ui.icons.OWLIcons;
 import edu.stanford.smi.protegex.owl.ui.widget.OWLUI;
@@ -182,7 +183,7 @@ public class OWLDataRangeComponent extends JComponent {
 
 	private void updateActions(boolean editable) {
 		editable = editable && RemoteClientFrameStore.isOperationAllowed(rangeWidget.getOWLModel(), 
-				MetaProjectConstants.OPERATION_ONTOLOGY_TAB_WRITE);	
+		                                                                 OwlMetaProjectConstants.OPERATION_ONTOLOGY_TAB_WRITE);	
 		createAction.setEnabled(editable);
 		deleteAction.setEnabled(editable && list.getSelectedValue() != null);
 	}
@@ -190,7 +191,7 @@ public class OWLDataRangeComponent extends JComponent {
 	@Override
 	public void setEnabled(boolean enabled) {
 		enabled = enabled && RemoteClientFrameStore.isOperationAllowed(rangeWidget.getOWLModel(),
-				MetaProjectConstants.OPERATION_ONTOLOGY_TAB_WRITE);
+		                                                               OwlMetaProjectConstants.OPERATION_ONTOLOGY_TAB_WRITE);
 		createAction.setEnabled(enabled);
 		deleteAction.setEnabled(enabled);
 		setEditable(enabled);
