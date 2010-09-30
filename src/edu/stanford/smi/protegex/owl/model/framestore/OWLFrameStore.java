@@ -102,6 +102,8 @@ public class OWLFrameStore extends FrameStoreAdapter {
      * An ugly trick to prevent anonymous classes from being deleted as a side effect
      */
     public static boolean autoDeleteOfAnonymousClses = true;
+    
+    private Set<OWLAnonymousClass> deletionsInProgress = new HashSet<OWLAnonymousClass>();
 
 
     public OWLFrameStore(AbstractOWLModel owlModel) {
@@ -109,24 +111,32 @@ public class OWLFrameStore extends FrameStoreAdapter {
     }
 
     private void deleteAnonymousClass(OWLAnonymousClass cls) {
-       
-    	//moved from AbstractOWLModel
-    	if (cls.getDirectSubclassCount() == 1) {
-            Cls subCls = (Cls) cls.getDirectSubclasses().iterator().next();            
-            subCls.removeDirectSuperclass(cls);  // Will call delete again
+        if (deletionsInProgress.contains(cls)) {
             return;
         }
-    	//end moved
-    	
-        //Collection refs = cls.getReferringAnonymousClasses();
-        //deleteDependingListInstances(cls);
-        Collection<RDFSClass> refs = getReferringAnonymousClassesAndDeleteDependingListInstances(cls);
-    	
-        if (refs.size() > 0) {
-            deleteAnonymousClses(refs);  // Will also delete cls
+        try {
+            deletionsInProgress.add(cls);
+            //moved from AbstractOWLModel
+            if (cls.getDirectSubclassCount() == 1) {
+                Cls subCls = (Cls) cls.getDirectSubclasses().iterator().next();            
+                subCls.removeDirectSuperclass(cls);  // Will call delete again
+                return;
+            }
+            //end moved
+
+            //Collection refs = cls.getReferringAnonymousClasses();
+            //deleteDependingListInstances(cls);
+            Collection<RDFSClass> refs = getReferringAnonymousClassesAndDeleteDependingListInstances(cls);
+
+            if (refs.size() > 0) {
+                deleteAnonymousClses(refs);  // Will also delete cls
+            }
+            else {
+                deleteAnonymousClses(Collections.singleton(cls));
+            }
         }
-        else {
-            deleteAnonymousClses(Collections.singleton(cls));
+        finally {
+            deletionsInProgress.remove(cls);
         }
     }
 
