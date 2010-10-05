@@ -9,6 +9,7 @@ import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLRuleEngineException;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClass;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLNamedIndividual;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLProperty;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.SQWRLResultImpl;
 
@@ -21,7 +22,8 @@ public interface SWRLProcessor
 	void reset();
 	
 	int getNumberOfImportedSWRLRules();
-  int getNumberOfImportedOWLClasseDeclarations();
+	int getNumberOfImportedOWLClassDeclarations();
+	int getNumberOfImportedOWLPropertyDeclarations();
   int getNumberOfImportedOWLIndividualDeclarations();
   int getNumberOfImportedOWLAxioms();
   
@@ -30,6 +32,7 @@ public interface SWRLProcessor
   
   Set<SWRLRule> getImportedSWRLRules();
   Set<OWLClass> getImportedOWLClassDeclarations();
+  Set<OWLProperty> getImportedOWLPropertyDeclarations();
   Set<OWLNamedIndividual> getImportedOWLIndividualDeclarations();
   Set<OWLAxiom> getImportedOWLAxioms();
   

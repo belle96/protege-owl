@@ -151,17 +151,21 @@ public class OWLOntologyImpl implements OWLOntology
 
     if (imp == null) throw new OWLConversionFactoryException("invalid rule name: " + ruleName);
 
-    Iterator iterator = imp.getBody().getValues().iterator();
-    while (iterator.hasNext()) {
-    	edu.stanford.smi.protegex.owl.swrl.model.SWRLAtom swrlAtom = (edu.stanford.smi.protegex.owl.swrl.model.SWRLAtom)iterator.next();
-      bodyAtoms.add(convertSWRLAtom(swrlAtom));
-    } // while 
-
-    iterator = imp.getHead().getValues().iterator();
-    while (iterator.hasNext()) {
-    	edu.stanford.smi.protegex.owl.swrl.model.SWRLAtom swrlAtom = (edu.stanford.smi.protegex.owl.swrl.model.SWRLAtom)iterator.next();
-      headAtoms.add(convertSWRLAtom(swrlAtom));
-    } // while 
+    if (imp.getBody() != null && imp.getBody().getValues() != null && !imp.getBody().getValues().isEmpty()) {
+	    Iterator iterator = imp.getBody().getValues().iterator();
+	    while (iterator.hasNext()) {
+	    	edu.stanford.smi.protegex.owl.swrl.model.SWRLAtom swrlAtom = (edu.stanford.smi.protegex.owl.swrl.model.SWRLAtom)iterator.next();
+	      bodyAtoms.add(convertSWRLAtom(swrlAtom));
+	    } // while 
+    } // if
+    
+    if (imp.getHead() != null && imp.getHead().getValues() != null && !imp.getHead().getValues().isEmpty()) {
+	    Iterator iterator = imp.getHead().getValues().iterator();
+	    while (iterator.hasNext()) {
+	    	edu.stanford.smi.protegex.owl.swrl.model.SWRLAtom swrlAtom = (edu.stanford.smi.protegex.owl.swrl.model.SWRLAtom)iterator.next();
+	      headAtoms.add(convertSWRLAtom(swrlAtom));
+	    } // while
+    } // if
 
     return new SWRLRuleImpl(imp.getPrefixedName(), bodyAtoms, headAtoms);
   } 

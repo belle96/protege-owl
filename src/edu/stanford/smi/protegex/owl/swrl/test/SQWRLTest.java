@@ -2,9 +2,9 @@
 package edu.stanford.smi.protegex.owl.swrl.test;
 
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
-import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLFactoryException;
 import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLOWLUtilException;
 import edu.stanford.smi.protegex.owl.swrl.model.SWRLFactory;
+import edu.stanford.smi.protegex.owl.swrl.model.SWRLImp;
 import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParseException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.IndividualValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngine;
@@ -30,6 +30,14 @@ public class SQWRLTest
       SWRLFactory factory = new SWRLFactory(owlModel);
       SQWRLResult result;
       
+      SWRLImp imp1 = factory.createImp("Person(?p) ^ hasAge(?p, 12) ^ sameAs(?p, ?p) ^ differentFrom(?p, ?p) -> sqwrl:select(?p, \"afd\")");
+      SWRLImp imp2 = factory.createImp("Person(?p) ^ hasAge(?p, 12) ^ sameAs(?p, ?p) ^ differentFrom(?p, ?p) -> sqwrl:select(?p, \"afdd\")");
+      
+      if (factory.areImpsEqual(imp1, imp2)) 
+      	System.err.println("yup");
+      else 
+      	System.err.println("nope");
+      
       /*
       queryEngine.createSQWRLQuery("T1", "Adult(?a) . sqwrl:makeSet(?s, ?a) . sqwrl:element(?e, ?s) -> sqwrl:select(?e)");
       
@@ -40,6 +48,7 @@ public class SQWRLTest
       
       */
       
+      /*
       result = queryEngine.runSQWRLQuery("Smarthome-device");
 
       while (result.hasNext()) {
@@ -47,6 +56,7 @@ public class SQWRLTest
         System.err.println("value: e=" + e);
         result.next();
       } // while
+      */
       
       //factory.deleteImps();
       
@@ -64,6 +74,9 @@ public class SQWRLTest
       } // while
       */
 
+    } catch (SWRLParseException e) {
+      System.err.println("SWRL exception: " + e.getMessage());
+      e.printStackTrace();
     } catch (SQWRLException e) {
       System.err.println("SQWRL exception: " + e.getMessage());
       e.printStackTrace();

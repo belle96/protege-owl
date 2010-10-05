@@ -21,6 +21,7 @@ import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDataFactory;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDeclarationAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLNamedIndividual;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLOntology;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLProperty;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.impl.OWLDataFactoryImpl;
 import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParseException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLResult;
@@ -42,7 +43,7 @@ public class DefaultSWRLRuleEngine implements SWRLRuleEngine
   private OWLDataValueFactory owlDataValueFactory; 
 
   // URIs of classes and individuals that have been exported to target rule engine for declaration
-  private Set<String> exportedOWLClassURIs, exportedOWLIndividualURIs; 
+  private Set<String> exportedOWLPropertyURIs, exportedOWLIndividualURIs; 
   
   public DefaultSWRLRuleEngine(OWLOntology activeOntology, SWRLProcessor swrlProcessor, TargetSWRLRuleEngine targetRuleEngine, 
   		                         SWRLRuleEngineBridgeController ruleEngineBridgeController, SWRLBuiltInBridgeController builtInBridgeController) 
@@ -215,7 +216,7 @@ public class DefaultSWRLRuleEngine implements SWRLRuleEngine
 
   // Convenience methods to display bridge activity
   public int getNumberOfImportedSWRLRules() { return swrlProcessor.getNumberOfImportedSWRLRules(); }
-  public int getNumberOfImportedOWLClasses() { return swrlProcessor.getNumberOfImportedOWLClasseDeclarations(); }
+  public int getNumberOfImportedOWLClasses() { return swrlProcessor.getNumberOfImportedOWLClassDeclarations(); }
   public int getNumberOfImportedOWLIndividuals() { return swrlProcessor.getNumberOfImportedOWLIndividualDeclarations(); }
   public int getNumberOfImportedOWLAxioms()  { return swrlProcessor.getNumberOfImportedOWLAxioms(); }
   
@@ -320,16 +321,32 @@ public class DefaultSWRLRuleEngine implements SWRLRuleEngine
     	exportOWLClass(owlClass);
   }
 
+  private void exportOWLPropertyDeclarationAxioms(Set<OWLProperty> axioms) throws SWRLRuleEngineException
+  {
+    for (OWLProperty owlProperty : axioms) 
+    	exportOWLProperty(owlProperty);
+  }
+
   private void exportOWLClass(OWLClass owlClass) throws SWRLRuleEngineException
   {
     String classURI = owlClass.getURI();
 
-    if (!exportedOWLClassURIs.contains(classURI)) { // See if it is already defined.
+    if (!exportedOWLPropertyURIs.contains(classURI)) { // See if it is already defined.
       exportOWLClassDeclaration(owlClass);
-      exportedOWLClassURIs.add(classURI);
+      exportedOWLPropertyURIs.add(classURI);
     } // if
   } 
-  
+
+  private void exportOWLProperty(OWLProperty owlProperty) throws SWRLRuleEngineException
+  {
+    String propertyURI = owlProperty.getURI();
+
+    if (!exportedOWLPropertyURIs.contains(propertyURI)) { // See if it is already defined.
+      exportOWLPropertyDeclaration(owlProperty);
+      exportedOWLPropertyURIs.add(propertyURI);
+    } // if
+  } 
+
   private void exportOWLIndividualDeclarationAxioms(Set<OWLNamedIndividual> individuals) throws SWRLRuleEngineException
   {
     for (OWLNamedIndividual owlIndividual : individuals) {
@@ -343,9 +360,8 @@ public class DefaultSWRLRuleEngine implements SWRLRuleEngine
 
   private void exportSWRLRulesAndOWLAxioms() throws SWRLRuleEngineException
   {
-  	exportOWLClassDeclarationAxioms(swrlProcessor.getImportedOWLClassDeclarations()); // Classes should be exported before rules because rules usually use class definitions.
-  	exportOWLIndividualDeclarationAxioms(swrlProcessor.getImportedOWLIndividualDeclarations());
-  
+  	exportOWLDeclarationAxioms();
+  	
     for (OWLAxiom axiom: swrlProcessor.getImportedOWLAxioms()) 
     	exportOWLAxiom(axiom);
     
@@ -354,13 +370,18 @@ public class DefaultSWRLRuleEngine implements SWRLRuleEngine
 
   private void exportReferencedOWLAxioms() throws SWRLRuleEngineException
   {
-  	exportOWLClassDeclarationAxioms(swrlProcessor.getImportedOWLClassDeclarations()); // Classes should be exported before rules because rules usually use class definitions.
-  	exportOWLIndividualDeclarationAxioms(swrlProcessor.getImportedOWLIndividualDeclarations());
-  
-    for (OWLAxiom axiom: swrlProcessor.getImportedOWLAxioms()) 
+  	exportOWLDeclarationAxioms();  
+
+  	for (OWLAxiom axiom: swrlProcessor.getImportedOWLAxioms()) 
     	exportOWLAxiom(axiom);
   }
 
+  private void exportOWLDeclarationAxioms() throws SWRLRuleEngineException
+  {
+  	exportOWLClassDeclarationAxioms(swrlProcessor.getImportedOWLClassDeclarations());
+  	exportOWLPropertyDeclarationAxioms(swrlProcessor.getImportedOWLPropertyDeclarations()); 
+  	exportOWLIndividualDeclarationAxioms(swrlProcessor.getImportedOWLIndividualDeclarations());
+  }
   private void writeInferredOWLIndividualDeclarations() throws SWRLRuleEngineException
   {
     for (OWLNamedIndividual owlIndividual : ruleEngineBridgeController.getInferredOWLIndividuals()) {
@@ -385,7 +406,7 @@ public class DefaultSWRLRuleEngine implements SWRLRuleEngine
   
   private void initialize()
   {  
-    exportedOWLClassURIs = new HashSet<String>();
+    exportedOWLPropertyURIs = new HashSet<String>();
     exportedOWLIndividualURIs = new HashSet<String>();
   }
   
@@ -399,6 +420,12 @@ public class DefaultSWRLRuleEngine implements SWRLRuleEngine
   private void exportOWLClassDeclaration(OWLClass owlClass) throws SWRLRuleEngineException
   {
     OWLDeclarationAxiom axiom = owlDataFactory.getOWLDeclarationAxiom(owlClass);
+    exportOWLAxiom(axiom);
+  } 
+
+  private void exportOWLPropertyDeclaration(OWLProperty owlProperty) throws SWRLRuleEngineException
+  {
+    OWLDeclarationAxiom axiom = owlDataFactory.getOWLDeclarationAxiom(owlProperty);
     exportOWLAxiom(axiom);
   } 
 

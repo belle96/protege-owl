@@ -18,6 +18,7 @@ import edu.stanford.smi.protegex.owl.model.RDFObject;
 import edu.stanford.smi.protegex.owl.model.RDFProperty;
 import edu.stanford.smi.protegex.owl.model.RDFResource;
 import edu.stanford.smi.protegex.owl.model.RDFSClass;
+import edu.stanford.smi.protegex.owl.model.RDFSLiteral;
 import edu.stanford.smi.protegex.owl.model.RDFSNamedClass;
 import edu.stanford.smi.protegex.owl.swrl.SWRLSystemFrames;
 import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLFactoryException;
@@ -448,5 +449,147 @@ public class SWRLFactory
 	  return swrlbProperties;
   }
 
+	public boolean areImpsEqual(SWRLImp imp1, SWRLImp imp2)
+	{
+		Iterator<SWRLAtom> iterator1, iterator2;
+		   
+		iterator1 = imp1.getBody().getValues().iterator();
+		iterator2 = imp2.getBody().getValues().iterator();
+		
+		if (!areAtomListsEqual(iterator1, iterator2)) return false;
+		
+		iterator1 = imp1.getHead().getValues().iterator();
+		iterator2 = imp2.getHead().getValues().iterator();
+		
+		return areAtomListsEqual(iterator1, iterator2);
+	}
+	
+	private boolean areAtomListsEqual(Iterator<SWRLAtom> iterator1, Iterator<SWRLAtom> iterator2)
+	{
+		SWRLAtom atom1, atom2;
+		
+    while (iterator1.hasNext()) {
+    	if (!iterator2.hasNext()) return false;
+    	
+    	atom1 = (SWRLAtom)iterator1.next();
+    	atom2 = (SWRLAtom)iterator2.next();
+    	
+    	if (!areAtomsEqual(atom1, atom2)) return false;
+		} // for
+    
+    return !iterator2.hasNext();
+	}
+	
+	private boolean areAtomsEqual(SWRLAtom atom1, SWRLAtom atom2)
+	{
+		if (atom1 instanceof SWRLBuiltinAtom) 
+			return (atom2 instanceof SWRLBuiltinAtom) && areBuiltInAtomsEqual((SWRLBuiltinAtom)atom1, (SWRLBuiltinAtom)atom2);
+		else if (atom1 instanceof SWRLClassAtom)
+			return (atom2 instanceof SWRLClassAtom) && areClassAtomsEqual((SWRLClassAtom)atom1, (SWRLClassAtom)atom2);
+		else if (atom1 instanceof SWRLDatavaluedPropertyAtom)
+			return (atom2 instanceof SWRLDatavaluedPropertyAtom) && 
+			        areDatavaluedPropertyAtomsEqual((SWRLDatavaluedPropertyAtom)atom1, (SWRLDatavaluedPropertyAtom)atom2);
+		else if (atom1 instanceof SWRLIndividualPropertyAtom)
+			return (atom2 instanceof SWRLIndividualPropertyAtom) && 
+			        areIndividualPropertyAtomsEqual((SWRLIndividualPropertyAtom)atom1, (SWRLIndividualPropertyAtom)atom2);
+		else if (atom1 instanceof SWRLDifferentIndividualsAtom)
+			return (atom2 instanceof SWRLDifferentIndividualsAtom) && 
+			        areDifferentIndividualsAtomsEqual((SWRLDifferentIndividualsAtom)atom1, (SWRLDifferentIndividualsAtom)atom2);
+		else if (atom1 instanceof SWRLSameIndividualAtom)
+			return (atom2 instanceof SWRLSameIndividualAtom) && 
+			        areSameIndividualAtomsEqual((SWRLSameIndividualAtom)atom1, (SWRLSameIndividualAtom)atom2);
+		else if (atom1 instanceof SWRLDataRangeAtom)
+			return (atom2 instanceof SWRLDataRangeAtom) && 
+			        areDataRangeAtomsEqual((SWRLDataRangeAtom)atom1, (SWRLDataRangeAtom)atom2);
+		else throw new RuntimeException("unknowl SWRL atom type " + atom1.getLocalName());
+	}
+	
+	@SuppressWarnings("unchecked") // To deal with groady non generics Protege-OWL API
+	private boolean areBuiltInAtomsEqual(SWRLBuiltinAtom atom1, SWRLBuiltinAtom atom2)
+	{
+	   if (!atom1.getBuiltin().getURI().equals(atom2.getBuiltin().getURI())) return false;   
+	    RDFList rdfList1 = atom1.getArguments();
+	    RDFList rdfList2 = atom2.getArguments();
 
-} // SWRLFactory
+	    Iterator iterator1 = rdfList1.getValues().iterator();
+	    Iterator iterator2 = rdfList2.getValues().iterator();
+	    while (iterator1.hasNext()) {
+	    	if (!iterator2.hasNext()) return false;
+	    	
+	    	Object argument1 = iterator1.next();
+	    	Object argument2 = iterator2.next();
+	    	
+	    	if (!areAtomArgumentsEqual(argument1, argument2)) return false;
+	    } // while
+
+	    return !iterator2.hasNext();
+	}
+
+	private boolean areClassAtomsEqual(SWRLClassAtom atom1, SWRLClassAtom atom2)
+	{
+		return atom1.getClassPredicate().getURI().equals(atom2.getClassPredicate().getURI()) && 
+		       areAtomArgumentsEqual(atom1.getArgument1(), atom2.getArgument1());
+	}
+
+	private boolean areIndividualPropertyAtomsEqual(SWRLIndividualPropertyAtom atom1, SWRLIndividualPropertyAtom atom2)
+	{
+		return atom1.getPropertyPredicate().getURI().equals(atom2.getPropertyPredicate().getURI()) && 
+		       areAtomArgumentsEqual(atom1.getArgument1(), atom2.getArgument1()) &&
+		       areAtomArgumentsEqual(atom1.getArgument2(), atom2.getArgument2());
+	}
+
+	private boolean areDatavaluedPropertyAtomsEqual(SWRLDatavaluedPropertyAtom atom1, SWRLDatavaluedPropertyAtom atom2)
+	{
+		return atom1.getPropertyPredicate().getURI().equals(atom2.getPropertyPredicate().getURI()) && 
+		       areAtomArgumentsEqual(atom1.getArgument1(), atom2.getArgument1()) &&
+		       areAtomArgumentsEqual(atom1.getArgument2(), atom2.getArgument2());
+	}
+
+	private boolean areSameIndividualAtomsEqual(SWRLSameIndividualAtom atom1, SWRLSameIndividualAtom atom2)
+	{
+		return areAtomArgumentsEqual(atom1.getArgument1(), atom2.getArgument1()) &&
+		       areAtomArgumentsEqual(atom1.getArgument2(), atom2.getArgument2());
+	}
+
+	private boolean areDifferentIndividualsAtomsEqual(SWRLDifferentIndividualsAtom atom1, SWRLDifferentIndividualsAtom atom2)
+	{
+		return areAtomArgumentsEqual(atom1.getArgument1(), atom2.getArgument1()) &&
+		       areAtomArgumentsEqual(atom1.getArgument2(), atom2.getArgument2());
+	}
+	
+	private boolean areDataRangeAtomsEqual(SWRLDataRangeAtom atom1, SWRLDataRangeAtom atom2)
+	{
+		throw new RuntimeException("data range atoms not implemented");
+	}
+
+	@SuppressWarnings("unchecked") // To deal with groady non generics Protege-OWL API
+  private boolean areAtomArgumentsEqual(Object argument1, Object argument2)
+  {
+    if (argument1 instanceof RDFResource) {
+    	if (!(argument2 instanceof RDFResource)) return false;
+    
+    	RDFResource resource1 = (RDFResource)argument1;
+    	RDFResource resource2 = (RDFResource)argument2;
+    	
+    	return resource1.getURI().equals(resource2.getURI());
+    } else if (argument1 instanceof RDFSLiteral) {
+    	if (!(argument2 instanceof RDFSLiteral)) return false;
+    	
+    	RDFSLiteral literal1 = (RDFSLiteral)argument1;
+    	RDFSLiteral literal2 = (RDFSLiteral)argument2;
+    	
+    	return literal1.compareTo(literal2) == 0;
+    } else if (argument1 instanceof String) {
+    	if (!(argument2 instanceof String)) return false;
+    	
+    	String s1 = (String)argument1;
+    	String s2 = (String)argument2;
+    	
+    	return s1.equals(s2);
+    } else { // TODO This will work for the type of arguments the SWRL atoms get, but is not nice in general
+    	if (argument1 instanceof Comparable)
+    		return ((Comparable)argument1).compareTo(argument2) != 0;
+    	else return false;
+    }
+  }
+} 

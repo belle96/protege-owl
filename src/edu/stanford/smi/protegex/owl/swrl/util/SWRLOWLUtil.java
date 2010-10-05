@@ -473,6 +473,20 @@ public class SWRLOWLUtil
     return (cls instanceof OWLNamedClass) && (individual instanceof OWLIndividual) && individual.hasRDFType((OWLNamedClass)cls, true);
   }
 
+  public static boolean isOWLIndividualOfType(OWLModel owlModel, String individualName, OWLNamedClass cls) 
+  {
+    RDFResource individual = owlModel.getRDFResource(individualName);
+
+    return (individual instanceof OWLIndividual) && individual.hasRDFType((OWLNamedClass)cls, true);
+  }
+
+  public static boolean isOWLIndividualOfTypeOWLThing(OWLModel owlModel, String individualName) 
+  {
+    RDFResource individual = owlModel.getRDFResource(individualName);
+
+    return (individual instanceof OWLIndividual) && individual.hasRDFType(getOWLThingClass(individual.getOWLModel()), true);
+  }
+
   public static void setType(OWLModel owlModel, String individualName, String className) throws SWRLOWLUtilException
   {
     OWLClass cls = getOWLClass(owlModel, className);
@@ -529,6 +543,11 @@ public class SWRLOWLUtil
   public static void addType(OWLIndividual individual, OWLClass cls) throws SWRLOWLUtilException
   {
     if (!individual.hasRDFType(cls, true)) individual.addRDFType(cls);
+  }
+
+  public static void removeType(OWLIndividual individual, OWLClass cls) throws SWRLOWLUtilException
+  {
+    if (individual.hasRDFType(cls, true)) individual.removeRDFType(cls);
   }
 
   public static String getFullName(OWLModel owlModel, String name) throws SWRLOWLUtilException
@@ -858,7 +877,7 @@ public class SWRLOWLUtil
   public static void removeOWLThingSuperclass(OWLModel owlModel, OWLClass owlClass)
   {
     if (owlClass.getSuperclasses(false).contains(getOWLThingClass(owlModel))) owlClass.removeSuperclass(getOWLThingClass(owlModel));
-  } // removeOWLThingSuperclass
+  } 
 
   public static Set<OWLNamedClass> getOWLRangeClasses(OWLModel owlModel, String propertyName, boolean mustExist)
     throws SWRLOWLUtilException

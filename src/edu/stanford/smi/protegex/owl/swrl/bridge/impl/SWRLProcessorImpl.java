@@ -56,6 +56,7 @@ public class SWRLProcessorImpl implements SWRLProcessor
   // Imported classes, properties, and individuals
   private HashMap<String, SWRLRule> importedSWRLRules; 
   private HashMap<String, OWLClass> importedOWLClassDeclarations;
+  private HashMap<String, OWLProperty> importedOWLPropertyDeclarations;
   private HashMap<String, OWLNamedIndividual> importedOWLIndividualDeclarations;
   private Set<String> importedOWLObjectPropertyURIs, importedOWLDataPropertyURIs;
   private Set<OWLAxiom> importedOWLAxioms;
@@ -92,7 +93,8 @@ public class SWRLProcessorImpl implements SWRLProcessor
 		
 		importedSWRLRules = new HashMap<String, SWRLRule>();
 
-    importedOWLClassDeclarations = new HashMap<String, OWLClass>();
+		importedOWLClassDeclarations = new HashMap<String, OWLClass>();
+		importedOWLPropertyDeclarations = new HashMap<String, OWLProperty>();
     importedOWLIndividualDeclarations = new HashMap<String, OWLNamedIndividual>(); 
     importedOWLAxioms = new HashSet<OWLAxiom>(); 
     importedOWLObjectPropertyURIs = new HashSet<String>();
@@ -129,12 +131,14 @@ public class SWRLProcessorImpl implements SWRLProcessor
   }
 
 	public int getNumberOfImportedSWRLRules() { return importedSWRLRules.values().size(); }
-  public int getNumberOfImportedOWLClasseDeclarations() { return importedOWLClassDeclarations.values().size(); }
+	public int getNumberOfImportedOWLClassDeclarations() { return importedOWLClassDeclarations.values().size(); }
+	public int getNumberOfImportedOWLPropertyDeclarations() { return importedOWLPropertyDeclarations.values().size(); }
   public int getNumberOfImportedOWLIndividualDeclarations() { return importedOWLIndividualDeclarations.values().size(); }
   public int getNumberOfImportedOWLAxioms() { return importedOWLAxioms.size(); }
   
   public Set<SWRLRule> getImportedSWRLRules() { return new HashSet<SWRLRule>(importedSWRLRules.values()); }
   public Set<OWLClass> getImportedOWLClassDeclarations() { return new HashSet<OWLClass>(importedOWLClassDeclarations.values()); }
+  public Set<OWLProperty> getImportedOWLPropertyDeclarations() { return new HashSet<OWLProperty>(importedOWLPropertyDeclarations.values()); }
   public Set<OWLNamedIndividual> getImportedOWLIndividualDeclarations()  { return new HashSet<OWLNamedIndividual>(importedOWLIndividualDeclarations.values()); }
   public Set<OWLAxiom> getImportedOWLAxioms() { return new HashSet<OWLAxiom>(importedOWLAxioms); }
   
@@ -994,11 +998,15 @@ public class SWRLProcessorImpl implements SWRLProcessor
 	 	 	} // try	
 		  
 		  importedOWLAxioms.addAll(axioms);
-        
+		          
 		  for (OWLPropertyAssertionAxiom axiom : axioms) {
 			  String subjectURI = axiom.getSubject().getURI();
 			  OWLProperty property = axiom.getProperty();
-			  
+			  			  
+			  if (!importedOWLPropertyDeclarations.containsKey(propertyURI)) {
+			  	importedOWLPropertyDeclarations.put(propertyURI, property);
+			  } // if
+
 			  cacheOWLPropertyAssertionAxiom(axiom);
 			  
 			  addReferencedIndividualURI(subjectURI);
