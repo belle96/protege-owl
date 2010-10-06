@@ -25,10 +25,16 @@ public interface SWRLRuleEngine extends SQWRLQueryEngine
   void infer() throws SWRLRuleEngineException;
 
   /**
-   * Load rules and knowledge from OWL into bridge. All existing bridge rules and knowledge will first be cleared and the associated rule
+   * Load rules and relevant knowledge from OWL into bridge. All existing bridge rules and knowledge will first be cleared and the associated rule
    * engine will be reset.
    */
   void importSWRLRulesAndOWLKnowledge() throws SWRLRuleEngineException;
+
+  /**
+   * Load specific query, all enabled rules, and relevant knowledge from OWL into bridge. All existing bridge rules and knowledge will first be cleared and the associated rule
+   * engine will be reset.
+   */
+  void importSQWRLQueryAndOWLKnowledge(String queryName) throws SWRLRuleEngineException;
 
   /**
    * Run the rule engine.

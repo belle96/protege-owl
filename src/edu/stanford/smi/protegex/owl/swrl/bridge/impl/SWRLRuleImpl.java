@@ -7,7 +7,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.Atom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRule;
 
 /**
- * Class implementing a SWRL rule
+ * Class implementing a SWRL rule or SQWRL query.
  */
 public class SWRLRuleImpl implements SWRLRule
 {
@@ -34,7 +34,7 @@ public class SWRLRuleImpl implements SWRLRule
   public void setBodyAtoms(List<Atom> atoms) { bodyAtoms = atoms; }
   public String toString() { return ruleURI; }
   public boolean isEnabled() { return true; } // TODO - used only in SWRLRuleGroupTreeTableModel 
-  public void setEnabled(boolean isEnabled) {} // TODO - used only in SWRLRuleGroupTreeTableModel 
+  public void setEnabled(boolean isEnabled) {} // TODO - used only in SWRLRuleGroupTreeTableModel
   
   public String getRuleText()
   {

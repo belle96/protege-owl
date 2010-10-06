@@ -111,6 +111,12 @@ public class SWRLProcessorImpl implements SWRLProcessor
 	  importReferencedOWLKnowledge();
 	} 
 
+	public void importSQWRLQueryAndOWLAxioms(String queryName) throws SWRLRuleEngineException
+	{
+	  importSQWRLQuery(queryName); 
+	  importReferencedOWLKnowledge();
+	} 
+
 	public void importReferencedOWLAxioms() throws SWRLRuleEngineException
 	{ 
 	  importReferencedOWLKnowledge();
@@ -160,7 +166,7 @@ public class SWRLProcessorImpl implements SWRLProcessor
     processSQWRLBuiltIns(ruleOrQuery);
     processBuiltInArgumentDependencies(ruleOrQuery);
     
-  	if (hasSQWRLBuiltIns(ruleOrQuery)) 
+  	if (isSQWRLQuery(ruleOrQuery)) 
   		queries.put(ruleOrQuery.getURI(), ruleOrQuery);
   	
   	rules.put(ruleOrQuery.getURI(), ruleOrQuery); 
@@ -274,18 +280,15 @@ public class SWRLProcessorImpl implements SWRLProcessor
     return sqwrlResultMap.get(uri);
   }
 
-  public boolean hasSQWRLBuiltIns(SWRLRule ruleOrQuery) 
+  public boolean isSQWRLQuery(SWRLRule ruleOrQuery) 
   { 
-  	String uri = ruleOrQuery.getURI();
-
-  	return hasSQWRLBuiltInsMap.containsKey(uri) && hasSQWRLBuiltInsMap.get(uri);
+    return !getBuiltInAtomsFromHead(ruleOrQuery, SQWRLNames.getSQWRLBuiltInNames()).isEmpty() ||
+    	     !getBuiltInAtomsFromBody(ruleOrQuery, SQWRLNames.getSQWRLBuiltInNames()).isEmpty();
   }
 
   public boolean hasSQWRLCollectionBuiltIns(SWRLRule ruleOrQuery) 
   { 
-  	String uri = ruleOrQuery.getURI();
-
-  	return hasSQWRLCollectionBuiltInsMap.containsKey(uri) && hasSQWRLCollectionBuiltInsMap.get(uri);
+    return !getBuiltInAtomsFromBody(ruleOrQuery, SQWRLNames.getCollectionMakeBuiltInNames()).isEmpty();
   }
 
   public List<Atom> getSQWRLPhase1BodyAtoms(SWRLRule query)
@@ -321,10 +324,24 @@ public class SWRLProcessorImpl implements SWRLProcessor
   private void importSWRLRules() throws SWRLRuleEngineException
   {
     try {
-      for (SWRLRule rule : dataFactory.getSWRLRules())
-      	importSWRLRule(rule);    	  
+      for (SWRLRule rule : dataFactory.getSWRLRules()) 
+      	if (!isSQWRLQuery(rule))
+      		importSWRLRule(rule); // Ignore SQWRL queries    	  
     } catch (OWLFactoryException e) {
       throw new SWRLRuleEngineBridgeException("factory error importing rules: " + e.getMessage());
+    } // try
+  }
+
+  private void importSQWRLQuery(String queryName) throws SWRLRuleEngineException
+  {
+    try {
+      for (SWRLRule rule : dataFactory.getSWRLRules()) { 
+      	if (isSQWRLQuery(rule) && !rule.getURI().equals(queryName))
+      		continue; // Ignore SQWRL queries apart from the named one
+      	importSWRLRule(rule);    	  
+      } // for
+    } catch (OWLFactoryException e) {
+      throw new SWRLRuleEngineBridgeException("factory error importing rule " + queryName + ": " + e.getMessage());
     } // try
   }
 

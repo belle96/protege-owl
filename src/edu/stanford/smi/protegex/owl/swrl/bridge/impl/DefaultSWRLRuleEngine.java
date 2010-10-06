@@ -72,6 +72,17 @@ public class DefaultSWRLRuleEngine implements SWRLRuleEngine
   	exportSWRLRulesAndOWLAxioms();
   }
 
+  /**
+   * Load named query, all enabled rules, and all relevant knowledge from OWL into bridge. All existing bridge rules and knowledge will first be cleared and the associated rule
+   * engine will be reset.
+   */
+  public void importSQWRLQueryAndOWLKnowledge(String queryName) throws SWRLRuleEngineException
+  {
+  	swrlProcessor.importSQWRLQueryAndOWLAxioms(queryName);
+  	
+  	exportSWRLRulesAndOWLAxioms();
+  }
+
   private void importSQWRLQuery(String queryName) throws SWRLRuleEngineException
   {
     try {
@@ -147,7 +158,7 @@ public class DefaultSWRLRuleEngine implements SWRLRuleEngine
     
     try {
       reset();
-      importSWRLRulesAndOWLKnowledge();
+      importSQWRLQueryAndOWLKnowledge(queryName);
       run();
       result = getSQWRLResult(queryName);
     } catch (SWRLRuleEngineException e) {

@@ -17,6 +17,7 @@ public interface SWRLProcessor
 { 
 	void importReferencedOWLAxioms() throws SWRLRuleEngineException;
 	void importSWRLRulesAndOWLAxioms() throws SWRLRuleEngineException;
+	void importSQWRLQueryAndOWLAxioms(String queryName) throws SWRLRuleEngineException;
 	
 	void process(SWRLRule ruleOrQuery) throws BuiltInException;
 	void reset();

@@ -54,7 +54,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   public void reset()
   {
     collections = new HashMap<String, Collection<BuiltInArgument>>();
-    collectionGroupElementNumbersMap = new HashMap<String, Integer>(); 
+    collectionGroupElementNumbersMap = new HashMap<String, Integer>();
   }
   
   public boolean select(List<BuiltInArgument> arguments) throws BuiltInException
@@ -163,13 +163,14 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 	  checkThatInAntecedent();
 	  checkForUnboundNonFirstArguments(arguments);
 	    
-    if (collections.containsKey(collectionID)) set = collections.get(collectionID);
+    if (collections.containsKey(collectionID)) 
+    	set = collections.get(collectionID);
     else {  
       set = new HashSet<BuiltInArgument>(); collections.put(collectionID, set); 
     } // if
 
     set.add(element);
-  
+      
     if (isUnboundArgument(0, arguments)) 
     	arguments.get(0).setBuiltInResult(createCollectionArgument(collectionID));
 
