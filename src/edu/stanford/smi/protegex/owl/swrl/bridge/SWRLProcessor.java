@@ -58,8 +58,8 @@ public interface SWRLProcessor
   boolean isSQWRLQuery(String uri);
   SQWRLResultImpl getSQWRLResult(String uri) throws SQWRLException;
   SQWRLResultImpl getSQWRLUnpreparedResult(String uri) throws SQWRLException;
-  List<Atom> getSQWRLPhase1BodyAtoms(SWRLRule query);
-  List<Atom> getSQWRLPhase2BodyAtoms(SWRLRule query);
+  List<SWRLAtom> getSQWRLPhase1BodyAtoms(SWRLRule query);
+  List<SWRLAtom> getSQWRLPhase2BodyAtoms(SWRLRule query);
   boolean usesSQWRLCollections(SWRLRule query);
   
   String getRuleGroupName(String uri);

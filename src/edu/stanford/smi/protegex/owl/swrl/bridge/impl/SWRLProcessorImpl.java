@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.Atom;
+import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLAtom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInAtom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.ClassAtom;
@@ -158,8 +158,8 @@ public class SWRLProcessorImpl implements SWRLProcessor
 	public void process(SWRLRule ruleOrQuery) throws BuiltInException
   {
 
-  	for (Atom atom : ruleOrQuery.getBodyAtoms()) processSWRLAtom(ruleOrQuery, atom, false);
-  	for (Atom atom : ruleOrQuery.getHeadAtoms()) processSWRLAtom(ruleOrQuery, atom, true);
+  	for (SWRLAtom atom : ruleOrQuery.getBodyAtoms()) processSWRLAtom(ruleOrQuery, atom, false);
+  	for (SWRLAtom atom : ruleOrQuery.getHeadAtoms()) processSWRLAtom(ruleOrQuery, atom, true);
 
     buildReferencedVariableNames(ruleOrQuery);
     processUnboundBuiltInArguments(ruleOrQuery); 
@@ -291,11 +291,11 @@ public class SWRLProcessorImpl implements SWRLProcessor
     return !getBuiltInAtomsFromBody(ruleOrQuery, SQWRLNames.getCollectionMakeBuiltInNames()).isEmpty();
   }
 
-  public List<Atom> getSQWRLPhase1BodyAtoms(SWRLRule query)
+  public List<SWRLAtom> getSQWRLPhase1BodyAtoms(SWRLRule query)
   {
-    List<Atom> result = new ArrayList<Atom>();
+    List<SWRLAtom> result = new ArrayList<SWRLAtom>();
 
-    for (Atom atom : query.getBodyAtoms()) {
+    for (SWRLAtom atom : query.getBodyAtoms()) {
       if (atom instanceof BuiltInAtom) {
     	BuiltInAtom builtInAtom = (BuiltInAtom)atom;	
     	if (builtInAtom.usesSQWRLCollectionResults() || builtInAtom.isSQWRLGroupCollection()) continue;
@@ -306,11 +306,11 @@ public class SWRLProcessorImpl implements SWRLProcessor
     return result;
   }
 
-  public List<Atom> getSQWRLPhase2BodyAtoms(SWRLRule query)
+  public List<SWRLAtom> getSQWRLPhase2BodyAtoms(SWRLRule query)
   {
-    List<Atom> result = new ArrayList<Atom>();
+    List<SWRLAtom> result = new ArrayList<SWRLAtom>();
 
-    for (Atom atom : query.getBodyAtoms()) {
+    for (SWRLAtom atom : query.getBodyAtoms()) {
     	if (atom instanceof BuiltInAtom) {
     	  BuiltInAtom builtInAtom = (BuiltInAtom)atom;
     	  if (builtInAtom.isSQWRLMakeCollection() || builtInAtom.isSQWRLGroupCollection()) continue;
@@ -381,13 +381,13 @@ public class SWRLProcessorImpl implements SWRLProcessor
   private void processUnboundBuiltInArguments(SWRLRule ruleOrQuery)
   {
     List<BuiltInAtom> bodyBuiltInAtoms = new ArrayList<BuiltInAtom>();
-    List<Atom> bodyNonBuiltInAtoms = new ArrayList<Atom>();
-    List<Atom> finalBodyAtoms = new ArrayList<Atom>();
+    List<SWRLAtom> bodyNonBuiltInAtoms = new ArrayList<SWRLAtom>();
+    List<SWRLAtom> finalBodyAtoms = new ArrayList<SWRLAtom>();
     Set<String> variableNamesUsedByNonBuiltInBodyAtoms = new HashSet<String>(); // By definition, these will always be bound.
     Set<String> variableNamesBoundByBuiltIns = new HashSet<String>(); // Names of variables bound by built-ins in this rule
    
     // Process the body atoms and build up list of (1) built-in body atoms, and (2) the variables used by non-built body in atoms.
-    for (Atom atom : ruleOrQuery.getBodyAtoms()) {
+    for (SWRLAtom atom : ruleOrQuery.getBodyAtoms()) {
       if (atom instanceof BuiltInAtom) bodyBuiltInAtoms.add((BuiltInAtom)atom);
       else {
         bodyNonBuiltInAtoms.add(atom); variableNamesUsedByNonBuiltInBodyAtoms.addAll(atom.getReferencedVariableNames());
@@ -425,7 +425,7 @@ public class SWRLProcessorImpl implements SWRLProcessor
   	Map<String, Set<Set<String>>> pathMap = new HashMap<String, Set<Set<String>>>();
   	Set<String> rootVariableNames = new HashSet<String>();
   	
-    for (Atom atom : ruleOrQuery.getBodyAtoms()) {
+    for (SWRLAtom atom : ruleOrQuery.getBodyAtoms()) {
     	Set<String> thisAtomReferencedVariableNames = new HashSet<String>(atom.getReferencedVariableNames());
 
     	buildPaths(atom, rootVariableNames, pathMap);
@@ -474,7 +474,7 @@ public class SWRLProcessorImpl implements SWRLProcessor
    * Note: Sets of sets in Java require care because of hash code issues. The enclosed set should not be modified or the outer set may 
    * return inconsistent results.  
    */
-  private void buildPaths(Atom atom, Set<String> rootVariableNames, Map<String, Set<Set<String>>> pathMap)
+  private void buildPaths(SWRLAtom atom, Set<String> rootVariableNames, Map<String, Set<Set<String>>> pathMap)
   {
   	Set<String> currentAtomReferencedVariableNames = atom.getReferencedVariableNames();
 		Set<String> matchingRootVariableNames;
@@ -579,13 +579,13 @@ public class SWRLProcessorImpl implements SWRLProcessor
   /**
    * Build up a list of body class atoms and non class, non built-in atoms. 
    */
-  private List<Atom> processBodyNonBuiltInAtoms(List<Atom> bodyNonBuiltInAtoms)
+  private List<SWRLAtom> processBodyNonBuiltInAtoms(List<SWRLAtom> bodyNonBuiltInAtoms)
   {
-    List<Atom> bodyClassAtoms = new ArrayList<Atom>(); 
-    List<Atom> bodyNonClassNonBuiltInAtoms = new ArrayList<Atom>();
-    List<Atom> result = new ArrayList<Atom>();
+    List<SWRLAtom> bodyClassAtoms = new ArrayList<SWRLAtom>(); 
+    List<SWRLAtom> bodyNonClassNonBuiltInAtoms = new ArrayList<SWRLAtom>();
+    List<SWRLAtom> result = new ArrayList<SWRLAtom>();
 
-    for (Atom atom : bodyNonBuiltInAtoms) {
+    for (SWRLAtom atom : bodyNonBuiltInAtoms) {
       if (atom instanceof ClassAtom) bodyClassAtoms.add(atom);
       else bodyNonClassNonBuiltInAtoms.add(atom);
     } // for
@@ -865,7 +865,7 @@ public class SWRLProcessorImpl implements SWRLProcessor
   {
     String uri = ruleOrQuery.getURI();
     
-    for (Atom atom : ruleOrQuery.getBodyAtoms()) 
+    for (SWRLAtom atom : ruleOrQuery.getBodyAtoms()) 
     	if (referencedVariableNameMap.containsKey(uri)) referencedVariableNameMap.get(uri).addAll(atom.getReferencedVariableNames());
     	else referencedVariableNameMap.put(uri, new HashSet<String>(atom.getReferencedVariableNames()));
   }
@@ -887,7 +887,7 @@ public class SWRLProcessorImpl implements SWRLProcessor
   	return false;
   }
  
-  private void processSWRLAtom(SWRLRule ruleOrQuery, Atom atom, boolean isConsequent)
+  private void processSWRLAtom(SWRLRule ruleOrQuery, SWRLAtom atom, boolean isConsequent)
   {
   	String uri = ruleOrQuery.getURI();
   	
@@ -907,11 +907,11 @@ public class SWRLProcessorImpl implements SWRLProcessor
     	else referencedOWLIndividualURIMap.put(uri, atom.getReferencedIndividualURIs());
   } 
 
-  private List<BuiltInAtom> getBuiltInAtoms(List<Atom> atoms, Set<String> builtInNames) 
+  private List<BuiltInAtom> getBuiltInAtoms(List<SWRLAtom> atoms, Set<String> builtInNames) 
   {
     List<BuiltInAtom> result = new ArrayList<BuiltInAtom>();
     
-    for (Atom atom : atoms) {
+    for (SWRLAtom atom : atoms) {
       if (atom instanceof BuiltInAtom) {
         BuiltInAtom builtInAtom = (BuiltInAtom)atom;
         if (builtInNames.contains(builtInAtom.getBuiltInURI())) result.add(builtInAtom);
@@ -920,11 +920,11 @@ public class SWRLProcessorImpl implements SWRLProcessor
     return result;
   } 
 
-  private List<BuiltInAtom> getBuiltInAtoms(List<Atom> atoms) 
+  private List<BuiltInAtom> getBuiltInAtoms(List<SWRLAtom> atoms) 
   {
     List<BuiltInAtom> result = new ArrayList<BuiltInAtom>();
     
-    for (Atom atom : atoms) if (atom instanceof BuiltInAtom) result.add((BuiltInAtom)atom);
+    for (SWRLAtom atom : atoms) if (atom instanceof BuiltInAtom) result.add((BuiltInAtom)atom);
 
     return result;
   }

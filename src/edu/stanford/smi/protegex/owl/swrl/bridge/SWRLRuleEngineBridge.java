@@ -42,8 +42,8 @@ public interface SWRLRuleEngineBridge
   // SQWRL-related functionality
   boolean isSQWRLQuery(SWRLRule query);
   boolean usesSQWRLCollections(SWRLRule query);
-  List<Atom> getSQWRLPhase1BodyAtoms(SWRLRule query);
-  List<Atom> getSQWRLPhase2BodyAtoms(SWRLRule query);
+  List<SWRLAtom> getSQWRLPhase1BodyAtoms(SWRLRule query);
+  List<SWRLAtom> getSQWRLPhase2BodyAtoms(SWRLRule query);
   List<BuiltInAtom> getBuiltInAtomsFromHead(SWRLRule query, Set<String> builtInNames);
   List<BuiltInAtom> getBuiltInAtomsFromBody(SWRLRule query, Set<String> builtInNames);
   

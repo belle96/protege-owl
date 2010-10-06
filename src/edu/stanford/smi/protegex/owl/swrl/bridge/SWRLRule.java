@@ -11,12 +11,12 @@ import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLEntity;
  */
 public interface SWRLRule extends OWLAxiom, OWLEntity
 {
-  List<Atom> getHeadAtoms();
-  List<Atom> getBodyAtoms();
+  List<SWRLAtom> getHeadAtoms();
+  List<SWRLAtom> getBodyAtoms();
   
   // TODO: these will not be in the OWLAPI.
-  void setBodyAtoms(List<Atom> atom);
-  void appendAtomsToBody(List<Atom> atom);
+  void setBodyAtoms(List<SWRLAtom> atom);
+  void appendAtomsToBody(List<SWRLAtom> atom);
   String getRuleText();
   void setRuleText(String text);
   String getRuleGroupName();

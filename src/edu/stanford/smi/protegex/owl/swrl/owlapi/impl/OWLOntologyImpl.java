@@ -22,7 +22,7 @@ import edu.stanford.smi.protegex.owl.model.RDFSClass;
 import edu.stanford.smi.protegex.owl.model.RDFSLiteral;
 import edu.stanford.smi.protegex.owl.model.triplestore.TripleStoreModel;
 import edu.stanford.smi.protegex.owl.swrl.bridge.ArgumentFactory;
-import edu.stanford.smi.protegex.owl.swrl.bridge.Atom;
+import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLAtom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInAtom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.ClassArgument;
@@ -168,8 +168,8 @@ public class OWLOntologyImpl implements OWLOntology {
 
 	public SWRLRule getSWRLRule(String ruleName)
 			throws OWLConversionFactoryException {
-		List<Atom> bodyAtoms = new ArrayList<Atom>();
-		List<Atom> headAtoms = new ArrayList<Atom>();
+		List<SWRLAtom> bodyAtoms = new ArrayList<SWRLAtom>();
+		List<SWRLAtom> headAtoms = new ArrayList<SWRLAtom>();
 		edu.stanford.smi.protegex.owl.swrl.model.SWRLImp imp = swrlFactory
 				.getImp(ruleName);
 
@@ -1032,10 +1032,10 @@ public class OWLOntologyImpl implements OWLOntology {
 				"SWRL data range atoms not implemented.");
 	} // convertDataRangeAtom
 
-	private Atom convertSWRLAtom(
+	private SWRLAtom convertSWRLAtom(
 			edu.stanford.smi.protegex.owl.swrl.model.SWRLAtom swrlAtom)
 			throws OWLConversionFactoryException {
-		Atom atom;
+		SWRLAtom atom;
 
 		if (swrlAtom instanceof edu.stanford.smi.protegex.owl.swrl.model.SWRLClassAtom) {
 			atom = convertClassAtom((edu.stanford.smi.protegex.owl.swrl.model.SWRLClassAtom) swrlAtom);

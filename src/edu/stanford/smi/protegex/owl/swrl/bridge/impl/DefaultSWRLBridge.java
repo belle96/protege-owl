@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.Atom;
+import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLAtom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInAtom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValue;
@@ -353,8 +353,8 @@ public class DefaultSWRLBridge implements SWRLRuleEngineBridge, SWRLBuiltInBridg
   public boolean isSQWRLQuery(String uri) { return swrlProcessor.isSQWRLQuery(uri); }
   public SQWRLResultImpl getSQWRLResult(String uri) throws SQWRLException { return swrlProcessor.getSQWRLResult(uri); }
   public SQWRLResultImpl getSQWRLUnpreparedResult(String uri) throws SQWRLException { return swrlProcessor.getSQWRLUnpreparedResult(uri); }
-  public List<Atom> getSQWRLPhase1BodyAtoms(SWRLRule query) { return swrlProcessor.getSQWRLPhase1BodyAtoms(query); }
-  public List<Atom> getSQWRLPhase2BodyAtoms(SWRLRule query) { return swrlProcessor.getSQWRLPhase2BodyAtoms(query); }
+  public List<SWRLAtom> getSQWRLPhase1BodyAtoms(SWRLRule query) { return swrlProcessor.getSQWRLPhase1BodyAtoms(query); }
+  public List<SWRLAtom> getSQWRLPhase2BodyAtoms(SWRLRule query) { return swrlProcessor.getSQWRLPhase2BodyAtoms(query); }
   public boolean usesSQWRLCollections(SWRLRule query) { return swrlProcessor.usesSQWRLCollections(query); }
 
   private void initialize()

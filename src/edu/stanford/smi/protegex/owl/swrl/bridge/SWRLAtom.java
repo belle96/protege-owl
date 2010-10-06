@@ -4,9 +4,9 @@ package edu.stanford.smi.protegex.owl.swrl.bridge;
 import java.util.Set;
 
 /**
- * Base class representing information about atoms in a SWRL rule
+ * Base class representing information about SWRL atoms.
  */
-public interface Atom
+public interface SWRLAtom
 {
 	int getNumberOfArguments();
   boolean hasReferencedClasses();

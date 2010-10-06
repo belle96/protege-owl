@@ -4,12 +4,12 @@ package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
 import java.util.HashSet;
 import java.util.Set;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.Atom;
+import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLAtom;
 
 /**
  * Base class representing information about atoms in a SWRL rule
  */
-public abstract class AtomImpl implements Atom
+public abstract class AtomImpl implements SWRLAtom
 {
   private Set<String> referencedClassURIs;
   private Set<String> referencedPropertyURIs;
