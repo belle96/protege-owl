@@ -4,6 +4,9 @@ package edu.stanford.smi.protegex.owl.swrl.sqwrl;
 import edu.stanford.smi.protegex.owl.swrl.bridge.xsd.XSDType;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.DataValueConversionException;
 
+/*
+ * Interface representing an OWL data value. Approximately equivalent to the OWLLiteral interface in the OWLAPI.
+ */
 public interface DataValue extends SQWRLResultValue
 {
   String getString() throws DataValueConversionException; 

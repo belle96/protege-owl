@@ -4,11 +4,11 @@ package edu.stanford.smi.protegex.owl.swrl;
 import java.util.Set;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValueFactory;
-import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRule;
 import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLRuleEngineException;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClass;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLNamedIndividual;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLRule;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLQueryEngine;
 
 /**

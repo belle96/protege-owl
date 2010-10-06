@@ -1,5 +1,5 @@
 
-package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
+package edu.stanford.smi.protegex.owl.swrl.owlapi.impl;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -7,16 +7,16 @@ import java.util.List;
 import java.util.Set;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
-import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInAtom;
-import edu.stanford.smi.protegex.owl.swrl.bridge.DataValueArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLBuiltInAtom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLLiteralArgument;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLNames;
 
 /**
  * Class representing a SWRL built-in atom
  */
-public class BuiltInAtomImpl extends AtomImpl implements BuiltInAtom
+public class SWRLBuiltInAtomImpl extends SWRLAtomImpl implements SWRLBuiltInAtom
 {
   private String builtInURI, builtInPrefixedName;
   private List<BuiltInArgument> arguments; 
@@ -24,14 +24,14 @@ public class BuiltInAtomImpl extends AtomImpl implements BuiltInAtom
   private boolean sqwrlCollectionResultsUsed = false;
   private Set<String> pathVariableNames = new HashSet<String>();
   
-  public BuiltInAtomImpl(String builtInURI, String builtInPrefixedName, List<BuiltInArgument> arguments)
+  public SWRLBuiltInAtomImpl(String builtInURI, String builtInPrefixedName, List<BuiltInArgument> arguments)
   {
     this.builtInURI = builtInURI;
     this.builtInPrefixedName = builtInPrefixedName;
     this.arguments = arguments;
   }
 
-  public BuiltInAtomImpl(String builtInURI, String builtInPrefixedName)
+  public SWRLBuiltInAtomImpl(String builtInURI, String builtInPrefixedName)
   {
     this.builtInURI = builtInURI;
     this.builtInPrefixedName = builtInPrefixedName;
@@ -147,9 +147,9 @@ public class BuiltInAtomImpl extends AtomImpl implements BuiltInAtom
 
     for (BuiltInArgument argument : getArguments()) {
       if (!isFirst) result += ", ";
-      if (argument instanceof DataValueArgument) {
-      	DataValueArgument dataValueArgument = (DataValueArgument)argument;
-      	DataValue dataValue = dataValueArgument.getDataValue();
+      if (argument instanceof SWRLLiteralArgument) {
+      	SWRLLiteralArgument dataValueArgument = (SWRLLiteralArgument)argument;
+      	DataValue dataValue = dataValueArgument.getLiteral();
         if (dataValue.isString()) result += "\"" + dataValue + "\"";
         else result += "" + dataValue;
       } else result += "" + argument;

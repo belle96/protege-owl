@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
-import edu.stanford.smi.protegex.owl.swrl.bridge.IndividualArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.Mapper;
 import edu.stanford.smi.protegex.owl.swrl.bridge.MultiArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValue;
@@ -22,6 +21,7 @@ import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLDataPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLNamedIndividual;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLObjectPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLProperty;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLIndividualArgument;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
 
 /**
@@ -84,7 +84,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (isUnboundIndividualArgument) {
       MultiArgument multiArgument = createMultiArgument();
       for (OWLNamedIndividual individual : individuals) {
-      	IndividualArgument argument = createIndividualArgument(individual.getURI());
+      	SWRLIndividualArgument argument = createIndividualArgument(individual.getURI());
       	multiArgument.addArgument(argument);
       }
       arguments.get(1).setBuiltInResult(multiArgument);

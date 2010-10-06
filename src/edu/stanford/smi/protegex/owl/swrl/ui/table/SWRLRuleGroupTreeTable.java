@@ -12,7 +12,7 @@ import javax.swing.tree.TreePath;
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRule;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLRule;
 
 public class SWRLRuleGroupTreeTable extends JXTreeTable
 {

@@ -8,13 +8,10 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
-import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInAtom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLPropertyPropertyAssertionAxiom;
-import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRule;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLConversionFactoryException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLFactoryException;
-import edu.stanford.smi.protegex.owl.swrl.bridge.impl.BuiltInAtomImpl;
 import edu.stanford.smi.protegex.owl.swrl.bridge.impl.OWLDataValueImpl;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClass;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClassAssertionAxiom;
@@ -35,6 +32,8 @@ import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLSameIndividualAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLSomeValuesFrom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLSubClassAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLTypedLiteral;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLBuiltInAtom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLRule;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 
 public class OWLDataFactoryImpl implements OWLDataFactory
@@ -188,9 +187,9 @@ public class OWLDataFactoryImpl implements OWLDataFactory
   public OWLSomeValuesFrom getOWLSomeValuesFrom(OWLClass owlClass, OWLProperty onProperty, OWLClass someValuesFrom)  
     { return new OWLSomeValuesFromImpl(owlClass, onProperty, someValuesFrom); } // TODO: should be OWLDescription
 
-  public BuiltInAtom getSWRLBuiltInAtom(String builtInURI, String builtInPrefixedName, List<BuiltInArgument> arguments) 
+  public SWRLBuiltInAtom getSWRLBuiltInAtom(String builtInURI, String builtInPrefixedName, List<BuiltInArgument> arguments) 
   { 
-    return new BuiltInAtomImpl(builtInURI, builtInPrefixedName, arguments); 
+    return new SWRLBuiltInAtomImpl(builtInURI, builtInPrefixedName, arguments); 
   }
 
   public OWLTypedLiteral getOWLTypedLiteral(int value) { return new OWLDataValueImpl(value); }

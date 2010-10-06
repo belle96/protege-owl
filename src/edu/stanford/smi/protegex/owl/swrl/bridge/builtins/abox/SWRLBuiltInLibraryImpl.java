@@ -10,7 +10,6 @@ import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.model.OWLNamedClass;
 import edu.stanford.smi.protegex.owl.model.RDFResource;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
-import edu.stanford.smi.protegex.owl.swrl.bridge.IndividualArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.MultiArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValue;
 import edu.stanford.smi.protegex.owl.swrl.bridge.builtins.AbstractSWRLBuiltInLibrary;
@@ -22,6 +21,7 @@ import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClassAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLNamedIndividual;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLProperty;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLPropertyAssertionAxiom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLIndividualArgument;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.impl.OWLOntologyImpl;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
 import edu.stanford.smi.protegex.owl.swrl.util.SWRLOWLUtil;
@@ -55,7 +55,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     if (isUnboundArgument) {
       MultiArgument multiArgument = createMultiArgument();
       for (OWLNamedIndividual individual : getBuiltInBridge().getOWLIndividuals()) {
-      	IndividualArgument argument = createIndividualArgument(individual.getURI());
+      	SWRLIndividualArgument argument = createIndividualArgument(individual.getURI());
       	multiArgument.addArgument(argument);
       } // for
       arguments.get(0).setBuiltInResult(multiArgument);
@@ -95,7 +95,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
         OWLPropertyAssertionAxiom axiom;
 
         if (isObjectProperty) {
-          IndividualArgument argument = getArgumentAsAnIndividual(2, arguments);
+          SWRLIndividualArgument argument = getArgumentAsAnIndividual(2, arguments);
           OWLNamedIndividual value = getBuiltInBridge().getOWLDataFactory().getOWLIndividual(argument.getURI());
           property = getBuiltInBridge().getOWLDataFactory().getOWLObjectProperty(propertyURI);
           axiom = getBuiltInBridge().getOWLDataFactory().getOWLObjectPropertyAssertionAxiom(subject, property, value);

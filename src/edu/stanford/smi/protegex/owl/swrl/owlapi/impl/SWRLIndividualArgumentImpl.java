@@ -1,14 +1,15 @@
 
-package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
+package edu.stanford.smi.protegex.owl.swrl.owlapi.impl;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
-import edu.stanford.smi.protegex.owl.swrl.bridge.IndividualArgument;
+import edu.stanford.smi.protegex.owl.swrl.bridge.impl.BuiltInArgumentImpl;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLIndividualArgument;
 
-public class IndividualArgumentImpl extends BuiltInArgumentImpl implements IndividualArgument
+public class SWRLIndividualArgumentImpl extends BuiltInArgumentImpl implements SWRLIndividualArgument
 {
   private String individualURI;
   
-  public IndividualArgumentImpl(String individualURI) { this.individualURI = individualURI; }
+  public SWRLIndividualArgumentImpl(String individualURI) { this.individualURI = individualURI; }
   
   public String getURI() { return individualURI; }
   
@@ -16,14 +17,14 @@ public class IndividualArgumentImpl extends BuiltInArgumentImpl implements Indiv
   
   public int compareTo(BuiltInArgument o)
   {
-  	return individualURI.compareTo(((IndividualArgument)o).getURI());
+  	return individualURI.compareTo(((SWRLIndividualArgument)o).getURI());
   } 
 
   public boolean equals(Object obj)
   {
     if(this == obj) return true;
     if((obj == null) || (obj.getClass() != this.getClass())) return false;
-    IndividualArgumentImpl impl = (IndividualArgumentImpl)obj;
+    SWRLIndividualArgumentImpl impl = (SWRLIndividualArgumentImpl)obj;
     return (getURI() == impl.getURI() || (getURI() != null && getURI().equals(impl.getURI())));
     } // equals
 

@@ -10,6 +10,9 @@ import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClass;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLNamedIndividual;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLProperty;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLAtom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLBuiltInAtom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLRule;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.SQWRLResultImpl;
 
@@ -50,10 +53,10 @@ public interface SWRLProcessor
 	Set<String> getReferencedOWLPropertyURIs(SWRLRule ruleOrQuery);
 	Set<String> getReferencedOWLIndividualURIs(SWRLRule ruleOrQuery);
 
-  List<BuiltInAtom> getBuiltInAtomsFromHead(SWRLRule ruleOrQuery);
-  List<BuiltInAtom> getBuiltInAtomsFromHead(SWRLRule ruleOrQuery, Set<String> builtInNames);
-  List<BuiltInAtom> getBuiltInAtomsFromBody(SWRLRule ruleOrQuery);
-  List<BuiltInAtom> getBuiltInAtomsFromBody(SWRLRule ruleOrQuery, Set<String> builtInNames);
+  List<SWRLBuiltInAtom> getBuiltInAtomsFromHead(SWRLRule ruleOrQuery);
+  List<SWRLBuiltInAtom> getBuiltInAtomsFromHead(SWRLRule ruleOrQuery, Set<String> builtInNames);
+  List<SWRLBuiltInAtom> getBuiltInAtomsFromBody(SWRLRule ruleOrQuery);
+  List<SWRLBuiltInAtom> getBuiltInAtomsFromBody(SWRLRule ruleOrQuery, Set<String> builtInNames);
 
   boolean isSQWRLQuery(String uri);
   SQWRLResultImpl getSQWRLResult(String uri) throws SQWRLException;

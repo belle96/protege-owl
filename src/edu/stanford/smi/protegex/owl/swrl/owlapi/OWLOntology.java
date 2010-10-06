@@ -4,7 +4,6 @@ package edu.stanford.smi.protegex.owl.swrl.owlapi;
 import java.util.Set;
 
 import edu.stanford.smi.protegex.owl.model.OWLModel;
-import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRule;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLConversionFactoryException;
 import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParseException;

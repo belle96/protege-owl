@@ -6,15 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLAtom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
-import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInAtom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValue;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValueFactory;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLBuiltInBridge;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLBuiltInBridgeController;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLProcessor;
-import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRule;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRuleEngineBridge;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRuleEngineBridgeController;
 import edu.stanford.smi.protegex.owl.swrl.bridge.TargetSWRLRuleEngine;
@@ -38,6 +35,9 @@ import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLProperty;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLSubClassAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.PrefixManager;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLAtom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLBuiltInAtom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLRule;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.impl.OWLDataFactoryImpl;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.impl.PrefixManagerImpl;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.DataValueConversionException;
@@ -137,9 +137,9 @@ public class DefaultSWRLBridge implements SWRLRuleEngineBridge, SWRLBuiltInBridg
 	  return BuiltInLibraryManager.invokeSWRLBuiltIn(targetRuleEngine, this, ruleName, builtInName, builtInIndex, isInConsequent, arguments); 
  	}
 			
-	public List<BuiltInAtom> getBuiltInAtomsFromBody(SWRLRule ruleOrQuery, Set<String> builtInNames) 
+	public List<SWRLBuiltInAtom> getBuiltInAtomsFromBody(SWRLRule ruleOrQuery, Set<String> builtInNames) 
     { return swrlProcessor.getBuiltInAtomsFromBody(ruleOrQuery, builtInNames); }
-	public List<BuiltInAtom> getBuiltInAtomsFromHead(SWRLRule ruleOrQuery, Set<String> builtInNames) 
+	public List<SWRLBuiltInAtom> getBuiltInAtomsFromHead(SWRLRule ruleOrQuery, Set<String> builtInNames) 
     { return swrlProcessor.getBuiltInAtomsFromHead(ruleOrQuery, builtInNames); }
 	  
   // The inject methods can be used by built-ins to inject new axioms into a bridge, which will also reflect them in the underlying

@@ -1,19 +1,19 @@
 
-package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
+package edu.stanford.smi.protegex.owl.swrl.owlapi.impl;
 
 import java.util.Set;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.DataRangeAtom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValue;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLDataRangeAtom;
 
 /**
  * Class representing a SWRL data range atom
  */
-public class DataRangeAtomImpl extends AtomImpl implements DataRangeAtom
+public class SWRLDataRangeAtomImpl extends SWRLAtomImpl implements SWRLDataRangeAtom
 {
   private Set<OWLDataValue> values;
   
-  public DataRangeAtomImpl(Set<OWLDataValue> values) 
+  public SWRLDataRangeAtomImpl(Set<OWLDataValue> values) 
   {
     this.values = values;
   }

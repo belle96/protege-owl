@@ -8,13 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLAtom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
-import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInAtom;
-import edu.stanford.smi.protegex.owl.swrl.bridge.ClassAtom;
-import edu.stanford.smi.protegex.owl.swrl.bridge.DataValueArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLProcessor;
-import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRule;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLConversionFactoryException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLFactoryException;
@@ -31,6 +26,11 @@ import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLOntology;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLProperty;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLPropertyAssertionAxiom;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLSameIndividualAxiom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLAtom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLBuiltInAtom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLClassAtom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLLiteralArgument;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLRule;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.impl.OWLDataFactoryImpl;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.SQWRLNames;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.DataValueConversionException;
@@ -296,8 +296,8 @@ public class SWRLProcessorImpl implements SWRLProcessor
     List<SWRLAtom> result = new ArrayList<SWRLAtom>();
 
     for (SWRLAtom atom : query.getBodyAtoms()) {
-      if (atom instanceof BuiltInAtom) {
-    	BuiltInAtom builtInAtom = (BuiltInAtom)atom;	
+      if (atom instanceof SWRLBuiltInAtom) {
+    	SWRLBuiltInAtom builtInAtom = (SWRLBuiltInAtom)atom;	
     	if (builtInAtom.usesSQWRLCollectionResults() || builtInAtom.isSQWRLGroupCollection()) continue;
       } // if
       result.add(atom);
@@ -311,8 +311,8 @@ public class SWRLProcessorImpl implements SWRLProcessor
     List<SWRLAtom> result = new ArrayList<SWRLAtom>();
 
     for (SWRLAtom atom : query.getBodyAtoms()) {
-    	if (atom instanceof BuiltInAtom) {
-    	  BuiltInAtom builtInAtom = (BuiltInAtom)atom;
+    	if (atom instanceof SWRLBuiltInAtom) {
+    	  SWRLBuiltInAtom builtInAtom = (SWRLBuiltInAtom)atom;
     	  if (builtInAtom.isSQWRLMakeCollection() || builtInAtom.isSQWRLGroupCollection()) continue;
       } // if
       result.add(atom);
@@ -380,7 +380,7 @@ public class SWRLProcessorImpl implements SWRLProcessor
    */
   private void processUnboundBuiltInArguments(SWRLRule ruleOrQuery)
   {
-    List<BuiltInAtom> bodyBuiltInAtoms = new ArrayList<BuiltInAtom>();
+    List<SWRLBuiltInAtom> bodyBuiltInAtoms = new ArrayList<SWRLBuiltInAtom>();
     List<SWRLAtom> bodyNonBuiltInAtoms = new ArrayList<SWRLAtom>();
     List<SWRLAtom> finalBodyAtoms = new ArrayList<SWRLAtom>();
     Set<String> variableNamesUsedByNonBuiltInBodyAtoms = new HashSet<String>(); // By definition, these will always be bound.
@@ -388,14 +388,14 @@ public class SWRLProcessorImpl implements SWRLProcessor
    
     // Process the body atoms and build up list of (1) built-in body atoms, and (2) the variables used by non-built body in atoms.
     for (SWRLAtom atom : ruleOrQuery.getBodyAtoms()) {
-      if (atom instanceof BuiltInAtom) bodyBuiltInAtoms.add((BuiltInAtom)atom);
+      if (atom instanceof SWRLBuiltInAtom) bodyBuiltInAtoms.add((SWRLBuiltInAtom)atom);
       else {
         bodyNonBuiltInAtoms.add(atom); variableNamesUsedByNonBuiltInBodyAtoms.addAll(atom.getReferencedVariableNames());
       } // if
     } // for
 
     // Process the body built-in atoms and determine if they bind any of their arguments.
-    for (BuiltInAtom builtInAtom : bodyBuiltInAtoms) { // Read through built-in arguments and determine which are unbound.   	
+    for (SWRLBuiltInAtom builtInAtom : bodyBuiltInAtoms) { // Read through built-in arguments and determine which are unbound.   	
     	for (BuiltInArgument argument : builtInAtom.getArguments()) {
         if (argument.isVariable()) {
           String argumentVariableName = argument.getVariableName();
@@ -430,8 +430,8 @@ public class SWRLProcessorImpl implements SWRLProcessor
 
     	buildPaths(atom, rootVariableNames, pathMap);
     	
-    	if (atom instanceof BuiltInAtom) {
-    		BuiltInAtom builtInAtom = (BuiltInAtom)atom;
+    	if (atom instanceof SWRLBuiltInAtom) {
+    		SWRLBuiltInAtom builtInAtom = (SWRLBuiltInAtom)atom;
     		
     		if (builtInAtom.isSQWRLGroupCollection()) continue;
     		if (builtInAtom.isSQWRLCollectionOperation()) break;
@@ -586,7 +586,7 @@ public class SWRLProcessorImpl implements SWRLProcessor
     List<SWRLAtom> result = new ArrayList<SWRLAtom>();
 
     for (SWRLAtom atom : bodyNonBuiltInAtoms) {
-      if (atom instanceof ClassAtom) bodyClassAtoms.add(atom);
+      if (atom instanceof SWRLClassAtom) bodyClassAtoms.add(atom);
       else bodyNonClassNonBuiltInAtoms.add(atom);
     } // for
     
@@ -604,7 +604,7 @@ public class SWRLProcessorImpl implements SWRLProcessor
 
      processBuiltInIndexes(query);
 
-     for (BuiltInAtom builtInAtom : getBuiltInAtomsFromHead(query, SQWRLNames.getHeadBuiltInNames())) {
+     for (SWRLBuiltInAtom builtInAtom : getBuiltInAtomsFromHead(query, SQWRLNames.getHeadBuiltInNames())) {
        String builtInName = builtInAtom.getBuiltInURI();
        hasSQWRLBuiltInsMap.put(query.getURI(), true);
           
@@ -655,9 +655,9 @@ public class SWRLProcessorImpl implements SWRLProcessor
 	           if (columnIndex != -1) sqwrlResult.addOrderByColumn(columnIndex, false);
 	           else throw new SQWRLException("variable ?" + variableName + " must be selected before it can be ordered");
 	         } else if (builtInName.equalsIgnoreCase(SQWRLNames.ColumnNames)) {
-	           if (argument instanceof DataValueArgument && ((DataValueArgument)argument).getDataValue().isString()) {
-	             DataValueArgument dataValueArgument = (DataValueArgument)argument;
-	             sqwrlResult.addColumnDisplayName(dataValueArgument.getDataValue().getString());
+	           if (argument instanceof SWRLLiteralArgument && ((SWRLLiteralArgument)argument).getLiteral().isString()) {
+	             SWRLLiteralArgument dataValueArgument = (SWRLLiteralArgument)argument;
+	             sqwrlResult.addColumnDisplayName(dataValueArgument.getLiteral().getString());
 	           } else throw new SQWRLException("only string literals allowed as column names - found " + argument);
 	         } // if
 	         argumentIndex++;
@@ -683,8 +683,8 @@ public class SWRLProcessorImpl implements SWRLProcessor
       		 BuiltInArgument nArgument = builtInAtom.getArguments().get(0);
       		 int n;
       		 
-        	 if (nArgument instanceof DataValueArgument && ((DataValueArgument)nArgument).getDataValue().isLong()) {
-             n = (int)((DataValueArgument)nArgument).getDataValue().getLong();
+        	 if (nArgument instanceof SWRLLiteralArgument && ((SWRLLiteralArgument)nArgument).getLiteral().isLong()) {
+             n = (int)((SWRLLiteralArgument)nArgument).getLiteral().getLong();
              if (n < 1) throw new SQWRLException("nth argument to slicing operator " + builtInName + " must be a positive integer");
         	 } else throw new SQWRLException("expecing integer to slicing operator " + builtInName);
 
@@ -701,8 +701,8 @@ public class SWRLProcessorImpl implements SWRLProcessor
 	      		 BuiltInArgument sliceArgument = builtInAtom.getArguments().get(1);
 	      		 int sliceSize;
 	      		 
-	        	 if (sliceArgument instanceof DataValueArgument && ((DataValueArgument)sliceArgument).getDataValue().isLong()) {
-	             sliceSize = (int)((DataValueArgument)sliceArgument).getDataValue().getLong();
+	        	 if (sliceArgument instanceof SWRLLiteralArgument && ((SWRLLiteralArgument)sliceArgument).getLiteral().isLong()) {
+	             sliceSize = (int)((SWRLLiteralArgument)sliceArgument).getLiteral().getLong();
 	             if (sliceSize < 1) throw new SQWRLException("slice size argument to slicing operator " + builtInName + " must be a positive integer");
 	        	 } else throw new SQWRLException("expecing integer to slicing operator " + builtInName);
 	        	 
@@ -743,7 +743,7 @@ public class SWRLProcessorImpl implements SWRLProcessor
   private void processSQWRLCollectionMakeBuiltIns(SWRLRule query, Set<String> collectionNames) 
     throws SQWRLException, BuiltInException
   {
-    for (BuiltInAtom builtInAtom : getBuiltInAtomsFromBody(query, SQWRLNames.getCollectionMakeBuiltInNames())) {
+    for (SWRLBuiltInAtom builtInAtom : getBuiltInAtomsFromBody(query, SQWRLNames.getCollectionMakeBuiltInNames())) {
       String collectionName = builtInAtom.getArgumentVariableName(0); // First argument is the collection name
       hasSQWRLCollectionBuiltInsMap.put(query.getURI(), true);
        
@@ -756,7 +756,7 @@ public class SWRLProcessorImpl implements SWRLProcessor
   private void processSQWRLCollectionGroupByBuiltIns(SWRLRule ruleOrQuery, Set<String> collectionNames) 
     throws SQWRLException, BuiltInException
   {
-    for (BuiltInAtom builtInAtom : getBuiltInAtomsFromBody(ruleOrQuery, SQWRLNames.getCollectionGroupByBuiltInNames())) {
+    for (SWRLBuiltInAtom builtInAtom : getBuiltInAtomsFromBody(ruleOrQuery, SQWRLNames.getCollectionGroupByBuiltInNames())) {
       String collectionName = builtInAtom.getArgumentVariableName(0); // The first argument is the collection name.
       List<BuiltInArgument> builtInArguments = builtInAtom.getArguments();
       List<BuiltInArgument> groupArguments = builtInArguments.subList(1, builtInArguments.size());
@@ -784,7 +784,7 @@ public class SWRLProcessorImpl implements SWRLProcessor
   private void processSQWRLCollectionMakeGroupArguments(SWRLRule ruleOrQuery, Set<String> collectionNames)
     throws SQWRLException, BuiltInException
   {
-    for (BuiltInAtom builtInAtom : getBuiltInAtomsFromBody(ruleOrQuery, SQWRLNames.getCollectionMakeBuiltInNames())) {
+    for (SWRLBuiltInAtom builtInAtom : getBuiltInAtomsFromBody(ruleOrQuery, SQWRLNames.getCollectionMakeBuiltInNames())) {
       String collectionName = builtInAtom.getArgumentVariableName(0); // First argument is the collection name
       Map<String, List<BuiltInArgument>> collectionGroupArguments;
       String uri = ruleOrQuery.getURI();
@@ -805,7 +805,7 @@ public class SWRLProcessorImpl implements SWRLProcessor
   private void processSQWRLCollectionOperationBuiltIns(SWRLRule ruleOrQuery,  Set<String> collectionNames, Set<String> cascadedUnboundVariableNames) 
     throws SQWRLException, BuiltInException
   {
-  	for (BuiltInAtom builtInAtom : getBuiltInAtomsFromBody(ruleOrQuery, SQWRLNames.getCollectionOperationBuiltInNames())) {
+  	for (SWRLBuiltInAtom builtInAtom : getBuiltInAtomsFromBody(ruleOrQuery, SQWRLNames.getCollectionOperationBuiltInNames())) {
   		List<BuiltInArgument> allOperandCollectionGroupArguments = new ArrayList<BuiltInArgument>(); // The group arguments from the operand collections
       Map<String, List<BuiltInArgument>> collectionGroupArguments;
       String uri = ruleOrQuery.getURI();
@@ -850,7 +850,7 @@ public class SWRLProcessorImpl implements SWRLProcessor
   private void processBuiltInsThatUseSQWRLCollectionOperationResults(SWRLRule ruleOrQuery, Set<String> cascadedUnboundVariableNames) 
     throws SQWRLException, BuiltInException
   {
-    for (BuiltInAtom builtInAtom : getBuiltInAtomsFromBody(ruleOrQuery)) {
+    for (SWRLBuiltInAtom builtInAtom : getBuiltInAtomsFromBody(ruleOrQuery)) {
       if (!builtInAtom.isSQWRLBuiltIn()) { // Mark later non SQWRL built-ins that (directly or indirectly) use variables bound by collection operation built-ins.
       	if (builtInAtom.usesAtLeastOneVariableOf(cascadedUnboundVariableNames)) {
       		builtInAtom.setUsesSQWRLCollectionResults(); // Mark this built-in as dependent on collection built-in bindings.
@@ -877,8 +877,8 @@ public class SWRLProcessorImpl implements SWRLProcessor
   {
     int builtInIndex = 0;
 
-    for (BuiltInAtom builtInAtom : getBuiltInAtomsFromBody(ruleOrQuery)) builtInAtom.setBuiltInIndex(builtInIndex++);
-    for (BuiltInAtom builtInAtom : getBuiltInAtomsFromHead(ruleOrQuery)) builtInAtom.setBuiltInIndex(builtInIndex++);
+    for (SWRLBuiltInAtom builtInAtom : getBuiltInAtomsFromBody(ruleOrQuery)) builtInAtom.setBuiltInIndex(builtInIndex++);
+    for (SWRLBuiltInAtom builtInAtom : getBuiltInAtomsFromHead(ruleOrQuery)) builtInAtom.setBuiltInIndex(builtInIndex++);
   }
   
   private boolean hasUnboundArgument(List<BuiltInArgument> arguments)
@@ -907,44 +907,44 @@ public class SWRLProcessorImpl implements SWRLProcessor
     	else referencedOWLIndividualURIMap.put(uri, atom.getReferencedIndividualURIs());
   } 
 
-  private List<BuiltInAtom> getBuiltInAtoms(List<SWRLAtom> atoms, Set<String> builtInNames) 
+  private List<SWRLBuiltInAtom> getBuiltInAtoms(List<SWRLAtom> atoms, Set<String> builtInNames) 
   {
-    List<BuiltInAtom> result = new ArrayList<BuiltInAtom>();
+    List<SWRLBuiltInAtom> result = new ArrayList<SWRLBuiltInAtom>();
     
     for (SWRLAtom atom : atoms) {
-      if (atom instanceof BuiltInAtom) {
-        BuiltInAtom builtInAtom = (BuiltInAtom)atom;
+      if (atom instanceof SWRLBuiltInAtom) {
+        SWRLBuiltInAtom builtInAtom = (SWRLBuiltInAtom)atom;
         if (builtInNames.contains(builtInAtom.getBuiltInURI())) result.add(builtInAtom);
         } // if
     } // for
     return result;
   } 
 
-  private List<BuiltInAtom> getBuiltInAtoms(List<SWRLAtom> atoms) 
+  private List<SWRLBuiltInAtom> getBuiltInAtoms(List<SWRLAtom> atoms) 
   {
-    List<BuiltInAtom> result = new ArrayList<BuiltInAtom>();
+    List<SWRLBuiltInAtom> result = new ArrayList<SWRLBuiltInAtom>();
     
-    for (SWRLAtom atom : atoms) if (atom instanceof BuiltInAtom) result.add((BuiltInAtom)atom);
+    for (SWRLAtom atom : atoms) if (atom instanceof SWRLBuiltInAtom) result.add((SWRLBuiltInAtom)atom);
 
     return result;
   }
   
-  public List<BuiltInAtom> getBuiltInAtomsFromHead(SWRLRule ruleOrQuery) 
+  public List<SWRLBuiltInAtom> getBuiltInAtomsFromHead(SWRLRule ruleOrQuery) 
   { 
   	return getBuiltInAtoms(ruleOrQuery.getHeadAtoms()); 
   }
   
-  public List<BuiltInAtom> getBuiltInAtomsFromHead(SWRLRule ruleOrQuery, Set<String> builtInNames) 
+  public List<SWRLBuiltInAtom> getBuiltInAtomsFromHead(SWRLRule ruleOrQuery, Set<String> builtInNames) 
   { 
   	return getBuiltInAtoms(ruleOrQuery.getHeadAtoms(), builtInNames); 
   }
 
-  public List<BuiltInAtom> getBuiltInAtomsFromBody(SWRLRule ruleOrQuery) 
+  public List<SWRLBuiltInAtom> getBuiltInAtomsFromBody(SWRLRule ruleOrQuery) 
   { 
   	return getBuiltInAtoms(ruleOrQuery.getBodyAtoms()); 
   }
   
-  public List<BuiltInAtom> getBuiltInAtomsFromBody(SWRLRule ruleOrQuery, Set<String> builtInNames) 
+  public List<SWRLBuiltInAtom> getBuiltInAtomsFromBody(SWRLRule ruleOrQuery, Set<String> builtInNames) 
   { 
   	return getBuiltInAtoms(ruleOrQuery.getBodyAtoms(), builtInNames); 
   }

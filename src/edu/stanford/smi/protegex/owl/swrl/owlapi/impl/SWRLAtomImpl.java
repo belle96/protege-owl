@@ -1,22 +1,22 @@
 
-package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
+package edu.stanford.smi.protegex.owl.swrl.owlapi.impl;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLAtom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLAtom;
 
 /**
  * Base class representing information about atoms in a SWRL rule
  */
-public abstract class AtomImpl implements SWRLAtom
+public abstract class SWRLAtomImpl implements SWRLAtom
 {
   private Set<String> referencedClassURIs;
   private Set<String> referencedPropertyURIs;
   private Set<String> referencedIndividualURIs;
   private Set<String> referencedVariableNames; // We need to know ordering of variables
 
-  public AtomImpl() 
+  public SWRLAtomImpl() 
   { 
     referencedClassURIs = new HashSet<String>();
     referencedPropertyURIs = new HashSet<String>();

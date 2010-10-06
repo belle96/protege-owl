@@ -18,12 +18,12 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.ClassArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.CollectionArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.DataPropertyArgument;
-import edu.stanford.smi.protegex.owl.swrl.bridge.DataValueArgument;
-import edu.stanford.smi.protegex.owl.swrl.bridge.IndividualArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.ObjectPropertyArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.builtins.AbstractSWRLBuiltInLibrary;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.InvalidBuiltInArgumentException;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLLiteralArgument;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLIndividualArgument;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.ClassValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataPropertyValue;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.DataValue;
@@ -68,11 +68,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
     int argumentIndex = 0;
     for (BuiltInArgument argument : arguments) {
-      if (argument instanceof DataValueArgument) {
-      	DataValue dataValue = ((DataValueArgument)argument).getDataValue();
+      if (argument instanceof SWRLLiteralArgument) {
+      	DataValue dataValue = ((SWRLLiteralArgument)argument).getLiteral();
       	result.addRowData(dataValue);
-      } else if (argument instanceof IndividualArgument) {
-      	IndividualArgument individualArgument = (IndividualArgument)argument;
+      } else if (argument instanceof SWRLIndividualArgument) {
+      	SWRLIndividualArgument individualArgument = (SWRLIndividualArgument)argument;
       	IndividualValue individualValue =  resultValueFactory.createIndividualValue(individualArgument.getURI());
       	result.addRowData(individualValue);
       } else if (argument instanceof ClassArgument) {
@@ -115,11 +115,11 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
     if (!result.isRowOpen()) result.openRow();
     
-    if (argument instanceof DataValueArgument) {
-    	DataValue dataValue = ((DataValueArgument)argument).getDataValue();
+    if (argument instanceof SWRLLiteralArgument) {
+    	DataValue dataValue = ((SWRLLiteralArgument)argument).getLiteral();
     	result.addRowData(dataValue);
-    } else if (argument instanceof IndividualArgument) {
-    	IndividualArgument individualArgument = (IndividualArgument)argument;
+    } else if (argument instanceof SWRLIndividualArgument) {
+    	SWRLIndividualArgument individualArgument = (SWRLIndividualArgument)argument;
     	IndividualValue individualValue =  resultValueFactory.createIndividualValue(individualArgument.getURI());
     	result.addRowData(individualValue);
     } else if (argument instanceof ClassArgument) {
@@ -240,8 +240,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       
       if (!resultImpl.isRowOpen()) resultImpl.openRow();
       
-      if (argument instanceof DataValueArgument && ((DataValueArgument)argument).getDataValue().isNumeric()) {
-      	DataValue dataValue = ((DataValueArgument)argument).getDataValue();
+      if (argument instanceof SWRLLiteralArgument && ((SWRLLiteralArgument)argument).getLiteral().isNumeric()) {
+      	DataValue dataValue = ((SWRLLiteralArgument)argument).getLiteral();
       	resultImpl.addRowData(dataValue);
       } else throw new InvalidBuiltInArgumentException(0, "expecting numeric literal, got " + argument);
       
@@ -264,8 +264,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       
       if (!resultImpl.isRowOpen()) resultImpl.openRow();
       
-      if (argument instanceof DataValueArgument && ((DataValueArgument)argument).getDataValue().isNumeric()) {
-      	DataValue dataValue = ((DataValueArgument)argument).getDataValue();
+      if (argument instanceof SWRLLiteralArgument && ((SWRLLiteralArgument)argument).getLiteral().isNumeric()) {
+      	DataValue dataValue = ((SWRLLiteralArgument)argument).getLiteral();
       	resultImpl.addRowData(dataValue);
       } else throw new InvalidBuiltInArgumentException(0, "expecting numeric literal, got: " + argument);
 
@@ -289,8 +289,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       
       if (!resultImpl.isRowOpen()) resultImpl.openRow();
       
-      if (argument instanceof DataValueArgument && ((DataValueArgument)argument).getDataValue().isNumeric()) {
-      	DataValue dataValue = ((DataValueArgument)argument).getDataValue();
+      if (argument instanceof SWRLLiteralArgument && ((SWRLLiteralArgument)argument).getLiteral().isNumeric()) {
+      	DataValue dataValue = ((SWRLLiteralArgument)argument).getLiteral();
       	resultImpl.addRowData(dataValue);
       } else throw new InvalidBuiltInArgumentException(resultArgumentNumber, "expecting numeric literal, got: " + argument);
       
@@ -328,8 +328,8 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
       
       if (!resultImpl.isRowOpen()) resultImpl.openRow();
       
-      if (argument instanceof DataValueArgument && ((DataValueArgument)argument).getDataValue().isNumeric()) {
-      	DataValue dataValue = ((DataValueArgument)argument).getDataValue();
+      if (argument instanceof SWRLLiteralArgument && ((SWRLLiteralArgument)argument).getLiteral().isNumeric()) {
+      	DataValue dataValue = ((SWRLLiteralArgument)argument).getLiteral();
       	resultImpl.addRowData(dataValue);
       } else throw new InvalidBuiltInArgumentException(resultArgumentNumber, "expecting numeric literal, got: " + argument);
     } else { // SQWRL collection operator
@@ -1045,7 +1045,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
 
   private void checkThatElementIsComparable(BuiltInArgument element) throws BuiltInException
   {
-    if (!(element instanceof DataValueArgument) || !((DataValueArgument)element).getDataValue().isComparable())
+    if (!(element instanceof SWRLLiteralArgument) || !((SWRLLiteralArgument)element).getLiteral().isComparable())
       throw new BuiltInException("may only be applied to collections with comparable elements");
   }
   

@@ -1,15 +1,16 @@
 
-package edu.stanford.smi.protegex.owl.swrl.bridge;
+package edu.stanford.smi.protegex.owl.swrl.owlapi;
 
 import java.util.List;
 import java.util.Set;
 
+import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 
 /**
  * Interface representing a SWRL built-in atom
  */
-public interface BuiltInAtom  extends SWRLAtom
+public interface SWRLBuiltInAtom  extends SWRLAtom
 {
   String getBuiltInURI();
   String getBuiltInPrefixedName();

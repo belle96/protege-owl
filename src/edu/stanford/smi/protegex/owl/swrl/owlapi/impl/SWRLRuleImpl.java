@@ -1,10 +1,10 @@
 
-package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
+package edu.stanford.smi.protegex.owl.swrl.owlapi.impl;
 
 import java.util.List;
 
-import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLAtom;
-import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRule;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLAtom;
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLRule;
 
 /**
  * Class implementing a SWRL rule or SQWRL query.

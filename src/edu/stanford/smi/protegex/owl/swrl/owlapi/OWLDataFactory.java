@@ -5,9 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
-import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInAtom;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLPropertyPropertyAssertionAxiom;
-import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRule;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLFactoryException;
 
 /**
@@ -17,7 +15,7 @@ public interface OWLDataFactory
 {
   Set<SWRLRule> getSWRLRules() throws OWLFactoryException;
   SWRLRule getSWRLRule(String ruleName) throws OWLFactoryException;
-  BuiltInAtom getSWRLBuiltInAtom(String builtInURI, String builtInPrefixedName, List<BuiltInArgument> arguments);
+  SWRLBuiltInAtom getSWRLBuiltInAtom(String builtInURI, String builtInPrefixedName, List<BuiltInArgument> arguments);
 
   OWLClass getOWLClass(String classURI);
   OWLNamedIndividual getOWLIndividual(String individualURI);

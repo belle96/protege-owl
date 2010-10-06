@@ -3,7 +3,8 @@ package edu.stanford.smi.protegex.owl.swrl.ui.table;
 
 import javax.swing.tree.DefaultTreeCellRenderer;
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
-import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRule;
+
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLRule;
 
 public class SWRLRuleGroupTreeCellRenderer extends DefaultTreeCellRenderer
 {

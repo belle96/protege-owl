@@ -1,10 +1,10 @@
 
-package edu.stanford.smi.protegex.owl.swrl.bridge;
+package edu.stanford.smi.protegex.owl.swrl.owlapi;
 
 import java.util.Set;
 
 /**
- * Base class representing information about SWRL atoms.
+ * Base class representing information about SWRL atoms
  */
 public interface SWRLAtom
 {

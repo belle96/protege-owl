@@ -1,10 +1,7 @@
 
-package edu.stanford.smi.protegex.owl.swrl.bridge;
+package edu.stanford.smi.protegex.owl.swrl.owlapi;
 
 import java.util.List;
-
-import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLAxiom;
-import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLEntity;
 
 /**
  * Interface representing a SWRL rule
