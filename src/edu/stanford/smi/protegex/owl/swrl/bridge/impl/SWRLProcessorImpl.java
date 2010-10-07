@@ -605,7 +605,7 @@ public class SWRLProcessorImpl implements SWRLProcessor
      processBuiltInIndexes(query);
 
      for (SWRLBuiltInAtom builtInAtom : getBuiltInAtomsFromHead(query, SQWRLNames.getHeadBuiltInNames())) {
-       String builtInName = builtInAtom.getBuiltInURI();
+       String builtInName = builtInAtom.getPredicate();
        hasSQWRLBuiltInsMap.put(query.getURI(), true);
           
        for (BuiltInArgument argument : builtInAtom.getArguments()) {
@@ -765,7 +765,7 @@ public class SWRLProcessorImpl implements SWRLProcessor
 
       hasSQWRLCollectionBuiltInsMap.put(uri, true);
     
-      if (builtInAtom.getNumberOfArguments() < 2) throw new SQWRLException("groupBy must have at least two arguments");
+      if (builtInAtom.getArguments().size() < 2) throw new SQWRLException("groupBy must have at least two arguments");
       if (!collectionNames.contains(collectionName)) throw new SQWRLException("groupBy applied to undefined collection ?" + collectionName);
       if (collectionGroupArgumentsMap.containsKey(collectionName)) throw new SQWRLException("groupBy specified more than once for same collection ?" + collectionName);
       if (hasUnboundArgument(groupArguments)) throw new SQWRLException("unbound group argument passed to groupBy for collection ?" + collectionName);
@@ -914,7 +914,7 @@ public class SWRLProcessorImpl implements SWRLProcessor
     for (SWRLAtom atom : atoms) {
       if (atom instanceof SWRLBuiltInAtom) {
         SWRLBuiltInAtom builtInAtom = (SWRLBuiltInAtom)atom;
-        if (builtInNames.contains(builtInAtom.getBuiltInURI())) result.add(builtInAtom);
+        if (builtInNames.contains(builtInAtom.getPredicate())) result.add(builtInAtom);
         } // if
     } // for
     return result;

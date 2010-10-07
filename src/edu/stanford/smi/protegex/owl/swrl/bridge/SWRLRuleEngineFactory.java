@@ -36,17 +36,17 @@ public class SWRLRuleEngineFactory
     if (cls == null) System.err.println("SWRLJessBridge load failed - could not find class");
    } // static
 
-  public static void registerRuleEngine(String ruleEngineName, TargetSWRLRuleEngineCreator ruleEngineCreator)
+  public static void registerRuleEngine(String pluginName, TargetSWRLRuleEngineCreator ruleEngineCreator)
   {
-    if (registeredSWRLRuleEngines.containsKey(ruleEngineName)) {
-      registeredSWRLRuleEngines.remove(ruleEngineName);
-      registeredSWRLRuleEngines.put(ruleEngineName, ruleEngineCreator);
-    } else registeredSWRLRuleEngines.put(ruleEngineName, ruleEngineCreator);
+    if (registeredSWRLRuleEngines.containsKey(pluginName)) {
+      registeredSWRLRuleEngines.remove(pluginName);
+      registeredSWRLRuleEngines.put(pluginName, ruleEngineCreator);
+    } else registeredSWRLRuleEngines.put(pluginName, ruleEngineCreator);
 
-    log.info("Rule engine '" + ruleEngineName + "' registered with the SWRLTab.");
+    log.info("Rule engine '" + pluginName + "' registered with the SWRLTab.");
   }
 
-  public static boolean isRuleEngineRegistered(String ruleEngineName) { return registeredSWRLRuleEngines.containsKey(ruleEngineName); }
+  public static boolean isRuleEngineRegistered(String pluginName) { return registeredSWRLRuleEngines.containsKey(pluginName); }
   public static Set<String> getRegisteredRuleEngineNames() { return registeredSWRLRuleEngines.keySet(); }
 
   /**
@@ -55,33 +55,35 @@ public class SWRLRuleEngineFactory
    */
   public static SWRLRuleEngine create(OWLModel owlModel) throws SWRLRuleEngineException
   {
-    if (!registeredSWRLRuleEngines.isEmpty()) return create(registeredSWRLRuleEngines.keySet().iterator().next(), owlModel);
+    if (!registeredSWRLRuleEngines.isEmpty()) 
+    	return create(registeredSWRLRuleEngines.keySet().iterator().next(), owlModel);
     else throw new NoRegisteredRuleEnginesException();
   } 
 
   /**
    * Create a rule engine. Throws an InvalidSWRLRuleEngineNameException if an engine of this name is not registered.
    */
-  public static SWRLRuleEngine create(String ruleEngineName, OWLModel owlModel) throws SWRLRuleEngineException
+  public static SWRLRuleEngine create(String pluginName, OWLModel owlModel) throws SWRLRuleEngineException
   {
   	SWRLRuleEngine ruleEngine = null;
     DefaultSWRLBridge bridge = null;
     TargetSWRLRuleEngine targetRuleEngine = null;
 
-    if (registeredSWRLRuleEngines.containsKey(ruleEngineName)) {
+    if (registeredSWRLRuleEngines.containsKey(pluginName)) {
 
       try {
       	OWLOntology activeOntology = new OWLOntologyImpl(owlModel);
       	SWRLProcessor swrlProcessor = new SWRLProcessorImpl(activeOntology); 
       	bridge = new DefaultSWRLBridge(activeOntology, swrlProcessor);
-        targetRuleEngine = registeredSWRLRuleEngines.get(ruleEngineName).create(bridge);
+        targetRuleEngine = registeredSWRLRuleEngines.get(pluginName).create(bridge);
         bridge.setTargetRuleEngine(targetRuleEngine);
         ruleEngine = new DefaultSWRLRuleEngine(activeOntology, swrlProcessor, targetRuleEngine, bridge, bridge);       
       } catch (Throwable e) {
-        throw new SWRLRuleEngineException("Error creating rule engine '" + ruleEngineName + "': " + e.getMessage());
+        throw new SWRLRuleEngineException("Error creating rule engine '" + pluginName + "': " + e.getMessage());
       } // try
 
-    } else throw new InvalidSWRLRuleEngineNameException(ruleEngineName);
+    } else 
+    	throw new InvalidSWRLRuleEngineNameException(pluginName);
 
     return ruleEngine;
   } 

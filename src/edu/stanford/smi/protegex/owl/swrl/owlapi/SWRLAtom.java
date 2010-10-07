@@ -8,7 +8,6 @@ import java.util.Set;
  */
 public interface SWRLAtom
 {
-	int getNumberOfArguments();
   boolean hasReferencedClasses();
   boolean hasReferencedProperties();
   boolean hasReferencedIndividuals();

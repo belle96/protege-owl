@@ -82,10 +82,10 @@ public class BridgePluginManager
   public static boolean isVisible(String pluginName) { return !visiblePluginName.equals("") && pluginName.equals(visiblePluginName); } 
 
   // Called by each plugin as it is loaded to inform the adapter of its presence
-  public static void registerPlugin(String pluginName, String toolTip, Icon icon, SWRLPluginGUIAdapter guiAdapter)
+  public static void registerPlugin(String pluginName, String ruleEngineName, String toolTip, Icon icon, SWRLPluginGUIAdapter guiAdapter)
   {
     if (registeredPlugins.containsKey(pluginName)) registeredPlugins.remove(pluginName);
-    registeredPlugins.put(pluginName, new PluginRegistration(pluginName, toolTip, icon, guiAdapter));
+    registeredPlugins.put(pluginName, new PluginRegistration(pluginName, ruleEngineName, toolTip, icon, guiAdapter));
     log.info("Plugin '" + pluginName + "' registered with the SWRLTab plugin manager.");
   }
 
@@ -104,7 +104,7 @@ public class BridgePluginManager
         
         if (registeredPlugins.containsKey(pluginName)) {
           PluginRegistration registration = registeredPlugins.get(pluginName);
-          Container pluginGUI = registration.getGUIAdapter().createPluginContainer(owlModel);
+          Container pluginGUI = registration.getGUIAdapter().createPluginContainer(owlModel, pluginName, registration.getRuleEngineName());
 
           registration.setOWLModel(owlModel); // Set the owlModel so that we can deregister ourselves on deactivation.
           
@@ -147,15 +147,17 @@ public class BridgePluginManager
   
   public static class PluginRegistration
   {
-    private String pluginName;
+  	private String pluginName;
+  	private String ruleEngineName;
     private String toolTip;
     private SWRLPluginGUIAdapter guiAdapter;
     private Icon icon;
     private OWLModel owlModel;
 
-    public PluginRegistration(String pluginName, String toolTip, Icon icon, SWRLPluginGUIAdapter guiAdapter)
+    public PluginRegistration(String pluginName, String ruleEngineName, String toolTip, Icon icon, SWRLPluginGUIAdapter guiAdapter)
     {
       this.pluginName = pluginName;
+      this.ruleEngineName = ruleEngineName;
       this.toolTip = toolTip;
       this.guiAdapter = guiAdapter;
       this.icon = icon;
@@ -165,6 +167,7 @@ public class BridgePluginManager
     public void setOWLModel(OWLModel owlModel) { this.owlModel = owlModel; }
 
     public String getPluginName() { return pluginName; }
+    public String getRuleEngineName() { return ruleEngineName; }
     public String getToolTip() { return toolTip; }
     public SWRLPluginGUIAdapter getGUIAdapter() { return guiAdapter; }
     public Icon getIcon() { return icon; }

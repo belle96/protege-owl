@@ -10,12 +10,13 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 /**
  * Interface representing a SWRL built-in atom
  */
-public interface SWRLBuiltInAtom  extends SWRLAtom
+public interface SWRLBuiltInAtom extends SWRLAtom
 {
-  String getBuiltInURI();
-  String getBuiltInPrefixedName();
+  String getPredicate();
   List<BuiltInArgument> getArguments();
-  int getNumberOfArguments();
+  // boolean isCoreBuiltin();
+  
+  String getBuiltInPrefixedName();
   int getBuiltInIndex();
   void setBuiltInIndex(int builtInIndex);
 

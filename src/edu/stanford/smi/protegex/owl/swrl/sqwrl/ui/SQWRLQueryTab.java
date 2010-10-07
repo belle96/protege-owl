@@ -20,14 +20,14 @@ public class SQWRLQueryTab extends JTabbedPane implements SWRLPluginGUIAdapter
 {
   static {
     // Register this plugin with the plugin manager so that the SWRL tab can activate and deactivate it.
-    BridgePluginManager.registerPlugin("SQWRLQueryTab", "Activate/deactivate SQWRLQueryTab", QueryIcons.getQueryIcon(), new SQWRLQueryTab());
+    BridgePluginManager.registerPlugin("SQWRLQueryTab", "Jess", "Activate/deactivate SQWRLQueryTab", QueryIcons.getQueryIcon(), new SQWRLQueryTab());
   } // static
 
   private SQWRLQueryEngine queryEngine;
 
   public Container getPluginContainer() { return this; }
 
-  public Container createPluginContainer(OWLModel owlModel)
+  public Container createPluginContainer(OWLModel owlModel, String pluginName, String ruleEngineName)
   {
     try {
       queryEngine = SQWRLQueryEngineFactory.create(owlModel);

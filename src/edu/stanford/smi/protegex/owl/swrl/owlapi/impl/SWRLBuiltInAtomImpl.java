@@ -40,7 +40,7 @@ public class SWRLBuiltInAtomImpl extends SWRLAtomImpl implements SWRLBuiltInAtom
 
   public void setBuiltInArguments(List<BuiltInArgument> arguments) { this.arguments = arguments; }
 
-  public String getBuiltInURI() { return builtInURI; }  
+  public String getPredicate() { return builtInURI; }  
   public String getBuiltInPrefixedName() { return builtInPrefixedName; }  
 
   public List<BuiltInArgument> getArguments() { return arguments; }

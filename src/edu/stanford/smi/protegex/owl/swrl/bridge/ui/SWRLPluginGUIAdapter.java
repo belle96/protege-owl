@@ -19,6 +19,6 @@ import edu.stanford.smi.protegex.owl.model.OWLModel;
  */
 public interface SWRLPluginGUIAdapter
 {
-  Container createPluginContainer(OWLModel owlModel);
+  Container createPluginContainer(OWLModel owlModel, String pluginName, String ruleEngineName);
   Container getPluginContainer();
 }
