@@ -572,6 +572,7 @@ implements ConditionsTableConstants, OWLTableModel {
 			        log.fine("-----------------------------------------------------------------");
 			        log.fine("Showing inherited items for " + hostClass.getBrowserText() + "...");
 			    }
+			    coveredClses.add(hostClass);
 				fillInheritedItems(coveredClses);
                 if (log.isLoggable(Level.FINE)) {
                     log.fine("-----------------------------------------------------------------");
