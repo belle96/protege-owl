@@ -10,5 +10,5 @@ public class SWRLRuleEngineBridgeException extends SWRLRuleEngineException
   public SWRLRuleEngineBridgeException(String message) { super(message); }
 
   public SWRLRuleEngineBridgeException(String message, Throwable cause) { super(message, cause); }
-} // SWRLRuleEngineBridgeException
+}
 

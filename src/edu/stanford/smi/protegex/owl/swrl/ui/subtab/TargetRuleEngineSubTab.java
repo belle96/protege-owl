@@ -39,10 +39,10 @@ public abstract class TargetRuleEngineSubTab extends JTabbedPane implements SWRL
     addTab("Rules", getImpsIcon(), rulesPanel, "Rules Tab");
 
     ImportedClassDeclarationsPanel importedClassesPanel = new ImportedClassDeclarationsPanel(ruleEngine);
-    addTab("Classes", getImpsIcon(), importedClassesPanel, "Imported OWL Classes Tab");
+    addTab("Classes", getImpsIcon(), importedClassesPanel, "Imported OWL Class Declarations Tab");
 
     ImportedIndividualDeclarationsPanel importedIndividualsPanel = new ImportedIndividualDeclarationsPanel(ruleEngine);
-    addTab("Individuals", getImpsIcon(), importedIndividualsPanel, "Imported OWL Individuals Tab");
+    addTab("Individuals", getImpsIcon(), importedIndividualsPanel, "Imported OWL Individual Declarations Tab");
 
     ImportedAxiomsPanel importedRestrictionsPanel = new ImportedAxiomsPanel(ruleEngine);
     addTab("Axioms", getImpsIcon(), importedRestrictionsPanel, "Imported OWL Axioms Tab");

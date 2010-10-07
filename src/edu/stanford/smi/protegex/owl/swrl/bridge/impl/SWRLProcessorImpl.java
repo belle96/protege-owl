@@ -122,9 +122,9 @@ public class SWRLProcessorImpl implements SWRLProcessor
 	  importReferencedOWLKnowledge();
 	} 
 	
-  public SWRLRule getSQWRLQuery(String queryURI) throws SWRLRuleEngineException
+  public SWRLRule getSQWRLQuery(String queryURI) throws SQWRLException
   {
-    if (!queries.containsKey(queryURI)) throw new SWRLRuleEngineException("invalid query name " + queryURI);
+    if (!queries.containsKey(queryURI)) throw new SQWRLException("invalid query name " + queryURI);
 
     return queries.get(queryURI);
   }
@@ -255,7 +255,7 @@ public class SWRLProcessorImpl implements SWRLProcessor
 	public Set<String> getReferencedOWLIndividualURIs(SWRLRule ruleOrQuery) { return referencedOWLIndividualURIMap.get(ruleOrQuery.getURI()); }
 		 
   /**
-   *  Get the results from a SQWRL query.
+   *  Get the results from a previously executed SQWRL query.
    */
   public SQWRLResultImpl getSQWRLResult(String uri) throws SQWRLException
   {
@@ -319,6 +319,36 @@ public class SWRLProcessorImpl implements SWRLProcessor
     } // for
 
     return result;
+  }
+
+  public Set<SWRLRule> getSQWRLQueries() throws SQWRLException
+  {
+  	Set<SWRLRule> sqwrlQueries = new HashSet<SWRLRule>();
+  	
+    try {
+      for (SWRLRule ruleOrQuery : dataFactory.getSWRLRules()) 
+      	if (isSQWRLQuery(ruleOrQuery))
+      		sqwrlQueries.add(ruleOrQuery);    	  
+    } catch (OWLFactoryException e) {
+      throw new SQWRLException("factory error importing SQWRL queries: " + e.getMessage());
+    } // try
+    
+    return sqwrlQueries;
+  }
+
+  public Set<String> getSQWRLQueryNames() throws SQWRLException
+  {
+  	Set<String> sqwrlQueryNames = new HashSet<String>();
+  	
+    try {
+      for (SWRLRule ruleOrQuery : dataFactory.getSWRLRules()) 
+      	if (isSQWRLQuery(ruleOrQuery))
+      		sqwrlQueryNames.add(ruleOrQuery.getURI());    	  
+    } catch (OWLFactoryException e) {
+      throw new SQWRLException("factory error importing SQWRL queries: " + e.getMessage());
+    } // try
+    
+    return sqwrlQueryNames;
   }
 
   private void importSWRLRules() throws SWRLRuleEngineException

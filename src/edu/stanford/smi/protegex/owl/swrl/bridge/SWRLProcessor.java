@@ -32,8 +32,12 @@ public interface SWRLProcessor
   int getNumberOfImportedOWLAxioms();
   
   SWRLRule getSWRLRule(String ruleURI) throws SWRLRuleEngineException;
-  SWRLRule getSQWRLQuery(String queryURI) throws SWRLRuleEngineException;
-  
+
+  boolean isSQWRLQuery(String uri);
+  SWRLRule getSQWRLQuery(String queryURI) throws SQWRLException;
+  Set<SWRLRule> getSQWRLQueries() throws SQWRLException;
+  Set<String> getSQWRLQueryNames() throws SQWRLException;
+
   Set<SWRLRule> getImportedSWRLRules();
   Set<OWLClass> getImportedOWLClassDeclarations();
   Set<OWLProperty> getImportedOWLPropertyDeclarations();
@@ -58,7 +62,6 @@ public interface SWRLProcessor
   List<SWRLBuiltInAtom> getBuiltInAtomsFromBody(SWRLRule ruleOrQuery);
   List<SWRLBuiltInAtom> getBuiltInAtomsFromBody(SWRLRule ruleOrQuery, Set<String> builtInNames);
 
-  boolean isSQWRLQuery(String uri);
   SQWRLResultImpl getSQWRLResult(String uri) throws SQWRLException;
   SQWRLResultImpl getSQWRLUnpreparedResult(String uri) throws SQWRLException;
   List<SWRLAtom> getSQWRLPhase1BodyAtoms(SWRLRule query);

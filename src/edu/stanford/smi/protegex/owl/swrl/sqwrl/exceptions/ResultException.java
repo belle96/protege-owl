@@ -8,4 +8,4 @@ public class ResultException extends BuiltInException
   public ResultException(String message) { super(message); }
 
   public ResultException(String message, Throwable cause) { super(message, cause); }
-} // ResultException
+}

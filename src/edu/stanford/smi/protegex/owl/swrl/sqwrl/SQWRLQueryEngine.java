@@ -1,6 +1,9 @@
 
 package edu.stanford.smi.protegex.owl.swrl.sqwrl;
 
+import java.util.Set;
+
+import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLRule;
 import edu.stanford.smi.protegex.owl.swrl.parser.SWRLParseException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 
@@ -15,7 +18,7 @@ public interface SQWRLQueryEngine
   SQWRLResult runSQWRLQuery(String queryName) throws SQWRLException;
 
   /**
-   * Run a named SQWRL query ignoring all SWRL rules in ontology.
+   * Run a named SQWRL query without executing any SWRL rules in ontology.
    */
   SQWRLResult runStandaloneSQWRLQuery(String queryName) throws SQWRLException;
 
@@ -40,14 +43,19 @@ public interface SQWRLQueryEngine
   void deleteSQWRLQuery(String queryName) throws SQWRLException;
 
   /**
-   * Get the results from a SQWRL query. Null is returned if there is no result.
+   * Get the results from a previously executed SQWRL query. Null is returned if there is no result.
    */
   SQWRLResult getSQWRLResult(String queryName) throws SQWRLException;
+
+  /**
+   * Get all the SQWRL queries in the ontology.
+   */
+  Set<SWRLRule> getSQWRLQueries() throws SQWRLException;
   
   /**
-   * Get the names of SQWRL queries.
+   * Get the names of the SQWRL queries in the ontology.
    */
-  //Set<String> getSQWRLQueryNames();
+  Set<String> getSQWRLQueryNames() throws SQWRLException;
   
   // TODO: temporary
   String uri2PrefixedName(String uri);

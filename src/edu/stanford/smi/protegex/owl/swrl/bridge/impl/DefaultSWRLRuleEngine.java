@@ -83,16 +83,6 @@ public class DefaultSWRLRuleEngine implements SWRLRuleEngine
   	exportSWRLRulesAndOWLAxioms();
   }
 
-  private void importSQWRLQuery(String queryName) throws SWRLRuleEngineException
-  {
-    try {
-      SWRLRule rule = owlDataFactory.getSWRLRule(queryName);
-      swrlProcessor.process(rule);
-    } catch (OWLFactoryException e) {
-    	throw new SWRLRuleEngineException("factory error importing SQWRL query " + queryName + ": " + e.getMessage());
-    } // try
-  } 
-  
   /**
    * Run the rule engine.
    */
@@ -152,6 +142,9 @@ public class DefaultSWRLRuleEngine implements SWRLRuleEngine
   	} // try
   }
 
+  /**
+   * Run a named SQWRL query. SWRL rules will also be executed and any inferences produced by them will be available in the query.
+   */
   public SQWRLResult runSQWRLQuery(String queryName) throws SQWRLException
   {
     SQWRLResult result = null;
@@ -168,6 +161,9 @@ public class DefaultSWRLRuleEngine implements SWRLRuleEngine
     return result;
   }
 
+  /**
+   * Run a named SQWRL query without executing any SWRL rules in ontology.
+   */
   public SQWRLResult runStandaloneSQWRLQuery(String queryName) throws SQWRLException
   {
     SQWRLResult result = null;
@@ -199,7 +195,7 @@ public class DefaultSWRLRuleEngine implements SWRLRuleEngine
   }
 
   /**
-   *  Get the results from a SQWRL query.
+   *  Get the results from a previously executed SQWRL query.
    */
   public SQWRLResultImpl getSQWRLResult(String queryURI) throws SQWRLException
   {
@@ -215,6 +211,23 @@ public class DefaultSWRLRuleEngine implements SWRLRuleEngine
   	}
   }
 
+  /**
+   * Get all the SQWRL queries in the ontology.
+   */
+  public Set<SWRLRule> getSQWRLQueries() throws SQWRLException
+  {
+  	return swrlProcessor.getSQWRLQueries();
+  }
+  
+  /**
+   * Get the names of the SQWRL queries in the ontology.
+   */
+  public Set<String> getSQWRLQueryNames() throws SQWRLException
+  {
+  	return swrlProcessor.getSQWRLQueryNames();
+  }
+
+  
   public SQWRLResultImpl getSQWRLUnpreparedResult(String queryURI) throws SQWRLException
   {
   	return swrlProcessor.getSQWRLUnpreparedResult(queryURI);
@@ -281,6 +294,17 @@ public class DefaultSWRLRuleEngine implements SWRLRuleEngine
   		} // try
   	} // for
   } 
+
+  private void importSQWRLQuery(String queryName) throws SWRLRuleEngineException
+  {
+    try {
+      SWRLRule rule = owlDataFactory.getSWRLRule(queryName);
+      swrlProcessor.process(rule);
+    } catch (OWLFactoryException e) {
+    	throw new SWRLRuleEngineException("factory error importing SQWRL query " + queryName + ": " + e.getMessage());
+    } // try
+  } 
+  
 
   /**
    * Create OWL individuals in model for the individuals injected by built-ins during rule execution.
