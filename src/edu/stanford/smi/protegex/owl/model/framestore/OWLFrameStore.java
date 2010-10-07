@@ -119,21 +119,16 @@ public class OWLFrameStore extends FrameStoreAdapter {
             //moved from AbstractOWLModel
             if (cls.getDirectSubclassCount() == 1) {
                 Cls subCls = (Cls) cls.getDirectSubclasses().iterator().next();            
-                subCls.removeDirectSuperclass(cls);  // Will call delete again
-                return;
-            }
-            //end moved
-
-            //Collection refs = cls.getReferringAnonymousClasses();
-            //deleteDependingListInstances(cls);
-            Collection<RDFSClass> refs = getReferringAnonymousClassesAndDeleteDependingListInstances(cls);
-
-            if (refs.size() > 0) {
-                deleteAnonymousClses(refs);  // Will also delete cls
+                subCls.removeDirectSuperclass(cls);
             }
             else {
-                deleteAnonymousClses(Collections.singleton(cls));
+                Collection<RDFSClass> refs = getReferringAnonymousClassesAndDeleteDependingListInstances(cls);
+
+                if (refs.size() > 0) {
+                    deleteAnonymousClses(refs);
+                }
             }
+            deleteAnonymousClses(Collections.singleton(cls));
         }
         finally {
             deletionsInProgress.remove(cls);
