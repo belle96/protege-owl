@@ -11,7 +11,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValue;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValueFactory;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLBuiltInBridge;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLBuiltInBridgeController;
-import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLProcessor;
+import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLAndSQWRLProcessor;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRuleEngineBridge;
 import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLRuleEngineBridgeController;
 import edu.stanford.smi.protegex.owl.swrl.bridge.TargetSWRLRuleEngine;
@@ -45,16 +45,16 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.SQWRLResultImpl;
 
 /**
- * Default implementation of a SWRL rule engine and built-in bridge.
+ * Default implementation of a SWRL rule engine bridge, built-in bridge, built-in bridge controller and rule engine bridge controller. 
  */
 public class DefaultSWRLBridge implements SWRLRuleEngineBridge, SWRLBuiltInBridge, SWRLBuiltInBridgeController, SWRLRuleEngineBridgeController 
 {
+	private OWLOntology activeOntology;
 	private TargetSWRLRuleEngine targetRuleEngine;
-	private SWRLProcessor swrlProcessor;
+	private SWRLAndSQWRLProcessor swrlAndSQWRLProcessor;
 	private OWLDataFactory dataFactory;
 	private OWLDataFactory injectedOWLFactory;
 	private OWLDataValueFactory dataValueFactory;
-	private OWLOntology activeOntology;
   private PrefixManager prefixManager;
 	
   private Map<String, OWLNamedIndividual> inferredOWLIndividualDeclarations;
@@ -67,10 +67,10 @@ public class DefaultSWRLBridge implements SWRLRuleEngineBridge, SWRLBuiltInBridg
   private Map<String, Map<String, Set<OWLPropertyAssertionAxiom>>> allOWLPropertyAssertionAxioms; // individualURI <propertyURI, axiom>
   private Map<String, OWLNamedIndividual> allOWLIndividualDeclarations; 
 
-	public DefaultSWRLBridge(OWLOntology activeOntology, SWRLProcessor swrlProcessor) throws SWRLBuiltInBridgeException 
+	public DefaultSWRLBridge(OWLOntology activeOntology, SWRLAndSQWRLProcessor swrlAndSQWRLProcessor) throws SWRLBuiltInBridgeException 
 	{
 		this.activeOntology = activeOntology;
-		this.swrlProcessor = swrlProcessor;
+		this.swrlAndSQWRLProcessor = swrlAndSQWRLProcessor;
 		this.targetRuleEngine = null;
       
     dataFactory = new OWLDataFactoryImpl();
@@ -103,7 +103,7 @@ public class DefaultSWRLBridge implements SWRLRuleEngineBridge, SWRLBuiltInBridg
   public Set<OWLNamedIndividual> getInferredOWLIndividuals() { return new HashSet<OWLNamedIndividual>(inferredOWLIndividualDeclarations.values()); }
   public int getNumberOfInferredOWLAxioms() { return inferredOWLAxioms.size(); }
   public int getNumberOfInferredOWLIndividuals() { return inferredOWLIndividualDeclarations.size(); }
-	public boolean isSQWRLQuery(SWRLRule query ) { return swrlProcessor.isSQWRLQuery(query.getURI()); }
+	public boolean isSQWRLQuery(SWRLRule query ) { return swrlAndSQWRLProcessor.isSQWRLQuery(query.getURI()); }
 	
   public void inferOWLAxiom(OWLAxiom axiom) throws SWRLRuleEngineBridgeException
   { 
@@ -138,9 +138,9 @@ public class DefaultSWRLBridge implements SWRLRuleEngineBridge, SWRLBuiltInBridg
  	}
 			
 	public List<SWRLBuiltInAtom> getBuiltInAtomsFromBody(SWRLRule ruleOrQuery, Set<String> builtInNames) 
-    { return swrlProcessor.getBuiltInAtomsFromBody(ruleOrQuery, builtInNames); }
+    { return swrlAndSQWRLProcessor.getBuiltInAtomsFromBody(ruleOrQuery, builtInNames); }
 	public List<SWRLBuiltInAtom> getBuiltInAtomsFromHead(SWRLRule ruleOrQuery, Set<String> builtInNames) 
-    { return swrlProcessor.getBuiltInAtomsFromHead(ruleOrQuery, builtInNames); }
+    { return swrlAndSQWRLProcessor.getBuiltInAtomsFromHead(ruleOrQuery, builtInNames); }
 	  
   // The inject methods can be used by built-ins to inject new axioms into a bridge, which will also reflect them in the underlying
   // engine. Eventually collapse all inject methods into injectOWLAxiom.
@@ -241,7 +241,7 @@ public class DefaultSWRLBridge implements SWRLRuleEngineBridge, SWRLBuiltInBridg
     OWLNamedIndividual owlIndividual = injectedOWLFactory.getOWLIndividual(individualURI);
     owlIndividual.addType(owlClass);
 
-    if (!swrlProcessor.isImportedOWLClass(owlClass.getURI())) exportOWLClassDeclaration(owlClass);
+    if (!swrlAndSQWRLProcessor.isImportedOWLClass(owlClass.getURI())) exportOWLClassDeclaration(owlClass);
    
     injectedOWLIndividualDeclarations.put(individualURI, owlIndividual); 
     cacheOWLIndividual(owlIndividual);
@@ -289,23 +289,23 @@ public class DefaultSWRLBridge implements SWRLRuleEngineBridge, SWRLBuiltInBridg
 
   public boolean isOWLClass(String classURI) 
   { 
-	 return swrlProcessor.isImportedOWLClass(classURI) || injectedOWLClassDeclarations.containsKey(classURI) ||
+	 return swrlAndSQWRLProcessor.isImportedOWLClass(classURI) || injectedOWLClassDeclarations.containsKey(classURI) ||
 	        activeOntology.containsClassInSignature(classURI, true);
   }
   
   public boolean isOWLObjectProperty(String propertyURI) 
   { 
-	  return swrlProcessor.isImportedOWLObjectProperty(propertyURI) || activeOntology.containsObjectPropertyInSignature(propertyURI, true);
+	  return swrlAndSQWRLProcessor.isImportedOWLObjectProperty(propertyURI) || activeOntology.containsObjectPropertyInSignature(propertyURI, true);
   }
   
   public boolean isOWLDataProperty(String propertyURI) 
   { 
-	  return swrlProcessor.isImportedOWLDataProperty(propertyURI) || activeOntology.containsDataPropertyInSignature(propertyURI, true);
+	  return swrlAndSQWRLProcessor.isImportedOWLDataProperty(propertyURI) || activeOntology.containsDataPropertyInSignature(propertyURI, true);
   }
 
   public boolean isOWLIndividual(String individualURI) 
   { 
-	  return swrlProcessor.isImportedOWLIndividual(individualURI) || activeOntology.containsIndividualInSignature(individualURI, true);
+	  return swrlAndSQWRLProcessor.isImportedOWLIndividual(individualURI) || activeOntology.containsIndividualInSignature(individualURI, true);
   }
   
   public boolean isOWLIndividualOfClass(String individualURI, String classURI)
@@ -350,12 +350,12 @@ public class DefaultSWRLBridge implements SWRLRuleEngineBridge, SWRLBuiltInBridg
   public OWLDataFactory getOWLDataFactory() { return dataFactory; }
   public OWLDataValueFactory getOWLDataValueFactory() { return dataValueFactory; }
 
-  public boolean isSQWRLQuery(String uri) { return swrlProcessor.isSQWRLQuery(uri); }
-  public SQWRLResultImpl getSQWRLResult(String uri) throws SQWRLException { return swrlProcessor.getSQWRLResult(uri); }
-  public SQWRLResultImpl getSQWRLUnpreparedResult(String uri) throws SQWRLException { return swrlProcessor.getSQWRLUnpreparedResult(uri); }
-  public List<SWRLAtom> getSQWRLPhase1BodyAtoms(SWRLRule query) { return swrlProcessor.getSQWRLPhase1BodyAtoms(query); }
-  public List<SWRLAtom> getSQWRLPhase2BodyAtoms(SWRLRule query) { return swrlProcessor.getSQWRLPhase2BodyAtoms(query); }
-  public boolean usesSQWRLCollections(SWRLRule query) { return swrlProcessor.usesSQWRLCollections(query); }
+  public boolean isSQWRLQuery(String uri) { return swrlAndSQWRLProcessor.isSQWRLQuery(uri); }
+  public SQWRLResultImpl getSQWRLResult(String uri) throws SQWRLException { return swrlAndSQWRLProcessor.getSQWRLResult(uri); }
+  public SQWRLResultImpl getSQWRLUnpreparedResult(String uri) throws SQWRLException { return swrlAndSQWRLProcessor.getSQWRLUnpreparedResult(uri); }
+  public List<SWRLAtom> getSQWRLPhase1BodyAtoms(SWRLRule query) { return swrlAndSQWRLProcessor.getSQWRLPhase1BodyAtoms(query); }
+  public List<SWRLAtom> getSQWRLPhase2BodyAtoms(SWRLRule query) { return swrlAndSQWRLProcessor.getSQWRLPhase2BodyAtoms(query); }
+  public boolean usesSQWRLCollections(SWRLRule query) { return swrlAndSQWRLProcessor.usesSQWRLCollections(query); }
 
   private void initialize()
   {  

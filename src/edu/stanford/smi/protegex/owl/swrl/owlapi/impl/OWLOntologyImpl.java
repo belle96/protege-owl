@@ -138,9 +138,9 @@ public class OWLOntologyImpl implements OWLOntology {
 	}
 
 	public Set<SWRLRule> getSWRLRules() throws OWLConversionFactoryException,
-			SQWRLException, BuiltInException {
-		Collection<edu.stanford.smi.protegex.owl.swrl.model.SWRLImp> imps = swrlFactory
-				.getImps();
+			SQWRLException, BuiltInException 
+			{
+		Collection<edu.stanford.smi.protegex.owl.swrl.model.SWRLImp> imps = swrlFactory.getImps();
 		Set<SWRLRule> result = new HashSet<SWRLRule>();
 
 		for (edu.stanford.smi.protegex.owl.swrl.model.SWRLImp imp : imps) {

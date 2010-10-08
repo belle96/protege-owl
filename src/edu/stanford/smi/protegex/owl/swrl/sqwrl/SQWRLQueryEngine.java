@@ -48,12 +48,12 @@ public interface SQWRLQueryEngine
   SQWRLResult getSQWRLResult(String queryName) throws SQWRLException;
 
   /**
-   * Get all the SQWRL queries in the ontology.
+   * Get all the enabled SQWRL queries in the ontology.
    */
   Set<SWRLRule> getSQWRLQueries() throws SQWRLException;
   
   /**
-   * Get the names of the SQWRL queries in the ontology.
+   * Get the names of the enabled SQWRL queries in the ontology.
    */
   Set<String> getSQWRLQueryNames() throws SQWRLException;
   

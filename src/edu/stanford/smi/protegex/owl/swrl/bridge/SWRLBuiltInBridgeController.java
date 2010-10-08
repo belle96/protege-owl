@@ -8,7 +8,7 @@ import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLClass;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLNamedIndividual;
 
 /*
- * 
+ * This interface defines methods required by a built-in bridge controller. 
  */
 public interface SWRLBuiltInBridgeController 
 {

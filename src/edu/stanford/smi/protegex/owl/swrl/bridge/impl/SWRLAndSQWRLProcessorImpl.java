@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.stanford.smi.protegex.owl.swrl.bridge.BuiltInArgument;
-import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLProcessor;
+import edu.stanford.smi.protegex.owl.swrl.bridge.SWRLAndSQWRLProcessor;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.BuiltInException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLConversionFactoryException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.OWLFactoryException;
@@ -38,7 +38,7 @@ import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.InvalidQueryNameExcep
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.exceptions.SQWRLException;
 import edu.stanford.smi.protegex.owl.swrl.sqwrl.impl.SQWRLResultImpl;
 
-public class SWRLProcessorImpl implements SWRLProcessor 
+public class SWRLAndSQWRLProcessorImpl implements SWRLAndSQWRLProcessor 
 { 
 	private OWLOntology activeOntology;
 	private OWLDataFactory dataFactory;
@@ -65,7 +65,7 @@ public class SWRLProcessorImpl implements SWRLProcessor
   private Map<String, Map<String, Set<OWLPropertyAssertionAxiom>>> allOWLPropertyAssertionAxioms; // individualURI <propertyURI, axiom>
   private Map<String, OWLNamedIndividual> allOWLIndividuals; 
 
-	public SWRLProcessorImpl(OWLOntology activeOntology) 
+	public SWRLAndSQWRLProcessorImpl(OWLOntology activeOntology) 
 	{
 		this.activeOntology = activeOntology;
 		this.dataFactory = new OWLDataFactoryImpl(activeOntology);
@@ -95,7 +95,8 @@ public class SWRLProcessorImpl implements SWRLProcessor
 
 		importedOWLClassDeclarations = new HashMap<String, OWLClass>();
 		importedOWLPropertyDeclarations = new HashMap<String, OWLProperty>();
-    importedOWLIndividualDeclarations = new HashMap<String, OWLNamedIndividual>(); 
+    importedOWLIndividualDeclarations = new HashMap<String, OWLNamedIndividual>();
+    
     importedOWLAxioms = new HashSet<OWLAxiom>(); 
     importedOWLObjectPropertyURIs = new HashSet<String>();
     importedOWLDataPropertyURIs = new HashSet<String>();
@@ -107,12 +108,14 @@ public class SWRLProcessorImpl implements SWRLProcessor
 
 	public void importSWRLRulesAndOWLAxioms() throws SWRLRuleEngineException
 	{
+		reset();
 	  importSWRLRules(); 
 	  importReferencedOWLKnowledge();
 	} 
 
 	public void importSQWRLQueryAndOWLAxioms(String queryName) throws SWRLRuleEngineException
 	{
+		reset();
 	  importSQWRLQuery(queryName); 
 	  importReferencedOWLKnowledge();
 	} 
@@ -157,7 +160,6 @@ public class SWRLProcessorImpl implements SWRLProcessor
 
 	public void process(SWRLRule ruleOrQuery) throws BuiltInException
   {
-
   	for (SWRLAtom atom : ruleOrQuery.getBodyAtoms()) processSWRLAtom(ruleOrQuery, atom, false);
   	for (SWRLAtom atom : ruleOrQuery.getHeadAtoms()) processSWRLAtom(ruleOrQuery, atom, true);
 

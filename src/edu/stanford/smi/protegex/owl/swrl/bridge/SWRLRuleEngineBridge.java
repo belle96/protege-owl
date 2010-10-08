@@ -14,7 +14,7 @@ import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLRule;
 
 /**
  * The SWRL Rule Engine Bridge defines the interface seen by a target implementation of a SWRL rule engine. The implementation uses this
- * interface primarily to infer axioms and to invoke built-ins.
+ * interface primarily to infer axioms and to invoke built-ins. 
  *
  * Detailed documentation for this mechanism can be found <a href="http://protege.cim3.net/cgi-bin/wiki.pl?SWRLRuleEngineBridgeFAQ">here</a>.
  */
