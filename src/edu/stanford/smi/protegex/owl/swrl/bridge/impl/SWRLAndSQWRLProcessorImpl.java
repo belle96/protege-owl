@@ -1041,6 +1041,14 @@ public class SWRLAndSQWRLProcessorImpl implements SWRLAndSQWRLProcessor
 	  	Set<OWLPropertyAssertionAxiom> axioms = null;
 	  	
 	  	try {
+			  if (!importedOWLPropertyDeclarations.containsKey(propertyURI)) {
+			  	if (activeOntology.containsDataPropertyInSignature(propertyURI, true))
+			  		importedOWLPropertyDeclarations.put(propertyURI, activeOntology.getOWLDataProperty(propertyURI));
+			  	else if (activeOntology.containsObjectPropertyInSignature(propertyURI, true))
+			  		importedOWLPropertyDeclarations.put(propertyURI, activeOntology.getOWLObjectProperty(propertyURI));
+			  	else throw new SWRLRuleEngineBridgeException("referenced property " + propertyURI + " not in active ontology");
+			  } // if
+
 	  		axioms = activeOntology.getOWLPropertyAssertionAxioms(propertyURI);
 	 	 	} catch (OWLConversionFactoryException e) {
 	 	 		throw new SWRLBuiltInBridgeException("error importing OWL property assertion axiom for property " + propertyURI + " :" + e);
@@ -1052,10 +1060,6 @@ public class SWRLAndSQWRLProcessorImpl implements SWRLAndSQWRLProcessor
 			  String subjectURI = axiom.getSubject().getURI();
 			  OWLProperty property = axiom.getProperty();
 			  			  
-			  if (!importedOWLPropertyDeclarations.containsKey(propertyURI)) {
-			  	importedOWLPropertyDeclarations.put(propertyURI, property);
-			  } // if
-
 			  cacheOWLPropertyAssertionAxiom(axiom);
 			  
 			  addReferencedIndividualURI(subjectURI);

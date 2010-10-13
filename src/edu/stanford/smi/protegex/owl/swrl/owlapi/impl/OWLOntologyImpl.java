@@ -104,18 +104,15 @@ public class OWLOntologyImpl implements OWLOntology {
 		individuals = new HashMap<String, OWLNamedIndividual>();
 	}
 
-	public boolean containsClassInSignature(String classURI,
-			boolean includesImportsClosure) {
+	public boolean containsClassInSignature(String classURI, boolean includesImportsClosure) {
 		return SWRLOWLUtil.isOWLClass(owlModel, classURI);
 	}
 
-	public boolean containsObjectPropertyInSignature(String propertyURI,
-			boolean includesImportsClosure) {
+	public boolean containsObjectPropertyInSignature(String propertyURI, boolean includesImportsClosure) {
 		return SWRLOWLUtil.isOWLObjectProperty(owlModel, propertyURI);
 	}
 
-	public boolean containsDataPropertyInSignature(String propertyURI,
-			boolean includesImportsClosure) {
+	public boolean containsDataPropertyInSignature(String propertyURI, boolean includesImportsClosure) {
 		return SWRLOWLUtil.isOWLDataProperty(owlModel, propertyURI);
 	}
 
@@ -272,15 +269,14 @@ public class OWLOntologyImpl implements OWLOntology {
 		return owlObjectProperty;
 	}
 
-	public OWLDataProperty getOWLDataProperty(String propertyURI)
-			throws OWLConversionFactoryException {
+	public OWLDataProperty getOWLDataProperty(String propertyURI) throws OWLConversionFactoryException 
+	{
 		OWLDataPropertyImpl owlDataProperty;
 
 		if (dataProperties.containsKey(propertyURI))
 			return dataProperties.get(propertyURI);
 		else {
-			edu.stanford.smi.protegex.owl.model.OWLDatatypeProperty property = SWRLOWLUtil
-					.createOWLDatatypeProperty(owlModel, propertyURI);
+			edu.stanford.smi.protegex.owl.model.OWLDatatypeProperty property = SWRLOWLUtil.createOWLDatatypeProperty(owlModel, propertyURI);
 			owlDataProperty = new OWLDataPropertyImpl(propertyURI);
 			dataProperties.put(propertyURI, owlDataProperty);
 
