@@ -10,7 +10,7 @@ public class SWRLTest
 {
    public static void main(String args[]) 
   {
-	JenaOWLModel modelA = null, modelB = null;
+	  JenaOWLModel modelA = null, modelB = null;
     SWRLFactory factoryA = null, factoryB = null;
     String fileName1 = "", fileName2 = "", fileName3 = "", fileName4 = "";
 

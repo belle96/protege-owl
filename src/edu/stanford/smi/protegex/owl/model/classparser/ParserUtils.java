@@ -21,6 +21,7 @@ import edu.stanford.smi.protegex.owl.model.OWLNamedClass;
 import edu.stanford.smi.protegex.owl.model.OWLObjectProperty;
 import edu.stanford.smi.protegex.owl.model.RDFProperty;
 import edu.stanford.smi.protegex.owl.model.RDFResource;
+import edu.stanford.smi.protegex.owl.model.RDFSClass;
 import edu.stanford.smi.protegex.owl.model.RDFSNamedClass;
 import edu.stanford.smi.protegex.owl.model.impl.DefaultRDFSLiteral;
 import edu.stanford.smi.protegex.owl.ui.widget.OWLUI;
@@ -64,7 +65,21 @@ public class ParserUtils {
   throws AmbiguousNameException {
     return getFrameByName(model, name, RDFResource.class);
   }
-  
+
+  public static RDFResource getRDFResourceFromRDFSLabel(OWLModel model, String label) 
+  throws AmbiguousNameException {
+  	RDFResource resource = null;
+  	
+    resource = getFrameByRDFSLabel(model, label, RDFResource.class);
+
+    return resource;
+  }
+
+  public static RDFSClass getRDFSClassFromName(OWLModel model, String name) 
+  throws AmbiguousNameException {
+    return getFrameByName(model, name, RDFSClass.class);
+  }
+
   public static OWLIndividual getOWLIndividualFromName(OWLModel model, String  name)  
   throws AmbiguousNameException {
     return getFrameByName(model, name, OWLIndividual.class); 
