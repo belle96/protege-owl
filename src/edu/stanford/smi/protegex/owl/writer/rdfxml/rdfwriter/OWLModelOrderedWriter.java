@@ -26,7 +26,7 @@ public class OWLModelOrderedWriter extends OWLModelWriter {
 
     protected RDFXMLContentWriter getContentWriter(OWLModel model,
                                                    TripleStore tripleStore) {
-        return new OWLModelOrderedContentWriter(model, tripleStore, new FrameComparator<RDFResource>());
+        return new OWLModelContentWriter(model, tripleStore, new FrameComparator<RDFResource>());
     }
 }
 
