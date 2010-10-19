@@ -89,7 +89,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     boolean result = false;
 
     checkNumberOfArgumentsEqualTo(2, arguments.size());
-
+    
     if (isArgumentAString(0, arguments)) {   
       String s1 = getArgumentAsAString(0, arguments);
       if (isArgumentAString(1, arguments)) {

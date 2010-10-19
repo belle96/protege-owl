@@ -181,6 +181,9 @@ public class DefaultSWRLRuleEngine implements SWRLRuleEngine
     return result;
   }
 
+  /**
+   *  Run all SQWRL queries.
+   */
   public void runSQWRLQueries() throws SQWRLException
   {
     try {
@@ -193,7 +196,7 @@ public class DefaultSWRLRuleEngine implements SWRLRuleEngine
   }
 
   /**
-   *  Get the results from a previously executed SQWRL query.
+   *  Get the results of a previously executed SQWRL query.
    */
   public SQWRLResultImpl getSQWRLResult(String queryURI) throws SQWRLException
   {
