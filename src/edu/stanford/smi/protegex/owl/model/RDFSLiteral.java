@@ -8,7 +8,7 @@ import edu.stanford.smi.protegex.owl.model.visitor.Visitable;
  *
  * @author Holger Knublauch  <holger@knublauch.com>
  */
-public interface RDFSLiteral extends Comparable, RDFObject, Visitable {
+public interface RDFSLiteral extends Comparable<RDFSLiteral>, RDFObject, Visitable {
 
 
     /**
@@ -67,6 +67,8 @@ public interface RDFSLiteral extends Comparable, RDFObject, Visitable {
      * @return null or a Boolean, Integer, Float, or String
      */
     Object getPlainValue();
+    
+    String getRawValue();
 
 
     String getString();
