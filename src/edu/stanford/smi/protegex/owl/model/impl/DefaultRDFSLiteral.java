@@ -32,25 +32,22 @@ public class DefaultRDFSLiteral implements RDFSLiteral {
     }
 
 
-    public int compareTo(Object o) {
-        if (o instanceof RDFSLiteral) {
-            RDFSLiteral other = (RDFSLiteral) o;
-            RDFSDatatype datatype = getDatatype();
-            RDFSDatatype otherDatatype = other.getDatatype();
-            if (datatype.equals(otherDatatype)) {
-                if (owlModel.getIntegerDatatypes().contains(datatype)) {
-                    int a = getInt();
-                    int b = other.getInt();
-                    return new Integer(a).compareTo(new Integer(b));
-                }
-                else if (owlModel.getFloatDatatypes().contains(datatype)) {
-                    double a = getDouble();
-                    double b = other.getDouble();
-                    return new Double(a).compareTo(new Double(b));
-                }
+    public int compareTo(RDFSLiteral other) {
+        RDFSDatatype datatype = getDatatype();
+        RDFSDatatype otherDatatype = other.getDatatype();
+        if (datatype.equals(otherDatatype)) {
+            if (owlModel.getIntegerDatatypes().contains(datatype)) {
+                int a = getInt();
+                int b = other.getInt();
+                return new Integer(a).compareTo(new Integer(b));
+            }
+            else if (owlModel.getFloatDatatypes().contains(datatype)) {
+                double a = getDouble();
+                double b = other.getDouble();
+                return new Double(a).compareTo(new Double(b));
             }
         }
-        return 0;
+        return rawValue.compareTo(other.getRawValue());
     }
 
 
