@@ -40,13 +40,13 @@ import edu.stanford.smi.protege.server.framestore.background.ServerCacheStateMac
 import edu.stanford.smi.protege.util.ApplicationProperties;
 import edu.stanford.smi.protege.util.CollectionUtilities;
 import edu.stanford.smi.protege.util.Log;
+import edu.stanford.smi.protege.util.MessageError;
 import edu.stanford.smi.protege.util.URIUtilities;
 import edu.stanford.smi.protegex.owl.inference.protegeowl.ReasonerManager;
 import edu.stanford.smi.protegex.owl.jena.JenaOWLModel;
 import edu.stanford.smi.protegex.owl.jena.graph.JenaModelFactory;
 import edu.stanford.smi.protegex.owl.jena.parser.GlobalParserCache;
 import edu.stanford.smi.protegex.owl.jena.parser.OWLImportsCache;
-import edu.stanford.smi.protegex.owl.jena.parser.ParserUtil;
 import edu.stanford.smi.protegex.owl.jena.parser.UnresolvedImportHandler;
 import edu.stanford.smi.protegex.owl.jena.writersettings.JenaWriterSettings;
 import edu.stanford.smi.protegex.owl.jena.writersettings.WriterSettings;
@@ -228,6 +228,8 @@ public abstract class AbstractOWLModel extends DefaultKnowledgeBase
     private GlobalParserCache globalParserCache;
 
     private RepositoryManager repositoryManager;
+    
+    private Collection<MessageError> parserErrors = new ArrayList<MessageError>();
 
     /**
      * The top OWL ontology is the top level ontology from the model.
@@ -422,6 +424,14 @@ public abstract class AbstractOWLModel extends DefaultKnowledgeBase
             }
         }
         return rep;
+    }
+    
+    public Collection<MessageError> getParserErrors() {
+        return parserErrors;
+    }
+    
+    public void addParserError(MessageError error) {
+        parserErrors.add(error);
     }
 
     public void addClassListener(ClassListener listener) {
