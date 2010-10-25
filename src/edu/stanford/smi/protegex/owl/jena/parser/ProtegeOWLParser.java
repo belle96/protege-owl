@@ -62,7 +62,6 @@ public class ProtegeOWLParser {
     public final static String PRINT_LOAD_TRIPLES_LOG = "protegeowl.parser.print.load.triples.log";
     public final static String PRINT_LOAD_TRIPLES_LOG_INCREMENT = "protegeowl.parser.print.load.triples.log.increment";
 
-	private static Collection errors;
 	private static String topOntologyName;
 	//needed for merging imports to support import by location
 	private static String currentlyParsingOntologyLocation;
@@ -81,7 +80,6 @@ public class ProtegeOWLParser {
 	public ProtegeOWLParser(OWLModel owlModel) {
 		tripleCount = 0;
 		topOntologyName = null;
-		errors = new ArrayList();
 		printLoadTriplesLog = ApplicationProperties.getBooleanProperty(PRINT_LOAD_TRIPLES_LOG, true);
 		printLoadTriplesLogIncrement = ApplicationProperties.getIntegerProperty(PRINT_LOAD_TRIPLES_LOG_INCREMENT, 10000);
 
@@ -398,10 +396,12 @@ public class ProtegeOWLParser {
 
 	private void processImports(TripleStore tripleStore) throws OntologyLoadException {
 		Set<String> thisOntoImports = OWLImportsCache.getOWLImportsURI(tripleStore.getName());
-
-		for (String import_ : thisOntoImports) {
-			((AbstractOWLModel) owlModel).loadImportedAssertions(URIUtilities.createURI(import_));
-		}
+		    for (String import_ : thisOntoImports) {
+		        URI u = ((AbstractOWLModel) owlModel).loadImportedAssertions(URIUtilities.createURI(import_));
+		        if (u == null) {
+		            ((AbstractOWLModel) owlModel).addParserError(new MessageError("Could not import ontology from " + import_));
+		        }
+		    }
 	}
 
 	private void processMergingImports(TripleStore tripleStore, String importingOntologyName) throws OntologyLoadException {
@@ -429,6 +429,7 @@ public class ProtegeOWLParser {
 				xmlBase = getXMLBaseForMerge(ontologyURI);
 			} catch (OntologyLoadException e) {
 				Log.getLogger().warning("Could not load import from: " + ontologyURI + " (Skipping this import)");
+				((AbstractOWLModel) owlModel).addParserError(new MessageError("Could not import ontology from " + ontologyURI));
 				continue;
 			}
 
@@ -477,8 +478,8 @@ public class ProtegeOWLParser {
 		return currentlyParsingOntologyLocation;
 	}
 	
-	public static Collection getErrors() {
-		return errors;
+	public static Collection<MessageError> getParserErrors(OWLModel owlModel) {
+	    return ((AbstractOWLModel) owlModel).getParserErrors();
 	}
 
 	public static InputStream getInputStream(URL url) throws OntologyLoadException {
@@ -535,7 +536,7 @@ public class ProtegeOWLParser {
 
         	Log.getLogger().log(severity == Severity.WARNING ? Level.WARNING : Level.SEVERE, message, ex);
 
-        	errors.add(new MessageError(ex, message, severity));
+        	((AbstractOWLModel) owlModel).addParserError(new MessageError(ex, message, severity));
 		}
 	}
 
