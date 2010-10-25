@@ -372,19 +372,19 @@ public class JenaOWLModel extends AbstractOWLModel implements OntModelProvider {
      */
     @Deprecated
     @SuppressWarnings("unchecked")
-    public void load(URI uri, String language, Collection errors) {
+    public void load(URI uri, String language, Collection<MessageError> errors) {
         try {
             load(uri, language);
         }
         catch (Throwable t) {
             Log.getLogger().log(Level.SEVERE, "Error at loading file "+uri, t);
 
-            Collection parseErrors = ProtegeOWLParser.getErrors();
+            Collection<MessageError> parseErrors = getParserErrors();
             if (parseErrors != null && parseErrors.size() > 0) {
                 errors.addAll(parseErrors);
             }
 
-            errors.add(t);
+            addParserError(new MessageError(t));
 
             String message = "Errors at loading OWL file from " + uri + "\n";
             message = message + "\nPlease consider running the file through an RDF or OWL validation service such as:";
@@ -401,7 +401,7 @@ public class JenaOWLModel extends AbstractOWLModel implements OntModelProvider {
         }
 
         //TODO: Improve this.
-        Collection parseErrors = ProtegeOWLParser.getErrors();
+        Collection<MessageError> parseErrors = getParserErrors();
         if (parseErrors != null && parseErrors.size() > 0) {
             errors.addAll(parseErrors);
         }

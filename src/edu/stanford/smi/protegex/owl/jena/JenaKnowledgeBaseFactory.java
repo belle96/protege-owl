@@ -207,8 +207,7 @@ public class JenaKnowledgeBaseFactory implements OWLKnowledgeBaseFactory {
 	        	handleException(t, owlModel, absoluteURI, errors);
 	        }
 
-	        //TODO: Improve this.
-	        Collection parseErrors = ProtegeOWLParser.getErrors();
+	        Collection parseErrors = owlModel.getParserErrors();
 	        if (parseErrors != null && parseErrors.size() > 0) {
 	            errors.addAll(parseErrors);
 	        }
@@ -221,14 +220,14 @@ public class JenaKnowledgeBaseFactory implements OWLKnowledgeBaseFactory {
     }
 
 
-    protected void handleException(Throwable t, JenaOWLModel owlModel, URI absoluteURI, Collection errors) {
+    protected void handleException(Throwable t, JenaOWLModel owlModel, URI absoluteURI, Collection<MessageError> errors) {
         Log.getLogger().log(Level.SEVERE, "Error at loading file "+ absoluteURI, t);
 
-        Collection parseErrors = ProtegeOWLParser.getErrors();
+        Collection<MessageError> parseErrors = owlModel.getParserErrors();
         if (parseErrors != null && parseErrors.size() > 0) {
             errors.addAll(parseErrors);
         }
-        errors.add(t);
+        errors.add(new MessageError(t));
 
         String message = "Errors at loading OWL file from " + absoluteURI + "\n";
         message = message + "\nPlease consider running the file through an RDF or OWL validation service such as:";
