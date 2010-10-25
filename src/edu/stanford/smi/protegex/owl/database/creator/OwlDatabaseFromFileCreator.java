@@ -66,7 +66,7 @@ public class OwlDatabaseFromFileCreator extends AbstractOwlDatabaseCreator {
         }
         FactoryUtils.adjustBrowserTextBasedOnPreferences(getOwlModel());
 
-        errors.addAll(ProtegeOWLParser.getErrors());
+        errors.addAll(getOwlModel().getParserErrors());
     }
 
 
