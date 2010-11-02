@@ -622,7 +622,7 @@ public class SWRLAndSQWRLProcessorImpl implements SWRLAndSQWRLProcessor
       else bodyNonClassNonBuiltInAtoms.add(atom);
     } // for
     
-    result.addAll(bodyClassAtoms);
+    result.addAll(bodyClassAtoms); // We arrange the class atoms first.
     result.addAll(bodyNonClassNonBuiltInAtoms);
     
     return result;
