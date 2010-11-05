@@ -868,7 +868,8 @@ public class SWRLOWLUtil
     iterator = domainClasses.iterator();
     while (iterator.hasNext()) {
       Object o = iterator.next();
-      if (o instanceof OWLNamedClass) result.add((OWLNamedClass)o);
+      if (o instanceof OWLNamedClass) 
+      	result.add((OWLNamedClass)o);
     } // while
     
     return result;
@@ -876,7 +877,8 @@ public class SWRLOWLUtil
 
   public static void removeOWLThingSuperclass(OWLModel owlModel, OWLClass owlClass)
   {
-    if (owlClass.getSuperclasses(false).contains(getOWLThingClass(owlModel))) owlClass.removeSuperclass(getOWLThingClass(owlModel));
+    if (owlClass.getSuperclasses(false).contains(getOWLThingClass(owlModel))) 
+    	owlClass.removeSuperclass(getOWLThingClass(owlModel));
   } 
 
   public static Set<OWLNamedClass> getOWLRangeClasses(OWLModel owlModel, String propertyName, boolean mustExist)
