@@ -71,7 +71,8 @@ public class DbCreatorTestCase extends AbstractCreatorTestCase {
             creator.setTable("JunitImporting");
             creator.setOntologySource(new File(IMPORTING_LOCATION).toURI().toString());
             creator.create(errors);
-            handleErrors();
+            assertTrue(errors.size() == 1);
+            errors.clear();
             OWLModel owlModel = creator.getOwlModel();
             checkUnsucessfulImport(owlModel);
             checkBase(owlModel, IMPORTING_BASE, IMPORTING_BASE);
