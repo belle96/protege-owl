@@ -46,7 +46,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
   /**
    * Determine if a single argument is an OWL individual. If the argument is unbound, bind it to all OWL individuals in an ontology.
    */
-  public boolean isOWLIndividual(List<BuiltInArgument> arguments) throws BuiltInException
+  public boolean isIndividual(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(1, arguments.size());
     boolean isUnboundArgument = isUnboundArgument(0, arguments);   
@@ -157,7 +157,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
    * Returns true if the individual named by the first argument has a property specified by the second argument. If the second argument in
    * unbound, bind it to all the properties that currently have a value for this individual.
    */
-  public boolean hasOWLProperty(List<BuiltInArgument> arguments) throws BuiltInException
+  public boolean hasProperty(List<BuiltInArgument> arguments) throws BuiltInException
   {
     String individualURI, propertyURI = null;
     boolean hasUnboundPropertyArgument = isUnboundArgument(1, arguments);
@@ -189,7 +189,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
    * Returns true if the class named by the first argument has an individual identified by the second argument. If the second argument is
    * unbound, bind it to all individuals of the class.
    */
-  public boolean hasOWLIndividual(List<BuiltInArgument> arguments) throws BuiltInException
+  public boolean hasIndividual(List<BuiltInArgument> arguments) throws BuiltInException
   {
     boolean isUnboundArgument = isUnboundArgument(1, arguments);   
     String classURI;
@@ -251,7 +251,7 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
    * Returns true if the individual named by the first argument is an instance of the class identified by the second argument. If the
    * second argument is unbound, bind it to all defining classes of the individual.
    */
-  public boolean hasOWLClass(List<BuiltInArgument> arguments) throws BuiltInException
+  public boolean hasClass(List<BuiltInArgument> arguments) throws BuiltInException
   {
     boolean isUnboundArgument = isUnboundArgument(1, arguments);   
     String individualURI;
@@ -328,14 +328,14 @@ public class SWRLBuiltInLibraryImpl extends AbstractSWRLBuiltInLibrary
     return result;
   }
 
-  public boolean isOWLLiteral(List<BuiltInArgument> arguments) throws BuiltInException
+  public boolean isLiteral(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(1, arguments.size());
 
     return isArgumentADataValue(0, arguments);
   }
 
-  public boolean notOWLLiteral(List<BuiltInArgument> arguments) throws BuiltInException
+  public boolean notLiteral(List<BuiltInArgument> arguments) throws BuiltInException
   {
     checkNumberOfArgumentsEqualTo(1, arguments.size());
 

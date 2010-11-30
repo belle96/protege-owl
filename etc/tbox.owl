@@ -9,60 +9,60 @@
     xmlns="http://swrl.stanford.edu/ontologies/built-ins/3.3/tbox.owl#"
   xml:base="http://swrl.stanford.edu/ontologies/built-ins/3.3/tbox.owl">
   <owl:Ontology rdf:about=""/>
-  <swrl:Builtin rdf:ID="hasOWLAnnotationProperty"/>
+  <swrl:Builtin rdf:ID="hasAnnotationProperty"/>
   <swrl:Builtin rdf:ID="hasRDFSComment"/>
-  <swrl:Builtin rdf:ID="hasOWLDescription"/>
+  <swrl:Builtin rdf:ID="hasDescription"/>
   <swrl:Builtin rdf:ID="hasRDFSIsDefinedBy"/>
   <swrl:Builtin rdf:ID="isRDFSIsDefinedBy"/>
   <swrl:Builtin rdf:ID="isRDFSSeeAlsoAnnotation"/>
   <swrl:Builtin rdf:ID="hasRDFSLabel"/>
   <swrl:Builtin rdf:ID="hasRDFSSeeAlso"/>
-  <swrl:Builtin rdf:ID="hasOWLVersionInfo"/>
-  <swrl:Builtin rdf:ID="isOWLVersionInfoAnnotation"/>
+  <swrl:Builtin rdf:ID="hasVersionInfo"/>
+  <swrl:Builtin rdf:ID="isVersionInfoAnnotation"/>
 
   <swrl:Builtin rdf:ID="isRDFSComment"/>
   <swrl:Builtin rdf:ID="isRDFSProperty"/>
 
-  <swrl:Builtin rdf:ID="isOWLOntology"/>
+  <swrl:Builtin rdf:ID="isOntology"/>
 
-  <swrl:Builtin rdf:ID="isOWLClass"/>
-  <swrl:Builtin rdf:ID="isOWLNamedClass"/>
-  <swrl:Builtin rdf:ID="isOWLProperty"/>
-  <swrl:Builtin rdf:ID="isOWLObjectProperty"/>
-  <swrl:Builtin rdf:ID="isOWLDataProperty"/>
-  <swrl:Builtin rdf:ID="isOWLTransitiveProperty"/>
-  <swrl:Builtin rdf:ID="isOWLFunctionalProperty"/>
-  <swrl:Builtin rdf:ID="isOWLSymmetricProperty"/>
-  <swrl:Builtin rdf:ID="isOWLInverseFunctionalProperty"/>
+  <swrl:Builtin rdf:ID="isClass"/>
+  <swrl:Builtin rdf:ID="isNamedClass"/>
+  <swrl:Builtin rdf:ID="isProperty"/>
+  <swrl:Builtin rdf:ID="isObjectProperty"/>
+  <swrl:Builtin rdf:ID="isDastaProperty"/>
+  <swrl:Builtin rdf:ID="isTransitiveProperty"/>
+  <swrl:Builtin rdf:ID="isFunctionalProperty"/>
+  <swrl:Builtin rdf:ID="isSymmetricProperty"/>
+  <swrl:Builtin rdf:ID="isInverseFunctionalProperty"/>
 
-  <swrl:Builtin rdf:ID="hasOWLAxiom"/>
+  <swrl:Builtin rdf:ID="hasAxiom"/>
 
-  <swrl:Builtin rdf:ID="isOWLAllDifferentsAxiom"/>
-  <swrl:Builtin rdf:ID="isOWLAllValuesFromRestriction"/>
-  <swrl:Builtin rdf:ID="isOWLAnnotationProperty"/>
-  <swrl:Builtin rdf:ID="isOWLDifferentFromAxiom"/>
-  <swrl:Builtin rdf:ID="isOWLDisjointWithAxiom"/>
-  <swrl:Builtin rdf:ID="isOWLEnumeratedDatatypeAxiom"/>
-  <swrl:Builtin rdf:ID="isOWLEquivalentClassAxiom"/>
-  <swrl:Builtin rdf:ID="isOWLSymmetricPropertyAxiom"/>
-  <swrl:Builtin rdf:ID="isOWLDifferentIndividualsAxiom"/>
-  <swrl:Builtin rdf:ID="isOWLEquivalentPropertyAxiom"/>
-  <swrl:Builtin rdf:ID="isOWLInDomainOfAxiom"/>
-  <swrl:Builtin rdf:ID="isOWLInRangeOfAxiom"/>
-  <swrl:Builtin rdf:ID="isOWLInverseOfAxiom"/>
-  <swrl:Builtin rdf:ID="isOWLSameAsAxiom"/>
+  <swrl:Builtin rdf:ID="isAllDifferentsAxiom"/>
+  <swrl:Builtin rdf:ID="isAllValuesFromRestriction"/>
+  <swrl:Builtin rdf:ID="isAnnotationProperty"/>
+  <swrl:Builtin rdf:ID="isDifferentFromAxiom"/>
+  <swrl:Builtin rdf:ID="isDisjointWithAxiom"/>
+  <swrl:Builtin rdf:ID="isEnumeratedDatatypeAxiom"/>
+  <swrl:Builtin rdf:ID="isEquivalentClassAxiom"/>
+  <swrl:Builtin rdf:ID="isSymmetricPropertyAxiom"/>
+  <swrl:Builtin rdf:ID="isDifferentIndividualsAxiom"/>
+  <swrl:Builtin rdf:ID="isEquivalentPropertyAxiom"/>
+  <swrl:Builtin rdf:ID="isInDomainOfAxiom"/>
+  <swrl:Builtin rdf:ID="isInRangeOfAxiom"/>
+  <swrl:Builtin rdf:ID="isInverseOfAxiom"/>
+  <swrl:Builtin rdf:ID="isSameAsAxiom"/>
 
-  <swrl:Builtin rdf:ID="isOWLRestriction"/>
-  <swrl:Builtin rdf:ID="isOWLHasValueRestriction"/>
-  <swrl:Builtin rdf:ID="isOWLMinCardinalityRestriction"/>
-  <swrl:Builtin rdf:ID="isOWLCardinalityRestriction"/>
-  <swrl:Builtin rdf:ID="isOWLMaxCardinalityRestriction"/>
+  <swrl:Builtin rdf:ID="isRestriction"/>
+  <swrl:Builtin rdf:ID="isHasValueRestriction"/>
+  <swrl:Builtin rdf:ID="isMinCardinalityRestriction"/>
+  <swrl:Builtin rdf:ID="isCardinalityRestriction"/>
+  <swrl:Builtin rdf:ID="isMaxCardinalityRestriction"/>
 
-  <swrl:Builtin rdf:ID="isOWLClassDescription"/>
-  <swrl:Builtin rdf:ID="isOWLOneOfDescription"/>
-  <swrl:Builtin rdf:ID="isOWLComplementOfDescription"/>
-  <swrl:Builtin rdf:ID="isOWLUnionOfDescription"/>
-  <swrl:Builtin rdf:ID="isOWLIntersectionOfDescription"/>
+  <swrl:Builtin rdf:ID="isClassDescription"/>
+  <swrl:Builtin rdf:ID="isOneOfDescription"/>
+  <swrl:Builtin rdf:ID="isComplementOfDescription"/>
+  <swrl:Builtin rdf:ID="isUnionOfDescription"/>
+  <swrl:Builtin rdf:ID="isIntersectionOfDescription"/>
 
 
   <swrl:Builtin rdf:ID="isInDirectDomainOf"/>

@@ -21,7 +21,7 @@ public class OWLIndividualImpl implements OWLNamedIndividual
   public OWLIndividualImpl(String individualURI)
   {
     initialize(individualURI);
-  } // OWLIndividualImpl
+  } 
 
   public String getURI() { return individualURI; }
   public Set<OWLClass> getTypes() { return definingClasses; }
@@ -39,32 +39,15 @@ public class OWLIndividualImpl implements OWLNamedIndividual
     for (OWLClass owlClass : definingClasses) if (owlClass.getURI().equals(classURI)) return true;
 
     return false;
-  } // hasClass
+  } 
 
   public String toString() { return getURI(); }
 
-  // We consider individuals to be equal if they have the same name.
-  public boolean equals(Object obj)
-  {
-    if(this == obj) return true;
-    if((obj == null) || (obj.getClass() != this.getClass())) return false;
-    OWLIndividualImpl impl = (OWLIndividualImpl)obj;
-    return (getURI() == impl.getURI() || (getURI() != null && getURI().equals(impl.getURI())));
-  } // equals
-
-  public int hashCode()
-  {
-    int hash = 8;
-
-    hash = hash + (null == getURI() ? 0 : getURI().hashCode());
-    
-    return hash;
-  } // hashCode
 
   public int compareTo(Object o)
   {
     return individualURI.compareTo(((OWLIndividualImpl)o).getURI());
-  } // compareTo
+  }
 
   private void initialize(String individualURI)
   {
@@ -73,6 +56,6 @@ public class OWLIndividualImpl implements OWLNamedIndividual
     definingClasses = new HashSet<OWLClass>();
     sameAsIndividuals = new HashSet<OWLNamedIndividual>();
     differentFromIndividuals = new HashSet<OWLNamedIndividual>();
-  } // initialize
+  } 
 
-} // OWLIndividualImpl
+} 

@@ -23,7 +23,7 @@ public interface SQWRLQueryEngine
   SQWRLResult runStandaloneSQWRLQuery(String queryName) throws SQWRLException;
 
   /**
-   * Run all SQWRL queries.
+   * Run all SQWRL enabled 	queries.
    */
   void runSQWRLQueries() throws SQWRLException;
 

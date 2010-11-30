@@ -449,6 +449,7 @@ public class SWRLFactory
 	  return swrlbProperties;
   }
 
+  @SuppressWarnings("unchecked") // To deal with groady non generics Protege-OWL API
 	public boolean areImpsEqual(SWRLImp imp1, SWRLImp imp2)
 	{
 		Iterator<SWRLAtom> iterator1, iterator2;

@@ -144,7 +144,7 @@ public class SQWRLQueryControlPanel extends JPanel
               } // if
             } else { // A result was returned
             	textArea.append("See the " + queryName + " tab to review results of the SQWRL query.\n");
-            	textArea.append("The query took " + (System.currentTimeMillis() - startTime) + " milliseconds.\n");
+            	textArea.append("The query took " + (System.currentTimeMillis() - startTime) + " milliseconds. Number of result rows = " + result.getNumberOfRows() + ".\n");
               
               if  (resultPanels.containsKey(queryName)) resultPanel = resultPanels.get(queryName); // Existing tab found
               else { // Create new tab

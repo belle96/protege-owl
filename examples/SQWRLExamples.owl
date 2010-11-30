@@ -2706,7 +2706,7 @@ See http://protege.cim3.net/cgi-bin/wiki.pl?SQWRL for documentation on SQWRL.</r
       <swrl:AtomList>
         <rdf:first>
           <swrl:BuiltinAtom>
-            <swrl:builtin rdf:resource="http://swrl.stanford.edu/ontologies/built-ins/3.3/tbox.owl#isOWLClass"/>
+            <swrl:builtin rdf:resource="http://swrl.stanford.edu/ontologies/built-ins/3.3/tbox.owl#isClass"/>
             <swrl:arguments>
               <rdf:List>
                 <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
@@ -5654,7 +5654,7 @@ See http://protege.cim3.net/cgi-bin/wiki.pl?SQWRL for documentation on SQWRL.</r
                 <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
               </rdf:List>
             </swrl:arguments>
-            <swrl:builtin rdf:resource="http://swrl.stanford.edu/ontologies/built-ins/3.3/tbox.owl#isOWLProperty"/>
+            <swrl:builtin rdf:resource="http://swrl.stanford.edu/ontologies/built-ins/3.3/tbox.owl#isProperty"/>
           </swrl:BuiltinAtom>
         </rdf:first>
       </swrl:AtomList>
@@ -6195,7 +6195,7 @@ See http://protege.cim3.net/cgi-bin/wiki.pl?SQWRL for documentation on SQWRL.</r
                 <rdf:first rdf:resource="#c"/>
               </rdf:List>
             </swrl:arguments>
-            <swrl:builtin rdf:resource="http://swrl.stanford.edu/ontologies/built-ins/3.3/tbox.owl#isOWLClass"/>
+            <swrl:builtin rdf:resource="http://swrl.stanford.edu/ontologies/built-ins/3.3/tbox.owl#isClass"/>
           </swrl:BuiltinAtom>
         </rdf:first>
       </swrl:AtomList>
@@ -6230,7 +6230,7 @@ See http://protege.cim3.net/cgi-bin/wiki.pl?SQWRL for documentation on SQWRL.</r
                 <rdf:first rdf:resource="#c"/>
               </rdf:List>
             </swrl:arguments>
-            <swrl:builtin rdf:resource="http://swrl.stanford.edu/ontologies/built-ins/3.3/tbox.owl#isOWLClass"/>
+            <swrl:builtin rdf:resource="http://swrl.stanford.edu/ontologies/built-ins/3.3/tbox.owl#isClass"/>
           </swrl:BuiltinAtom>
         </rdf:first>
         <rdf:rest>
@@ -7991,7 +7991,7 @@ See http://protege.cim3.net/cgi-bin/wiki.pl?SQWRL for documentation on SQWRL.</r
                 <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
               </rdf:List>
             </swrl:arguments>
-            <swrl:builtin rdf:resource="http://swrl.stanford.edu/ontologies/built-ins/3.3/tbox.owl#isOWLClass"/>
+            <swrl:builtin rdf:resource="http://swrl.stanford.edu/ontologies/built-ins/3.3/tbox.owl#isClass"/>
           </swrl:BuiltinAtom>
         </rdf:first>
         <rdf:rest>
@@ -8228,7 +8228,7 @@ See http://protege.cim3.net/cgi-bin/wiki.pl?SQWRL for documentation on SQWRL.</r
       <swrl:AtomList>
         <rdf:first>
           <swrl:BuiltinAtom>
-            <swrl:builtin rdf:resource="http://swrl.stanford.edu/ontologies/built-ins/3.3/tbox.owl#isOWLObjectProperty"/>
+            <swrl:builtin rdf:resource="http://swrl.stanford.edu/ontologies/built-ins/3.3/tbox.owl#isObjectProperty"/>
             <swrl:arguments>
               <rdf:List>
                 <rdf:first rdf:resource="#p"/>
@@ -8760,7 +8760,7 @@ See http://protege.cim3.net/cgi-bin/wiki.pl?SQWRL for documentation on SQWRL.</r
       <swrl:AtomList>
         <rdf:first>
           <swrl:BuiltinAtom>
-            <swrl:builtin rdf:resource="http://swrl.stanford.edu/ontologies/built-ins/3.3/tbox.owl#isOWLProperty"/>
+            <swrl:builtin rdf:resource="http://swrl.stanford.edu/ontologies/built-ins/3.3/tbox.owl#isProperty"/>
             <swrl:arguments>
               <rdf:List>
                 <rdf:first rdf:resource="#p"/>

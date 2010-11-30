@@ -63,13 +63,13 @@ public abstract class BuiltInLibraryManager
 
     if (result) {
     	if(hasUnboundArguments(arguments)) // Make sure the built-in has bound all its arguments.
-         throw new BuiltInException("built-in " + builtInURI + " in rule " + ruleName + " returned with unbound arguments");
+         throw new BuiltInException("built-in " + builtInURI + "(index " + builtInIndex + ") in rule " + ruleName + " returned with unbound arguments");
       
     	for (List<BuiltInArgument> binding : generateBuiltInArgumentBindings(ruleName, builtInURI, builtInIndex, arguments)) {
     	  try {
     	    targetRuleEngine.defineBuiltInArgumentBinding(ruleName, builtInURI, builtInIndex, binding);
     	  } catch (TargetSWRLRuleEngineException e) {
-    	    throw new BuiltInException("error defining argument binding for built-in " + builtInURI + " in rule " + ruleName + ": " + e.getMessage());
+    	    throw new BuiltInException("error defining argument binding for built-in " + builtInURI + "(index " + builtInIndex + ") in rule " + ruleName + ": " + e.getMessage());
     	  } // try
     	} // for
     } // if
@@ -82,7 +82,7 @@ public abstract class BuiltInLibraryManager
   {
     SWRLBuiltInLibrary library;
 
-    if (builtInLibraries.containsKey(prefix)) { // Find the implementation
+    if (builtInLibraries.containsKey(prefix)) { // Find the implementation.
       library = builtInLibraries.get(prefix);
     } else { // Implementation class not loaded - load it, call its reset method, and cache it.
       library = loadBuiltInLibraryImpl(ruleName, prefix, implementationClassName);
@@ -151,13 +151,13 @@ public abstract class BuiltInLibraryManager
       MultiArgument multiArgument = arguments.get(firstMultiArgumentIndex).getBuiltInMultiArgumentResult();
       int numberOfArgumentsInMultiArgument = multiArgument.getNumberOfArguments(); 
 
-      if (numberOfArgumentsInMultiArgument < 1) throw new BuiltInException("empty multi-argument for built-in " + builtInURI + " in rule " + ruleName);
+      if (numberOfArgumentsInMultiArgument < 1) throw new BuiltInException("empty multi-argument for built-in " + builtInURI + "(index " + builtInIndex + ") in rule " + ruleName);
       
       for (int i = 1; i < multiArgumentIndexes.size(); i++) {
       	int multiArgumentIndex = multiArgumentIndexes.get(i);
       	multiArgument = arguments.get(multiArgumentIndex).getBuiltInMultiArgumentResult();
       	if (numberOfArgumentsInMultiArgument != multiArgument.getNumberOfArguments())
-      		 throw new BuiltInException("all multi-arguments must have the same number of elements for built-in " + builtInURI + " in rule " + ruleName);
+      		 throw new BuiltInException("all multi-arguments must have the same number of elements for built-in " + builtInURI + "(index " + builtInIndex + ") in rule " + ruleName);
       } // for
       
       for (int multiArgumentArgumentIndex = 0; multiArgumentArgumentIndex < numberOfArgumentsInMultiArgument; multiArgumentArgumentIndex++) {
@@ -261,7 +261,7 @@ public abstract class BuiltInLibraryManager
         (((ParameterizedType)parameterTypes[0]).getActualTypeArguments().length != 1) ||
         (((ParameterizedType)parameterTypes[0]).getActualTypeArguments()[0] != BuiltInArgument.class))
       throw new IncompatibleBuiltInMethodException(ruleName, prefix, builtInURI, 
-                                                   "Java method must accept a single List of BuiltInArgument objects");
+                                                   "Java built-in method implementation must accept a single List of BuiltInArgument objects");
   }
 
   private static boolean hasUnboundArguments(List<BuiltInArgument> arguments)
@@ -275,7 +275,7 @@ public abstract class BuiltInLibraryManager
     throws IncompatibleBuiltInClassException
   {
     if (!SWRLBuiltInLibrary.class.isAssignableFrom(cls)) 
-      throw new IncompatibleBuiltInClassException(ruleName, prefix, cls.getName(), "Java class does not implement SWRLBuiltInLibrary");
+      throw new IncompatibleBuiltInClassException(ruleName, prefix, cls.getName(), "Java class does not extend SWRLBuiltInLibrary");
   } 
 }
 

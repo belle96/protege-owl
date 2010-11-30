@@ -31,6 +31,9 @@ import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.bridge.ui.SWRLPluginGUIAdapter;
 import edu.stanford.smi.protegex.owl.swrl.ui.tab.SWRLTab;
 
+/**
+ * Class that manages rule engines.
+ */
 public class BridgePluginManager
 {
   private static transient final Logger log = Log.getLogger(BridgePluginManager.class);
