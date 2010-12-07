@@ -19,7 +19,7 @@ public class OWLClassImpl implements OWLClass
   public OWLClassImpl(String classURI)
   {
     initialize(classURI);
-  } // OWLClassImpl
+  }
 
   public void addSuperClass(OWLClass superclass) { superClasses.add(superclass); }
   public void addSubClass(OWLClass subClass) { subClasses.add(subClass); }
@@ -43,7 +43,7 @@ public class OWLClassImpl implements OWLClass
     if((obj == null) || (obj.getClass() != this.getClass())) return false;
     OWLClassImpl impl = (OWLClassImpl)obj;
     return (getURI() == impl.getURI() || (getURI() != null && getURI().equals(impl.getURI())));
-    } // equals
+  }
 
   public int hashCode()
   {
@@ -52,7 +52,7 @@ public class OWLClassImpl implements OWLClass
     hash = hash + (null == getURI() ? 0 : getURI().hashCode());
     
     return hash;
-  } // hashCode
+  }
 
   private void initialize(String classURI)
   {
@@ -60,6 +60,5 @@ public class OWLClassImpl implements OWLClass
     superClasses = new HashSet<OWLClass>();
     subClasses = new HashSet<OWLClass>();
     equivalentClasses = new HashSet<OWLClass>();
-  } // initialize
-
-} // OWLClassImpl
+  }
+} 

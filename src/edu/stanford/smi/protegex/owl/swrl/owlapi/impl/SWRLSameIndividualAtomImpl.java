@@ -7,7 +7,7 @@ import edu.stanford.smi.protegex.owl.swrl.owlapi.SWRLSameIndividualAtom;
 /**
  * Class representing a SWRL same individual atom
  */
-public class SWRLSameIndividualAtomImpl extends SWRLObjectPropertyAtomImpl implements SWRLSameIndividualAtom
+public class SWRLSameIndividualAtomImpl extends SWRLBinaryAtomImpl implements SWRLSameIndividualAtom
 {
   public SWRLSameIndividualAtomImpl(SWRLArgument argument1, SWRLArgument argument2) { super(argument1, argument2); }
 

@@ -5,4 +5,4 @@ public interface OWLClassAssertionAxiom extends OWLAxiom
 {
   OWLClass getDescription(); // TODO: should be OWLDescription
   OWLNamedIndividual getIndividual();
-} // OWLClassAssertionAxiom
+} 

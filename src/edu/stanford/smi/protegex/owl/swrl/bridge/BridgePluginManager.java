@@ -60,6 +60,8 @@ public class BridgePluginManager
       Class.forName("jess.Rete");
       Class.forName("edu.stanford.smi.protegex.owl.swrl.bridge.jess.JessSWRLRuleEngine");
       Class.forName("edu.stanford.smi.protegex.owl.swrl.bridge.jess.ui.SWRLJessTab");
+      Class.forName("edu.stanford.smi.protegex.owl.swrl.bridge.drools.DroolsSWRLRuleEngine");
+      Class.forName("edu.stanford.smi.protegex.owl.swrl.bridge.drools.ui.SWRLDroolsTab");
     } catch (ClassNotFoundException e) {
       log.info("Jess rule engine load failed: could not find jess.Rete - or an error occured on initialization");
       

@@ -105,7 +105,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory
     } // if
     
     return owlClass; 
-  } // getOWLClass
+  }
     
   public OWLNamedIndividual getOWLIndividual(String individualURI)
   {
@@ -124,7 +124,7 @@ public class OWLDataFactoryImpl implements OWLDataFactory
     } // if
     
     return owlIndividual; 
-  } // getOWLIndividual
+  }
 
   public OWLObjectProperty getOWLObjectProperty(String propertyURI)
   {

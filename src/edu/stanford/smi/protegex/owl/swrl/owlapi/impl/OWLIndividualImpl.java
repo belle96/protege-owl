@@ -49,6 +49,23 @@ public class OWLIndividualImpl implements OWLNamedIndividual
     return individualURI.compareTo(((OWLIndividualImpl)o).getURI());
   }
 
+  public boolean equals(Object obj)
+  {
+    if(this == obj) return true;
+    if((obj == null) || (obj.getClass() != this.getClass())) return false;
+    OWLIndividualImpl impl = (OWLIndividualImpl)obj;
+    return (getURI() == impl.getURI() || (getURI() != null && getURI().equals(impl.getURI())));
+  }
+
+  public int hashCode()
+  {
+    int hash = 76;
+  
+    hash = hash + (null == getURI() ? 0 : getURI().hashCode());
+  
+    return hash;
+  }
+
   private void initialize(String individualURI)
   {
     this.individualURI = individualURI;

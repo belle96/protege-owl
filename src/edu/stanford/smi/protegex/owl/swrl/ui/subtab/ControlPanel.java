@@ -54,9 +54,9 @@ public class ControlPanel extends JPanel
     textArea.append("Press the \"Run " + ruleEngineName +"\" button to run the rule engine.\n");
     textArea.append("Press the \"" + ruleEngineName + "->OWL\" button to transfer the inferred rule engine knowledge to OWL knowledge.\n\n");
     textArea.append("IMPORTANT: A significant limitation of the current implementation is that it does not represent all OWL\n");
-    textArea.append("axioms when transferring knowledge from an OWL ontology to a rule engine. The exceptions are the basic\n");
-    textArea.append("class, property and individual axioms, such as, for example, owl:subClassOf and owl:subPropertyOf, and\n");
-    textArea.append("owl:sameAs, owl:differentFrom, owl:allDifferent, owl:equivalentClass, and owl:equivalentProperty axioms.\n");
+    textArea.append("axioms when transferring knowledge from an OWL ontology to a rule engine. The exceptions are\n");
+    textArea.append("declaration axioms, class and property assertion axioms, and owl:subClassOf, owl:subPropertyOf, \n");
+    textArea.append("owl:equivalentClass, owl:equivalentProperty, owl:sameAs, owl:differentFrom, and owl:allDifferent axioms.\n");
     textArea.append("As a result, the rule engine inferencing mechanisms do not know about the remaining OWL axioms.\n");
     textArea.append("To ensure consistency, a reasoner should be run on an OWL knowledge base before SWRL rules and OWL\n");
     textArea.append("knowledge are transferred to a rule engine. Also, if inferred knowledge from rule engine is inserted back into an OWL\n");
@@ -105,6 +105,7 @@ public class ControlPanel extends JPanel
     public void actionPerformed(ActionEvent event) 
     {
       try {
+      	long startTime = System.currentTimeMillis();
         ruleEngine.reset();
         ruleEngine.importSWRLRulesAndOWLKnowledge();
 
@@ -114,6 +115,7 @@ public class ControlPanel extends JPanel
         textArea.append("Number of OWL class declarations exported to rule engine: " + ruleEngine.getNumberOfImportedOWLClasses() + "\n");
         textArea.append("Number of OWL individual declarations exported to rule engine: " + ruleEngine.getNumberOfImportedOWLIndividuals() + "\n");
         textArea.append("Number of other OWL axioms exported to rule engine: " + ruleEngine.getNumberOfImportedOWLAxioms() + "\n");
+        textArea.append("The transfer took " + (System.currentTimeMillis() - startTime) + " millisecond(s).\n");
         textArea.append("Press the \"Run " + ruleEngineName + "\" button to run the rule engine.\n");
       } catch (SWRLRuleEngineException e) {
         textArea.append("Exception importing SWRL rules and OWL knowledge: " + e.toString() + "\n");
@@ -130,6 +132,7 @@ public class ControlPanel extends JPanel
     public void actionPerformed(ActionEvent event) 
     {
       try {
+      	long startTime = System.currentTimeMillis();
         ruleEngine.run();
 
         textArea.setText("");
@@ -141,6 +144,7 @@ public class ControlPanel extends JPanel
           textArea.append("Number of classes declarations injected by built-ins: " + ruleEngine.getNumberOfInjectedOWLClasses() + "\n");
         if (ruleEngine.getNumberOfInjectedOWLAxioms() != 0) 
           textArea.append("Number of axioms injected by built-ins: " + ruleEngine.getNumberOfInjectedOWLAxioms() + "\n");
+        textArea.append("The process took " + (System.currentTimeMillis() - startTime) + " millisecond(s).\n");
         textArea.append("Look at the \"Inferred Axioms\" tab to see the inferred axioms.\n");
         textArea.append("Press the \"Jess->OWL\" button to translate the asserted facts to OWL knowledge.\n");
       } catch (SWRLRuleEngineException e) { 
@@ -158,6 +162,7 @@ public class ControlPanel extends JPanel
     public void actionPerformed(ActionEvent event) 
     {
       try {
+      	long startTime = System.currentTimeMillis();
         ruleEngine.writeInferredKnowledge2OWL();
 
         textArea.setText("");
@@ -169,6 +174,7 @@ public class ControlPanel extends JPanel
         if (ruleEngine.getNumberOfInjectedOWLAxioms() != 0) 
           textArea.append("Number of axioms injected by built-ins: " + ruleEngine.getNumberOfInjectedOWLAxioms() + "\n");
         textArea.append("Number of axioms inferred: " + ruleEngine.getNumberOfInferredOWLAxioms() + "\n");
+        textArea.append("The process took " + (System.currentTimeMillis() - startTime) + " millisecond(s).\n");
       } catch (SWRLRuleEngineException e) {
         textArea.append("Exception exporting knowledge to OWL: " + e.toString() + "\n");
       } // try

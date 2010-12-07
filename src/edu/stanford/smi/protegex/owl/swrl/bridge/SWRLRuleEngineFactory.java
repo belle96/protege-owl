@@ -14,7 +14,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.NoRegisteredRuleEngi
 import edu.stanford.smi.protegex.owl.swrl.bridge.exceptions.SWRLRuleEngineBridgeException;
 import edu.stanford.smi.protegex.owl.swrl.bridge.impl.DefaultSWRLBridge;
 import edu.stanford.smi.protegex.owl.swrl.bridge.impl.DefaultSWRLRuleEngine;
-import edu.stanford.smi.protegex.owl.swrl.bridge.impl.SWRLAndSQWRLProcessorImpl;
+import edu.stanford.smi.protegex.owl.swrl.bridge.impl.OWLAxiomProcessorImpl;
 import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLRuleEngineException;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLOntology;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.impl.OWLOntologyImpl;
@@ -73,11 +73,11 @@ public class SWRLRuleEngineFactory
 
       try {
       	OWLOntology activeOntology = new OWLOntologyImpl(owlModel);
-      	SWRLAndSQWRLProcessor swrlAndSQWRLProcessor = new SWRLAndSQWRLProcessorImpl(activeOntology); 
-      	bridge = new DefaultSWRLBridge(activeOntology, swrlAndSQWRLProcessor);
+      	OWLAxiomProcessor owlAxiomProcessor = new OWLAxiomProcessorImpl(activeOntology); 
+      	bridge = new DefaultSWRLBridge(activeOntology, owlAxiomProcessor);
         targetRuleEngine = registeredSWRLRuleEngines.get(pluginName).create(bridge);
         bridge.setTargetRuleEngine(targetRuleEngine);
-        ruleEngine = new DefaultSWRLRuleEngine(activeOntology, swrlAndSQWRLProcessor, targetRuleEngine, bridge, bridge);       
+        ruleEngine = new DefaultSWRLRuleEngine(activeOntology, owlAxiomProcessor, targetRuleEngine, bridge, bridge);       
       } catch (Throwable e) {
         throw new SWRLRuleEngineException("Error creating rule engine '" + pluginName + "': " + e.getMessage());
       } // try

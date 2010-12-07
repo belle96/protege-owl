@@ -3,12 +3,10 @@ package edu.stanford.smi.protegex.owl.swrl.owlapi;
 
 
 /**
- * Interface representing a SWRL individuals atom
+ * Interface representing a SWRL object property atom
  */
-public interface SWRLObjectPropertyAtom extends SWRLAtom
+public interface SWRLObjectPropertyAtom extends SWRLBinaryAtom
 {
-  SWRLArgument getFirstArgument();
-  SWRLArgument getSecondArgument();
   String getPropertyURI();
 }
 

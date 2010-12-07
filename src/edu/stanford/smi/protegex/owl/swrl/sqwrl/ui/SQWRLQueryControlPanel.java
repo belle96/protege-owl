@@ -62,7 +62,7 @@ public class SQWRLQueryControlPanel extends JPanel
   public void appendText(String text)
   {
     textArea.append(text);
-  } // appendText
+  } 
 
   public void removeResultPanel(String queryName)
   {
@@ -78,7 +78,7 @@ public class SQWRLQueryControlPanel extends JPanel
   {
     for (SQWRLQueryResultPanel resultPanel : resultPanels.values()) ((JTabbedPane)getParent()).remove(resultPanel);
     resultPanels = new HashMap<String, SQWRLQueryResultPanel>();
-  } // if
+  } 
 
   private JButton createButton(String text, String toolTipText, ActionListener listener)
   {
@@ -133,7 +133,7 @@ public class SQWRLQueryControlPanel extends JPanel
           if (queryName == null || queryName.equals("")) textArea.append("No enabled SQWRL query selected.\n");
           else {
           	long startTime = System.currentTimeMillis();
-            result = queryEngine.runSQWRLQuery(queryName);
+          	result = queryEngine.runSQWRLQuery(queryName);
   
             if (result == null || result.getNumberOfRows() == 0) {
               textArea.append("SQWRL query " + queryName + " did not generate any result.\n");

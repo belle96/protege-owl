@@ -23,14 +23,15 @@ import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLSubClassAxiom;
 
 /**
  * Default implementation of an OWL axiom convertor that takes OWL axioms and converts them to a native rule engine implementation. 
- * This implementation defines some of the standard tasks that will likely be common to many rule engines and   
+ * This implementation defines some of the standard tasks that will likely be common to many rule engines.   
  * 
- * A target rule engine implementation should implement the abstract methods. 
+ * A target rule engine implementation should implement the abstract methods. As can be seen, the bridge currently only supports a
+ * small number of OWL axioms.  
  */
 public abstract class DefaultOWLAxiomConvertor extends DefaultConvertor implements OWLAxiomConvertor 
 {
   protected abstract void defineOWLClassDeclaration(String classURI) throws TargetSWRLRuleEngineException;
-  protected abstract void defineOWLIndividualDeclaration(String classURI, String individualURI) throws TargetSWRLRuleEngineException;
+  protected abstract void defineOWLIndividualDeclaration(String individualURI) throws TargetSWRLRuleEngineException;
   protected abstract void defineOWLPropertyDeclaration(String propertyURI) throws TargetSWRLRuleEngineException;
   
   protected abstract void defineOWLClassAssertionAxiom(String classURI, String individualURI) throws TargetSWRLRuleEngineException;
@@ -38,6 +39,7 @@ public abstract class DefaultOWLAxiomConvertor extends DefaultConvertor implemen
   	throws TargetSWRLRuleEngineException;
   protected abstract void defineOWLDataPropertyAssertionAxiom(String propertyURI, String subjectIndividualURI, OWLLiteral objectLiteral) 
   	throws TargetSWRLRuleEngineException;
+
   protected abstract void defineOWLSameIndividualAxiom(String individual1URI, String individual2URI) throws TargetSWRLRuleEngineException;
   protected abstract void defineOWLDifferentIndividualsAxiom(String individual1URI, String individual2URI) throws TargetSWRLRuleEngineException;
   
@@ -48,39 +50,39 @@ public abstract class DefaultOWLAxiomConvertor extends DefaultConvertor implemen
   
   public DefaultOWLAxiomConvertor(SWRLRuleEngineBridge bridge) { super(bridge); }
 	
-  public void generateOWLAxiomRepresentation(OWLAxiom axiom) throws TargetSWRLRuleEngineException
+  public void generateOWLAxiom(OWLAxiom axiom) throws TargetSWRLRuleEngineException
   {
   	if (axiom instanceof OWLDataPropertyAssertionAxiom) {
   		OWLDataPropertyAssertionAxiom owlDatatypePropertyAssertionAxiom = (OWLDataPropertyAssertionAxiom)axiom;
-  		generateOWLDataPropertyAssertionAxiomRepresentation(owlDatatypePropertyAssertionAxiom);
+  		generateOWLDataPropertyAssertionAxiom(owlDatatypePropertyAssertionAxiom);
 	    } else if (axiom instanceof OWLObjectPropertyAssertionAxiom) {
 	      OWLObjectPropertyAssertionAxiom owlObjectPropertyAssertionAxiom = (OWLObjectPropertyAssertionAxiom)axiom;
-	      generateOWLObjectPropertyAssertionAxiomRepresentation(owlObjectPropertyAssertionAxiom);
+	      generateOWLObjectPropertyAssertionAxiom(owlObjectPropertyAssertionAxiom);
 	    } else if (axiom instanceof OWLClassPropertyAssertionAxiom) {
 	      OWLClassPropertyAssertionAxiom owlClassPropertyAssertionAxiom = (OWLClassPropertyAssertionAxiom)axiom;
-	      generateOWLClassPropertyAssertionAxiomRepresentation(owlClassPropertyAssertionAxiom);
+	      generateOWLClassPropertyAssertionAxiom(owlClassPropertyAssertionAxiom);
 	    } else if (axiom instanceof OWLPropertyPropertyAssertionAxiom) {
 	      OWLPropertyPropertyAssertionAxiom owlPropertyPropertyAssertionAxiom = (OWLPropertyPropertyAssertionAxiom)axiom;
-	      generateOWLPropertyPropertyAssertionAxiomRepresentation(owlPropertyPropertyAssertionAxiom);
+	      generateOWLPropertyPropertyAssertionAxiom(owlPropertyPropertyAssertionAxiom);
 	    } else if (axiom instanceof OWLSameIndividualAxiom) {
 	      OWLSameIndividualAxiom owlSameIndividualAxiom = (OWLSameIndividualAxiom)axiom;
-	      generateOWLSameIndividualAxiomRepresentation(owlSameIndividualAxiom);
+	      generateOWLSameIndividualAxiom(owlSameIndividualAxiom);
 	    } else if (axiom instanceof OWLDifferentIndividualsAxiom) {
 	      OWLDifferentIndividualsAxiom owlDifferentIndividualsAxiom = (OWLDifferentIndividualsAxiom)axiom;
-	      generateOWLDifferentIndividualsAxiomRepresentation(owlDifferentIndividualsAxiom);
+	      generateOWLDifferentIndividualsAxiom(owlDifferentIndividualsAxiom);
 	    } else if (axiom instanceof OWLClassAssertionAxiom) {
 	      OWLClassAssertionAxiom owlClassAssertionAxiom = (OWLClassAssertionAxiom)axiom;
-	      generateOWLClassAssertionAxiomRepresentation(owlClassAssertionAxiom);
+	      generateOWLClassAssertionAxiom(owlClassAssertionAxiom);
 	    } else if (axiom instanceof OWLDeclarationAxiom) {
 	      OWLDeclarationAxiom owlDeclarationAxiom = (OWLDeclarationAxiom)axiom;
-	      generateOWLDeclarationAxiomRepresentation(owlDeclarationAxiom);
+	      generateOWLDeclarationAxiom(owlDeclarationAxiom);
 	    } else if (axiom instanceof OWLSubClassAxiom) {
 	      OWLSubClassAxiom owlSubClassAxiom = (OWLSubClassAxiom)axiom;
-	      generateOWLSubclassAxiomRepresentation(owlSubClassAxiom);
+	      generateOWLSubclassAxiom(owlSubClassAxiom);
 	    } else throw new TargetSWRLRuleEngineException("OWL axiom " + axiom.getClass() + " not supported");
   }
   	
-  public void generateOWLClassDeclarationRepresentation(OWLClass owlClass) throws TargetSWRLRuleEngineException
+  public void generateOWLClassDeclaration(OWLClass owlClass) throws TargetSWRLRuleEngineException
   {
     Set<String> classURIs = new HashSet<String>();
 
@@ -91,7 +93,7 @@ public abstract class DefaultOWLAxiomConvertor extends DefaultConvertor implemen
     } // for
   } 
 
-  public void generateOWLPropertyDeclarationRepresentation(OWLProperty owlProperty) throws TargetSWRLRuleEngineException
+  public void generateOWLPropertyDeclaration(OWLProperty owlProperty) throws TargetSWRLRuleEngineException
   {
     Set<String> propertyURIs = new HashSet<String>();
 
@@ -102,24 +104,38 @@ public abstract class DefaultOWLAxiomConvertor extends DefaultConvertor implemen
     } // for
   } 
 
-  public void generateOWLIndividualDeclarationRepresentation(OWLNamedIndividual individual) throws TargetSWRLRuleEngineException
+  public void generateOWLIndividualDeclaration(OWLNamedIndividual individual) throws TargetSWRLRuleEngineException
   {
-    Set<OWLClass> definingClasses = new HashSet<OWLClass>();
     String individualURI = individual.getURI();
 
-    calculateTransitiveClassClosure(individual.getTypes(), definingClasses);
+    defineOWLIndividualDeclaration(individualURI);
+  }
+ 
+  // TODO: Here, we go beyond just declaring the supplied class assertion axiom but also declare the transitive closure of
+  // the individual's classes and also the same and different individual axioms for that individual. This should not be 
+  // happening here and should be taken care of by the generateOWLSubClassAssertion, generateOWLEquivalentClassAssertion,
+  // generateOWLSameIndividualAxiom, and generateOWLDifferentIndividualsAxiom methods. However, the SWRLAndSQWRLProcessor
+  // class does not currently generate these axioms.
+  public void generateOWLClassAssertionAxiom(OWLClassAssertionAxiom axiom) throws TargetSWRLRuleEngineException
+  {
+    Set<OWLClass> definingClasses = new HashSet<OWLClass>();
+    String individualURI = axiom.getIndividual().getURI();
+    
+    definingClasses.add(axiom.getDescription());
+
+    calculateTransitiveClassClosure(axiom.getIndividual().getTypes(), definingClasses);
     
     for (OWLClass owlClass : definingClasses) {
       String classURI = owlClass.getURI();
-    	defineOWLIndividualDeclaration(classURI, individualURI);
+    	defineOWLClassAssertionAxiom(classURI, individualURI);
 
-      for (OWLNamedIndividual sameIndividual : individual.getSameIndividuals()) {
+      for (OWLNamedIndividual sameIndividual : axiom.getIndividual().getSameIndividuals()) {
       	String sameIndividualURI = sameIndividual.getURI();
       	defineOWLSameIndividualAxiom(individualURI, sameIndividualURI);
-      	defineOWLIndividualDeclaration(classURI, sameIndividualURI);
+      	defineOWLClassAssertionAxiom(classURI, sameIndividualURI);
       } // for
       
-      for (OWLNamedIndividual differentIndividual : individual.getDifferentIndividuals()) {
+      for (OWLNamedIndividual differentIndividual : axiom.getIndividual().getDifferentIndividuals()) {
       	String differentIndividualURI = differentIndividual.getURI();
       	defineOWLDifferentIndividualsAxiom(individualURI, differentIndividualURI);
         } // for
@@ -127,8 +143,12 @@ public abstract class DefaultOWLAxiomConvertor extends DefaultConvertor implemen
 
     defineOWLSameIndividualAxiom(individualURI, individualURI);
   }
- 
-  public void generateOWLDataPropertyAssertionAxiomRepresentation(OWLDataPropertyAssertionAxiom axiom) throws TargetSWRLRuleEngineException
+
+  // TODO: Here, we go beyond just declaring the supplied property assertion axiom but also declare the transitive closure of
+  // the properties and consider the same as relationships for the subject individuals.
+  // This should not be happening here and should be taken care of by the generateOWLSubPropertyAssertion 
+  // and generateOWLEquivalentPropertyAssertion methods. However, the SWRLAndSQWRLProcessor class does not currently generate these axioms.
+  public void generateOWLDataPropertyAssertionAxiom(OWLDataPropertyAssertionAxiom axiom) throws TargetSWRLRuleEngineException
   {
     OWLProperty property = axiom.getProperty();
     Set<OWLProperty> definingProperties = new HashSet<OWLProperty>();
@@ -151,7 +171,11 @@ public abstract class DefaultOWLAxiomConvertor extends DefaultConvertor implemen
     } /// for      
   } 
 
-  public void generateOWLObjectPropertyAssertionAxiomRepresentation(OWLObjectPropertyAssertionAxiom axiom) throws TargetSWRLRuleEngineException
+  // TODO: Here, we go beyond just declaring the supplied property assertion axiom but also declare the transitive closure of
+  // the properties and consider the same as relationships for both subject and object individuals. 
+  // This should not be happening here and should be taken care of by the generateOWLSubPropertyAssertion 
+  // and generateOWLEquivalentPropertyAssertion methods. However, the SWRLAndSQWRLProcessor class does not currently generate these axioms.
+  public void generateOWLObjectPropertyAssertionAxiom(OWLObjectPropertyAssertionAxiom axiom) throws TargetSWRLRuleEngineException
   {
     OWLProperty property = axiom.getProperty();
     Set<OWLProperty> definingProperties = new HashSet<OWLProperty>();
@@ -160,6 +184,7 @@ public abstract class DefaultOWLAxiomConvertor extends DefaultConvertor implemen
     Set<OWLNamedIndividual> subjectIndividuals = new HashSet<OWLNamedIndividual>();
     Set<OWLNamedIndividual> objectIndividuals = new HashSet<OWLNamedIndividual>();
 
+    definingProperties.add(property);
     calculateTransitivePropertyClosure(property.getTypes(), definingProperties);
 
     subjectIndividuals.add(subjectIndividual);
@@ -180,7 +205,7 @@ public abstract class DefaultOWLAxiomConvertor extends DefaultConvertor implemen
     } // for
   }
 
-  public void generateOWLClassPropertyAssertionAxiomRepresentation(OWLClassPropertyAssertionAxiom axiom) throws TargetSWRLRuleEngineException
+  public void generateOWLClassPropertyAssertionAxiom(OWLClassPropertyAssertionAxiom axiom) throws TargetSWRLRuleEngineException
   {
     OWLProperty property = axiom.getProperty();
     Set<OWLProperty> definingProperties = new HashSet<OWLProperty>();
@@ -189,6 +214,7 @@ public abstract class DefaultOWLAxiomConvertor extends DefaultConvertor implemen
     Set<OWLNamedIndividual> subjectIndividuals = new HashSet<OWLNamedIndividual>();
     Set<String> objectClassURIs = new HashSet<String>();
 
+    definingProperties.add(property);
     calculateTransitivePropertyClosure(property.getTypes(), definingProperties);
 
     subjectIndividuals.add(subjectIndividual);
@@ -207,7 +233,7 @@ public abstract class DefaultOWLAxiomConvertor extends DefaultConvertor implemen
     } // for
   } 
 
-  public void generateOWLPropertyPropertyAssertionAxiomRepresentation(OWLPropertyPropertyAssertionAxiom axiom) throws TargetSWRLRuleEngineException
+  public void generateOWLPropertyPropertyAssertionAxiom(OWLPropertyPropertyAssertionAxiom axiom) throws TargetSWRLRuleEngineException
   {
     OWLProperty property = axiom.getProperty();
     Set<OWLProperty> definingProperties = new HashSet<OWLProperty>();
@@ -216,6 +242,7 @@ public abstract class DefaultOWLAxiomConvertor extends DefaultConvertor implemen
     Set<OWLNamedIndividual> subjectIndividuals = new HashSet<OWLNamedIndividual>();
     Set<String> objectPropertyURIs = new HashSet<String>();
 
+    definingProperties.add(property);
     calculateTransitivePropertyClosure(property.getTypes(), definingProperties);
 
     subjectIndividuals.add(subjectIndividual);
@@ -234,7 +261,7 @@ public abstract class DefaultOWLAxiomConvertor extends DefaultConvertor implemen
     } // for
   }
 
-  public void generateOWLSameIndividualAxiomRepresentation(OWLSameIndividualAxiom axiom) throws TargetSWRLRuleEngineException
+  public void generateOWLSameIndividualAxiom(OWLSameIndividualAxiom axiom) throws TargetSWRLRuleEngineException
   {
     String individualURI1 = axiom.getIndividual1().getURI();
     String individualURI2 = axiom.getIndividual2().getURI();
@@ -244,7 +271,7 @@ public abstract class DefaultOWLAxiomConvertor extends DefaultConvertor implemen
     defineOWLSameIndividualAxiom(individualURI1, individualURI1);
   } 
 
-  public void generateOWLDifferentIndividualsAxiomRepresentation(OWLDifferentIndividualsAxiom axiom) throws TargetSWRLRuleEngineException
+  public void generateOWLDifferentIndividualsAxiom(OWLDifferentIndividualsAxiom axiom) throws TargetSWRLRuleEngineException
   {
     List<String> allDifferentsSoFar = new ArrayList<String>();
     
@@ -258,30 +285,25 @@ public abstract class DefaultOWLAxiomConvertor extends DefaultConvertor implemen
     } // for
   } 
 
-  public void generateOWLDeclarationAxiomRepresentation(OWLDeclarationAxiom axiom) throws TargetSWRLRuleEngineException
+  public void generateOWLDeclarationAxiom(OWLDeclarationAxiom axiom) throws TargetSWRLRuleEngineException
 	{
 	  OWLEntity owlEntity = axiom.getEntity();
 	
-	  if (owlEntity instanceof OWLClass) generateOWLClassDeclarationRepresentation((OWLClass)owlEntity);
-	  else if (owlEntity instanceof OWLProperty) generateOWLPropertyDeclarationRepresentation((OWLProperty)owlEntity);
-	  else if (owlEntity instanceof OWLNamedIndividual) generateOWLIndividualDeclarationRepresentation((OWLNamedIndividual)owlEntity);
+	  if (owlEntity instanceof OWLClass) generateOWLClassDeclaration((OWLClass)owlEntity);
+	  else if (owlEntity instanceof OWLProperty) generateOWLPropertyDeclaration((OWLProperty)owlEntity);
+	  else if (owlEntity instanceof OWLNamedIndividual) generateOWLIndividualDeclaration((OWLNamedIndividual)owlEntity);
 	  else throw new TargetSWRLRuleEngineException("OWL declaration axiom with entity " + owlEntity.getClass() + " not supported");
 	}
 
-  public void generateOWLClassAssertionAxiomRepresentation(OWLClassAssertionAxiom axiom)	throws TargetSWRLRuleEngineException
-  {
-    String classURI = axiom.getDescription().getURI();
-    String individualURI = axiom.getIndividual().getURI();
-    defineOWLClassAssertionAxiom(classURI, individualURI);
-  }
-
-  public void generateOWLSubclassAxiomRepresentation(OWLSubClassAxiom axiom) throws TargetSWRLRuleEngineException
+  public void generateOWLSubclassAxiom(OWLSubClassAxiom axiom) throws TargetSWRLRuleEngineException
   {
     OWLClass owlSubClass = axiom.getSubClass();
     OWLClass owlSuperClass = axiom.getSuperClass();
 
-    generateOWLClassDeclarationRepresentation(owlSubClass);
-    generateOWLClassDeclarationRepresentation(owlSuperClass);
+    generateOWLClassDeclaration(owlSubClass);
+    generateOWLClassDeclaration(owlSuperClass);
+    
+    // TODO: we do nothing for the moment because generateOWLClassAssertionAxiomRepresentation effectively takes care of this axiom.
   }
   
   private void calculateTransitiveClassClosure(Set<OWLClass> classes, Set<OWLClass> closure)

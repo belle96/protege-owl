@@ -16,7 +16,7 @@ public class SQWRLQueryEngineFactory
     SQWRLQueryEngine queryEngine = null;
 
     try {
-      queryEngine = SWRLRuleEngineFactory.create(owlModel);
+      queryEngine = SWRLRuleEngineFactory.create("SWRLJessBridge", owlModel);
     } catch (SWRLRuleEngineException e) {
       throw new SQWRLException("error creating SQWRL query engine: " + e.getMessage());
     } // try

@@ -44,7 +44,6 @@ public abstract class OWLPropertyImpl implements OWLProperty
   	return types;
   }
 
-
   public String toString() { return getURI(); }
 
   public boolean equals(Object obj)
@@ -53,7 +52,7 @@ public abstract class OWLPropertyImpl implements OWLProperty
     if((obj == null) || (obj.getClass() != this.getClass())) return false;
     OWLPropertyImpl impl = (OWLPropertyImpl)obj;
     return (getURI() == impl.getURI() || (getURI() != null && getURI().equals(impl.getURI())));
-  } // equals
+  }
 
   public int hashCode()
   {
@@ -62,7 +61,7 @@ public abstract class OWLPropertyImpl implements OWLProperty
     hash = hash + (null == getURI() ? 0 : getURI().hashCode());
   
     return hash;
-  } // hashCode
+  }
 
   private void initialize()
   {

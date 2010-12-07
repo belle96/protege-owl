@@ -14,7 +14,7 @@ public class OWLClassAssertionAxiomImpl implements OWLClassAssertionAxiom
   {
     this.individual = individual;
     this.description = description;
-  } // OWLClassAssertionAxiomImpl
+  }
 
   public OWLClass getDescription() { return description; }
   public OWLNamedIndividual getIndividual() { return individual; }
@@ -27,7 +27,7 @@ public class OWLClassAssertionAxiomImpl implements OWLClassAssertionAxiom
     return (super.equals((OWLClassAssertionAxiomImpl)impl) &&
             (description != null && impl.description != null && description.equals(impl.description)) &&
             (individual != null && impl.individual != null && individual.equals(impl.individual)));
-  } // equals
+  }
 
   public int hashCode()
   {
@@ -36,8 +36,7 @@ public class OWLClassAssertionAxiomImpl implements OWLClassAssertionAxiom
     hash = hash + (null == description ? 0 : description.hashCode());
     hash = hash + (null == individual ? 0 : individual.hashCode());
     return hash;
-  } // hashCode
+  }
 
   public String toString() { return "" + getDescription() + "(" + getIndividual() + ")"; }
-
-} // OWLClassAssertionAxiom
+}
