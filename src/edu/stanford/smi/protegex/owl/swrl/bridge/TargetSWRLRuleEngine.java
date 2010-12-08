@@ -16,6 +16,11 @@ import java.util.List;
  */
 public interface TargetSWRLRuleEngine
 {
+	/*
+	 * Return the name of the target rule engine.
+	 */
+	String getName(); 
+	
   /**
    * Initialize the target engine. Supply it with the bridge.
    */

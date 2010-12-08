@@ -57,6 +57,11 @@ public interface SQWRLQueryEngine
    */
   Set<String> getSQWRLQueryNames() throws SQWRLException;
   
+  /**
+   * Returns the name of the underlying targer rule engine.
+   */
+  String getTargetRuleEngineName();
+  
   // TODO: temporary
   String uri2PrefixedName(String uri);
   String name2URI(String prefixedName);

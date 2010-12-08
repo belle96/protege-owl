@@ -56,23 +56,32 @@ public class BridgePluginManager
   
   static {
 
+  	boolean ruleEngineFound = false;
+  	
     try { // TODO:  Hack until we can do a proper class load with the manifest
       Class.forName("jess.Rete");
       Class.forName("edu.stanford.smi.protegex.owl.swrl.bridge.jess.JessSWRLRuleEngine");
       Class.forName("edu.stanford.smi.protegex.owl.swrl.bridge.jess.ui.SWRLJessTab");
-      Class.forName("edu.stanford.smi.protegex.owl.swrl.bridge.drools.DroolsSWRLRuleEngine");
-      Class.forName("edu.stanford.smi.protegex.owl.swrl.bridge.drools.ui.SWRLDroolsTab");
+      ruleEngineFound = true;
     } catch (ClassNotFoundException e) {
-      log.info("Jess rule engine load failed: could not find jess.Rete - or an error occured on initialization");
-      
+      log.info("Jess rule engine load failed: could not find jess.Rete - or an error occured on initialization");     
     } // try
 
     try { // TODO:  Hack until we can do a proper class load with the manifest
-      Class.forName("jess.Rete");
-      Class.forName("edu.stanford.smi.protegex.owl.swrl.sqwrl.ui.SQWRLQueryTab");
+      Class.forName("edu.stanford.smi.protegex.owl.swrl.bridge.drools.DroolsSWRLRuleEngine");
+      Class.forName("edu.stanford.smi.protegex.owl.swrl.bridge.drools.ui.SWRLDroolsTab");
+      ruleEngineFound = true;
     } catch (ClassNotFoundException e) {
-      log.info("SQWRLQueryTab load failed: could not find jess.Rete - or an error occured on initialization");
+      log.info("Drools rule engine load failed: could not find Drools JARs - or an error occured on initialization");     
     } // try
+
+    if (ruleEngineFound) {
+	    try { // TODO:  Hack until we can do a proper class load with the manifest
+	      Class.forName("edu.stanford.smi.protegex.owl.swrl.sqwrl.ui.SQWRLQueryTab");
+	    } catch (ClassNotFoundException e) {
+	      log.info("SQWRLQueryTab load failed: an error occured on initialization");
+	    } // try
+    }
 
   } // static
 

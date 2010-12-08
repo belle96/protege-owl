@@ -4,8 +4,6 @@ package edu.stanford.smi.protegex.owl.swrl.bridge.impl;
 import java.util.HashSet;
 import java.util.Set;
 
-import edu.stanford.smi.protegex.owl.model.OWLIndividual;
-import edu.stanford.smi.protegex.owl.model.OWLNamedClass;
 import edu.stanford.smi.protegex.owl.swrl.SWRLRuleEngine;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLAxiomProcessor;
 import edu.stanford.smi.protegex.owl.swrl.bridge.OWLDataValueFactory;
@@ -305,6 +303,8 @@ public class DefaultSWRLRuleEngine implements SWRLRuleEngine
 
   public OWLDataFactory getOWLDataFactory() { return owlDataFactory; }
   public OWLDataValueFactory getOWLDataValueFactory() { return owlDataValueFactory; }
+  
+  public String getTargetRuleEngineName() { return targetRuleEngine.getName(); }
 
   private void importSQWRLQuery(String queryName) throws SWRLRuleEngineException
   {

@@ -51,6 +51,8 @@ public interface SWRLNames extends OWLNames {
   public final static String SQWRL_PREFIX = "sqwrl";
 
   public final static String EXCLUDE_STANDARD_IMPORTS = "protege.owl.swrl.exclude_standard_imports";
+  public final static String DEFAULT_RULE_ENGINE = "protege.owl.swrl.default_rule_engine";
+  
   
   public static interface Cls {
     

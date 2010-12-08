@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import edu.stanford.smi.protege.plugin.PluginUtilities;
+import edu.stanford.smi.protege.util.ApplicationProperties;
 import edu.stanford.smi.protege.util.Log;
 import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.swrl.SWRLRuleEngine;
@@ -16,6 +17,7 @@ import edu.stanford.smi.protegex.owl.swrl.bridge.impl.DefaultSWRLBridge;
 import edu.stanford.smi.protegex.owl.swrl.bridge.impl.DefaultSWRLRuleEngine;
 import edu.stanford.smi.protegex.owl.swrl.bridge.impl.OWLAxiomProcessorImpl;
 import edu.stanford.smi.protegex.owl.swrl.exceptions.SWRLRuleEngineException;
+import edu.stanford.smi.protegex.owl.swrl.model.SWRLNames;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.OWLOntology;
 import edu.stanford.smi.protegex.owl.swrl.owlapi.impl.OWLOntologyImpl;
 
@@ -50,14 +52,20 @@ public class SWRLRuleEngineFactory
   public static Set<String> getRegisteredRuleEngineNames() { return registeredSWRLRuleEngines.keySet(); }
 
   /**
-   * Create an instance of a rule engine - a random registered engine is returned. If no engine is registered, a
+   * Create an instance of a rule engine. If no default engine is specified in the protege.properties file then the Jess rule
+   * engine is returned if it is registered; otherwise a random engine is returned. If no engine is registered, a 
    * NoRegisteredRuleEnginesException is returned.
    */
   public static SWRLRuleEngine create(OWLModel owlModel) throws SWRLRuleEngineException
   {
-    if (!registeredSWRLRuleEngines.isEmpty()) 
-    	return create(registeredSWRLRuleEngines.keySet().iterator().next(), owlModel);
-    else throw new NoRegisteredRuleEnginesException();
+    if (!registeredSWRLRuleEngines.isEmpty()) {
+    	String defaultRuleEngine = ApplicationProperties.getString(SWRLNames.DEFAULT_RULE_ENGINE, "SWRLJessBridge");
+    	if (!registeredSWRLRuleEngines.containsKey(defaultRuleEngine))
+    		return create(registeredSWRLRuleEngines.keySet().iterator().next(), owlModel);
+    	else
+    		return create(defaultRuleEngine, owlModel);
+    	
+    } else throw new NoRegisteredRuleEnginesException();
   } 
 
   /**

@@ -16,22 +16,22 @@ public class SQWRLQueryEngineFactory
     SQWRLQueryEngine queryEngine = null;
 
     try {
-      queryEngine = SWRLRuleEngineFactory.create("SWRLJessBridge", owlModel);
+      queryEngine = SWRLRuleEngineFactory.create(owlModel);
     } catch (SWRLRuleEngineException e) {
       throw new SQWRLException("error creating SQWRL query engine: " + e.getMessage());
     } // try
     
     return queryEngine;
-  } // create
+  }
 
-  public static SQWRLQueryEngine create(String queryEngineName, OWLModel owlModel) throws SQWRLException
+  public static SQWRLQueryEngine create(String pluginName, OWLModel owlModel) throws SQWRLException
   {
     SQWRLQueryEngine queryEngine = null;
 
     try {
-      queryEngine = SWRLRuleEngineFactory.create(queryEngineName, owlModel);
+      queryEngine = SWRLRuleEngineFactory.create(pluginName, owlModel);
     } catch (SWRLRuleEngineException e) {
-      throw new SQWRLException("error creating SQWRL query engine '" + queryEngineName + "': " + e.getMessage());
+      throw new SQWRLException("error creating SQWRL query engine using '" + pluginName + "': " + e.getMessage());
     } // try
     
     return queryEngine;

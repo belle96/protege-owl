@@ -8,7 +8,7 @@ import java.util.HashSet;
 
 public class SQWRLNames
 {
-  public static String SQWRLBuiltInLibraryName = "SQWRLBuiltIns";
+	public static String SQWRLBuiltInLibraryName = "SQWRLBuiltIns";
 
   public static final String SQWRLNamespace = "http://sqwrl.stanford.edu/ontologies/built-ins/3.4/sqwrl.owl#";
 

@@ -53,6 +53,7 @@ public class SQWRLQueryControlPanel extends JPanel
 
     add(BorderLayout.SOUTH, panel);
 
+    textArea.append("Using the " + queryEngine.getTargetRuleEngineName() + " for query execution.\n");
     textArea.append("\nSee http://protege.cim3.net/cgi-bin/wiki.pl?SQWRLQueryTab for documentation.\n\n");
     textArea.append("Executing queries in this tab does not modify the ontology.\n\n");
     textArea.append("Select a SQWRL query from the list above and press the 'Run' button.\n");
