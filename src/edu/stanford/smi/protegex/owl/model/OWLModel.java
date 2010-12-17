@@ -140,6 +140,15 @@ public interface OWLModel extends ProtegeKnowledgeBase, OWLTestManager {
      */
     String createNewResourceName(String partialLocalName);
 
+    /**
+     * Generates a unique URI for a Frame given a base URI. For example, if you pass in
+     * "http://a.com/MyOntology#Class" the method will generate the unique URI
+     * "http://a.com/MyOntology#Class_42" or the like.
+     * 
+     * @param baseURI a partial URI
+     * @return a unique URI for a new resource
+     */
+    String getUniqueFrameName(String baseURI);
 
     OWLAllDifferent createOWLAllDifferent();
 
@@ -1306,8 +1315,7 @@ public interface OWLModel extends ProtegeKnowledgeBase, OWLTestManager {
      * @return the name of the corresponding Frame
      */
     String getResourceNameForURI(String uri);
-
-
+    
     /**
      * Gets the slots that are used for matching when the user searches for a frame
      * in the search fields.  These are used in addition to the :NAME slot in the
