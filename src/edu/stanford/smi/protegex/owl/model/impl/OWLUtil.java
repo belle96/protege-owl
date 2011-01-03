@@ -928,7 +928,7 @@ public class OWLUtil {
         //TODO: please check implementation
         // Triple store should have as the name the ontology name
         // If TS name is null, use the default ontology
-        OWLOntology owlOntology = owlModel.getDefaultOWLOntology();
+        OWLOntology owlOntology = null;
         TripleStoreModel tsm = owlModel.getTripleStoreModel();
         TripleStore activeTripleStore = tsm.getActiveTripleStore();
 
@@ -939,6 +939,9 @@ public class OWLUtil {
             } catch (Exception e) {
                 Log.emptyCatchBlock(e);
             }
+        }
+        if (owlOntology == null) {
+            owlOntology = owlModel.getDefaultOWLOntology();
         }
 
         return owlOntology;
