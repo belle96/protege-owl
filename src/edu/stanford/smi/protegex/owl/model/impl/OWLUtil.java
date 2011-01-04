@@ -926,25 +926,11 @@ public class OWLUtil {
 
     public static OWLOntology getActiveOntology(OWLModel owlModel) {
         //TODO: please check implementation
-        // Triple store should have as the name the ontology name
-        // If TS name is null, use the default ontology
-        OWLOntology owlOntology = null;
+        RDFResource owlOntology = null;
         TripleStoreModel tsm = owlModel.getTripleStoreModel();
         TripleStore activeTripleStore = tsm.getActiveTripleStore();
 
-        String name = activeTripleStore.getName();
-        if (name != null) {
-            try {
-                owlOntology = (OWLOntology) owlModel.getOWLOntologyByURI(URIUtilities.createURI(name));
-            } catch (Exception e) {
-                Log.emptyCatchBlock(e);
-            }
-        }
-        if (owlOntology == null) {
-            owlOntology = owlModel.getDefaultOWLOntology();
-        }
-
-        return owlOntology;
+        return activeTripleStore.getOWLOntology();
     }
 
     public static void setActiveOntology(OWLModel owlModel, OWLOntology ont) {
