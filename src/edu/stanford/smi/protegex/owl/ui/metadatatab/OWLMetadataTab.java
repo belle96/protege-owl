@@ -69,7 +69,7 @@ public class OWLMetadataTab extends AbstractTabWidget implements HostResourceDis
         resourceDisplay = ProtegeUI.getResourcePanelFactory().createResourcePanel(getOWLModel(), ResourcePanel.DEFAULT_TYPE_ONTOLOGY);
 
 
-        OWLOntology activeOntology = OWLUtil.getActiveOntology(getOWLModel());
+        RDFResource activeOntology = OWLUtil.getActiveOntology(getOWLModel());
         if (activeOntology != null) {
             displayHostResource(activeOntology);
         }
@@ -153,8 +153,13 @@ public class OWLMetadataTab extends AbstractTabWidget implements HostResourceDis
 	public String getLabel() {
 	    // Tania can change it back?
 	    // OWLOntology displayedOntology = getOWLModel().getDefaultOWLOntology();
-	    OWLOntology displayedOntology =  OWLUtil.getActiveOntology(getOWLModel());
-        return "Metadata" + "(" + NamespaceUtil.getLocalName(displayedOntology.getName()) + ")";
+	    RDFResource displayedOntology =  OWLUtil.getActiveOntology(getOWLModel());
+	    if (displayedOntology != null) {
+	        return "Metadata" + "(" + NamespaceUtil.getLocalName(displayedOntology.getName()) + ")";
+	    }
+	    else {
+	        return "Metadata" + "(Unknown ontology name)";
+	    }
     }
 
     @SuppressWarnings("unchecked")
