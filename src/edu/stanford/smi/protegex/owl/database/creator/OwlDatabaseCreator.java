@@ -21,6 +21,7 @@ import edu.stanford.smi.protegex.owl.model.OWLModel;
 import edu.stanford.smi.protegex.owl.model.factory.AlreadyImportedException;
 import edu.stanford.smi.protegex.owl.model.factory.FactoryUtils;
 import edu.stanford.smi.protegex.owl.repository.Repository;
+import edu.stanford.smi.protegex.owl.storage.OWLKnowledgeBaseFactory;
 
 public class OwlDatabaseCreator extends AbstractOwlDatabaseCreator {
 	private boolean wipe;
@@ -35,7 +36,7 @@ public class OwlDatabaseCreator extends AbstractOwlDatabaseCreator {
 	public OwlDatabaseCreator(OWLDatabaseKnowledgeBaseFactory factory, boolean wipe) {
 		super(factory);
 		this.wipe = wipe;
-		databaseFrameDbClass = DefaultDatabaseFrameDb.class;
+		databaseFrameDbClass = factory.getDatabaseFrameDbClass();
 	}
 
 	@Override
@@ -71,7 +72,14 @@ public class OwlDatabaseCreator extends AbstractOwlDatabaseCreator {
 	}
 	
 	private void createFromExistingSources(Collection errors) {
-        OWLDatabaseKnowledgeBaseFactory factory = new OWLDatabaseKnowledgeBaseFactory();
+	    OWLKnowledgeBaseFactory suppliedFactory = getFactory();
+	    OWLDatabaseKnowledgeBaseFactory factory;
+	    if (suppliedFactory != null && suppliedFactory instanceof OWLDatabaseKnowledgeBaseFactory) {
+	        factory = (OWLDatabaseKnowledgeBaseFactory) suppliedFactory;
+	    }
+	    else {
+	        factory = new OWLDatabaseKnowledgeBaseFactory();
+	    }
         project = Project.createBuildProject(factory, errors);
         initializeSources(project.getSources());
         project.createDomainKnowledgeBase(factory, errors, false);

@@ -157,7 +157,7 @@ public class OWLDatabaseWizardPage extends DatabaseWizardPage {
         return ok == ModalDialog.OPTION_OK;
     }
     
-    private boolean databaseExists(Connection connection)  {
+    protected boolean databaseExists(Connection connection)  {
         Statement statement;
         try {
             statement = connection.createStatement();

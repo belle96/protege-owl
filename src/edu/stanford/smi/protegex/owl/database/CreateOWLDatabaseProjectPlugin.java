@@ -75,7 +75,7 @@ public class CreateOWLDatabaseProjectPlugin extends
 
 
     public boolean canCreateProject(KnowledgeBaseFactory factory, boolean useExistingSources) {
-        return factory instanceof OWLDatabaseKnowledgeBaseFactory;
+        return factory.getClass() == OWLDatabaseKnowledgeBaseFactory.class;
     }
     
     
