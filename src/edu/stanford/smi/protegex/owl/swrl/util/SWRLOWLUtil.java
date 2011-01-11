@@ -42,7 +42,7 @@ import edu.stanford.smi.protegex.owl.swrl.model.SWRLVariable;
 /**
  * Class that wraps some common Protege-OWL API methods and throws meaningful exceptions when errors are encountered.
  *
- * Covers a fairly arbitrary method set.
+ * Covers a fairly arbitrary method set. 
  */
 public class SWRLOWLUtil
 {
@@ -82,7 +82,7 @@ public class SWRLOWLUtil
     } catch (Exception e) {
       throwException("error importing OWL file " + importOWLFileName + ": " + e.getMessage());
     } // try
-  } // importOWLFile
+  } 
 
   public static void setPrefix(OWLModel owlModel, String prefix, String namespace) throws SWRLOWLUtilException
   {
@@ -99,7 +99,7 @@ public class SWRLOWLUtil
     URI outputURI = URIUtilities.createURI(new File(outputOWLFileName).toURI().toString());
     owlModel.save(outputURI, FileUtils.langXMLAbbrev, errors);
     if (errors.size() != 0) throwException("error creating output OWL file " + outputOWLFileName + ": " + errors);
-  } // writeJenaOWLModel2File
+  } 
   
   public static OWLNamedClass createOWLNamedClass(OWLModel owlModel, String className) throws SWRLOWLUtilException
   {
@@ -155,7 +155,7 @@ public class SWRLOWLUtil
   public static OWLObjectProperty createOWLObjectProperty(OWLModel owlModel) 
   {
     return owlModel.createOWLObjectProperty(null);
-  } // createOWLObjectProperty
+  }
 
   public static OWLDatatypeProperty createOWLDatatypeProperty(OWLModel owlModel, String propertyName) 
   {
@@ -164,7 +164,7 @@ public class SWRLOWLUtil
     if (property == null) property = owlModel.createOWLDatatypeProperty(propertyName);
 
     return property;
-  } // createOWLDatatypeProperty
+  }
 
   public static RDFSNamedClass createRDFSNamedClassUsingLabelAnnotation(OWLModel owlModel, String labelText, boolean allowDuplicates) 
   {
@@ -255,7 +255,7 @@ public class SWRLOWLUtil
     if (!property.hasPropertyValue(owlModel.getRDFSLabelProperty(), labelText)) property.addPropertyValue(owlModel.getRDFSLabelProperty(), labelText);
 
     return property;
-  } // createOWLObjectPropertyUsingLabelAnnotation
+  }
 
   public static OWLDatatypeProperty createOWLDataPropertyUsingLabelAnnotation(OWLModel owlModel, String labelText, boolean allowDuplicates) 
   {
@@ -285,7 +285,7 @@ public class SWRLOWLUtil
     if (!property.hasPropertyValue(owlModel.getRDFSLabelProperty(), labelText)) property.addPropertyValue(owlModel.getRDFSLabelProperty(), labelText);
 
     return property;
-  } // createOWLDataPropertyUsingLabelAnnotation
+  }
 
   public static OWLIndividual createOWLIndividualUsingLabelAnnotation(OWLModel owlModel, String labelText, boolean allowDuplicates) 
    throws SWRLOWLUtilException
@@ -316,7 +316,7 @@ public class SWRLOWLUtil
     if (!individual.hasPropertyValue(owlModel.getRDFSLabelProperty(), labelText)) individual.addPropertyValue(owlModel.getRDFSLabelProperty(), labelText);
 
     return individual;
-  } // createOWLIndividualUsingLabelAnnotation
+  }
 
   public static Set<OWLIndividual> getMatchingIndividuals(OWLModel owlModel, String propertyName, String matchString) 
     throws SWRLOWLUtilException
@@ -339,7 +339,7 @@ public class SWRLOWLUtil
       if (isOWLIndividualOfClass(owlModel, owlIndividual, className)) matchingIndividuals.add(owlIndividual);
 
     return matchingIndividuals;
-  } // getMatchingIndividualsOfClass    
+  }    
 
   public static boolean isOWLNamedClass(OWLModel owlModel, String className)
   {
@@ -353,7 +353,7 @@ public class SWRLOWLUtil
     RDFResource resource = owlModel.getRDFResource(className);
 
     return resource != null && resource instanceof OWLClass;
-  } // isOWLClass
+  }
 
   public static OWLNamedClass getOWLNamedClass(OWLModel owlModel, String className) throws SWRLOWLUtilException
   {
@@ -362,7 +362,7 @@ public class SWRLOWLUtil
     if (cls == null) throw new SWRLOWLUtilException("invalid OWL named class " + className);
 
     return cls;
-  } // getOWLNamedClass
+  }
 
   public static OWLClass getOWLClass(OWLModel owlModel, String className) throws SWRLOWLUtilException
   {
@@ -425,7 +425,7 @@ public class SWRLOWLUtil
     throws SWRLOWLUtilException
   {
     return createIndividualOfClass(owlModel, cls, null);
-  } // createIndividualOfClass
+  }
 
   public static OWLIndividual createIndividualOfClass(OWLModel owlModel, OWLClass cls, String individualName)
     throws SWRLOWLUtilException
@@ -446,7 +446,7 @@ public class SWRLOWLUtil
     } // if
 
     return individual;
-  } // createIndividualOfClass
+  }
 
   public static OWLNamedClass getNamedClass(OWLModel owlModel, String className) throws SWRLOWLUtilException
   {
@@ -480,11 +480,11 @@ public class SWRLOWLUtil
     return (individual instanceof OWLIndividual) && individual.hasRDFType((OWLNamedClass)cls, true);
   }
 
-  public static boolean isOWLIndividualOfTypeOWLThing(OWLModel owlModel, String individualName) 
+  public static boolean isOWLIndividualOfDirectTypeOWLThing(OWLModel owlModel, String individualName) 
   {
     RDFResource individual = owlModel.getRDFResource(individualName);
 
-    return (individual instanceof OWLIndividual) && individual.hasRDFType(getOWLThingClass(individual.getOWLModel()), true);
+    return (individual instanceof OWLIndividual) && individual.hasRDFType(getOWLThingClass(individual.getOWLModel()), false);
   }
 
   public static void setType(OWLModel owlModel, String individualName, String className) throws SWRLOWLUtilException
@@ -496,7 +496,7 @@ public class SWRLOWLUtil
   } 
 
   public static void addPropertyValue(OWLModel owlModel, String subjectName, String propertyName, String propertyValue) 
-  throws SWRLOWLUtilException
+    throws SWRLOWLUtilException
 	{
 	  RDFResource subject = null;
 	  OWLProperty property = getOWLProperty(owlModel, propertyName);
@@ -580,7 +580,7 @@ public class SWRLOWLUtil
     	} // for
     } // if
     return result;
-  } // getRDFSLabels
+  } 
 
   public static Set<String> getRDFSLabelLanguages(OWLModel owlModel, String resourceName)
   {
@@ -1002,33 +1002,33 @@ public class SWRLOWLUtil
     RDFResource resource = owlModel.getRDFResource(propertyName);
 
     return resource instanceof OWLDatatypeProperty;
-  } // isOWLDataProperty
+  } 
 
   public static boolean isOWLTransitiveProperty(OWLModel owlModel, String propertyName, boolean mustExist) throws SWRLOWLUtilException
   {
     OWLProperty property = getOWLProperty(owlModel, propertyName, mustExist);
 
     return (property != null && property instanceof OWLObjectProperty && ((OWLObjectProperty)property).isTransitive());
-  } // isOWLTransitiveProperty
+  }
 
   public static boolean isOWLTransitiveProperty(OWLModel owlModel, String propertyName) throws SWRLOWLUtilException
   {
     return isOWLTransitiveProperty(owlModel, propertyName, true);
-  } // isOWLTransitiveProperty
+  }
 
   public static boolean isOWLSymmetricProperty(OWLModel owlModel, String propertyName, boolean mustExist) throws SWRLOWLUtilException
   {
     OWLProperty property = getOWLProperty(owlModel, propertyName, mustExist);
 
     return (property != null && property instanceof OWLObjectProperty && ((OWLObjectProperty)property).isSymmetric());
-  } // isOWLSymmetricProperty
+  } 
 
   public static boolean isOWLFunctionalProperty(OWLModel owlModel, String propertyName, boolean mustExist) throws SWRLOWLUtilException
   {
     OWLProperty property = getOWLProperty(owlModel, propertyName, mustExist);
 
     return property != null && property.isFunctional();
-  } // isOWLFunctionalProperty
+  } 
 
   public static boolean isAnnotationProperty(OWLModel owlModel, String propertyName, boolean mustExist) throws SWRLOWLUtilException
   {
