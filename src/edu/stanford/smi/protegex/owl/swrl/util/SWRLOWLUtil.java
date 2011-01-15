@@ -496,8 +496,39 @@ public class SWRLOWLUtil
   } 
 
   public static void addPropertyValue(OWLModel owlModel, String subjectName, String propertyName, String propertyValue) 
-    throws SWRLOWLUtilException
-	{
+  throws SWRLOWLUtilException
+{
+  RDFResource subject = null;
+  OWLProperty property = getOWLProperty(owlModel, propertyName);
+
+  if (subjectName.startsWith("'")) subjectName = subjectName.substring(1, subjectName.length() - 1); 
+
+  if (isOWLIndividual(owlModel, subjectName)) subject = getOWLIndividual(owlModel, subjectName);
+  else if (isOWLClass(owlModel, subjectName)) subject = getOWLClass(owlModel, subjectName);
+  else throw new SWRLOWLUtilException("invalid subject name " + subjectName + "; must be OWLClass or OWLIndividual");
+
+  if (subject == null) throwException("invalid subject name " + subjectName);
+  if (property == null) throwException("invalid property name " + propertyName);
+  if (propertyValue == null) throwException("null value for property " + propertyName + " for subject " + subjectName);
+
+  if (property.isObjectProperty()) {
+    if (isOWLIndividual(owlModel, propertyValue)) {
+      OWLIndividual objectIndividual = getOWLIndividual(owlModel, propertyValue);
+      if (!subject.hasPropertyValue(property, objectIndividual)) subject.addPropertyValue(property, objectIndividual);
+    } else if (isOWLNamedClass(owlModel, propertyValue)) {
+      OWLClass objectClass = getOWLNamedClass(owlModel, propertyValue);
+      if (!subject.hasPropertyValue(property, objectClass)) subject.addPropertyValue(property, objectClass);
+    } else throw new SWRLOWLUtilException("invalid property value " + propertyValue + " for object property " + propertyName + 
+                                          " for subject " + subjectName + "; must be class or individual name");
+
+  } else { // TODO: deals only with strings
+    if (!subject.hasPropertyValue(property, propertyValue)) subject.addPropertyValue(property, propertyValue);
+  } // if
+} 
+
+  public static void addPropertyValue(OWLModel owlModel, String subjectName, String propertyName, String propertyValue, String datatypeName) 
+  	throws SWRLOWLUtilException
+  {
 	  RDFResource subject = null;
 	  OWLProperty property = getOWLProperty(owlModel, propertyName);
 	
@@ -511,19 +542,17 @@ public class SWRLOWLUtil
 	  if (property == null) throwException("invalid property name " + propertyName);
 	  if (propertyValue == null) throwException("null value for property " + propertyName + " for subject " + subjectName);
 	
-	  if (property.isObjectProperty()) {
-	    if (isOWLIndividual(owlModel, propertyValue)) {
-	      OWLIndividual objectIndividual = getOWLIndividual(owlModel, propertyValue);
-	      if (!subject.hasPropertyValue(property, objectIndividual)) subject.addPropertyValue(property, objectIndividual);
-	    } else if (isOWLNamedClass(owlModel, propertyValue)) {
-	      OWLClass objectClass = getOWLNamedClass(owlModel, propertyValue);
-	      if (!subject.hasPropertyValue(property, objectClass)) subject.addPropertyValue(property, objectClass);
-	    } else throw new SWRLOWLUtilException("invalid property value " + propertyValue + " for object property " + propertyName + 
-	                                          " for subject " + subjectName + "; must be class or individual name");
-	
-	  } else { // TODO: deals only with strings
-	    if (!subject.hasPropertyValue(property, propertyValue)) subject.addPropertyValue(property, propertyValue);
-	  } // if
+	  if (property.isObjectProperty()) 
+	  	throw new SWRLOWLUtilException("attempt to assign data property with value " + propertyValue + " and type " + datatypeName +
+	  			                           " to property " + propertyName + " on individual " + subjectName);
+	  
+	  RDFSDatatype datatype = getRDFSDatatype(owlModel, datatypeName);
+	  
+	  if (datatype == null) throw new SWRLOWLUtilException("invdlia datatype name " + datatypeName);
+	  
+	  RDFSLiteral literal = owlModel.createRDFSLiteral(propertyValue, datatype);
+  		
+	  if (!subject.hasPropertyValue(property, literal)) subject.addPropertyValue(property, literal);
 	} 
 
   public static void addType(OWLModel owlModel, String resourceName, String className) throws SWRLOWLUtilException
@@ -1843,14 +1872,14 @@ public class SWRLOWLUtil
     return owlModel.createNewResourceName(localNamePrefix);
   } // createNewResourceName
 
-  public static RDFSDatatype getRDFSDatatype(OWLModel owlModel, String type) throws SWRLOWLUtilException
+  public static RDFSDatatype getRDFSDatatype(OWLModel owlModel, String datatypeName) throws SWRLOWLUtilException
   {
-    RDFSDatatype datatype = owlModel.getRDFSDatatypeByName(type);
+    RDFSDatatype datatype = owlModel.getRDFSDatatypeByName(datatypeName);
 
-    if (datatype == null) throw new SWRLOWLUtilException("error getting RDFSDatatype " + type);
+    if (datatype == null) throw new SWRLOWLUtilException("error getting RDFSDatatype " + datatypeName);
 
     return datatype;
-  } // getRDFSDatatype
+  }
 
   public static RDFSLiteral createRDFSLiteral(OWLModel owlModel, String value, RDFSDatatype datatype) 
     throws SWRLOWLUtilException
@@ -1861,7 +1890,7 @@ public class SWRLOWLUtil
       throw new SWRLOWLUtilException("error creating RDFSLiteral '" + value + "' of type '" + datatype + "'");
 
     return literal;
-  } // createRDFSLiteral
+  } 
 
   public static OWLClass createOWLClassDescription(OWLModel owlModel, String classExpression) throws SWRLOWLUtilException
   {
