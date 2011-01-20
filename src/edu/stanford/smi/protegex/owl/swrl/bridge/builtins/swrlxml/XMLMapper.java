@@ -51,20 +51,24 @@ public class XMLMapper
   private OWLProperty rootElementProperty, elementsProperty, subElementsProperty, nameProperty, namespacePrefixProperty, 
     namespaceURIProperty, contentProperty, valueProperty, attributesProperty;
 
-  public XMLMapper(OWLModel owlModel)
+  public XMLMapper(OWLModel owlModel) throws XMLMapperException
   {
     this.owlModel = owlModel;
 
-    rootElementProperty = SWRLOWLUtil.createOWLObjectProperty(owlModel, XMLDocumentHasRootElementPropertyName);
-    elementsProperty = SWRLOWLUtil.createOWLObjectProperty(owlModel, XMLDocumentHasElementsPropertyName);
-    nameProperty = SWRLOWLUtil.createOWLDatatypeProperty(owlModel, XMLHasNamePropertyName);
-    namespacePrefixProperty = SWRLOWLUtil.createOWLDatatypeProperty(owlModel, XMLHasNamespacePrefixPropertyName);
-    namespaceURIProperty = SWRLOWLUtil.createOWLDatatypeProperty(owlModel, XMLHasNamespaceURIPropertyName);
-    contentProperty = SWRLOWLUtil.createOWLDatatypeProperty(owlModel, XMLElementHasContentPropertyName);
-    subElementsProperty = SWRLOWLUtil.createOWLObjectProperty(owlModel, XMLElementHasSubElementsPropertyName);
-    valueProperty = SWRLOWLUtil.createOWLDatatypeProperty(owlModel, XMLAttributeHasValuePropertyName);
-    attributesProperty = SWRLOWLUtil.createOWLObjectProperty(owlModel, XMLElementHasAttributesPropertyName);
-  } // XMLMapper
+    try {
+	    rootElementProperty = SWRLOWLUtil.createOWLObjectProperty(owlModel, XMLDocumentHasRootElementPropertyName);
+	    elementsProperty = SWRLOWLUtil.createOWLObjectProperty(owlModel, XMLDocumentHasElementsPropertyName);
+	    nameProperty = SWRLOWLUtil.createOWLDatatypeProperty(owlModel, XMLHasNamePropertyName);
+	    namespacePrefixProperty = SWRLOWLUtil.createOWLDatatypeProperty(owlModel, XMLHasNamespacePrefixPropertyName);
+	    namespaceURIProperty = SWRLOWLUtil.createOWLDatatypeProperty(owlModel, XMLHasNamespaceURIPropertyName);
+	    contentProperty = SWRLOWLUtil.createOWLDatatypeProperty(owlModel, XMLElementHasContentPropertyName);
+	    subElementsProperty = SWRLOWLUtil.createOWLObjectProperty(owlModel, XMLElementHasSubElementsPropertyName);
+	    valueProperty = SWRLOWLUtil.createOWLDatatypeProperty(owlModel, XMLAttributeHasValuePropertyName);
+	    attributesProperty = SWRLOWLUtil.createOWLObjectProperty(owlModel, XMLElementHasAttributesPropertyName);
+    } catch (SWRLOWLUtilException e) {
+    	throw new XMLMapperException("error creating properties: " + e.getMessage());
+    }
+  }
 
   public Document xmlDocument2Document() throws XMLMapperException
   {
