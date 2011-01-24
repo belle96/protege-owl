@@ -156,8 +156,11 @@ public class OWLBrowserSlotPattern extends BrowserSlotPattern{
         } else if (o instanceof RDFSLiteral) {
         	text = getLangBrowserText(o, lang);
         } else {
-            text = o.toString();
-        	text = ParserUtils.quoteIfNeeded(text);
+        	if (o instanceof String) {
+            	text = ParserUtils.quoteIfNeeded((String) o);
+        	} else {
+        		text = o.toString();
+        	}
         }
         return text;
     }
